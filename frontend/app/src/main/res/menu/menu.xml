@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Home"
+        android:id="@+id/item_home"
+        android:icon="@drawable/ic_home_selector"/>
+    <item android:title="My Work"
+        android:id="@+id/item_work"
+        android:icon="@drawable/ic_work_selector"/>
+    <item android:title="Notifications"
+        android:id="@+id/item_notification"
+        android:icon="@drawable/ic_notification_selector"/>
+    <item android:title="More"
+        android:id="@+id/item_more"
+        android:icon="@drawable/ic_more_selector"/>
+</menu>
