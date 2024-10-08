@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<!--    Home Page color -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -8,6 +9,16 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
-    <color name="grey">#eee</color>
+<!--    <color name="background_input">#aaa</color>-->
+<!--    <color name="item_in_input_color">#eee</color>-->
+<!--    <color name="blackgrey">#AA000000</color>-->
+<!--    <color name="grey">#cccccc</color>-->
+    <color name="main_theme_color">#FF000000</color>
+    <color name="main_theme_second_color">#aaa</color>
+    <color name="main_theme_third_color">#424242</color>
+    <color name="main_theme_word_color">#FFFFFFFF</color>
+    <color name="main_theme_word_second_color">#eee</color>
+    <color name="main_theme_icon_color">#FFFFFFFF</color>
+    <color name="main_theme_btn_color">#0075e2</color>
 
 </resources>

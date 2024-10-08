@@ -1,14 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NotificationFragment">
+    tools:context=".NotificationFragment"
+    android:background="@color/main_theme_color">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Notification" />
+        android:layout_height="60dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Notifications"
+            android:padding="10dp"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="32dp"
+            android:textStyle="bold" />
 
-</FrameLayout>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="btn add person"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_more_setting"
+            app:tint="@color/white" />
+    </RelativeLayout>
+    <EditText
+        android:id="@+id/text_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/border_input"
+        android:cursorVisible="true"
+        android:drawableLeft="@drawable/ic_search"
+        android:drawablePadding="5dp"
+        android:drawableTint="@color/main_theme_word_second_color"
+        android:hint="Search all notifications"
+        android:minHeight="48dp"
+        android:padding="5dp"
+        android:textColor="@color/main_theme_word_color"
+        android:textColorHint="@color/main_theme_word_second_color"
+        android:textCursorDrawable="@null"
+        android:textSize="20dp" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/main_theme_third_color"
+                android:text="All"
+                android:textAllCaps="false"
+                android:textSize="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/main_theme_third_color"
+                android:text="Unread"
+                android:textAllCaps="false"
+                android:textSize="20dp"
+                android:layout_marginRight="10dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/main_theme_third_color"
+                android:text="I was mentioned"
+                android:textAllCaps="false"
+                android:textSize="20dp"
+                android:layout_marginRight="10dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/main_theme_third_color"
+                android:text="Assign to me"
+                android:textAllCaps="false"
+                android:textSize="20dp"
+                android:layout_marginRight="10dp"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/main_theme_third_color"
+                android:text="Today"
+                android:textAllCaps="false"
+                android:textSize="20dp"
+                android:layout_marginRight="10dp"/>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="200dp"
+        android:background="@color/transparent"
+        android:text="Ready, set, get notified!"
+        android:textAlignment="center"
+        android:textColor="@color/main_theme_word_color"
+        android:textSize="32dp"
+        android:textStyle="bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        android:text="Here's where you'll get notified in real-time every time something important happens"
+        android:textAlignment="center"
+        android:background="@color/transparent"
+        android:textColor="@color/main_theme_word_color"
+        android:textSize="24dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="@color/main_theme_btn_color"
+        android:text="Invite team members"
+        android:textAllCaps="false"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+</RelativeLayout>
