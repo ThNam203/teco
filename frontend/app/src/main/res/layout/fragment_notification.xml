@@ -33,6 +33,12 @@
             android:src="@drawable/ic_more_setting"
             app:tint="@color/white" />
     </RelativeLayout>
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerInParent="true"
+        android:background="@color/transparent"
+        android:src="@drawable/notification_page" />
     <EditText
         android:id="@+id/text_input"
         android:layout_width="match_parent"
@@ -40,7 +46,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="70dp"
         android:layout_marginRight="15dp"
-        android:background="@drawable/border_input"
+        android:background="@drawable/background_input_box"
         android:cursorVisible="true"
         android:drawableLeft="@drawable/ic_search"
         android:drawablePadding="5dp"
@@ -56,48 +62,54 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="130dp">
+        android:layout_marginTop="130dp"
+        android:scrollbars="none">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/main_theme_third_color"
+                android:layout_height="40dp"
+                android:background="@drawable/background_corner_btn"
                 android:text="All"
                 android:textAllCaps="false"
                 android:textSize="20dp"
+                android:textColor="@color/main_theme_word_color"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"/>
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/main_theme_third_color"
+                android:layout_height="40dp"
+                android:background="@drawable/background_corner_btn"
                 android:text="Unread"
                 android:textAllCaps="false"
                 android:textSize="20dp"
+                android:textColor="@color/main_theme_word_color"
                 android:layout_marginRight="10dp"/>
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/main_theme_third_color"
+                android:layout_height="40dp"
+                android:background="@drawable/background_corner_btn"
                 android:text="I was mentioned"
                 android:textAllCaps="false"
                 android:textSize="20dp"
+                android:textColor="@color/main_theme_word_color"
                 android:layout_marginRight="10dp"/>
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/main_theme_third_color"
+                android:layout_height="40dp"
+                android:background="@drawable/background_corner_btn"
+                android:textColor="@color/main_theme_word_color"
                 android:text="Assign to me"
                 android:textAllCaps="false"
                 android:textSize="20dp"
                 android:layout_marginRight="10dp"/>
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/main_theme_third_color"
+                android:layout_height="40dp"
+                android:background="@drawable/background_corner_btn"
+                android:textColor="@color/main_theme_word_color"
                 android:text="Today"
                 android:textAllCaps="false"
                 android:textSize="20dp"
