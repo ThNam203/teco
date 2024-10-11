@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Pages.page_login"
+    android:orientation="vertical"
+    android:background="@color/primary_color"
+    android:paddingTop="60dp">
+
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:src="@drawable/image_logo_app"
+        android:layout_gravity="center"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Work the way that works for you"
+        android:textAlignment="center"
+        android:background="@color/transparent"
+        android:textColor="@color/primary_word_color"
+        android:textSize="26dp"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log in or sign up by email"
+        android:textAlignment="center"
+        android:background="@color/transparent"
+        android:textColor="@color/primary_word_color"
+        android:textSize="24dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="25dp"/>
+    <EditText
+        android:id="@+id/login_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_btn_stroke"
+        android:drawableTint="@color/primary_word_second_color"
+        android:hint="Name@workmail.com"
+        android:minHeight="48dp"
+        android:paddingHorizontal="15dp"
+        android:textColor="@color/primary_word_color"
+        android:textColorHint="@color/primary_word_second_color"
+        android:textSize="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="5dp"/>
+    <EditText
+        android:id="@+id/login_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_btn_stroke"
+        android:drawableTint="@color/primary_word_second_color"
+        android:hint="Password"
+        android:inputType="numberPassword"
+        android:minHeight="48dp"
+        android:paddingHorizontal="15dp"
+        android:textColor="@color/primary_word_color"
+        android:textColorHint="@color/primary_word_second_color"
+        android:textSize="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="5dp"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/background_btn_corner"
+        android:backgroundTint="@color/btn_disabled_color"
+        android:layout_gravity="center"
+        android:text="Log in"
+        android:textAllCaps="false"
+        android:textSize="20dp"
+        android:textColor="@color/primary_word_color"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="20dp" />
+
+    <Button
+        android:id="@+id/btn_login_google"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:drawableLeft="@drawable/google_logo"
+        android:drawablePadding="8dp"
+        android:textAlignment="center"
+        android:text="Login with Google"
+        android:layout_gravity="center"
+        android:textColor="@color/primary_word_third_color"
+        android:background="@drawable/background_btn_stroke"
+        android:backgroundTint="@color/primary_btn_color"
+        android:paddingVertical="10dp"/>
+</LinearLayout>

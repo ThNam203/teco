@@ -1,4 +1,4 @@
-package com.example.monday_app_project;
+package com.worthybitbuilders.squadsense;
 
 import org.junit.Test;
 

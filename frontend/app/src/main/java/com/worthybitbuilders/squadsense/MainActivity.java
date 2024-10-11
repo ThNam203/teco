@@ -1,4 +1,4 @@
-package com.example.monday_app_project;
+package com.worthybitbuilders.squadsense;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,10 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.monday_app_project.Fragments.HomeFragment;
-import com.example.monday_app_project.Fragments.MoreFragment;
-import com.example.monday_app_project.Fragments.NotificationFragment;
-import com.example.monday_app_project.Fragments.WorkFragment;
+import com.worthybitbuilders.squadsense.Fragments.HomeFragment;
+import com.worthybitbuilders.squadsense.Fragments.MoreFragment;
+import com.worthybitbuilders.squadsense.Fragments.NotificationFragment;
+import com.worthybitbuilders.squadsense.Fragments.WorkFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
