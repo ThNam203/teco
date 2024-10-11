@@ -23,5 +23,6 @@
     <color name="main_theme_btn_color">#0075e2</color>
     <color name="main_theme_splitter_color">#ddd</color>
     <color name="chosen_color">#00aefd</color>
+    <color name="darkgrey_translucent">#EE444444</color>
 
 </resources>

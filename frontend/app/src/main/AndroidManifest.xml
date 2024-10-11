@@ -12,6 +12,12 @@
         android:theme="@style/Theme.Monday_app_project"
         tools:targetApi="31">
         <activity
+            android:name=".popup_btn_addperson"
+            android:exported="false" />
+        <activity
+            android:name=".popup_btn_myfavortites"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

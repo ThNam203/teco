@@ -17,5 +17,8 @@
         <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
         <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
-
+    <style name="PopupAnimation">
+        <item name="android:windowEnterAnimation">@anim/popup_btn_add_slide_in</item>
+        <item name="android:windowExitAnimation">@anim/popup_btn_add_slide_out</item>
+    </style>
 </resources>
