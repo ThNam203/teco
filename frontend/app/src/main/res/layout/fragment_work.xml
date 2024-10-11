@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".WorkFragment"
-    android:background="@color/black">
+    tools:context=".Fragments.WorkFragment"
+    android:background="@color/primary_color">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -42,11 +42,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <Button
+                android:id="@+id/btn_hide_done_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/main_theme_third_color"
-                android:drawableLeft="@drawable/ic_checkbox"
-                android:drawableTint="@color/main_theme_icon_color"
+                android:backgroundTint="@color/primary_third_color"
+                android:drawableLeft="@drawable/ic_checkbox_unchecked"
+                android:drawableTint="@color/primary_icon_color"
                 android:text="Hide done items"
                 android:textAllCaps="false"
                 android:textSize="20dp"
@@ -55,7 +56,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/main_theme_third_color"
+                android:backgroundTint="@color/primary_third_color"
                 android:text="Board (0)"
                 android:textAllCaps="false"
                 android:textSize="20dp"
@@ -63,7 +64,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/main_theme_third_color"
+                android:backgroundTint="@color/primary_third_color"
                 android:text="Following (0)"
                 android:textAllCaps="false"
                 android:textSize="20dp"
@@ -86,7 +87,7 @@
                 app:cardCornerRadius="15dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:backgroundTint="@color/main_theme_third_color">
+                android:backgroundTint="@color/primary_third_color">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -97,14 +98,14 @@
                         android:text="0"
                         android:textSize="40dp"
                         android:textStyle="bold"
-                        android:textColor="@color/main_theme_word_color"
+                        android:textColor="@color/primary_word_color"
                         android:layout_marginLeft="20dp"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Past Day"
                         android:textSize="24dp"
-                        android:textColor="@color/main_theme_word_color"
+                        android:textColor="@color/primary_word_color"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"/>
                 </LinearLayout>
@@ -114,7 +115,7 @@
                 android:layout_height="120dp"
                 app:cardCornerRadius="15dp"
                 android:layout_marginRight="10dp"
-                android:backgroundTint="@color/main_theme_third_color">
+                android:backgroundTint="@color/primary_third_color">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -125,14 +126,14 @@
                         android:text="0"
                         android:textSize="40dp"
                         android:textStyle="bold"
-                        android:textColor="@color/main_theme_word_color"
+                        android:textColor="@color/primary_word_color"
                         android:layout_marginLeft="20dp"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Today"
                         android:textSize="24dp"
-                        android:textColor="@color/main_theme_word_color"
+                        android:textColor="@color/primary_word_color"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"/>
                 </LinearLayout>
@@ -142,7 +143,7 @@
                 android:layout_height="120dp"
                 app:cardCornerRadius="15dp"
                 android:layout_marginRight="10dp"
-                android:backgroundTint="@color/main_theme_third_color">
+                android:backgroundTint="@color/primary_third_color">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -153,14 +154,14 @@
                         android:text="0"
                         android:textSize="40dp"
                         android:textStyle="bold"
-                        android:textColor="@color/main_theme_word_color"
+                        android:textColor="@color/primary_word_color"
                         android:layout_marginLeft="20dp"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="This Week"
                         android:textSize="24dp"
-                        android:textColor="@color/main_theme_word_color"
+                        android:textColor="@color/primary_word_color"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"/>
                 </LinearLayout>
@@ -170,7 +171,7 @@
                 android:layout_height="120dp"
                 app:cardCornerRadius="15dp"
                 android:layout_marginRight="10dp"
-                android:backgroundTint="@color/main_theme_third_color">
+                android:backgroundTint="@color/primary_third_color">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -181,14 +182,14 @@
                         android:text="0"
                         android:textSize="40dp"
                         android:textStyle="bold"
-                        android:textColor="@color/main_theme_word_color"
+                        android:textColor="@color/primary_word_color"
                         android:layout_marginLeft="20dp"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Next Week"
                         android:textSize="24dp"
-                        android:textColor="@color/main_theme_word_color"
+                        android:textColor="@color/primary_word_color"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"/>
                 </LinearLayout>
@@ -198,7 +199,7 @@
                 android:layout_height="120dp"
                 app:cardCornerRadius="15dp"
                 android:layout_marginRight="10dp"
-                android:backgroundTint="@color/main_theme_third_color">
+                android:backgroundTint="@color/primary_third_color">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -209,14 +210,14 @@
                         android:text="0"
                         android:textSize="40dp"
                         android:textStyle="bold"
-                        android:textColor="@color/main_theme_word_color"
+                        android:textColor="@color/primary_word_color"
                         android:layout_marginLeft="20dp"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Later"
                         android:textSize="24dp"
-                        android:textColor="@color/main_theme_word_color"
+                        android:textColor="@color/primary_word_color"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"/>
                 </LinearLayout>
@@ -230,7 +231,7 @@
         android:layout_height="200dp"
         android:layout_centerInParent="true"
         android:background="@color/transparent"
-        android:src="@drawable/work_page" />
+        android:src="@drawable/image_work_fragment" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -241,7 +242,7 @@
         android:text="You have unfollowed all your boards"
         android:textAlignment="center"
         android:background="@color/transparent"
-        android:textColor="@color/main_theme_word_color"
+        android:textColor="@color/primary_word_color"
         android:textSize="32dp"
         android:textStyle="bold" />
     <TextView
@@ -253,10 +254,11 @@
         android:text="You have unfollowed 0 boards you were assigned to. To see your items, start following boards again"
         android:textAlignment="center"
         android:background="@color/transparent"
-        android:textColor="@color/main_theme_word_color"
+        android:textColor="@color/primary_word_color"
         android:textSize="24dp" />
 
     <ImageButton
+        android:id="@+id/btn_add_item"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentEnd="true"
@@ -265,6 +267,6 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/background_round_btn"
         android:contentDescription="btn add"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/ic_add_calendar"
         app:tint="@color/white" />
 </RelativeLayout>

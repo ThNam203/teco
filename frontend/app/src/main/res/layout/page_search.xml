@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_color"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/background_input_box"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="backBtn"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/primary_icon_color" />
+        <EditText
+            android:id="@+id/input_search_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:cursorVisible="true"
+            android:hint="Search boards, docs, and dashboards"
+            android:minHeight="48dp"
+            android:padding="5dp"
+            android:textColor="@color/primary_word_color"
+            android:textColorHint="@color/primary_word_second_color"
+            android:background="@color/transparent"
+            android:textSize="20dp" />
+    </LinearLayout>
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:background="@color/transparent"
+        android:src="@drawable/image_search"
+        android:layout_marginTop="50dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_gravity="center"
+        android:text="What's the name of your board, doc or dashboard?"
+        android:textAlignment="center"
+        android:background="@color/transparent"
+        android:textColor="@color/primary_word_color"
+        android:textSize="32dp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:contentDescription="describe page"/>
+
+</LinearLayout>

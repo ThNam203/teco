@@ -15,6 +15,7 @@
         android:layout_marginRight="50dp">
 
         <LinearLayout
+            android:id="@+id/btn_add_item"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:orientation="horizontal"
@@ -26,7 +27,7 @@
                 android:layout_weight="1"
                 android:text="Add Item"
                 android:textAlignment="center"
-                android:textColor="@color/main_theme_word_color"
+                android:textColor="@color/primary_word_color"
                 android:textSize="24dp" />
 
             <ImageView
@@ -35,15 +36,16 @@
                 android:layout_alignParentStart="true"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_add_item"
-                app:tint="@color/main_theme_icon_color" />
+                app:tint="@color/primary_icon_color" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@color/main_theme_splitter_color" />
+            android:background="@color/primary_splitter_color" />
 
         <LinearLayout
+            android:id="@+id/btn_add_board"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -55,7 +57,7 @@
                 android:layout_weight="1"
                 android:text="Add Board"
                 android:textAlignment="center"
-                android:textColor="@color/main_theme_word_color"
+                android:textColor="@color/primary_word_color"
                 android:textSize="24dp" />
 
             <ImageView
@@ -64,7 +66,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_add_board"
-                app:tint="@color/main_theme_icon_color" />
+                app:tint="@color/primary_icon_color" />
         </LinearLayout>
     </LinearLayout>
 

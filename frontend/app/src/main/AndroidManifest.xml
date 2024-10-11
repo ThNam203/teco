@@ -12,10 +12,25 @@
         android:theme="@style/Theme.Monday_app_project"
         tools:targetApi="31">
         <activity
-            android:name=".popup_btn_addperson"
+            android:name=".Pages.page_search_everywhere"
             android:exported="false" />
         <activity
-            android:name=".popup_btn_myfavortites"
+            android:name=".Pages.page_notification_setting"
+            android:exported="false" />
+        <activity
+            android:name=".Pages.page_myteam"
+            android:exported="false" />
+        <activity
+            android:name=".Pages.page_inbox"
+            android:exported="false" />
+        <activity
+            android:name=".Pages.page_profile"
+            android:exported="false" />
+        <activity
+            android:name=".Pages.page_search"
+            android:exported="false" />
+        <activity
+            android:name=".Pages.page_edit_profile"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

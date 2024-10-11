@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_color">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="15dp">
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="btn add person"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/primary_icon_color" />
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Team"
+            android:paddingLeft="20dp"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:textSize="28dp"
+            android:textStyle="bold" />
+        <ImageButton
+            android:id="@+id/btn_addperson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="btn add person"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_add_person"
+            app:tint="@color/primary_icon_color" />
+        <ImageButton
+            android:id="@+id/btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="btn add person"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_search"
+            app:tint="@color/primary_icon_color" />
+    </LinearLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabBackground="@color/primary_color"
+        app:tabTextColor="@color/tablayout_unselected"
+        app:tabSelectedTextColor="@color/tablayout_selected"
+        app:tabIndicatorColor="@color/tablayout_selected"
+        app:tabIndicatorHeight="1dp"
+        app:tabTextAppearance="@style/TextAppearanceTablayout">
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Joined date"
+            android:textColor="#FF0000"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A-Z" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Guests" />
+    </com.google.android.material.tabs.TabLayout>
+</LinearLayout>

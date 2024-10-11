@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    <item android:state_pressed="false" android:color="@color/primary_third_color"/>-->
+<!--    <item android:state_pressed="true" android:color="@color/primary_btn_color"/>-->
+    <item android:state_selected="false">
+        <shape android:tint="@color/primary_third_color">
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+    <item android:state_selected="true">
+        <shape android:tint="@color/primary_btn_color">
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+</selector>
