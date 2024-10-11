@@ -38,14 +38,69 @@
             android:id="@+id/text_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/text_input"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/background_input_box"
+            android:cursorVisible="true"
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="5dp"
             android:drawableTint="@color/main_theme_word_second_color"
             android:hint="Search boards, docs, and dashboards"
             android:minHeight="48dp"
             android:padding="5dp"
-            android:layout_margin="5dp"/>
-    </LinearLayout>
+            android:textColor="@color/main_theme_word_color"
+            android:textColorHint="@color/main_theme_word_second_color"
+            android:textCursorDrawable="@null"
+            android:textSize="20dp" />
+
+
+        <Button
+            android:id="@+id/btn_myfavorites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="130dp"
+            android:backgroundTint="@color/transparent"
+            android:drawableRight="@drawable/ic_arrow_down"
+            android:drawableTint="@color/main_theme_icon_color"
+            android:text="My favorities"
+            android:textAllCaps="false"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            android:background="@color/transparent"
+            android:src="@drawable/home_page" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="500dp"
+            android:layout_marginRight="20dp"
+            android:text="Star any board, doc or dashboard to add it to your favorites"
+            android:textAlignment="center"
+            android:background="@color/transparent"
+            android:textColor="@color/main_theme_word_color"
+            android:textSize="32dp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/background_round_btn"
+            android:contentDescription="btn add"
+            android:src="@drawable/ic_add"
+            app:tint="@color/white" />
+
+
+    </RelativeLayout>
 
 </RelativeLayout>
