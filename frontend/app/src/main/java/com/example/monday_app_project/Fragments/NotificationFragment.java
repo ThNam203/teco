@@ -45,6 +45,7 @@ public class NotificationFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_notification, container, false);
 
+        //Init variables here
         btnInvite = (Button) v.findViewById(R.id.btn_invite);
         btnAllNotification = (Button) v.findViewById(R.id.btn_all_notification);
         btnUnreadNotification =  (Button) v.findViewById(R.id.btn_unread_notification);
@@ -52,12 +53,14 @@ public class NotificationFragment extends Fragment {
         btnAssignedNotification =  (Button) v.findViewById(R.id.btn_assign_to_me_notification);
         btnTodayNotification =  (Button) v.findViewById(R.id.btn_today_notification);
 
+        //Add button to list buttons in horizontal scrollview
         buttonList.add(btnAllNotification);
         buttonList.add(btnUnreadNotification);
         buttonList.add(btnMentionedNotification);
         buttonList.add(btnAssignedNotification);
         buttonList.add(btnTodayNotification);
 
+        //Algorithm to set click buttons in horizontal scrollview to choose just one button each time
         selectedButton = btnAllNotification;
         btnAllNotification.setSelected(true);
 
@@ -73,6 +76,7 @@ public class NotificationFragment extends Fragment {
             });
         }
 
+        //set onclick buttons here
         btnInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,6 +88,7 @@ public class NotificationFragment extends Fragment {
         return v;
     }
 
+    //define function here
     private void btn_invite_showDialog() {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -97,7 +102,7 @@ public class NotificationFragment extends Fragment {
 
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.BottomDialogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
 
         EditText inputEmail = (EditText) dialog.findViewById(R.id.input_email);

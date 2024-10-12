@@ -62,7 +62,7 @@
                 <RelativeLayout
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:background="@drawable/background_corner_btn"
+                    android:background="@drawable/background_btn_corner"
                     android:backgroundTint="@color/teal_200">
                     <TextView
                         android:layout_width="wrap_content"
@@ -83,7 +83,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
-                        android:background="@drawable/background_round_btn"
+                        android:background="@drawable/background_btn_circle"
                         android:src="@drawable/ic_camera"
                         app:tint="@color/primary_icon_color"
                         tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
@@ -106,7 +106,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/background_input_box"
+                        android:background="@drawable/background_input"
                         android:hint="Add name"
                         android:padding="10dp"
                         android:textColor="@color/primary_word_color"
@@ -137,7 +137,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/background_input_box"
+                        android:background="@drawable/background_input"
                         android:hint="Add introduction"
                         android:padding="10dp"
                         android:textColor="@color/primary_word_color"
@@ -168,7 +168,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/background_input_box"
+                        android:background="@drawable/background_input"
                         android:text="phamtiendat4823@gmail.com"
                         android:padding="10dp"
                         android:textColor="@color/primary_word_color"
@@ -200,7 +200,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/background_input_box"
+                        android:background="@drawable/background_input"
                         android:hint="Add a phone number"
                         android:padding="10dp"
                         android:textColor="@color/primary_word_color"
@@ -231,7 +231,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/background_input_box"
+                        android:background="@drawable/background_input"
                         android:hint="Add a birthday"
                         android:padding="10dp"
                         android:textColor="@color/primary_word_color"

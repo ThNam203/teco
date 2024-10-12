@@ -31,7 +31,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/background_round_btn"
+            android:background="@drawable/background_btn_circle"
             android:backgroundTint="@color/teal_200"
             android:layout_centerHorizontal="true"
 
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/background_all_radius"
+            android:background="@drawable/background_layout_corner"
             android:backgroundTint="@color/primary_second_color"
             android:layout_marginTop="50dp"
             android:layout_marginLeft="10dp"
@@ -64,7 +64,7 @@
                     android:layout_height="40dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginRight="15dp"
-                    android:background="@drawable/background_corner_btn"
+                    android:background="@drawable/background_btn_corner"
                     android:backgroundTint="@color/primary_btn_color"
                     android:text="Edit"
                     android:textAllCaps="false"
@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/background_border_btn">
+                android:background="@drawable/background_btn_stroke">
 
                 <ImageView
                     android:layout_width="50dp"
@@ -136,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/background_border_btn">
+                android:background="@drawable/background_btn_stroke">
 
                 <ImageView
                     android:layout_width="50dp"
@@ -180,7 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/background_border_btn">
+                android:background="@drawable/background_btn_stroke">
 
                 <ImageView
                     android:layout_width="50dp"
@@ -224,7 +224,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/background_border_btn">
+                android:background="@drawable/background_btn_stroke">
 
                 <ImageView
                     android:layout_width="50dp"

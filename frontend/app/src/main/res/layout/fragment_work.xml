@@ -265,7 +265,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/background_round_btn"
+        android:background="@drawable/background_btn_circle"
         android:contentDescription="btn add"
         android:src="@drawable/ic_add_calendar"
         app:tint="@color/white" />

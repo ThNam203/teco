@@ -80,8 +80,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:showText="false"
-            android:thumb="@drawable/toggle_thumb"
-            app:track="@drawable/toggle_track"
+            android:thumb="@drawable/selector_toggle_thumb"
+            app:track="@drawable/selector_toggle_track"
             />
 
     </LinearLayout>
@@ -130,8 +130,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:showText="false"
-            android:thumb="@drawable/toggle_thumb"
-            app:track="@drawable/toggle_track"
+            android:thumb="@drawable/selector_toggle_thumb"
+            app:track="@drawable/selector_toggle_track"
             />
 
     </LinearLayout>

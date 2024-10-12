@@ -16,8 +16,11 @@ public class page_notification_setting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page_notification_setting);
         getSupportActionBar().hide();
+
+        //init variables here
         btnBack = (ImageButton) findViewById(R.id.btn_back);
 
+        //set onclick buttons here
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

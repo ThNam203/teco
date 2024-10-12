@@ -13,6 +13,21 @@
         android:theme="@style/Theme.Monday_app_project"
         tools:targetApi="31">
         <activity
+            android:name=".Pages.page_login"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Pages.page_task_board"
+            android:exported="false" />
+        <activity
+            android:name=".Pages.page_add_board"
+            android:exported="false" />
+        <activity
             android:name=".Pages.page_search_everywhere"
             android:exported="false" />
         <activity
@@ -35,12 +50,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false">
         </activity>
     </application>
 

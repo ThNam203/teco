@@ -10,39 +10,33 @@ import android.widget.ImageButton;
 import com.example.monday_app_project.R;
 import com.example.monday_app_project.Util.SwitchActivity;
 
-public class page_profile extends AppCompatActivity {
+public class page_add_board extends AppCompatActivity {
 
-    ImageButton btnBack = null;
-    Button btnEdit = null;
+    ImageButton btnClose = null;
 
+    Button btnNewBoard = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.page_profile);
+        setContentView(R.layout.page_add_board);
         getSupportActionBar().hide();
 
-
         //Init variables here
-        btnBack = (ImageButton) findViewById(R.id.btn_back);
-        btnEdit = (Button) findViewById(R.id.btn_edit);
-
+        btnNewBoard = (Button) findViewById(R.id.btn_create_new_board);
+        btnClose = (ImageButton) findViewById(R.id.btn_close);
 
         //set onclick buttons here
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                page_profile.super.onBackPressed();
+                page_add_board.super.onBackPressed();
             }
         });
-        btnEdit.setOnClickListener(new View.OnClickListener() {
+        btnNewBoard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnEdit_showActivity();
+                SwitchActivity.switchToActivity(getWindow().getContext(), page_task_board.class);
             }
         });
-    }
-
-    private void btnEdit_showActivity() {
-        SwitchActivity.switchToActivity(getWindow().getContext(), page_edit_profile.class);
     }
 }

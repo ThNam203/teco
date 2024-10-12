@@ -33,7 +33,11 @@ public class WorkFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_work, container, false);
 
+        //Init variables here
         btnHideDoneItem = (Button) v.findViewById(R.id.btn_hide_done_item);
+        btnAddItem = v.findViewById(R.id.btn_add_item);
+
+        //set onclick buttons here
         btnHideDoneItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,7 +60,6 @@ public class WorkFragment extends Fragment {
 
             }
         });
-        btnAddItem = v.findViewById(R.id.btn_add_item);
         btnAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,6 +69,7 @@ public class WorkFragment extends Fragment {
         return v;
     }
 
+    //define function here
     private void btnAddItem_showDialog() {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -79,7 +83,7 @@ public class WorkFragment extends Fragment {
 
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.BottomDialogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialog.show();
         ImageButton btnClosePopup = (ImageButton) dialog.findViewById(R.id.btn_close_popup);

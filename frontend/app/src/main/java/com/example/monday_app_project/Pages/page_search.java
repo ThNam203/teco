@@ -20,7 +20,10 @@ public class page_search extends AppCompatActivity {
         getSupportActionBar().hide();
 
 
+        //init variables here
         btnBack = findViewById(R.id.btn_back);
+
+        //set onclick buttons here
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -26,6 +26,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.monday_app_project.Pages.page_add_board;
 import com.example.monday_app_project.Pages.page_search;
 import com.example.monday_app_project.R;
 import com.example.monday_app_project.Util.SwitchActivity;
@@ -42,12 +43,16 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_home, container, false);
+
+
+        //Init variables here
         btn_myfavorities = v.findViewById(R.id.btn_myfavorites);
         btn_addperson = v.findViewById(R.id.btn_addperson);
         btn_add = v.findViewById(R.id.btn_add);
         inputSearchLabel = v.findViewById(R.id.input_search_label);
         layout = v.findViewById(R.id.home_fragment);
 
+        //set onclick buttons here
         btn_myfavorities.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,7 +72,6 @@ public class HomeFragment extends Fragment {
                 btnAdd_showPopup();
             }
         });
-
         inputSearchLabel.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -82,6 +86,8 @@ public class HomeFragment extends Fragment {
         return v;
     }
 
+
+    //define function here
     private void btnAdd_showPopup() {
         LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = layoutInflater.inflate(R.layout.popup_btn_add, null);
@@ -90,7 +96,7 @@ public class HomeFragment extends Fragment {
         int height = ViewGroup.LayoutParams.MATCH_PARENT;
 
         PopupWindow popupBtnAdd = new PopupWindow(popupView,width,height, true);
-        popupBtnAdd.setAnimationStyle(R.style.PopupAnimation);
+        popupBtnAdd.setAnimationStyle(R.style.PopupAnimationRight);
         layout.post(new Runnable() {
             @Override
             public void run() {
@@ -113,8 +119,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        LinearLayout btnAddBoard = popupView.findViewById(R.id.btn_add_board);
+        btnAddBoard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btn_add_board_showPopup();
+            }
+        });
     }
-
 
     private void btn_addperson_showPopup() {
         final Dialog dialog = new Dialog(getActivity());
@@ -129,7 +141,7 @@ public class HomeFragment extends Fragment {
 
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.BottomDialogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialog.show();
         ImageButton btnClosePopup = (ImageButton) dialog.findViewById(R.id.btn_close_popup);
@@ -154,7 +166,7 @@ public class HomeFragment extends Fragment {
 
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.BottomDialogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialog.show();
         ImageButton btnClosePopup = (ImageButton) dialog.findViewById(R.id.btn_close_popup);
@@ -166,6 +178,10 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    private void btn_add_board_showPopup() {
+        SwitchActivity.switchToActivity(getContext(), page_add_board.class);
+    }
+
     private void btn_myfavorities_showPopup() {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -173,7 +189,7 @@ public class HomeFragment extends Fragment {
 
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.BottomDialogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialog.show();
 
@@ -230,8 +246,6 @@ public class HomeFragment extends Fragment {
         if(tickState)  tick.setVisibility(View.VISIBLE);
         else tick.setVisibility(View.INVISIBLE);
     }
-
-
     private void inputSearch_showActivity() {
         SwitchActivity.switchToActivity(getContext(), page_search.class);
     }

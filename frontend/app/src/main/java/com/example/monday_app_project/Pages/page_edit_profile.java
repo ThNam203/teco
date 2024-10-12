@@ -26,11 +26,12 @@ public class page_edit_profile extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
+        //Init variables here
         btnBack = (ImageButton) findViewById(R.id.btn_back);
         btnCamera = (ImageButton) findViewById(R.id.btn_camera);
 
 
-
+        //set onclick buttons here
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,6 +48,7 @@ public class page_edit_profile extends AppCompatActivity {
 
     }
 
+    //define function here
     private void btnCamera_showPopup() {
         final Dialog dialog = new Dialog(getWindow().getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -17,8 +17,10 @@ public class page_inbox extends AppCompatActivity {
         setContentView(R.layout.page_inbox);
         getSupportActionBar().hide();
 
+        //Init variables here
         btnBack = (ImageButton) findViewById(R.id.btn_back);
 
+        //set onclick buttons here
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

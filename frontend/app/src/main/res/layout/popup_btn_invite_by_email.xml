@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/background_activity_btn_addperson"
+    android:background="@drawable/background_popup_corner_top_left_andright"
     android:backgroundTint="@color/primary_third_color">
 
     <LinearLayout
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            android:background="@drawable/background_corner_btn"
+            android:background="@drawable/background_btn_corner"
             android:backgroundTint="@color/primary_btn_color"
             android:text="Invite"
             android:textAllCaps="false"
@@ -60,7 +60,7 @@
         android:inputType="textEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_input_box"
+        android:background="@drawable/background_input"
         android:backgroundTint="@color/primary_third_color"
         android:cursorVisible="true"
         android:hint="email@email.com"

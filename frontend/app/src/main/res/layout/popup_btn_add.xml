@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_activity_btn_add"
+        android:background="@drawable/background_popup_corner"
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

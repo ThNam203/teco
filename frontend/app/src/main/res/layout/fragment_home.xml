@@ -14,7 +14,7 @@
             <ImageView
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/logo_app" />
+                android:src="@drawable/image_logo_app" />
 
             <ImageButton
                 android:id="@+id/btn_addperson"
@@ -37,7 +37,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="70dp"
             android:layout_marginRight="15dp"
-            android:background="@drawable/background_input_box"
+            android:background="@drawable/background_input"
             android:cursorVisible="false"
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="5dp"
@@ -92,9 +92,9 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/background_round_btn"
+            android:background="@drawable/background_btn_circle"
             android:contentDescription="btn add"
-            android:src="@drawable/ic_add_selector"
+            android:src="@drawable/selector_ic_add"
             app:tint="@color/white" />
 
 </RelativeLayout>
