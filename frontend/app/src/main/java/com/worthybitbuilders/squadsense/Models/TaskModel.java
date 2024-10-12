@@ -1,10 +1,11 @@
 package com.worthybitbuilders.squadsense.Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class TaskModel {
+public class TaskModel implements Serializable {
     public enum Status {
         WORKING,
         STUCK,
@@ -28,6 +29,9 @@ public class TaskModel {
     public TaskModel(String taskBoardId, String taskName,Status status, String date)
     {
         message = new ArrayList<String>();
+        // test
+        message.add("Hello");
+        //
         this.taskBoardId = taskBoardId;
         this.taskName = taskName;
         this.status = status;

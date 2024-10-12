@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Pages.page_task_message"
+    android:background="@color/primary_color"
+    >
+    <LinearLayout
+        android:id="@+id/top_mess"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="btn add person"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/primary_icon_color" />
+        <TextView
+            android:id="@+id/message_name"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="32dp"
+            android:textStyle="bold" />
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="btn add person"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_more_setting"
+            app:tint="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottom_mess"
+        android:layout_below="@+id/top_mess" >
+        <ListView
+            android:id="@+id/lv_update_mess"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10.0sp"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/bottom_mess"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_btn_corner">
+        <EditText
+            android:id="@+id/message_Edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/sendMess"
+            android:background="@color/transparent"
+            android:hint="Write your update..."
+            android:padding="15dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+        <ImageButton
+            android:id="@+id/sendMess"
+            android:padding="15dp"
+            android:background="@color/transparent"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+</RelativeLayout>

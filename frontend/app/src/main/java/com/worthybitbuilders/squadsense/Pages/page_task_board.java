@@ -1,9 +1,13 @@
 package com.worthybitbuilders.squadsense.Pages;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.LayerDrawable;
@@ -31,6 +35,7 @@ public class page_task_board extends AppCompatActivity {
     ImageButton btnBack;
     LinearLayout taskBoardFrame;
     TaskBoardViewModel taskBoardViewModel;
+    private ActivityResultLauncher<Intent> taskMessageLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,18 @@ public class page_task_board extends AppCompatActivity {
         taskBoardViewModel = new ViewModelProvider(this).get(TaskBoardViewModel.class);
 
         LoadTaskBoards();
+
+        taskMessageLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            // anything
+                        }
+                    }
+                }
+        );
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +134,7 @@ public class page_task_board extends AppCompatActivity {
                     TextView taskName = taskRow.findViewById(R.id.task_name);
                     TextView taskStatus = taskRow.findViewById(R.id.task_status);
                     TextView taskDate = taskRow.findViewById(R.id.task_date);
+                    ImageButton taskMessage = taskRow.findViewById(R.id.task_message);
 
 
                     // Thiết lập giá trị cho các TextView
@@ -133,7 +151,15 @@ public class page_task_board extends AppCompatActivity {
                     ////taskDate
                     taskDate.setText(task.getDate());
 
-
+                    // Chuyển đến cửa trang updates
+                    taskMessage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(getWindow().getContext(), page_task_message.class);
+                            intent.putExtra("task", task);
+                            taskMessageLauncher.launch(intent);
+                        }
+                    });
 
                     // Thêm TableRow vào TableLayout
                     taskBoard.addView(taskRow);

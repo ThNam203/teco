@@ -104,4 +104,16 @@ public class TaskBoardViewModel extends ViewModel {
         }
         return count;
     }
+
+    public void updateTaskMess(String taskId, List<String> mes) {
+        System.out.println(taskId);
+        for (TaskModel task : taskList) {
+            System.out.println(task.getTaskBoardId());
+            if (task.getTaskBoardId().equals(taskId)) {
+                task.setMessage(new ArrayList<>(mes));
+                System.out.println(task.getMessage().size());
+            }
+        }
+        taskListLiveData.setValue(taskList);
+    }
 }
