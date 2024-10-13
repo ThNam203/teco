@@ -58,21 +58,48 @@ exports.getUserById = asyncCatch(async (req, res, next) => {
     res.status(200).json(user)
 })
 
+exports.getAllUsers = asyncCatch(async (req, res, next) => {
+    const user = await User.find({})
+    if (!user) return next(new AppError('No email found!', 400))
+
+    res.status(200).json(user)
+})
+
 exports.getUserByEmail = asyncCatch(async (req, res, next) => {
-    const { userEmail } = req.params
-    const user = await User.findOne({ email: userEmail })
+    const { email } = req.params
+    const user = await User.findOne({ email })
     if (!user) return next(new AppError('No email found!', 400))
 
     res.status(200).json(user)
 })
 
 exports.updateUserById = asyncCatch(async (req, res, next) => {
-    const { userId } = req.params
-    const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
+    const { id } = req.params
+    const updatedUser = await User.findByIdAndUpdate(id, req.body, {
         new: true,
         runValidators: true,
     })
     if (!updatedUser) return next(new AppError('No user found!', 400))
 
     res.status(200).json(updatedUser)
+})
+
+exports.addNewUser = asyncCatch(async (req, res, next) => {
+    const newUser = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        phoneNumber: req.body.phoneNumber,
+        profileImagePath: req.body.profileImagePath,
+        location: req.body.location,
+    })
+
+    const savedUser = await newUser.save()
+    res.status(200).json({
+        message: 'user was saved!!',
+    })
+
+    if (!savedUser) return next(new AppError('Save new user ERROR!', 400))
+
+    res.status(200).json(savedUser)
 })

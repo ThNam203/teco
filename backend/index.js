@@ -5,6 +5,7 @@ const http = require('http')
 const io = require('./socket/socket')
 const errorHandlers = require('./controllers/errorControllers/genericErrorController')
 const authRouter = require('./routers/authRouter')
+const userRouter = require('./routers/userRouter')
 
 const app = express()
 const server = http.createServer(app)
@@ -20,6 +21,7 @@ app.use(
 )
 
 app.use('/', authRouter)
+app.use('/', userRouter)
 app.use('*', errorHandlers.invalidUrlHandler)
 app.use(errorHandlers.globalErrorHandler)
 
