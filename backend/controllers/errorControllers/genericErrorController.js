@@ -13,17 +13,19 @@ const sendErrorInDevelopmentEnv = function (err, res) {
 
 const sendErrorInProductionEnv = function (err, res) {
     res.status(err.statusCode).json({
-        errorMessage: err.message,
+        message: err.message,
     })
 }
 
 exports.globalErrorHandler = (err, req, res, next) => {
+    console.log(err)
     err.statusCode = err.statusCode || 500
     err.message = err.message || 'Internal server error'
 
-    if (process.env.NODE_ENV === 'development')
-        sendErrorInDevelopmentEnv(err, res)
-    else sendErrorInProductionEnv(err, res)
+    // if (process.env.NODE_ENV === 'development')
+    //     sendErrorInDevelopmentEnv(err, res)
+    // else
+    sendErrorInProductionEnv(err, res)
 }
 
 exports.invalidUrlHandler = (req, res, next) => {

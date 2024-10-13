@@ -1,4 +1,4 @@
-package com.worthybitbuilders.squadsense.Fragments;
+package com.worthybitbuilders.squadsense.fragments;
 
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -26,9 +26,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.Pages.page_add_board;
-import com.worthybitbuilders.squadsense.Pages.page_search;
-import com.worthybitbuilders.squadsense.Util.SwitchActivity;
+import com.worthybitbuilders.squadsense.activities.page_add_board;
+import com.worthybitbuilders.squadsense.activities.page_search;
+import com.worthybitbuilders.squadsense.utils.SwitchActivity;
 
 public class HomeFragment extends Fragment {
 

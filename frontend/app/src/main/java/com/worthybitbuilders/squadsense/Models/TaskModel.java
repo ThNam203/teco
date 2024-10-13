@@ -1,4 +1,4 @@
-package com.worthybitbuilders.squadsense.Models;
+package com.worthybitbuilders.squadsense.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;

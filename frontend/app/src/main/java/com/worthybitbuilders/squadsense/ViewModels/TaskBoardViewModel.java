@@ -1,11 +1,11 @@
-package com.worthybitbuilders.squadsense.ViewModels;
+package com.worthybitbuilders.squadsense.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.worthybitbuilders.squadsense.Models.TaskBoardModel;
-import com.worthybitbuilders.squadsense.Models.TaskModel;
+import com.worthybitbuilders.squadsense.models.TaskBoardModel;
+import com.worthybitbuilders.squadsense.models.TaskModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

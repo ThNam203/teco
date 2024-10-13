@@ -1,4 +1,4 @@
-package com.worthybitbuilders.squadsense.Models;
+package com.worthybitbuilders.squadsense.models;
 
 import java.util.List;
 import java.util.UUID;

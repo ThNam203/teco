@@ -1,9 +1,7 @@
-package com.worthybitbuilders.squadsense.Pages;
+package com.worthybitbuilders.squadsense.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
@@ -12,12 +10,11 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.worthybitbuilders.squadsense.Models.TaskModel;
+import com.worthybitbuilders.squadsense.models.TaskModel;
 import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.Util.UpdateAdapter;
-import com.worthybitbuilders.squadsense.ViewModels.TaskBoardViewModel;
+import com.worthybitbuilders.squadsense.utils.UpdateAdapter;
+import com.worthybitbuilders.squadsense.viewmodels.TaskBoardViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class page_task_message extends AppCompatActivity {

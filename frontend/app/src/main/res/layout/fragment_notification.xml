@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.NotificationFragment"
+    tools:context=".fragments.NotificationFragment"
     android:background="@color/primary_color">
 
     <!-- TODO: Update blank fragment layout -->

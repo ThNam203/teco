@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back"
+            android:background="?attr/selectableItemBackground"/>
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@color/blue"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:text="sen1or"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <ImageButton
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_call"
+            app:tint="@color/blue"
+            android:background="?attr/selectableItemBackground"/>
+        <ImageButton
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:layout_marginHorizontal="16dp"
+            android:src="@drawable/ic_video_call"
+            app:tint="@color/blue"
+            android:background="?attr/selectableItemBackground"/>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMessage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="16dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@+id/text_gchat_indicator"
+        app:layout_constraintTop_toBottomOf="@+id/layout_group_chat" />
+
+    <LinearLayout
+        android:id="@+id/layout_gchat_chatbox"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="8dp"
+            android:paddingVertical="12dp"
+            android:layout_gravity="center"
+            android:background="@drawable/background_enter_message">
+            <EditText
+                android:id="@+id/etEnterMessage"
+                android:layout_marginHorizontal="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="Enter Message"
+                android:inputType="text"
+                android:maxLines="6"
+                tools:ignore="Autofill" />
+
+            <ImageButton
+                android:id="@+id/btnTakeCamera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_camera"
+                app:tint="@color/blue"
+                android:layout_gravity="center"/>
+
+            <ImageButton
+                android:id="@+id/btnAttachFile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_attach_file"
+                app:tint="@color/blue"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:background="?attr/selectableItemBackground"
+            android:drawableLeft="@drawable/ic_send"
+            android:drawableTint="@color/blue"/>
+    </LinearLayout>
+</LinearLayout>

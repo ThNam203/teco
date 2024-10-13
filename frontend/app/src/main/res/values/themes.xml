@@ -13,16 +13,32 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
     <style name="PopupAnimationBottom">
         <item name="android:windowEnterAnimation">@anim/popup_slide_in_up</item>
         <item name="android:windowExitAnimation">@anim/popup_slide_out_down</item>
     </style>
+
     <style name="PopupAnimationRight">
         <item name="android:windowEnterAnimation">@anim/popup_slide_in_from_right</item>
         <item name="android:windowExitAnimation">@anim/popup_slide_out_to_right</item>
     </style>
+
     <style name="TextAppearanceTablayout" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="Theme.Monday_app_project.Fullscreen" parent="Theme.Monday_app_project">
+        <item name="android:actionBarStyle">
+            @style/Widget.Theme.Monday_app_project.ActionBar.Fullscreen
+        </item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
+    <style name="ThemeOverlay.Monday_app_project.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
     </style>
 
 </resources>

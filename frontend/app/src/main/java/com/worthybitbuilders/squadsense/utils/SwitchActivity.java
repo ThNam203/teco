@@ -1,9 +1,7 @@
-package com.worthybitbuilders.squadsense.Util;
+package com.worthybitbuilders.squadsense.utils;
 
 import android.content.Context;
 import android.content.Intent;
-
-import com.worthybitbuilders.squadsense.R;
 
 public class SwitchActivity {
     public static void switchToActivity(Context context, Class<?> cls) {

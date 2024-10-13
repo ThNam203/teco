@@ -1,4 +1,4 @@
-package com.worthybitbuilders.squadsense.Pages;
+package com.worthybitbuilders.squadsense.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.Util.SwitchActivity;
+import com.worthybitbuilders.squadsense.utils.SwitchActivity;
 
 public class page_profile extends AppCompatActivity {
 

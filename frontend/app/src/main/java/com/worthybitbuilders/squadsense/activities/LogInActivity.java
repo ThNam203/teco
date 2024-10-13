@@ -1,7 +1,6 @@
-package com.worthybitbuilders.squadsense.Pages;
+package com.worthybitbuilders.squadsense.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -10,16 +9,14 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.worthybitbuilders.squadsense.MainActivity;
 import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.Util.SwitchActivity;
-import com.worthybitbuilders.squadsense.ViewModels.LoginViewModel;
+import com.worthybitbuilders.squadsense.databinding.PageLoginBinding;
+import com.worthybitbuilders.squadsense.utils.SwitchActivity;
+import com.worthybitbuilders.squadsense.viewmodels.LoginViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,28 +24,21 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-public class page_login extends AppCompatActivity {
-    EditText loginEmail;
-    EditText loginPassword;
-    AppCompatButton btnNext;
-    Button btnLoginWithGoogle;
+public class LogInActivity extends AppCompatActivity {
+    private PageLoginBinding binding;
     LoginViewModel loginViewModel;
     GoogleSignInClient mGoogleSignInClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.page_login);
+        binding = PageLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         getSupportActionBar().hide();
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-        loginEmail = (EditText) findViewById(R.id.login_email);
-        loginPassword = (EditText) findViewById(R.id.login_password);
-        btnNext = (AppCompatButton) findViewById(R.id.btn_next);
-        btnNext.setEnabled(false);
-
         setUpGoogleLogin();
 
-        loginEmail.addTextChangedListener(new TextWatcher() {
+        binding.loginEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -60,20 +50,19 @@ public class page_login extends AppCompatActivity {
                 if(loginViewModel.IsValidEmail(inputEmail))
                 {
                     int color = ResourcesCompat.getColor(getResources(), R.color.btn_enabled_color, null);
-                    Drawable drawable = btnNext.getBackground();
+                    Drawable drawable = binding.btnNext.getBackground();
                     drawable.setTint(color);
-                    btnNext.setBackground(drawable);
-                    btnNext.setEnabled(true);
+                    binding.btnNext.setBackground(drawable);
+                    binding.btnNext.setEnabled(true);
                 }
                 else
                 {
                     int color = ResourcesCompat.getColor(getResources(), R.color.btn_disabled_color, null);
-                    Drawable drawable = btnNext.getBackground();
+                    Drawable drawable = binding.btnNext.getBackground();
                     drawable.setTint(color);
-                    btnNext.setBackground(drawable);
-                    btnNext.setEnabled(false);
+                    binding.btnNext.setBackground(drawable);
+                    binding.btnNext.setEnabled(false);
                 }
-
             }
 
             @Override
@@ -82,29 +71,51 @@ public class page_login extends AppCompatActivity {
             }
         });
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
+        binding.btnGoToSignUp.setOnClickListener((view) -> {
+            SwitchActivity.switchToActivity(this, SignUpActivity.class);
+            finish();
+        });
+
+        binding.btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String inputEmail = loginEmail.getText().toString();
-                String inputPassword = loginPassword.getText().toString();
+                String inputEmail = binding.loginEmail.getText().toString();
+                String inputPassword = binding.loginPassword.getText().toString();
                 if(!loginViewModel.IsValidEmail(inputEmail))
                 {
-                    Toast.makeText(page_login.this, "Invalid email", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LogInActivity.this, "Invalid email", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                else if (!loginViewModel.IsEmailExisted(inputEmail))
-                {
-                    Toast.makeText(page_login.this, "Not exist this email", Toast.LENGTH_SHORT).show();
-                }
-                else if (loginViewModel.IsLoginSuccess(inputEmail,inputPassword))
-                {
-                    SwitchActivity.switchToActivity(getWindow().getContext(), MainActivity.class);
-                }
-                else
-                {
-                    Toast.makeText(page_login.this, "Wrong password", Toast.LENGTH_SHORT).show();
-                }
+
+                startLoadingIndicator();
+                loginViewModel.logIn(inputEmail, inputPassword, new LoginViewModel.LogInCallback() {
+                    @Override
+                    public void onSuccess() {
+                        stopLoadingIndicator();
+                        SwitchActivity.switchToActivity(LogInActivity.this, MainActivity.class);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        stopLoadingIndicator();
+                        Toast.makeText(LogInActivity.this, message, Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
+    }
+
+    private void startLoadingIndicator() {
+        binding.loadingIndicator.setVisibility(View.VISIBLE);
+        binding.mainLayout.setClickable(false);
+        binding.mainLayout.setAlpha(0.8f); // Adjust the opacity to your preference
+    }
+
+    private void stopLoadingIndicator() {
+        binding.loadingIndicator.setVisibility(View.GONE);
+        binding.mainLayout.setClickable(true);
+        binding.mainLayout.setAlpha(1f);
     }
 
     private void setUpGoogleLogin() {
@@ -115,8 +126,7 @@ public class page_login extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        btnLoginWithGoogle = (Button) findViewById(R.id.btn_login_google);
-        btnLoginWithGoogle.setOnClickListener(view -> {
+        binding.btnLoginGoogle.setOnClickListener(view -> {
             Toast.makeText(this, "Clicked", Toast.LENGTH_LONG).show();
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, 1);

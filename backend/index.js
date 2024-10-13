@@ -1,13 +1,28 @@
 require('./utils/setUpServer')
 const express = require('express')
+const http = require('http')
 
+const io = require('./socket/socket')
 const errorHandlers = require('./controllers/errorControllers/genericErrorController')
+const authRouter = require('./routers/authRouter')
 
-const server = express()
+const app = express()
+const server = http.createServer(app)
 
-server.use('*', errorHandlers.invalidUrlHandler)
-server.use(errorHandlers.globalErrorHandler)
+io.initialize(server)
+require('./socket/chat')
 
-server.listen(3000, () => {
-    console.log('server is listening on port 3000')
+app.use(express.json())
+app.use(
+    express.urlencoded({
+        extended: true,
+    })
+)
+
+app.use('/', authRouter)
+app.use('*', errorHandlers.invalidUrlHandler)
+app.use(errorHandlers.globalErrorHandler)
+
+server.listen(process.env.PORT || 3000, () => {
+    console.log(`server is listening on port ${process.env.PORT || 3000}`)
 })

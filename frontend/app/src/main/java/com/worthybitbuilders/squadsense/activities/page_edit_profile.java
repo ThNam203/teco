@@ -1,4 +1,4 @@
-package com.worthybitbuilders.squadsense.Pages;
+package com.worthybitbuilders.squadsense.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 

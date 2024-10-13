@@ -1,4 +1,4 @@
-package com.worthybitbuilders.squadsense.Pages;
+package com.worthybitbuilders.squadsense.activities;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -23,10 +23,10 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.worthybitbuilders.squadsense.Models.TaskBoardModel;
-import com.worthybitbuilders.squadsense.Models.TaskModel;
+import com.worthybitbuilders.squadsense.models.TaskBoardModel;
+import com.worthybitbuilders.squadsense.models.TaskModel;
 import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.ViewModels.TaskBoardViewModel;
+import com.worthybitbuilders.squadsense.viewmodels.TaskBoardViewModel;
 
 import java.util.Random;
 

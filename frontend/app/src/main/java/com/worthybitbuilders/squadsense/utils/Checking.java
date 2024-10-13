@@ -1,4 +1,4 @@
-package com.worthybitbuilders.squadsense.Util;
+package com.worthybitbuilders.squadsense.utils;
 
 import android.util.Patterns;
 public class Checking {

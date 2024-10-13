@@ -1,4 +1,4 @@
-package com.worthybitbuilders.squadsense.Fragments;
+package com.worthybitbuilders.squadsense.fragments;
 
 import android.os.Bundle;
 
@@ -10,13 +10,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.worthybitbuilders.squadsense.Pages.page_inbox;
-import com.worthybitbuilders.squadsense.Pages.page_myteam;
-import com.worthybitbuilders.squadsense.Pages.page_notification_setting;
-import com.worthybitbuilders.squadsense.Pages.page_profile;
-import com.worthybitbuilders.squadsense.Pages.page_search_everywhere;
+import com.worthybitbuilders.squadsense.activities.page_inbox;
+import com.worthybitbuilders.squadsense.activities.page_myteam;
+import com.worthybitbuilders.squadsense.activities.page_notification_setting;
+import com.worthybitbuilders.squadsense.activities.page_profile;
+import com.worthybitbuilders.squadsense.activities.page_search_everywhere;
 import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.Util.SwitchActivity;
+import com.worthybitbuilders.squadsense.utils.SwitchActivity;
 
 public class MoreFragment extends Fragment {
     LinearLayout btnNotificationSetting = null;
