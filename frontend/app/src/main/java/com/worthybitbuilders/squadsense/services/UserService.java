@@ -10,11 +10,14 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface UserService {
-    @GET("{userId}")
-    Call<UserModel> getUser(@Path("userId") String userId);
+    @GET("user-id/{userId}")
+    Call<UserModel> getUserById(@Path("userId") String userId);
 
-    @POST("{userId}")
-    Call<UserModel> updateUser(@Path("userId") String userId);
+    @GET("user-email/{email}")
+    Call<UserModel> getUserByEmail(@Path("email") String email);
+
+    @POST("update-user")
+    Call<UserModel> updateUser(@Body UserModel user);
 
     @POST("signup")
     Call<Void> createNewUser(@Body UserModel newUser);

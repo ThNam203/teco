@@ -3,21 +3,17 @@ package com.worthybitbuilders.squadsense.viewmodels;
 import android.util.Log;
 import android.util.Patterns;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.auth0.android.jwt.JWT;
 import com.google.gson.Gson;
 import com.worthybitbuilders.squadsense.models.ErrorResponse;
 import com.worthybitbuilders.squadsense.models.LoginRequest;
-import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.services.RetrofitServices;
 import com.worthybitbuilders.squadsense.services.UserService;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;

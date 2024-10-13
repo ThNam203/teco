@@ -14,9 +14,10 @@ import android.widget.Toast;
 
 import com.worthybitbuilders.squadsense.MainActivity;
 import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.databinding.PageLoginBinding;
-import com.worthybitbuilders.squadsense.utils.SwitchActivity;
 import com.worthybitbuilders.squadsense.viewmodels.LoginViewModel;
+import com.worthybitbuilders.squadsense.databinding.PageLoginBinding;
+import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.utils.Activity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -28,6 +29,7 @@ public class LogInActivity extends AppCompatActivity {
     private PageLoginBinding binding;
     LoginViewModel loginViewModel;
     GoogleSignInClient mGoogleSignInClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +39,8 @@ public class LogInActivity extends AppCompatActivity {
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         setUpGoogleLogin();
+
+        SharedPreferencesManager.init(this);
 
         binding.loginEmail.addTextChangedListener(new TextWatcher() {
             @Override
@@ -72,8 +76,7 @@ public class LogInActivity extends AppCompatActivity {
         });
 
         binding.btnGoToSignUp.setOnClickListener((view) -> {
-            SwitchActivity.switchToActivity(this, SignUpActivity.class);
-            finish();
+            Activity.switchToActivity(this, SignUpActivity.class);
         });
 
         binding.btnNext.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +95,8 @@ public class LogInActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess() {
                         stopLoadingIndicator();
-                        SwitchActivity.switchToActivity(LogInActivity.this, MainActivity.class);
+                        SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.USEREMAIL, inputEmail);
+                        Activity.switchToActivity(LogInActivity.this, MainActivity.class);
                         finish();
                     }
 
@@ -119,7 +123,6 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void setUpGoogleLogin() {
-        Toast.makeText(this, "Clicked", Toast.LENGTH_LONG).show();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -127,7 +130,6 @@ public class LogInActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         binding.btnLoginGoogle.setOnClickListener(view -> {
-            Toast.makeText(this, "Clicked", Toast.LENGTH_LONG).show();
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, 1);
         });

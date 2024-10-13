@@ -44,28 +44,28 @@
             android:name=".activities.page_task_board"
             android:exported="false" />
         <activity
-            android:name=".activities.page_add_board"
+            android:name=".activities.AddBoardActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.page_search_everywhere"
+            android:name=".activities.SearchEverywhereActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.page_notification_setting"
+            android:name=".activities.NotificationSettingActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.page_myteam"
+            android:name=".activities.TeamActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.page_inbox"
+            android:name=".activities.InboxActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.page_profile"
+            android:name=".activities.OpenProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.page_search"
+            android:name=".activities.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.page_edit_profile"
+            android:name=".activities.EditProfileActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

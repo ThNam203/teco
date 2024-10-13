@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.NotificationFragment"
-    android:background="@color/primary_color">
+    android:background="@color/primary_color"
+    android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
     <RelativeLayout
@@ -33,18 +34,12 @@
             android:src="@drawable/ic_more_setting"
             app:tint="@color/white" />
     </RelativeLayout>
-    <ImageView
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_centerInParent="true"
-        android:background="@color/transparent"
-        android:src="@drawable/image_notification_fragment" />
+
     <EditText
         android:id="@+id/text_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="70dp"
         android:layout_marginRight="15dp"
         android:background="@drawable/background_input"
         android:cursorVisible="true"
@@ -62,7 +57,7 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="20dp"
         android:scrollbars="none"
         android:id="@+id/srollview">
         <LinearLayout
@@ -82,18 +77,6 @@
                 android:layout_marginLeft="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"/>
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_unread_notification"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:background="@drawable/background_btn_in_scrollview_selector"
-                android:text="Unread"
-                android:textAllCaps="false"
-                android:textSize="20dp"
-                android:textColor="@color/primary_word_color"
-                android:layout_marginRight="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_mentioned_notification"
@@ -109,18 +92,6 @@
                 android:textSize="20dp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_assign_to_me_notification"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:background="@drawable/background_btn_in_scrollview_selector"
-                android:textColor="@color/primary_word_color"
-                android:text="Assign to me"
-                android:textAllCaps="false"
-                android:textSize="20dp"
-                android:layout_marginRight="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"/>
-            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_today_notification"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
@@ -135,41 +106,57 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_notification"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="200dp"
-        android:background="@color/transparent"
-        android:text="Ready, set, get notified!"
-        android:textAlignment="center"
-        android:textColor="@color/primary_word_color"
-        android:textSize="32dp"
-        android:textStyle="bold" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="100dp"
-        android:text="Here's where you'll get notified in real-time every time something important happens"
-        android:textAlignment="center"
-        android:background="@color/transparent"
-        android:textColor="@color/primary_word_color"
-        android:textSize="24dp" />
+        android:visibility="gone"/>
 
-    <Button
-        android:id="@+id/btn_invite"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/defaultview_notification"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="40dp"
-        android:backgroundTint="@color/primary_btn_color"
-        android:text="Invite team members"
-        android:textAllCaps="false"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:background="@color/transparent"
+            android:src="@drawable/image_notification_fragment" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
 
-</RelativeLayout>
+            android:background="@color/transparent"
+            android:text="Ready, set, get notified!"
+            android:textAlignment="center"
+            android:textColor="@color/primary_word_color"
+            android:textSize="32dp"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Here's where you'll get notified in real-time every time something important happens"
+            android:textAlignment="center"
+            android:background="@color/transparent"
+            android:textColor="@color/primary_word_color"
+            android:textSize="24dp" />
+        <Button
+            android:id="@+id/btn_invite_member"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/primary_btn_color"
+            android:text="Invite team members"
+            android:textAllCaps="false"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/primary_word_color"
+            android:layout_marginTop="10dp"/>
+    </LinearLayout>
+
+
+
+</LinearLayout>

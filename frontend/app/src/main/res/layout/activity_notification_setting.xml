@@ -113,14 +113,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email notifications"
+                android:text="Mobile notifications"
                 android:textColor="@color/primary_word_color"
                 android:textSize="24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Received directly to your email"
+                android:text="Received directly on your device"
                 android:textColor="@color/primary_word_second_color"
                 android:textSize="24dp" />
 

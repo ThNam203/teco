@@ -19,33 +19,30 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.databinding.FragmentMoreBinding;
+import com.worthybitbuilders.squadsense.databinding.FragmentWorkBinding;
 
 public class WorkFragment extends Fragment {
 
-    Button btnHideDoneItem = null;
+    private FragmentWorkBinding binding;
     Boolean IsbtnHideDoneItemChecked = false;
 
-    ImageButton btnAddItem = null;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_work, container, false);
-
-        //Init variables here
-        btnHideDoneItem = (Button) v.findViewById(R.id.btn_hide_done_item);
-        btnAddItem = v.findViewById(R.id.btn_add_item);
+        binding = FragmentWorkBinding.inflate(getLayoutInflater());
 
         //set onclick buttons here
-        btnHideDoneItem.setOnClickListener(new View.OnClickListener() {
+        binding.btnHideDoneItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(IsbtnHideDoneItemChecked == false)
                 {
                     Drawable drawable = getResources().getDrawable(R.drawable.ic_checkbox_checked);
                     drawable.setColorFilter(ContextCompat.getColor(getContext(), R.color.chosen_color), PorterDuff.Mode.SRC_IN);
-                    btnHideDoneItem.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+                    binding.btnHideDoneItem.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
 
                     IsbtnHideDoneItemChecked = true;
                 }
@@ -53,20 +50,20 @@ public class WorkFragment extends Fragment {
                 {
                     Drawable drawable = getResources().getDrawable(R.drawable.ic_checkbox_unchecked);
                     drawable.setColorFilter(ContextCompat.getColor(getContext(), R.color.primary_icon_color), PorterDuff.Mode.SRC_IN);
-                    btnHideDoneItem.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+                    binding.btnHideDoneItem.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
 
                     IsbtnHideDoneItemChecked = false;
                 }
 
             }
         });
-        btnAddItem.setOnClickListener(new View.OnClickListener() {
+        binding.btnAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 btnAddItem_showDialog();
             }
         });
-        return v;
+        return binding.getRoot();
     }
 
     //define function here

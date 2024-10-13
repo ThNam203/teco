@@ -8,23 +8,25 @@ import android.widget.ImageButton;
 
 import com.worthybitbuilders.squadsense.R;
 
-public class page_inbox extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity {
 
     ImageButton btnBack = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.page_inbox);
+        setContentView(R.layout.activity_search);
         getSupportActionBar().hide();
 
-        //Init variables here
-        btnBack = (ImageButton) findViewById(R.id.btn_back);
+
+        //init variables here
+        btnBack = findViewById(R.id.btn_back);
 
         //set onclick buttons here
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                page_inbox.super.onBackPressed();
+                SearchActivity.super.onBackPressed();
+//                finish();
             }
         });
     }

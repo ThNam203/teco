@@ -8,13 +8,13 @@ import android.widget.ImageButton;
 
 import com.worthybitbuilders.squadsense.R;
 
-public class page_notification_setting extends AppCompatActivity {
+public class SearchEverywhereActivity extends AppCompatActivity {
 
     ImageButton btnBack = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.page_notification_setting);
+        setContentView(R.layout.activity_search_everywhere);
         getSupportActionBar().hide();
 
         //init variables here
@@ -24,7 +24,7 @@ public class page_notification_setting extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                page_notification_setting.super.onBackPressed();
+                SearchEverywhereActivity.super.onBackPressed();
             }
         });
     }

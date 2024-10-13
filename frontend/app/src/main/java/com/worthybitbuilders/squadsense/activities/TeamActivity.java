@@ -8,13 +8,13 @@ import android.widget.ImageButton;
 
 import com.worthybitbuilders.squadsense.R;
 
-public class page_myteam extends AppCompatActivity {
+public class TeamActivity extends AppCompatActivity {
 
     ImageButton btnBack = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.page_myteam);
+        setContentView(R.layout.activity_team);
         getSupportActionBar().hide();
 
         //Init variables here
@@ -24,7 +24,7 @@ public class page_myteam extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                page_myteam.super.onBackPressed();
+                TeamActivity.super.onBackPressed();
             }
         });
     }

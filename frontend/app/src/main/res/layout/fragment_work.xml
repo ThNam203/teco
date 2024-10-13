@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.WorkFragment"
-    android:background="@color/primary_color">
+    android:background="@color/primary_color"
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="60dp"
+        android:orientation="horizontal">
         <TextView
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="My Work"
             android:padding="10dp"
             android:layout_alignParentLeft="true"
-            android:gravity="center"
+            android:gravity="left"
             android:textColor="@color/white"
             android:textSize="32dp"
             android:textStyle="bold" />
@@ -24,20 +27,19 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true"
+            android:layout_gravity="end"
             android:backgroundTint="@color/transparent"
             android:contentDescription="btn add person"
             android:minHeight="48dp"
             android:src="@drawable/ic_more_setting"
             app:tint="@color/white" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:layout_marginTop="10dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,6 +54,7 @@
                 android:text="Hide done items"
                 android:textAllCaps="false"
                 android:textSize="20dp"
+                android:textColor="@color/primary_word_color"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"/>
             <Button
@@ -61,6 +64,7 @@
                 android:text="Board (0)"
                 android:textAllCaps="false"
                 android:textSize="20dp"
+                android:textColor="@color/primary_word_color"
                 android:layout_marginRight="10dp"/>
             <Button
                 android:layout_width="wrap_content"
@@ -69,6 +73,7 @@
                 android:text="Following (0)"
                 android:textAllCaps="false"
                 android:textSize="20dp"
+                android:textColor="@color/primary_word_color"
                 android:layout_marginRight="10dp"/>
         </LinearLayout>
     </HorizontalScrollView>
@@ -76,8 +81,8 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:layout_marginTop="10dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -230,7 +235,7 @@
     <ImageView
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_centerInParent="true"
+        android:layout_gravity="center"
         android:background="@color/transparent"
         android:src="@drawable/image_work_fragment" />
 
@@ -238,7 +243,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="450dp"
         android:layout_marginRight="20dp"
         android:text="You have unfollowed all your boards"
         android:textAlignment="center"
@@ -250,7 +254,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="550dp"
         android:layout_marginRight="40dp"
         android:text="You have unfollowed 0 boards you were assigned to. To see your items, start following boards again"
         android:textAlignment="center"
@@ -262,12 +265,10 @@
         android:id="@+id/btn_add_item"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
+        android:layout_gravity="end"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/background_btn_circle"
-        android:contentDescription="btn add"
         android:src="@drawable/ic_add_calendar"
         app:tint="@color/white" />
-</RelativeLayout>
+</LinearLayout>

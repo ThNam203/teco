@@ -7,8 +7,9 @@ public class SharedPreferencesManager {
     private static final String SHARED_PREFS_NAME = "MySharedPrefs";
     public enum KEYS {
         USERID("userid"),
-        JWT("jwt");
+        JWT("jwt"),
 
+        USEREMAIL("useremail");
         private final String key;
 
         KEYS(String key) {

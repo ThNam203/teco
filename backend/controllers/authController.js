@@ -31,6 +31,11 @@ const verifyAndGetJWTToken = async (req, next) => {
 }
 
 exports.signUp = asyncCatch(async (req, res, next) => {
+    const { email } = req.body
+
+    const isExisted = await User.findOne({ email })
+    if (isExisted) return next(new AppError('Email already existed', 400))
+
     const newUser = await User.create(req.body)
     if (!newUser) return next(new AppError('Unable to create new user', 500))
     res.status(204).end()

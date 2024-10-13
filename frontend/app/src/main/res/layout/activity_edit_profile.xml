@@ -64,14 +64,17 @@
                     android:layout_height="100dp"
                     android:background="@drawable/background_btn_corner"
                     android:backgroundTint="@color/teal_200">
+
                     <TextView
+                        android:id="@+id/default_image_profile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:text="N"
                         android:textColor="@color/primary_word_color"
                         android:textSize="48dp"
-                        android:textStyle="bold"/>
+                        android:textAllCaps="true"
+                        android:textStyle="bold" />
 
                     <ImageButton
                         android:id="@+id/btn_camera"
@@ -104,6 +107,7 @@
                         android:textSize="24dp"
                         android:padding="10dp"/>
                     <EditText
+                        android:id="@+id/name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/background_input"
@@ -135,6 +139,7 @@
                         android:textSize="24dp"
                         android:padding="10dp"/>
                     <EditText
+                        android:id="@+id/introduction"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/background_input"
@@ -166,10 +171,13 @@
                         android:textSize="24dp"
                         android:padding="10dp"/>
                     <EditText
+                        android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/background_input"
-                        android:text="phamtiendat4823@gmail.com"
+                        android:text="email@gmail.com"
+                        android:hint="email@gmail.com"
+                        android:focusable="false"
                         android:padding="10dp"
                         android:textColor="@color/primary_word_color"
                         android:textColorHint="@color/primary_word_second_color"
@@ -198,11 +206,13 @@
                         android:textSize="24dp"
                         android:padding="10dp"/>
                     <EditText
+                        android:id="@+id/phonenumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/background_input"
                         android:hint="Add a phone number"
                         android:padding="10dp"
+                        android:inputType="number"
                         android:textColor="@color/primary_word_color"
                         android:textColorHint="@color/primary_word_second_color"
                         android:textSize="24dp" />
@@ -229,6 +239,7 @@
                         android:textSize="24dp"
                         android:padding="10dp"/>
                     <EditText
+                        android:id="@id/birthday"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/background_input"

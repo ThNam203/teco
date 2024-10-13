@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.HomeFragment"
     android:background="@color/primary_color"
-    android:id="@+id/home_fragment">
+    android:id="@+id/home_fragment"
+    android:orientation="vertical">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp">
@@ -31,11 +32,10 @@
         </RelativeLayout>
 
         <EditText
-            android:id="@+id/input_search_label"
+            android:id="@+id/label_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="70dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/background_input"
             android:cursorVisible="false"
@@ -52,30 +52,31 @@
 
 
         <Button
+            android:visibility="visible"
             android:id="@+id/btn_myfavorites"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="130dp"
             android:background="@color/transparent"
             android:drawableRight="@drawable/ic_arrow_down"
             android:drawableTint="@color/primary_icon_color"
             android:text="My favorities"
             android:textAllCaps="false"
             android:textSize="20dp"
+            android:textColor="@color/primary_word_color"
             android:textStyle="bold" />
 
     <ImageView
         android:layout_width="250dp"
         android:layout_height="200dp"
-        android:layout_centerInParent="true"
+        android:layout_gravity="center"
         android:background="@color/transparent"
         android:src="@drawable/image_home_page" />
 
         <TextView
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="500dp"
             android:layout_marginRight="20dp"
             android:text="Star any board, doc or dashboard to add it to your favorites"
             android:textAlignment="center"
@@ -88,8 +89,7 @@
             android:id="@+id/btn_add"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
+            android:layout_gravity="end|bottom"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/background_btn_circle"
@@ -97,4 +97,4 @@
             android:src="@drawable/selector_ic_add"
             app:tint="@color/white" />
 
-</RelativeLayout>
+</LinearLayout>
