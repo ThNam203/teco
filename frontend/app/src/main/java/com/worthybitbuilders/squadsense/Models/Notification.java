@@ -91,14 +91,13 @@ public class Notification {
     public String getTimeCreated()
     {
         //if the notification is sent today -> show time else show date
-
         String dateNow = Convert.DateToString(new Date(), Convert.Pattern.DAY_MONTH_YEAR);
         String dateCreatedDMY = Convert.TimestampsToString(createdAt, Convert.Pattern.DAY_MONTH_YEAR);
 
         if(dateNow.equals(dateCreatedDMY))
-            return getTimeCreatedDMY();
-        else
             return getTimeCreatedHm();
+        else
+            return getTimeCreatedDMY();
     }
 
     public String getTimeCreatedDMY() {
