@@ -39,6 +39,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     FriendViewModel friendViewModel;
     UserViewModel userViewModel;
+    String hello;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
