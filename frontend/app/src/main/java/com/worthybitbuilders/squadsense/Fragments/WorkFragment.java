@@ -1,4 +1,4 @@
-package com.worthybitbuilders.squadsense.fragments;
+package com.worthybitbuilders.squadsense.fragments12;
 
 import android.app.Dialog;
 import android.graphics.Color;
@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.worthybitbuilders.squadsense.R;

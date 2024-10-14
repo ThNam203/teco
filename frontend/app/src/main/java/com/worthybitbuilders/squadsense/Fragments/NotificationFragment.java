@@ -1,4 +1,4 @@
-package com.worthybitbuilders.squadsense.fragments;
+package com.worthybitbuilders.squadsense.fragments12;
 
 import android.app.Dialog;
 import android.graphics.Color;
@@ -29,7 +29,6 @@ import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.utils.Activity;
 import com.worthybitbuilders.squadsense.utils.Convert;
 import com.worthybitbuilders.squadsense.adapters.NotificationAdapter;
-import com.worthybitbuilders.squadsense.databinding.FragmentNotificationBinding;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.NotificationViewModel;
