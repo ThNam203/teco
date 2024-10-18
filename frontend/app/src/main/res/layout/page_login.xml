@@ -63,7 +63,7 @@
             android:background="@drawable/background_btn_stroke"
             android:drawableTint="@color/primary_word_second_color"
             android:hint="Password"
-            android:inputType="numberPassword"
+            android:inputType="textPassword"
             android:minHeight="48dp"
             android:paddingHorizontal="15dp"
             android:textColor="@color/primary_word_color"

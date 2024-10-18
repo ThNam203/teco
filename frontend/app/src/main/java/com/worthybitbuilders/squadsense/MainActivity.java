@@ -6,12 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.worthybitbuilders.squadsense.fragments12.HomeFragment;
-import com.worthybitbuilders.squadsense.fragments12.MoreFragment;
-import com.worthybitbuilders.squadsense.fragments12.NotificationFragment;
-import com.worthybitbuilders.squadsense.fragments12.WorkFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.worthybitbuilders.squadsense.fragments.HomeFragment;
+import com.worthybitbuilders.squadsense.fragments.MoreFragment;
+import com.worthybitbuilders.squadsense.fragments.NotificationFragment;
+import com.worthybitbuilders.squadsense.fragments.WorkFragment;
 
 public class MainActivity extends AppCompatActivity {
 

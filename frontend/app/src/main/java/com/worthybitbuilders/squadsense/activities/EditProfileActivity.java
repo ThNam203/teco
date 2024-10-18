@@ -5,9 +5,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,8 @@ import com.worthybitbuilders.squadsense.utils.Activity;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
+import java.util.ArrayList;
+
 public class EditProfileActivity extends AppCompatActivity {
 
     private ActivityEditProfileBinding binding;
@@ -30,6 +35,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private UserViewModel userViewModel;
 
     private UserModel currentUser;
+
+    private static final int STORAGE_PERMISSION_REQUEST_CODE = 1002;
+    private ArrayList<String> imagePaths;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,5 +153,32 @@ public class EditProfileActivity extends AppCompatActivity {
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().setGravity(Gravity.CENTER);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == STORAGE_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                loadPhotos();
+            } else {
+                Toast.makeText(this, "Storage permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void loadPhotos() {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                String imagePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
+                imagePaths.add(imagePath);
+            }
+            cursor.close();
+        }
     }
 }

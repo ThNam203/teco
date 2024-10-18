@@ -7,7 +7,7 @@ public class RetrofitServices {
     private static UserService userService = null;
     private static FriendService friendService = null;
     private static NotificationService notificationService = null;
-    private final static String BASE_URL = "http://192.168.1.7:3000/";
+    private final static String BASE_URL = "http://10.45.8.143:3000/";
 
     private static Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)

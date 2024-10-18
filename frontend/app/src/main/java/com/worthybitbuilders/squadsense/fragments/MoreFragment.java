@@ -1,4 +1,4 @@
-package com.worthybitbuilders.squadsense.fragments12;
+package com.worthybitbuilders.squadsense.fragments;
 
 import android.os.Bundle;
 
@@ -17,6 +17,7 @@ import com.worthybitbuilders.squadsense.activities.TeamActivity;
 import com.worthybitbuilders.squadsense.activities.NotificationSettingActivity;
 import com.worthybitbuilders.squadsense.activities.OpenProfileActivity;
 import com.worthybitbuilders.squadsense.activities.SearchEverywhereActivity;
+import com.worthybitbuilders.squadsense.databinding.FragmentMoreBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.Activity;

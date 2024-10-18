@@ -1,4 +1,4 @@
-package com.worthybitbuilders.squadsense.fragments12;
+package com.worthybitbuilders.squadsense.fragments;
 
 import android.app.Dialog;
 import android.graphics.Color;
@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.worthybitbuilders.squadsense.activities.NotificationSettingActivity;
+import com.worthybitbuilders.squadsense.databinding.FragmentNotificationBinding;
 import com.worthybitbuilders.squadsense.models.Notification;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.R;
