@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/primary_third_color">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingHorizontal="10dp"
+        android:paddingBottom="15dp">
+        <TextView
+            android:id="@+id/deleteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Status"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="28dp"
+            android:textStyle="bold" />
+        <ImageButton
+            android:id="@+id/btn_close_popup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/transparent"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_close"
+            app:tint="@color/primary_icon_color" />
+    </FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/primary_splitter_color" />
+    <TextView
+        android:id="@+id/etContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Are you sure to delete"
+        android:textSize="18sp"
+        android:textColorHint="@color/primary_word_color"
+        android:textColor="@color/primary_word_color"
+        android:layout_margin="32dp"
+        android:background="@null"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:paddingEnd="32dp">
+        <TextView
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Cancel"
+            android:textSize="18sp"
+            android:textColor="#c1d3ea"
+            android:layout_marginBottom="16dp"/>
+        <TextView
+            android:id="@+id/btnAccept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Accept"
+            android:textSize="18sp"
+            android:textColor="#c1d3ea"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"/>
+    </LinearLayout>
+</LinearLayout>

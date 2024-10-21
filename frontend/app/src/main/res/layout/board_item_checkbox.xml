@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout
+    android:id="@+id/userItemContainer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="80dp"
+    android:layout_height="wrap_content">
+    <FrameLayout
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_board_cell">
+        <CheckBox
+            android:id="@+id/checkBoxItemCheckbox"
+            android:layout_width="80dp"
+            android:layout_height="@dimen/tableview_default_height"
+            android:scaleY="1.5"
+            android:scaleX="1.5"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/transparent"
+            android:button="@android:color/transparent"
+            app:tint="@color/white"/>
+    </FrameLayout>
+</LinearLayout>

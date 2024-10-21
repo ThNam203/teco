@@ -38,6 +38,10 @@ public class LogInActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
+        // Auto logging
+        if (loginViewModel.isAutoLogging()) SwitchActivity.switchToActivity(LogInActivity.this, MainActivity.class);
+
         setUpGoogleLogin();
 
         SharedPreferencesManager.init(this);
@@ -51,7 +55,7 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence content, int i, int i1, int i2) {
                 String inputEmail = content.toString();
-                if(loginViewModel.IsValidEmail(inputEmail))
+                if(loginViewModel.isValidEmail(inputEmail))
                 {
                     int color = ResourcesCompat.getColor(getResources(), R.color.btn_enabled_color, null);
                     Drawable drawable = binding.btnNext.getBackground();
@@ -79,16 +83,14 @@ public class LogInActivity extends AppCompatActivity {
             Activity.switchToActivity(this, SignUpActivity.class);
         });
 
-        binding.btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String inputEmail = binding.loginEmail.getText().toString();
-                String inputPassword = binding.loginPassword.getText().toString();
-                if(!loginViewModel.IsValidEmail(inputEmail))
-                {
-                    Toast.makeText(LogInActivity.this, "Invalid email", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        binding.btnNext.setOnClickListener(view -> {
+            String inputEmail = binding.loginEmail.getText().toString();
+            String inputPassword = binding.loginPassword.getText().toString();
+            if(!loginViewModel.isValidEmail(inputEmail))
+            {
+                Toast.makeText(LogInActivity.this, "Invalid email", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
                 startLoadingIndicator();
                 loginViewModel.logIn(inputEmail, inputPassword, new LoginViewModel.LogInCallback() {
@@ -100,13 +102,12 @@ public class LogInActivity extends AppCompatActivity {
                         finish();
                     }
 
-                    @Override
-                    public void onFailure(String message) {
-                        stopLoadingIndicator();
-                        Toast.makeText(LogInActivity.this, message, Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
+                @Override
+                public void onFailure(String message) {
+                    stopLoadingIndicator();
+                    Toast.makeText(LogInActivity.this, message, Toast.LENGTH_LONG).show();
+                }
+            });
         });
     }
 

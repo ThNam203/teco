@@ -27,34 +27,31 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.nav_bottom);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
 
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId())
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId())
+            {
+                case R.id.item_home:
                 {
-                    case R.id.item_home:
-                    {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-                        break;
-                    }
-                    case R.id.item_work:
-                    {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WorkFragment()).commit();
-                        break;
-                    }
-                    case R.id.item_notification:
-                    {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationFragment()).commit();
-                        break;
-                    }
-                    case R.id.item_more:
-                    {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MoreFragment()).commit();
-                        break;
-                    }
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                    break;
                 }
-                return true;
+                case R.id.item_work:
+                {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WorkFragment()).commit();
+                    break;
+                }
+                case R.id.item_notification:
+                {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationFragment()).commit();
+                    break;
+                }
+                case R.id.item_more:
+                {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MoreFragment()).commit();
+                    break;
+                }
             }
+            return true;
         });
     }
 }

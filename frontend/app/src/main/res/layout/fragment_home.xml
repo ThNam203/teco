@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments12.HomeFragment"
@@ -11,12 +12,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp">
-
             <ImageView
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/image_logo_app" />
-
             <ImageButton
                 android:id="@+id/btn_addperson"
                 android:layout_width="wrap_content"
@@ -37,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
+            android:layout_marginVertical="12dp"
             android:background="@drawable/background_input"
             android:cursorVisible="false"
             android:drawableLeft="@drawable/ic_search"
@@ -49,8 +49,6 @@
             android:textColorHint="@color/primary_word_second_color"
             android:textCursorDrawable="@null"
             android:textSize="20dp" />
-
-
         <Button
             android:visibility="visible"
             android:id="@+id/btn_myfavorites"
@@ -59,42 +57,55 @@
             android:background="@color/transparent"
             android:drawableRight="@drawable/ic_arrow_down"
             android:drawableTint="@color/primary_icon_color"
-            android:text="My favorities"
+            android:text="All projects"
             android:textAllCaps="false"
             android:textSize="20dp"
             android:textColor="@color/primary_word_color"
             android:textStyle="bold" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/emptyProjectsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:orientation="vertical">
+                <ImageView
+                    android:layout_width="250dp"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="64dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/transparent"
+                    android:src="@drawable/image_home_page" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:text="Manage your works and teams by creating a new project"
+                    android:textAlignment="center"
+                    android:background="@color/transparent"
+                    android:textColor="@color/primary_word_color"
+                    android:textSize="32dp"
+                    android:textStyle="bold" />
+        </LinearLayout>
 
-    <ImageView
-        android:layout_width="250dp"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:background="@color/transparent"
-        android:src="@drawable/image_home_page" />
-
-        <TextView
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text="Star any board, doc or dashboard to add it to your favorites"
-            android:textAlignment="center"
-            android:background="@color/transparent"
-            android:textColor="@color/primary_word_color"
-            android:textSize="32dp"
-            android:textStyle="bold" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProjects"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
         <ImageButton
             android:id="@+id/btn_add"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_gravity="end|bottom"
-            android:layout_marginEnd="10dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="32dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/background_btn_circle"
-            android:contentDescription="btn add"
+            android:contentDescription="btn add project"
             android:src="@drawable/selector_ic_add"
             app:tint="@color/white" />
-
+    </FrameLayout>
 </LinearLayout>

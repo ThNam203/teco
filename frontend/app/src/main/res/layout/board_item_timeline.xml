@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="180dp"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tvDateItemContent"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tableview_default_height"
+        android:paddingHorizontal="4dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:singleLine="true"
+        tools:text="Jan 10, 2003 - Jan 08 2032"
+        android:textColor="@color/white"
+        android:textSize="@dimen/tableview_default_text_size"
+        android:gravity="center"
+        android:background="@drawable/background_board_cell"/>
+</LinearLayout>

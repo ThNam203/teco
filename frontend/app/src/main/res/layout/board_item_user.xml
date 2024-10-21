@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout
+    android:id="@+id/userItemContainer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="80dp"
+    android:layout_height="wrap_content">
+    <FrameLayout
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_board_cell">
+        <ImageView
+            android:id="@+id/taskItemUser"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:padding="8dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="Task item user"
+            android:src="@drawable/ic_person"
+            app:tint="@color/white"/>
+    </FrameLayout>
+</LinearLayout>

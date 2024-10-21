@@ -22,12 +22,10 @@
             android:label="@string/title_activity_sign_up"
             android:theme="@style/Theme.Monday_app_project.Fullscreen" />
         <activity
-            android:name=".ui.login.LoginActivity"
-            android:exported="false"
-            android:label="@string/title_activity_login" />
-        <activity
             android:name=".activities.MessagingActivity"
-            android:exported="true" />
+            android:exported="false" />
+        <activity android:name=".activities.ProjectActivity"
+            android:exported="false"/>
         <activity
             android:name=".activities.LogInActivity"
             android:exported="true">
@@ -39,9 +37,6 @@
         </activity>
         <activity
             android:name=".activities.page_task_message"
-            android:exported="false" />
-        <activity
-            android:name=".activities.page_task_board"
             android:exported="false" />
         <activity
             android:name=".activities.AddBoardActivity"

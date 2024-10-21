@@ -2,6 +2,7 @@ package com.worthybitbuilders.squadsense.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,9 +11,7 @@ import android.widget.ImageButton;
 import com.worthybitbuilders.squadsense.R;
 
 public class AddBoardActivity extends AppCompatActivity {
-
     ImageButton btnClose = null;
-
     Button btnNewBoard = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,10 @@ public class AddBoardActivity extends AppCompatActivity {
         btnNewBoard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                SwitchActivity.switchToActivity(getWindow().getContext(), page_task_board.class);
+                Intent boardIntent = new Intent(page_add_board.this, ProjectActivity.class);
+                boardIntent.putExtra("whatToDo", "createNew");
+                finish();
+                startActivity(boardIntent);
             }
         });
     }

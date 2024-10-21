@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/primary_second_color">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingHorizontal="10dp"
+        android:paddingBottom="15dp">
+        <ImageButton
+            android:id="@+id/btnClosePopup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:backgroundTint="@color/transparent"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_close"
+            app:tint="@color/primary_icon_color" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="New status"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="28dp"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:singleLine="true"
+            android:padding="0dp"
+            android:layout_marginEnd="16dp"
+            android:text="Add"
+            android:backgroundTint="#0073ea"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/primary_splitter_color" />
+    <EditText
+        android:id="@+id/etTextItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Status info..."
+        android:paddingVertical="16dp"
+        android:textColorHint="@color/primary_word_color"
+        android:textColor="@color/primary_word_color"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginVertical="16dp"
+        android:background="@null"/>
+</LinearLayout>

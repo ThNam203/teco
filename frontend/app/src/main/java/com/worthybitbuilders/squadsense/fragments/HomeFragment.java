@@ -1,15 +1,12 @@
 package com.worthybitbuilders.squadsense.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,32 +21,62 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.activities.AddBoardActivity;
+import com.worthybitbuilders.squadsense.activities.ProjectActivity;
+import com.worthybitbuilders.squadsense.activities.SearchActivity;
+import com.worthybitbuilders.squadsense.adapters.ProjectAdapter;
 import com.worthybitbuilders.squadsense.databinding.FragmentHomeBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
-import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
-import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
-import com.worthybitbuilders.squadsense.activities.AddBoardActivity;
-import com.worthybitbuilders.squadsense.activities.SearchActivity;
-import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.Activity;
+import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
+import com.worthybitbuilders.squadsense.viewmodels.MainActivityViewModel;
+import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
 public class HomeFragment extends Fragment {
-
     private FragmentHomeBinding binding;
+    private ProjectAdapter projectAdapter;
+    private MainActivityViewModel viewModel;
+
     FriendViewModel friendViewModel;
     UserViewModel userViewModel;
     String hello;
 
+    @SuppressLint({"ClickableViewAccessibility", "NotifyDataSetChanged"})
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(getLayoutInflater());
-        friendViewModel = new ViewModelProvider(this).get(FriendViewModel.class);
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        SharedPreferencesManager.init(getContext());
+        viewModel = new ViewModelProvider(getActivity()).get(MainActivityViewModel.class);
 
-        //set onclick buttons here
+        // THERE IS ONLY "ONFAILURE" method
+        viewModel.getAllProjects(message -> {
+            Toast.makeText(getContext(), "Unable to get your projects, please try again", Toast.LENGTH_LONG).show();
+        });
+
+        viewModel.getProjectsLiveData().observe(getViewLifecycleOwner(), minimizedProjectModels -> {
+            if (minimizedProjectModels == null || minimizedProjectModels.size() == 0)
+                binding.emptyProjectsContainer.setVisibility(View.VISIBLE);
+            else binding.emptyProjectsContainer.setVisibility(View.GONE);
+            projectAdapter.setData(minimizedProjectModels);
+        });
+
+        projectAdapter = new ProjectAdapter(null, _id -> {
+            Intent intent = new Intent(getContext(), ProjectActivity.class);
+            intent.putExtra("whatToDo", "fetch");
+            intent.putExtra("projectId", _id);
+            startActivity(intent);
+        });
+        binding.rvProjects.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvProjects.setHasFixedSize(true);
+        binding.rvProjects.setAdapter(projectAdapter);
+
         binding.btnMyfavorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,7 +100,6 @@ public class HomeFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 int action = motionEvent.getAction() & MotionEvent.ACTION_MASK;
-
                 if (action == MotionEvent.ACTION_UP) {
                     labelSearch_showActivity();
                 }
@@ -83,8 +109,8 @@ public class HomeFragment extends Fragment {
         return binding.getRoot();
     }
 
-
     //define function here
+    @SuppressLint("ClickableViewAccessibility")
     private void btnAdd_showPopup() {
         View popupView = getLayoutInflater().inflate(R.layout.popup_btn_add, null);
         View layout = binding.getRoot();
@@ -107,21 +133,12 @@ public class HomeFragment extends Fragment {
                 return true;
             }
         });
+
         LinearLayout btnAddItem = popupView.findViewById(R.id.btn_add_item);
-        btnAddItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btn_add_item_showPopup();
-            }
-        });
+        btnAddItem.setOnClickListener(view -> btn_add_item_showPopup());
 
         LinearLayout btnAddBoard = popupView.findViewById(R.id.btn_add_board);
-        btnAddBoard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btn_add_board_showPopup();
-            }
-        });
+        btnAddBoard.setOnClickListener(view -> btn_add_board_showPopup());
     }
 
     private void btn_addperson_showPopup() {
@@ -182,7 +199,6 @@ public class HomeFragment extends Fragment {
                 dialog.dismiss();
             }
         });
-        //
 
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -205,7 +221,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
@@ -227,8 +242,6 @@ public class HomeFragment extends Fragment {
         dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialog.show();
-
-
 
         //      Set activity of button in dialog here
         ImageButton btnClosePopup = (ImageButton) dialog.findViewById(R.id.btn_close_popup);

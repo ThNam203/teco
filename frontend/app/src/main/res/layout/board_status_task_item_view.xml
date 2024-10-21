@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvStatusItemContent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/background_btn_corner"
+    android:backgroundTint="#9c9c9c"
+    android:gravity="center"
+    android:paddingVertical="10dp"
+    android:textColor="@color/primary_word_color"
+    android:textSize="16sp" />
