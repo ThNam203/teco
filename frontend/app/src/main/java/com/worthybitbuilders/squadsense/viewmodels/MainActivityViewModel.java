@@ -46,6 +46,7 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public interface GetProjectsFromRemoteHandlers {
+        void onSuccess();
         void onFailure(String message);
     }
 }

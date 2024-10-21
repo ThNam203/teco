@@ -34,6 +34,8 @@ import com.worthybitbuilders.squadsense.adapters.ProjectAdapter;
 import com.worthybitbuilders.squadsense.databinding.FragmentHomeBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.Activity;
+import com.worthybitbuilders.squadsense.utils.CustomUtils;
+import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.MainActivityViewModel;
@@ -56,8 +58,18 @@ public class HomeFragment extends Fragment {
         viewModel = new ViewModelProvider(getActivity()).get(MainActivityViewModel.class);
 
         // THERE IS ONLY "ONFAILURE" method
-        viewModel.getAllProjects(message -> {
-            Toast.makeText(getContext(), "Unable to get your projects, please try again", Toast.LENGTH_LONG).show();
+        Dialog loadingDialog = DialogUtils.GetLoadingDialog(getContext());
+        loadingDialog.show();
+        viewModel.getAllProjects(new MainActivityViewModel.GetProjectsFromRemoteHandlers() {
+            @Override
+            public void onSuccess() {
+                loadingDialog.dismiss();
+            }
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(getContext(), "Unable to get your projects, please try again", Toast.LENGTH_LONG).show();
+                loadingDialog.dismiss();
+            }
         });
 
         viewModel.getProjectsLiveData().observe(getViewLifecycleOwner(), minimizedProjectModels -> {

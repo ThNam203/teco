@@ -40,7 +40,7 @@ public class LogInActivity extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         // Auto logging
-        if (loginViewModel.isAutoLogging()) SwitchActivity.switchToActivity(LogInActivity.this, MainActivity.class);
+        if (loginViewModel.isAutoLogging()) Activity.switchToActivity(LogInActivity.this, MainActivity.class);
 
         setUpGoogleLogin();
 

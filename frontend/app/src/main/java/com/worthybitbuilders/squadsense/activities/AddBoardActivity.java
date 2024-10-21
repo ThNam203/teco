@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
@@ -19,25 +18,15 @@ public class AddBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_board);
         getSupportActionBar().hide();
 
-        //Init variables here
         btnNewBoard = (Button) findViewById(R.id.btn_create_new_board);
         btnClose = (ImageButton) findViewById(R.id.btn_close);
 
-        //set onclick buttons here
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddBoardActivity.super.onBackPressed();
-            }
-        });
-        btnNewBoard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent boardIntent = new Intent(page_add_board.this, ProjectActivity.class);
-                boardIntent.putExtra("whatToDo", "createNew");
-                finish();
-                startActivity(boardIntent);
-            }
+        btnClose.setOnClickListener(view -> AddBoardActivity.super.onBackPressed());
+        btnNewBoard.setOnClickListener(view -> {
+            Intent boardIntent = new Intent(AddBoardActivity.this, ProjectActivity.class);
+            boardIntent.putExtra("whatToDo", "createNew");
+            finish();
+            startActivity(boardIntent);
         });
     }
 }
