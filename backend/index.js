@@ -1,6 +1,7 @@
 require('./utils/setUpServer')
 const express = require('express')
 const http = require('http')
+var cors = require('cors')
 
 const io = require('./socket/socket')
 const errorHandlers = require('./controllers/errorControllers/genericErrorController')
@@ -10,6 +11,8 @@ const friendRouter = require('./routers/friendRouter')
 const notificationRouter = require('./routers/notificationRouter')
 const projectRouter = require('./routers/projectRouter')
 const chatRoomRouter = require('./routers/chatRoomRouter')
+const jitsiRouter = require('./routers/jitsiRouter')
+// const livekitRouter = require('./routers/livekitRouter')
 const s3Controller = require('./controllers/awsS3Controllers')
 
 const app = express()
@@ -24,6 +27,7 @@ app.use(
         extended: true,
     })
 )
+app.use(cors())
 
 app.post('/upload-files', s3Controller.s3Upload.array('files'), (req, res) => {
     if (req.files) {
@@ -51,6 +55,8 @@ app.use('/', authRouter)
 app.use('/', userRouter)
 app.use('/', friendRouter)
 app.use('/', notificationRouter)
+// app.use('/', livekitRouter)
+app.use('/', jitsiRouter)
 app.use('/:userId/chatroom', chatRoomRouter)
 app.use('/:userId/project', projectRouter)
 app.use('*', errorHandlers.invalidUrlHandler)
