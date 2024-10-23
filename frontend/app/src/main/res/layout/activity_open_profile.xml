@@ -100,14 +100,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/primary_splitter_color" />
+
             <LinearLayout
+                android:layout_marginTop="30dp"
                 android:id="@+id/btn_intro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/background_btn_stroke">
-
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
@@ -115,7 +116,6 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="10dp"
                     android:src="@drawable/ic_user" />
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -124,15 +124,14 @@
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:text="Introduction"
+                        android:textStyle="bold"
                         android:textColor="@color/primary_word_second_color"
                         android:textSize="@dimen/normal_textsize" />
-
                     <TextView
                         android:id="@+id/introduction"
                         android:layout_width="wrap_content"
@@ -143,7 +142,6 @@
                         android:text="Add introduction"
                         android:textColor="@color/primary_word_second_color"
                         android:textSize="@dimen/normal_textsize" />
-
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -175,6 +173,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:text="Email"
+                        android:textStyle="bold"
                         android:textColor="@color/primary_word_second_color"
                         android:textSize="@dimen/normal_textsize" />
 
@@ -221,6 +220,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:text="Phone"
+                        android:textStyle="bold"
                         android:textColor="@color/primary_word_second_color"
                         android:textSize="@dimen/normal_textsize" />
 
@@ -267,6 +267,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:text="Birthday"
+                        android:textStyle="bold"
                         android:textColor="@color/primary_word_second_color"
                         android:textSize="@dimen/normal_textsize" />
 

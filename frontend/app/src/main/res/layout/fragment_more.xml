@@ -16,7 +16,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp">
                 <androidx.cardview.widget.CardView
                     android:id="@+id/image_profile_border"
                     android:visibility="gone"
@@ -62,10 +63,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="25sp"
                     android:text="View Profile"
-                    android:textColor="@color/primary_word_second_color"
+                    android:textColor="@color/amp_blue"
                     android:textSize="@dimen/large_textsize" />
+
+
             </LinearLayout>
 
             <LinearLayout
@@ -102,14 +106,15 @@
                             android:text="Inbox"
                             android:textColor="@color/primary_word_color"
                             android:textSize="@dimen/normal_textsize" />
-<!--                        <TextView-->
-<!--                            android:id="@+id/desc_inbox"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_marginLeft="5dp"-->
-<!--                            android:text="No new updates"-->
-<!--                            android:textColor="@color/primary_word_second_color"-->
-<!--                            android:textSize="@dimen/small_textsize" />-->
+
+                        <TextView
+                            android:id="@+id/desc_inbox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="No new updates"
+                            android:textColor="@color/primary_word_second_color"
+                            android:textSize="@dimen/small_textsize" />
                     </LinearLayout>
 
                     <ImageView
