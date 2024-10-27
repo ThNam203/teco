@@ -97,8 +97,8 @@ public class LogInActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess() {
                         stopLoadingIndicator();
-                        SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.USEREMAIL, inputEmail);
-                        ActivityUtils.switchToActivity(LogInActivity.this, MainActivity.class);
+                        SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.USER_EMAIL, inputEmail);
+                        Activity.switchToActivity(LogInActivity.this, MainActivity.class);
                         finish();
                     }
 

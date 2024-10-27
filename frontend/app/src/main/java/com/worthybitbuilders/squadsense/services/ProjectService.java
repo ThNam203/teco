@@ -1,8 +1,10 @@
 package com.worthybitbuilders.squadsense.services;
 
+import com.worthybitbuilders.squadsense.models.BoardDetailItemModel;
 import com.worthybitbuilders.squadsense.models.MinimizedProjectModel;
 import com.worthybitbuilders.squadsense.models.NewColumnRequestModel;
 import com.worthybitbuilders.squadsense.models.NewRowRequestModel;
+import com.worthybitbuilders.squadsense.models.UpdateTask;
 import com.worthybitbuilders.squadsense.models.board_models.BoardBaseItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardContentModel;
@@ -17,11 +19,14 @@ import com.worthybitbuilders.squadsense.models.board_models.ProjectModel;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface ProjectService {
@@ -46,11 +51,18 @@ public interface ProjectService {
     @PUT("{userId}/project/{projectId}/board/{boardId}/row")
     Call<List<String>> addNewRowToRemote(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Body NewRowRequestModel newRow);
 
+    @GET("{userId}/project/{projectId}/board/{boardId}/row/{rowPosition}")
+    Call<BoardDetailItemModel> getCellsInARow(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("rowPosition") Integer rowPosition);
+
+    @GET("{userId}/project/{projectId}/board/{boardId}/cell-update/{cellId}")
+    Call<List<UpdateTask>> getAllUpdateTasksOfACell(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId);
+
     // CELL UPDATES
+    @Multipart
+    @POST("{userId}/project/{projectId}/board/{boardId}/cell/{cellId}")
+    Call<UpdateTask> createNewUpdateTaskToRemote(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Part List<MultipartBody.Part> files, @Part UpdateTask taskContent);
     @PUT("{userId}/project/{projectId}/board/{boardId}/cell/{cellId}")
     Call<Void> updateCellToRemote(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Body BoardStatusItemModel cellModel);
-    @PUT("{userId}/project/{projectId}/board/{boardId}/cell/{cellId}")
-    Call<Void> updateCellToRemote(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Body BoardUpdateItemModel cellModel);
     @PUT("{userId}/project/{projectId}/board/{boardId}/cell/{cellId}")
     Call<Void> updateCellToRemote(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Body BoardTextItemModel cellModel);
     @PUT("{userId}/project/{projectId}/board/{boardId}/cell/{cellId}")

@@ -18,7 +18,7 @@ public class ProjectModel {
      */
     public ProjectModel(int chosenPosition, List<BoardContentModel> boards) {
         this.title = "Start from scratch";
-        this.creatorId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID);
+        this.creatorId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
 
         List<String> memberIds = new ArrayList<>();
         memberIds.add(creatorId);

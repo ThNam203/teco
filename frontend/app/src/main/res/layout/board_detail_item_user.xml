@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout
+    android:id="@+id/userItemContainer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical">
+    <TextView
+        android:id="@+id/tvColumnTitle"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/primary_word_color"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <FrameLayout
+        android:orientation="horizontal"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_board_detail_cell">
+        <ImageView
+            android:id="@+id/taskItemUser"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:padding="8dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="Task item user"
+            android:src="@drawable/ic_person"
+            app:tint="@color/white"/>
+    </FrameLayout>
+</LinearLayout>

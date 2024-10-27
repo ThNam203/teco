@@ -6,10 +6,10 @@ import android.content.SharedPreferences;
 public class SharedPreferencesManager {
     private static final String SHARED_PREFS_NAME = "MySharedPrefs";
     public enum KEYS {
-        USERID("userid"),
+        USER_ID("userid"),
         JWT("jwt"),
 
-        USEREMAIL("useremail");
+        USER_EMAIL("useremail");
         private final String key;
 
         KEYS(String key) {

@@ -15,7 +15,7 @@ public class AddBoardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_board);
+        setContentView(R.layout.activity_add_project);
         getSupportActionBar().hide();
 
         btnNewBoard = (Button) findViewById(R.id.btn_create_new_board);

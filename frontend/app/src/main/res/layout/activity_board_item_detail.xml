@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_color"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="btn add person"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/primary_icon_color" />
+        <TextView
+            android:id="@+id/itemTitle"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            tools:text="Item1" />
+        <ImageButton
+            android:id="@+id/btnMoreOptions"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="btn add person"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_more_setting"
+            app:tint="@color/white" />
+    </LinearLayout>
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/buttonsContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+            <Button
+                android:id="@+id/btnShowColumns"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Columns"
+                android:padding="8dp"
+                android:backgroundTint="#2b2b2b"
+                app:icon="@drawable/ic_table_sheet"
+                android:textAllCaps="false"
+                android:textColor="@color/primary_word_color"/>
+        </LinearLayout>
+    </HorizontalScrollView>
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

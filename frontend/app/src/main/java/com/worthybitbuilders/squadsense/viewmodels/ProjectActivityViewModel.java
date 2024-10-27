@@ -25,7 +25,7 @@ public class ProjectActivityViewModel extends ViewModel {
     public ProjectActivityViewModel() {}
 
     public void getProjectById(String projectId, OnGettingProjectFromRemote handler) {
-        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID);
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         Call<ProjectModel> project = projectService.getProjectById(userId, projectId);
         project.enqueue(new Callback<ProjectModel>() {
             @Override
@@ -46,13 +46,17 @@ public class ProjectActivityViewModel extends ViewModel {
         });
     }
 
+    public String getProjectId() {
+        return projectModel.get_id();
+    }
+
     /**
      * This method is called when user create a new project
      * The new project is automatically created by this method
      * which is then saved in the view model
      */
     public void saveNewProjectToRemote(OnGettingProjectFromRemote handlers) {
-        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID);
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         List<String> authors = new ArrayList<>();
         authors.add(userId);
 
@@ -78,7 +82,7 @@ public class ProjectActivityViewModel extends ViewModel {
     }
 
     public void addNewBoardToProject(OnCreateAndSaveNewBoardToRemote handlers) {
-        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID);
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         Call<BoardContentModel> call = projectService.createAndGetNewBoardToProject(userId, projectModel.get_id());
         call.enqueue(new Callback<BoardContentModel>() {
             @Override

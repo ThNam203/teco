@@ -21,7 +21,7 @@ public class BoardTimelineItemModel extends BoardBaseItemModel {
     private int endMonth = -1;
     private int endDay = -1;
     public BoardTimelineItemModel() {
-        super("", "Timeline");
+        super("", "CellTimeline");
     }
 
     public BoardTimelineItemModel(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {

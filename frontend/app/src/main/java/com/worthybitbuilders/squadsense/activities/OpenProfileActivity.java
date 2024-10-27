@@ -60,7 +60,7 @@ public class OpenProfileActivity extends AppCompatActivity {
 
     private void LoadData()
     {
-        userViewModel.getUserById(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID), new UserViewModel.UserCallback() {
+        userViewModel.getUserById(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), new UserViewModel.UserCallback() {
             @Override
             public void onSuccess(UserModel user) {
                 String name = user.getName();

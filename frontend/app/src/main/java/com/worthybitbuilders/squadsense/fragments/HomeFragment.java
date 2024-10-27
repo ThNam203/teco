@@ -181,7 +181,7 @@ public class HomeFragment extends Fragment {
                 userViewModel.getUserByEmail(receiverEmail, new UserViewModel.UserCallback() {
                     @Override
                     public void onSuccess(UserModel user) {
-                        friendViewModel.createRequest(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID), user.getId(), new FriendViewModel.FriendRequestCallback() {
+                        friendViewModel.createRequest(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), user.getId(), new FriendViewModel.FriendRequestCallback() {
                             @Override
                             public void onSuccess() {
                                 Toast t = Toast.makeText(getContext(), "request was sent to " + receiverEmail + "!!", Toast.LENGTH_SHORT);

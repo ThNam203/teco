@@ -65,7 +65,7 @@ public class NotificationFragment extends Fragment {
 
         setupBtnList();
 
-        notificationViewModel.getNotification(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID), new NotificationViewModel.getNotificationCallback() {
+        notificationViewModel.getNotification(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), new NotificationViewModel.getNotificationCallback() {
             @Override
             public void onSuccess(List<Notification> notificationsData) {
                 for (Notification item : notificationsData) {
@@ -236,7 +236,7 @@ public class NotificationFragment extends Fragment {
     }
 
     private void ReplyFriendRequest(String response, int position){
-        String replierId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID);
+        String replierId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         String requestSender = listNotification.get(position).getSenderId();
         friendViewModel.reply(replierId, requestSender, response, new FriendViewModel.FriendRequestCallback() {
             @Override
@@ -298,7 +298,7 @@ public class NotificationFragment extends Fragment {
                 userViewModel.getUserByEmail(receiverEmail, new UserViewModel.UserCallback() {
                     @Override
                     public void onSuccess(UserModel user) {
-                        friendViewModel.createRequest(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID), user.getId(), new FriendViewModel.FriendRequestCallback() {
+                        friendViewModel.createRequest(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), user.getId(), new FriendViewModel.FriendRequestCallback() {
                             @Override
                             public void onSuccess() {
                                 Toast t = Toast.makeText(getContext(), "request was sent to " + receiverEmail + "!!", Toast.LENGTH_SHORT);

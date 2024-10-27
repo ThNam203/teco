@@ -23,7 +23,7 @@ public class MainActivityViewModel extends ViewModel {
     public MainActivityViewModel() {}
 
     public void getAllProjects(GetProjectsFromRemoteHandlers handlers) {
-        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID);
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         Call<List<MinimizedProjectModel>> projectsCall = projectService.getAllProject(userId);
         projectsCall.enqueue(new Callback<List<MinimizedProjectModel>>() {
             @Override

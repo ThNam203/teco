@@ -109,7 +109,7 @@ public class MoreFragment extends Fragment {
     }
 
     private void LoadData(){
-        userViewModel.getUserById(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID), new UserViewModel.UserCallback() {
+        userViewModel.getUserById(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), new UserViewModel.UserCallback() {
             @Override
             public void onSuccess(UserModel user) {
                 if(user.getName() == null || user.getName().isEmpty())

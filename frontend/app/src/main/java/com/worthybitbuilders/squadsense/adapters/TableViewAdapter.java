@@ -124,6 +124,8 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
     public void onBindCellViewHolder(@NonNull AbstractViewHolder holder, @Nullable BoardBaseItemModel cellItemModel, int columnPosition, int rowPosition) {
         if (cellItemModel == null) return;
         String columnTitle = mColumnHeaderItems.get(columnPosition).getTitle();
+        String rowTitle = mRowHeaderItems.get(rowPosition).getTitle();
+
         if (holder instanceof BoardStatusItemViewHolder) {
             ((BoardStatusItemViewHolder) holder).setItemModel((BoardStatusItemModel) cellItemModel, columnPosition, rowPosition);
         } else if (holder instanceof BoardTextItemViewHolder) {
@@ -131,7 +133,7 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
         } else if (holder instanceof BoardUserItemViewHolder) {
             ((BoardUserItemViewHolder) holder).setItemModel((BoardUserItemModel) cellItemModel, mContext);
         } else if (holder instanceof BoardUpdateItemViewHolder) {
-            ((BoardUpdateItemViewHolder) holder).setItemModel((BoardUpdateItemModel) cellItemModel, columnTitle);
+            ((BoardUpdateItemViewHolder) holder).setItemModel(rowPosition, rowTitle);
         } else if (holder instanceof BoardNumberItemViewHolder) {
             ((BoardNumberItemViewHolder) holder).setItemModel((BoardNumberItemModel) cellItemModel, columnTitle, columnPosition, rowPosition);
         } else if (holder instanceof BoardCheckboxItemViewHolder) {

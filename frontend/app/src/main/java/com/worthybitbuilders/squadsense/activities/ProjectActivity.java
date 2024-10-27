@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Toast;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 import com.worthybitbuilders.squadsense.R;
@@ -26,7 +25,7 @@ import com.worthybitbuilders.squadsense.adapters.EditBoardsAdapter;
 import com.worthybitbuilders.squadsense.adapters.StatusContentsAdapter;
 import com.worthybitbuilders.squadsense.adapters.StatusEditItemAdapter;
 import com.worthybitbuilders.squadsense.adapters.TableViewAdapter;
-import com.worthybitbuilders.squadsense.databinding.ActivityBoardBinding;
+import com.worthybitbuilders.squadsense.databinding.ActivityProjectBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardAddItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardAddNewRowPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardDateItemPopupBinding;
@@ -71,13 +70,13 @@ public class ProjectActivity extends AppCompatActivity {
 
     // This differs from "projectActivityViewModel", this holds logic for only TableView
     private BoardViewModel boardViewModel;
-    private ActivityBoardBinding activityBinding;
+    private ActivityProjectBinding activityBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
-        activityBinding = ActivityBoardBinding.inflate(getLayoutInflater());
+        activityBinding = ActivityProjectBinding.inflate(getLayoutInflater());
         activityBinding.btnShowTables.setOnClickListener(view -> showTables());
 
         projectActivityViewModel = new ViewModelProvider(this).get(ProjectActivityViewModel.class);
@@ -96,33 +95,18 @@ public class ProjectActivity extends AppCompatActivity {
 
             @Override
             public void onCheckboxItemClick(BoardCheckboxItemModel itemModel, int columnPos, int rowPos) {
-                Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
-                loadingDialog.show();
-                itemModel.setChecked(!itemModel.getChecked());
-                boardViewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()) {
-                            boardAdapter.changeCellItem(columnPos, rowPos, itemModel);
-                        } else {
-                            Toast.makeText(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG).show();
-                        }
-
-                        loadingDialog.dismiss();
-                    }
-
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Toast.makeText(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG).show();
-                        loadingDialog.dismiss();
-                    }
-                });
-
+                onCheckboxItemClicked(itemModel, columnPos, rowPos);
             }
 
             @Override
-            public void onUpdateItemClick(BoardUpdateItemModel itemModel, String columnTitle) {
-                Toast.makeText(ProjectActivity.this, "Update item clicked", Toast.LENGTH_SHORT).show();
+            public void onUpdateItemClick(int rowPosition, String rowTitle) {
+                Intent updateIntent = new Intent(ProjectActivity.this, BoardItemDetailActivity.class);
+                updateIntent.putExtra("projectId", projectActivityViewModel.getProjectId());
+                updateIntent.putExtra("boardId", boardViewModel.getBoardId());
+                updateIntent.putExtra("rowPosition", rowPosition);
+                updateIntent.putExtra("rowTitle", rowTitle);
+                updateIntent.putExtra("isFromUpdateColumn", true);
+                startActivity(updateIntent);
             }
 
             @Override
@@ -169,9 +153,41 @@ public class ProjectActivity extends AppCompatActivity {
                             .getBoardTitle());
         });
 
-        getDataForActivity();
         activityBinding.btnBack.setOnClickListener((view) -> onBackPressed());
         setContentView(activityBinding.getRoot());
+    }
+
+    private void onCheckboxItemClicked(BoardCheckboxItemModel itemModel, int columnPos, int rowPos) {
+        Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
+        loadingDialog.show();
+        itemModel.setChecked(!itemModel.getChecked());
+        boardViewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    boardAdapter.changeCellItem(columnPos, rowPos, itemModel);
+                } else {
+                    Toast.makeText(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG).show();
+                }
+
+                loadingDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG).show();
+                loadingDialog.dismiss();
+            }
+        });
+    }
+
+    /**
+     * The reason to use onStart() is the onStop() will eventually navigate to this
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getDataForActivity();
     }
 
     /**
@@ -316,8 +332,28 @@ public class ProjectActivity extends AppCompatActivity {
         StatusContentsAdapter statusContentsAdapter = new StatusContentsAdapter(statusItemModel);
         statusContentsAdapter.setHandlers((itemModel, newContent) -> {
             itemModel.setContent(newContent);
-            boardAdapter.changeCellItem(columnPos, rowPos, itemModel);
-            dialog.dismiss();
+            Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
+            loadingDialog.show();
+            boardViewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        boardAdapter.changeCellItem(columnPos, rowPos, itemModel);
+                    } else {
+                        Toast.makeText(ProjectActivity.this, "Unable to save the cell", Toast.LENGTH_LONG).show();
+                    }
+
+                    loadingDialog.dismiss();
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(ProjectActivity.this, "Unable to save the cell", Toast.LENGTH_LONG).show();
+                    loadingDialog.dismiss();
+                    dialog.dismiss();
+                }
+            });
         });
         binding.rvStatusContents.setLayoutManager(new LinearLayoutManager(this));
         binding.rvStatusContents.setAdapter(statusContentsAdapter);

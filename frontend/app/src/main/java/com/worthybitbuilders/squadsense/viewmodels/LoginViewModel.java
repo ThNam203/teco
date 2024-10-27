@@ -44,7 +44,7 @@ public class LoginViewModel extends ViewModel {
                     String jwtString = response.body();
                     SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.JWT, jwtString);
                     JWT jwt = new JWT(jwtString);
-                    SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.USERID, jwt.getClaim("id").asString());
+                    SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.USER_ID, jwt.getClaim("id").asString());
                     callback.onSuccess();
                 }
                 else {

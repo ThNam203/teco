@@ -2,6 +2,7 @@
 const Board = require('../models/Board')
 const Project = require('../models/Project')
 const cellModels = require('../models/Cell')
+const UpdateTask = require('../models/UpdateTask')
 const AppError = require('../utils/AppError')
 const asyncCatch = require('../utils/asyncCatch')
 
@@ -211,6 +212,22 @@ exports.deleteColumn = asyncCatch(async (req, res, next) => {
     res.status(204).end()
 })
 
+exports.addNewUpdateTask = asyncCatch(async (req, res, next) => {
+    const { taskContent } = req.body
+    const { cellId } = req.params
+    console.log(JSON.stringify(taskContent, null, 2))
+    console.log(JSON.stringify(req.files, null, 2))
+    res.status(500).end()
+})
+
+exports.getAllUpdateTasksOfACell = asyncCatch(async (req, res, next) => {
+    const { cellId } = req.params
+    const updateTasks = await UpdateTask.find({ cellId: cellId }).sort({
+        createdAt: 1,
+    })
+    res.status(200).json(updateTasks)
+})
+
 exports.addNewRow = asyncCatch(async (req, res, next) => {
     const { rowHeaderModel, cells } = req.body
     const { projectId, boardId } = req.params
@@ -306,6 +323,28 @@ exports.deleteProjectById = asyncCatch(async (req, res, next) => {
 
     await Project.findByIdAndDelete(projectId)
     res.status(204).end()
+})
+
+exports.getCellsInARow = asyncCatch(async (req, res, next) => {
+    const { boardId, rowPosition } = req.params
+
+    const board = await Board.findById(boardId).populate({
+        path: 'cells',
+        model: 'Cell',
+    })
+
+    const cellsInRow = []
+    const columnTitles = []
+    for (let i = 0; i < board.columnCells.length; i += 1) {
+        cellsInRow.push(board.cells[rowPosition][i])
+        columnTitles.push(board.columnCells[i].title)
+    }
+
+    res.status(200).json({
+        columnTitles: columnTitles,
+        cells: cellsInRow,
+        rowTitle: board.rowCells[rowPosition],
+    })
 })
 
 exports.getProjectById = asyncCatch(async (req, res, next) => {

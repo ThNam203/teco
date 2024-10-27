@@ -61,6 +61,14 @@ public class BoardViewModel extends ViewModel {
         }
     }
 
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public String getBoardId() {
+        return boardId;
+    }
+
     public String getBoardTitle() {
         if (boardTitle == null || boardTitle.isEmpty()) return "Unknown title";
         return boardTitle;
@@ -156,7 +164,7 @@ public class BoardViewModel extends ViewModel {
             itemModels.add(newModel);
         }
 
-        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID);
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         Call<List<String>> call = projectService.addNewColumnToRemote(userId, projectId, boardId, new NewColumnRequestModel(newColumnModel, itemModels));
         call.enqueue(new Callback<List<String>>() {
             @Override
@@ -192,7 +200,7 @@ public class BoardViewModel extends ViewModel {
             newRowItems.add(BoardItemFactory.createNewItem(mColumnHeaderModelList.get(i).getColumnType()));
         }
 
-        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID);
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         Call<List<String>> call = projectService.addNewRowToRemote(userId, projectId, boardId, new NewRowRequestModel(newRowHeaderModel, newRowItems));
         call.enqueue(new Callback<List<String>>() {
             @Override
@@ -222,12 +230,10 @@ public class BoardViewModel extends ViewModel {
      * Use it along with boardAdapter.changeCellItem or pass it into the function
      */
     public Call<Void> updateACell(BoardBaseItemModel cellModel) {
-        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID);
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         switch (cellModel.getCellType()) {
             case "CellStatus":
                 return projectService.updateCellToRemote(userId, projectId, boardId, cellModel.get_id(), (BoardStatusItemModel) cellModel);
-            case "CellUpdate":
-                return projectService.updateCellToRemote(userId, projectId, boardId, cellModel.get_id(), (BoardUpdateItemModel) cellModel);
             case "CellText":
                 return projectService.updateCellToRemote(userId, projectId, boardId, cellModel.get_id(), (BoardTextItemModel) cellModel);
             case "CellNumber":
