@@ -31,6 +31,9 @@ public class MainActivityViewModel extends ViewModel {
                 if (response.isSuccessful()) {
                     minimizedProject = response.body();
                     minimizedProjectsMutableLiveData.setValue(minimizedProject);
+                    handlers.onSuccess();
+                } else {
+                    handlers.onFailure(response.message());
                 }
             }
 
