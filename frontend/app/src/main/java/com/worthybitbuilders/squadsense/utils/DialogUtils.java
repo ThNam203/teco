@@ -22,7 +22,6 @@ public class DialogUtils {
         dialog.setCancelable(false);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
         dialog.getWindow().setGravity(Gravity.CENTER);
         return dialog;
     }

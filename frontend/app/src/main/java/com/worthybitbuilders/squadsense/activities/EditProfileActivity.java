@@ -2,12 +2,18 @@ package com.worthybitbuilders.squadsense.activities;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -15,6 +21,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.View;
@@ -24,9 +31,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.worthybitbuilders.squadsense.BuildConfig;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.databinding.ActivityEditProfileBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
+import com.worthybitbuilders.squadsense.utils.DialogUtils;
+import com.worthybitbuilders.squadsense.utils.EventChecker;
 import com.worthybitbuilders.squadsense.utils.ImageUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
@@ -34,6 +44,9 @@ import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -46,10 +59,12 @@ public class EditProfileActivity extends AppCompatActivity {
     private UserViewModel userViewModel;
     private UserModel currentUser;
     private Uri avatarUri;
-    String bucketName = "squadsense";
-    String region = "ap-southeast-1";
     private static final int STORAGE_PERMISSION_REQUEST_CODE = 1;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 2;
+
+    Dialog loadingDialog;
+
+    EventChecker eventChecker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +74,9 @@ public class EditProfileActivity extends AppCompatActivity {
         binding = ActivityEditProfileBinding.inflate(getLayoutInflater());
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
+        eventChecker = new EventChecker();
+        loadingDialog = DialogUtils.GetLoadingDialog(this);
+        loadingDialog.show();
         userViewModel.getUserById(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), new UserViewModel.UserCallback() {
             @Override
             public void onSuccess(UserModel user) {
@@ -77,7 +95,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 {
                     try{
                         String profileImagePath = user.getProfileImagePath();
-                        String publicProfileImageURL = String.format("https://%s.s3.%s.amazonaws.com/%s", bucketName, region, profileImagePath);
+                        String publicProfileImageURL = String.format("https://squadsense.s3.ap-southeast-1.amazonaws.com/%s", profileImagePath);
 
                         Glide.with(EditProfileActivity.this)
                                 .load(publicProfileImageURL)
@@ -111,10 +129,13 @@ public class EditProfileActivity extends AppCompatActivity {
                 {
                     binding.birthday.setText(user.getBirthday());
                 }
+
+                loadingDialog.dismiss();
             }
 
             @Override
             public void onFailure(String message) {
+                loadingDialog.dismiss();
                 Toast t = Toast.makeText(EditProfileActivity.this, message, Toast.LENGTH_SHORT);
                 t.setGravity(Gravity.TOP, 0, 0);
                 t.show();
@@ -146,6 +167,16 @@ public class EditProfileActivity extends AppCompatActivity {
         binding.btnSaveProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loadingDialog.show();
+                eventChecker.setActionWhenComplete(new EventChecker.CompleteCallback() {
+                    @Override
+                    public void Action() {
+                        loadingDialog.dismiss();
+                        EditProfileActivity.this.onBackPressed();
+                        finish();
+                    }
+                });
+
                 if(binding.name.getText().toString() != null && !binding.name.getText().toString().isEmpty())
                     currentUser.setName(binding.name.getText().toString());
                 else
@@ -153,6 +184,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 if(avatarUri != null)
                 {
+                    final int SAVE_AVATAR_INDEX = eventChecker.addEventStatusAndGetCode(false);
                     File avatarFile = UriToFile(avatarUri);
                     RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), avatarFile);
                     MultipartBody.Part avatarFilePart = MultipartBody.Part.createFormData("avatar-file", avatarFile.getName(), requestBody);
@@ -160,31 +192,33 @@ public class EditProfileActivity extends AppCompatActivity {
                     userViewModel.uploadAvatar(userId, avatarFilePart, new UserViewModel.UploadAvatarCallback() {
                         @Override
                         public void onSuccess() {
+                            eventChecker.markEventAsCompleteAndDoActionIfNeeded(SAVE_AVATAR_INDEX);
                             Toast.makeText(EditProfileActivity.this, "Save image successfully!", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onFailure(String message) {
-                            binding.introduction.setText(message);
+                            eventChecker.markEventAsCompleteAndDoActionIfNeeded(SAVE_AVATAR_INDEX);
+                            Toast.makeText(EditProfileActivity.this, "Save image failed", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
                 currentUser.setIntroduction(binding.introduction.getText().toString());
                 currentUser.setPhoneNumber(binding.phonenumber.getText().toString());
                 currentUser.setBirthday(binding.birthday.getText().toString());
+                final int SAVE_INFO_USER_INDEX = eventChecker.addEventStatusAndGetCode(false);
                 userViewModel.updateUser(currentUser, new UserViewModel.UserCallback() {
                     @Override
                     public void onSuccess(UserModel user) {
+                        eventChecker.markEventAsCompleteAndDoActionIfNeeded(SAVE_INFO_USER_INDEX);
                         Toast t = Toast.makeText(EditProfileActivity.this, "user updated!", Toast.LENGTH_SHORT);
                         t.setGravity(Gravity.TOP, 0, 0);
                         t.show();
-
-                        EditProfileActivity.super.onBackPressed();
-                        finish();
                     }
 
                     @Override
                     public void onFailure(String message) {
+                        eventChecker.markEventAsCompleteAndDoActionIfNeeded(SAVE_INFO_USER_INDEX);
                         Toast t = Toast.makeText(EditProfileActivity.this, message, Toast.LENGTH_SHORT);
                         t.setGravity(Gravity.TOP, 0, 0);
                         t.show();
@@ -210,19 +244,19 @@ public class EditProfileActivity extends AppCompatActivity {
         tvOpenCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                avatarUri = createImage();
-                myCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, avatarUri);
-                startActivityIfNeeded(myCameraIntent, CAMERA_PERMISSION_REQUEST_CODE);
+                if(!checkPermissionAndAskForIt(
+                        EditProfileActivity.this,
+                        Manifest.permission.CAMERA,
+                        CAMERA_PERMISSION_REQUEST_CODE)
+                ) return;
+                getPhotoFromCamera();
             }
         });
 
         tvUploadPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                myFileIntent.setType("image/*");
-                startActivityIfNeeded(myFileIntent, STORAGE_PERMISSION_REQUEST_CODE);
+                openImageStorage();
             }
         });
         //
@@ -249,27 +283,23 @@ public class EditProfileActivity extends AppCompatActivity {
             case CAMERA_PERMISSION_REQUEST_CODE:
                 if(resultCode == RESULT_OK)
                 {
-                    Toast.makeText(this, "image captured", Toast.LENGTH_SHORT).show();
-                    return;
+                    if (avatarUri != null) {
+                        // Ảnh đã chụp thành công, sử dụng URI để hiển thị ảnh
+                        binding.imageProfile.setImageURI(avatarUri);
+                        loadAvatarView(true);
+                    } else {
+                        Toast.makeText(this, "capture image failed, please try again", Toast.LENGTH_SHORT).show();
+                    }
                 }
         }
     }
 
-    private Uri createImage(){
-        Uri uri = null;
-        ContentResolver resolver = getContentResolver();
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-            uri = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-        else
-            uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-
-        String imageName = String.valueOf(System.currentTimeMillis());
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, imageName + ".jpg");
-        contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/" + "My Images/");
-        Uri finalUri = resolver.insert(uri, contentValues);
-        return finalUri;
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "IMG_" + timeStamp;
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File imageFile = File.createTempFile(imageFileName, ".jpg", storageDir);
+        return imageFile;
     }
 
     private void loadAvatarView(boolean hasAvatar)
@@ -300,4 +330,44 @@ public class EditProfileActivity extends AppCompatActivity {
         }
         return file;
     }
+
+    private boolean checkPermissionAndAskForIt(Context context, String permission, int PERMISSION_REQUEST_CODE) {
+        if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{permission},
+                    PERMISSION_REQUEST_CODE);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void openImageStorage()
+    {
+        Intent myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        myFileIntent.setType("image/*");
+        startActivityIfNeeded(myFileIntent, STORAGE_PERMISSION_REQUEST_CODE);
+    }
+    private void getPhotoFromCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                Toast.makeText(this, "Unable to take picture, please try again", Toast.LENGTH_LONG).show();
+            }
+
+            if (photoFile != null) {
+                avatarUri = FileProvider.getUriForFile(this,
+                        "com.worthybitbuilders.squadsense.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, avatarUri);
+                startActivityIfNeeded(takePictureIntent, CAMERA_PERMISSION_REQUEST_CODE);
+            }
+        } else {
+            Toast.makeText(this, "No usable camera, operation failed", Toast.LENGTH_LONG).show();
+        }
+    }
+
 }

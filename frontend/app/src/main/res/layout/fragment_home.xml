@@ -45,7 +45,7 @@
             android:textColor="@color/primary_word_color"
             android:textColorHint="@color/primary_word_second_color"
             android:textCursorDrawable="@null"
-            android:textSize="20sp" />
+            android:textSize="20dp" />
         <Button
             android:visibility="visible"
             android:id="@+id/btn_myfavorites"
@@ -56,7 +56,7 @@
             android:drawableTint="@color/primary_icon_color"
             android:text="All projects"
             android:textAllCaps="false"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:textColor="@color/primary_word_color"
             android:textStyle="bold" />
     <FrameLayout
@@ -82,7 +82,7 @@
                     android:textAlignment="center"
                     android:background="@color/transparent"
                     android:textColor="@color/primary_word_color"
-                    android:textSize="32sp"
+                    android:textSize="32dp"
                     android:text="Manage your works and teams by creating a new project"
                     android:textStyle="bold" />
         </LinearLayout>

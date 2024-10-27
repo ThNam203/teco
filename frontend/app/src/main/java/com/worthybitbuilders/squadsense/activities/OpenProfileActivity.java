@@ -3,15 +3,19 @@ package com.worthybitbuilders.squadsense.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Dialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.databinding.ActivityOpenProfileBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
+import com.worthybitbuilders.squadsense.utils.DialogUtils;
+import com.worthybitbuilders.squadsense.utils.EventChecker;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
@@ -19,8 +23,7 @@ import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 public class OpenProfileActivity extends AppCompatActivity {
     private ActivityOpenProfileBinding binding;
     private UserViewModel userViewModel;
-
-    private Uri avatarUri;
+    Dialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class OpenProfileActivity extends AppCompatActivity {
         binding = ActivityOpenProfileBinding.inflate(getLayoutInflater());
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
+        loadingDialog = DialogUtils.GetLoadingDialog(this);
         LoadData();
 
         //set onclick buttons here
@@ -60,6 +64,7 @@ public class OpenProfileActivity extends AppCompatActivity {
 
     private void LoadData()
     {
+        loadingDialog.show();
         userViewModel.getUserById(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), new UserViewModel.UserCallback() {
             @Override
             public void onSuccess(UserModel user) {
@@ -68,7 +73,6 @@ public class OpenProfileActivity extends AppCompatActivity {
                 String introduction = user.getIntroduction();
                 String phonenumber = user.getPhoneNumber();
                 String birthday = user.getBirthday();
-                String avatarUriString = user.getProfileImagePath();
                 int color;
 
                 //set name
@@ -77,14 +81,24 @@ public class OpenProfileActivity extends AppCompatActivity {
                 binding.name.setText(name);
                 binding.defaultImageProfile.setText(String.valueOf(name.charAt(0)));
 
-//                //set avatar
-//                if(avatarUriString != null && !avatarUriString.isEmpty())
-//                {
-//                    avatarUri = Uri.parse(avatarUriString);
-//                    binding.imageProfile.setImageURI(avatarUri);
-//                    binding.defaultImageProfile.setVisibility(View.GONE);
-//                    binding.imageProfileBorder.setVisibility(View.VISIBLE);
-//                }
+                if(user.getProfileImagePath() != null && !user.getProfileImagePath().isEmpty())
+                {
+                    try{
+                        String profileImagePath = user.getProfileImagePath();
+                        String publicProfileImageURL = String.format("https://squadsense.s3.ap-southeast-1.amazonaws.com/%s", profileImagePath);
+
+                        Glide.with(OpenProfileActivity.this)
+                                .load(publicProfileImageURL)
+                                .into(binding.imageProfile);
+                        loadAvatarView(true);
+                    }
+                    catch (Exception e)
+                    {
+                        Toast.makeText(OpenProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else
+                    loadAvatarView(false);
 
                 //set introduction
                 color = getResources().getColor(R.color.primary_word_color);
@@ -118,14 +132,30 @@ public class OpenProfileActivity extends AppCompatActivity {
                 }
                 binding.birthday.setText(birthday);
                 binding.birthday.setTextColor(color);
+
+                loadingDialog.dismiss();
             }
 
             @Override
             public void onFailure(String message) {
+                loadingDialog.dismiss();
                 Toast t = Toast.makeText(OpenProfileActivity.this, message, Toast.LENGTH_SHORT);
                 t.setGravity(Gravity.TOP, 0, 0);
                 t.show();
             }
         });
+    }
+    private void loadAvatarView(boolean hasAvatar)
+    {
+        if(hasAvatar)
+        {
+            binding.imageProfileBorder.setVisibility(View.VISIBLE);
+            binding.defaultImageProfile.setVisibility(View.GONE);
+        }
+        else
+        {
+            binding.imageProfileBorder.setVisibility(View.GONE);
+            binding.defaultImageProfile.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -1,3 +1,8 @@
+const uuid = require('uuid')
+const { S3Client, DeleteObjectCommand } = require('@aws-sdk/client-s3')
+const multerS3 = require('multer-s3')
+const multer = require('multer')
+
 const User = require('../models/User')
 const asyncCatch = require('../utils/asyncCatch')
 const AppError = require('../utils/AppError')
@@ -12,17 +17,20 @@ const s3Client = new S3Client({
 
 const deleteOldProfileImage = (path) => {
     const command = new DeleteObjectCommand({
-        Bucket: 'workwise',
+        Bucket: 'squadsense',
         Key: path.substring(path.lastIndexOf('/') + 1, path.length),
     })
 
+    console.log(
+        'deleting.........................................................................'
+    )
     s3Client.send(command).catch(() => {})
 }
 
 exports.uploadProfileImage = multer({
     storage: multerS3({
         s3: s3Client,
-        bucket: 'workwise',
+        bucket: 'squadsense',
         acl: 'public-read',
         contentType: multerS3.AUTO_CONTENT_TYPE,
         key: function (req, file, cb) {
@@ -32,15 +40,19 @@ exports.uploadProfileImage = multer({
 })
 
 exports.updateProfileImage = asyncCatch(async (req, res, next) => {
-    console.log(req.file)
     const { key: avatarFile } = req.file
+    console.log(
+        'updating...................................................................................'
+    )
     if (!avatarFile) {
         return next(new Error('Unable to upload profile image'))
     }
 
     const { userId } = req.params
     const user = await User.findById(userId)
-    if (user.profileImagePath) deleteOldProfileImage(user.profileImagePath)
+    if (user.profileImagePath) {
+        deleteOldProfileImage(user.profileImagePath)
+    }
 
     user.profileImagePath = avatarFile
     await user.save()
@@ -52,6 +64,8 @@ exports.getUserById = asyncCatch(async (req, res, next) => {
     const { userId } = req.params
     const user = await User.findById(userId)
     if (!user) return next(new AppError('No user found!', 400))
+
+    console.log(user)
 
     res.status(200).json(user)
 })
@@ -68,6 +82,7 @@ exports.getUserByEmail = asyncCatch(async (req, res, next) => {
     const user = await User.findOne({ email: email })
     if (!user) return next(new AppError('No email found!', 400))
 
+    console.log(user)
     res.status(200).json(user)
 })
 
