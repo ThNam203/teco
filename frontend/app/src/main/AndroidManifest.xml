@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -36,9 +35,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.page_task_message"
-            android:exported="false" />
         <activity
             android:name=".activities.AddBoardActivity"
             android:exported="false" />

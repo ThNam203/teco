@@ -11,8 +11,11 @@ import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.services.RetrofitServices;
 import com.worthybitbuilders.squadsense.services.UserService;
 
+import java.io.File;
 import java.io.IOException;
 
+import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -110,9 +113,40 @@ public class UserViewModel extends ViewModel {
         });
     }
 
+    public void uploadAvatar (String userId, MultipartBody.Part avatarFilePart, UploadAvatarCallback callback) {
+        Call<ResponseBody> result = userService.uploadAvatarFile(userId, avatarFilePart);
+        result.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess();
+                }
+                else {
+                    ErrorResponse err = null;
+                    try {
+                        err = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                    } catch (IOException e) {
+                        callback.onFailure("Something has gone wrong!");
+                    }
+                    callback.onFailure(err.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callback.onFailure(t.getMessage());
+            }
+        });
+    }
+
+
 
     public interface UserCallback {
-        public void onSuccess(UserModel user);
-        public void onFailure(String message);
+        void onSuccess(UserModel user);
+        void onFailure(String message);
+    }
+    public interface UploadAvatarCallback {
+        void onSuccess();
+        void onFailure(String message);
     }
 }

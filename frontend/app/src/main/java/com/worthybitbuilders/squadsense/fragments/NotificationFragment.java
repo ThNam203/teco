@@ -27,7 +27,7 @@ import com.worthybitbuilders.squadsense.databinding.FragmentNotificationBinding;
 import com.worthybitbuilders.squadsense.models.Notification;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.utils.Activity;
+import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.Convert;
 import com.worthybitbuilders.squadsense.adapters.NotificationAdapter;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
@@ -207,7 +207,7 @@ public class NotificationFragment extends Fragment {
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.option_setting:
-                Activity.switchToActivity(getContext(), NotificationSettingActivity.class);
+                ActivityUtils.switchToActivity(getContext(), NotificationSettingActivity.class);
                 return true;
             case R.id.option_delete:
                 DeleteNotification(selectedNotification.getId());

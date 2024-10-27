@@ -3,6 +3,7 @@ package com.worthybitbuilders.squadsense.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -12,12 +13,14 @@ import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.databinding.ActivityOpenProfileBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
-import com.worthybitbuilders.squadsense.utils.Activity;
+import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
 public class OpenProfileActivity extends AppCompatActivity {
     private ActivityOpenProfileBinding binding;
     private UserViewModel userViewModel;
+
+    private Uri avatarUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +55,7 @@ public class OpenProfileActivity extends AppCompatActivity {
     }
 
     private void btnEdit_showActivity() {
-        Activity.switchToActivity(getWindow().getContext(), EditProfileActivity.class);
+        ActivityUtils.switchToActivity(getWindow().getContext(), EditProfileActivity.class);
     }
 
     private void LoadData()
@@ -65,6 +68,7 @@ public class OpenProfileActivity extends AppCompatActivity {
                 String introduction = user.getIntroduction();
                 String phonenumber = user.getPhoneNumber();
                 String birthday = user.getBirthday();
+                String avatarUriString = user.getProfileImagePath();
                 int color;
 
                 //set name
@@ -72,6 +76,15 @@ public class OpenProfileActivity extends AppCompatActivity {
                     name = "Anonymous";
                 binding.name.setText(name);
                 binding.defaultImageProfile.setText(String.valueOf(name.charAt(0)));
+
+//                //set avatar
+//                if(avatarUriString != null && !avatarUriString.isEmpty())
+//                {
+//                    avatarUri = Uri.parse(avatarUriString);
+//                    binding.imageProfile.setImageURI(avatarUri);
+//                    binding.defaultImageProfile.setVisibility(View.GONE);
+//                    binding.imageProfileBorder.setVisibility(View.VISIBLE);
+//                }
 
                 //set introduction
                 color = getResources().getColor(R.color.primary_word_color);

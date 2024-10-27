@@ -17,7 +17,7 @@ const s3Client = new S3Client({
 
 const deleteOldProfileImage = (path) => {
     const command = new DeleteObjectCommand({
-        Bucket: 'workwise',
+        Bucket: 'squadsense',
         Key: path.substring(path.lastIndexOf('/') + 1, path.length),
     })
 
@@ -27,7 +27,7 @@ const deleteOldProfileImage = (path) => {
 exports.uploadProfileImage = multer({
     storage: multerS3({
         s3: s3Client,
-        bucket: 'workwise',
+        bucket: 'squadsense',
         acl: 'public-read',
         contentType: multerS3.AUTO_CONTENT_TYPE,
         key: function (req, file, cb) {
@@ -37,17 +37,22 @@ exports.uploadProfileImage = multer({
 })
 
 exports.updateProfileImage = asyncCatch(async (req, res, next) => {
-    if (!req.file || !req.file.location)
-        return next(new AppError('Unable to upload profile image', 500))
+    console.log(req.file)
+    const { key: avatarFile } = req.file
+    if (!avatarFile) {
+        return next(new Error('Unable to upload profile image'))
+    }
 
     const { userId } = req.params
     const user = await User.findById(userId)
-    if (user.profileImagePath) deleteOldProfileImage(user.profileImagePath)
+    if (user.profileImagePath) {
+        deleteOldProfileImage(user.profileImagePath)
+    }
 
-    user.profileImagePath = req.file.location
+    user.profileImagePath = avatarFile
     await user.save()
 
-    res.status(200).json({ imagePath: req.file.location })
+    res.status(200).json({ imagePath: avatarFile })
 })
 
 exports.getUserById = asyncCatch(async (req, res, next) => {

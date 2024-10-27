@@ -27,7 +27,19 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
+        <androidx.cardview.widget.CardView
+            android:id="@+id/image_profile_border"
+            android:visibility="gone"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            app:cardCornerRadius="250dp">
+            <ImageView
+                android:id="@+id/image_profile"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"/>
+        </androidx.cardview.widget.CardView>
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/default_image_profile"
             android:layout_width="100dp"
@@ -35,7 +47,6 @@
             android:background="@drawable/background_btn_circle"
             android:backgroundTint="@color/teal_200"
             android:layout_centerHorizontal="true"
-            android:contentDescription="btn image profile"
             android:text="N"
             android:textAllCaps="true"
             android:textColor="@color/primary_word_color"

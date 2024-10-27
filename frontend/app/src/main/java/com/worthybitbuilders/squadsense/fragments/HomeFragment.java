@@ -40,6 +40,10 @@ import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.MainActivityViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
+import com.worthybitbuilders.squadsense.activities.AddBoardActivity;
+import com.worthybitbuilders.squadsense.activities.SearchActivity;
+import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
@@ -48,7 +52,6 @@ public class HomeFragment extends Fragment {
 
     FriendViewModel friendViewModel;
     UserViewModel userViewModel;
-    String hello;
 
     @SuppressLint({"ClickableViewAccessibility", "NotifyDataSetChanged"})
     @Override
@@ -241,7 +244,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void btn_add_board_showPopup() {
-        Activity.switchToActivity(getContext(), AddBoardActivity.class);
+        ActivityUtils.switchToActivity(getContext(), AddBoardActivity.class);
     }
 
     private void btn_myfavorities_showPopup() {
@@ -303,6 +306,6 @@ public class HomeFragment extends Fragment {
         else tick.setVisibility(View.INVISIBLE);
     }
     private void labelSearch_showActivity() {
-        Activity.switchToActivity(getContext(), SearchActivity.class);
+        ActivityUtils.switchToActivity(getContext(), SearchActivity.class);
     }
 }

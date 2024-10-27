@@ -1,5 +1,6 @@
 package com.worthybitbuilders.squadsense.fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,14 +21,14 @@ import com.worthybitbuilders.squadsense.activities.SearchEverywhereActivity;
 import com.worthybitbuilders.squadsense.databinding.FragmentMoreBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
-import com.worthybitbuilders.squadsense.utils.Activity;
+import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
 public class MoreFragment extends Fragment {
 
     private FragmentMoreBinding binding;
-
     private UserViewModel userViewModel;
+    private Uri avatarUri;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,7 +75,7 @@ public class MoreFragment extends Fragment {
         binding.btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Activity.switchToActivity(getContext(), LogInActivity.class);
+                ActivityUtils.switchToActivity(getContext(), LogInActivity.class);
                 getActivity().finish();
             }
         });
@@ -88,40 +89,48 @@ public class MoreFragment extends Fragment {
     }
 
     private void btnSearchEverywhere_showActivity() {
-        Activity.switchToActivity(getContext(), SearchEverywhereActivity.class);
+        ActivityUtils.switchToActivity(getContext(), SearchEverywhereActivity.class);
     }
 
     private void btnProfile_showActivity() {
-        Activity.switchToActivity(getContext(), OpenProfileActivity.class);
+        ActivityUtils.switchToActivity(getContext(), OpenProfileActivity.class);
     }
 
     private void btnMyteam_showActivity() {
-        Activity.switchToActivity(getContext(), TeamActivity.class);
+        ActivityUtils.switchToActivity(getContext(), TeamActivity.class);
     }
 
     private void btnInbox_showActivity() {
-        Activity.switchToActivity(getContext(), InboxActivity.class);
+        ActivityUtils.switchToActivity(getContext(), InboxActivity.class);
     }
 
     private void btnNotificationSetting_showActivity() {
-        Activity.switchToActivity(getContext(), NotificationSettingActivity.class);
+        ActivityUtils.switchToActivity(getContext(), NotificationSettingActivity.class);
     }
 
     private void LoadData(){
         userViewModel.getUserById(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID), new UserViewModel.UserCallback() {
             @Override
             public void onSuccess(UserModel user) {
-                if(user.getName() == null || user.getName().equals(""))
+                if(user.getName() == null || user.getName().isEmpty())
                 {
-                    binding.name.setVisibility(View.GONE);
-                    binding.imageProfile.setText("N");
+                    binding.name.setText("Anonymous");
+                    binding.defaultImageProfile.setText("A");
                 }
                 else
                 {
                     binding.name.setText(user.getName());
-                    binding.name.setVisibility(View.VISIBLE);
-                    binding.imageProfile.setText(String.valueOf(binding.name.getText().charAt(0)));
+                    binding.defaultImageProfile.setText(String.valueOf(binding.name.getText().charAt(0)));
                 }
+
+//                if(user.getProfileImagePath() != null && !user.getProfileImagePath().isEmpty())
+//                {
+//                    avatarUri = Uri.parse(user.getProfileImagePath());
+//                    binding.imageProfile.setImageURI(avatarUri);
+//                    binding.imageProfileBorder.setVisibility(View.VISIBLE);
+//                    binding.defaultImageProfile.setVisibility(View.GONE);
+//                }
+
             }
 
             @Override

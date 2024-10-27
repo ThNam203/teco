@@ -15,7 +15,7 @@ import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.viewmodels.SignUpViewModel;
 import com.worthybitbuilders.squadsense.databinding.ActivitySignUpBinding;
 import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.utils.Activity;
+import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -82,7 +82,7 @@ public class SignUpActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess() {
                     Toast.makeText(SignUpActivity.this, "Signed up successfully", Toast.LENGTH_SHORT).show();
-                    Activity.switchToActivity(SignUpActivity.this, LogInActivity.class);
+                    ActivityUtils.switchToActivity(SignUpActivity.this, LogInActivity.class);
                     finish();
                 }
 
