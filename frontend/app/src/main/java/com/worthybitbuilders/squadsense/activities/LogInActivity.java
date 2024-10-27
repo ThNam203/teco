@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -40,7 +41,7 @@ public class LogInActivity extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         // Auto logging
-        if (loginViewModel.isAutoLogging()) Activity.switchToActivity(LogInActivity.this, MainActivity.class);
+        if (loginViewModel.isAutoLogging()) ActivityUtils.switchToActivity(LogInActivity.this, MainActivity.class);
 
         setUpGoogleLogin();
 
@@ -98,7 +99,7 @@ public class LogInActivity extends AppCompatActivity {
                     public void onSuccess() {
                         stopLoadingIndicator();
                         SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.USER_EMAIL, inputEmail);
-                        Activity.switchToActivity(LogInActivity.this, MainActivity.class);
+                        ActivityUtils.switchToActivity(LogInActivity.this, MainActivity.class);
                         finish();
                     }
 

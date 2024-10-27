@@ -156,7 +156,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     File avatarFile = UriToFile(avatarUri);
                     RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), avatarFile);
                     MultipartBody.Part avatarFilePart = MultipartBody.Part.createFormData("avatar-file", avatarFile.getName(), requestBody);
-                    String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USERID);
+                    String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
                     userViewModel.uploadAvatar(userId, avatarFilePart, new UserViewModel.UploadAvatarCallback() {
                         @Override
                         public void onSuccess() {
