@@ -15,23 +15,26 @@
         tools:text="10:00"
         android:textColor="@color/primary_word_second_color"
         android:textSize="12sp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="12dp"
         android:layout_gravity="bottom" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/messageContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/curved_small_background"
-        android:backgroundTint="#774df2">
+        android:backgroundTint="#774df2"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingRight="12dp"
+        android:paddingLeft="12dp">
+        >
             <TextView
                 android:id="@+id/tvMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:maxWidth="250dp"
-                android:paddingLeft="12dp"
-                android:paddingTop="8dp"
-                android:paddingRight="12dp"
+                android:padding="4dp"
                 tools:text="This is a Message"
                 android:textColor="@color/primary_word_color"
                 android:textSize="@dimen/normal_textsize"
