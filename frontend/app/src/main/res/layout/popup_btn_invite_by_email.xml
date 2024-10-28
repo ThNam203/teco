@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/background_popup_corner_top_left_andright"
+    android:background="@drawable/background_popup_corner_top_left_and_right"
     android:backgroundTint="@color/primary_third_color">
 
     <LinearLayout

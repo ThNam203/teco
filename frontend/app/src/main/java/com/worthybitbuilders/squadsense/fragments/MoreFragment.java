@@ -1,9 +1,13 @@
 package com.worthybitbuilders.squadsense.fragments;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -11,9 +15,14 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.activities.EditProfileActivity;
 import com.worthybitbuilders.squadsense.activities.LogInActivity;
 import com.worthybitbuilders.squadsense.activities.InboxActivity;
@@ -49,6 +58,13 @@ public class MoreFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 btnNotificationSetting_showActivity();
+            }
+        });
+
+        binding.btnTheme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnTheme_showPopup();
             }
         });
 
@@ -112,6 +128,35 @@ public class MoreFragment extends Fragment {
 
     private void btnNotificationSetting_showActivity() {
         ActivityUtils.switchToActivity(getContext(), NotificationSettingActivity.class);
+    }
+
+    private void btnTheme_showPopup() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.popup_theme);
+
+        SwitchCompat toggleSwitchTheme = (SwitchCompat) dialog.findViewById(R.id.toggle_switch_theme);
+        TextView tvThemeName = (TextView)  dialog.findViewById(R.id.theme_name);
+        toggleSwitchTheme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked)
+                {
+                    tvThemeName.setText("Light theme");
+
+                }
+                else
+                {
+                    tvThemeName.setText("Dark theme");
+                }
+            }
+        });
+
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialog.show();
     }
 
     private void LoadData(){
