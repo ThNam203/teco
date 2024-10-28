@@ -5,7 +5,8 @@ import android.app.Application;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 
 public class MyApplication extends Application {
-    String hello;
+    String name;
+
     @Override
     public void onCreate() {
         super.onCreate();
