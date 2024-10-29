@@ -85,7 +85,6 @@ exports.createNewFriendRequest = asyncCatch(async (req, res, next) => {
 exports.replyFriendRequest = asyncCatch(async (req, res, next) => {
     const { senderId, receiverId } = req.body
     const { response } = req.params
-    console.log(senderId, receiverId, response)
 
     if (response !== 'Accept' && response !== 'Deny')
         return next(new AppError('False response format', 400))
@@ -101,7 +100,6 @@ exports.replyFriendRequest = asyncCatch(async (req, res, next) => {
         receiverId: replier._id,
     })
     if (isExisted) {
-        console.log('existed')
         sendNotificationOnReply(replier, requestSender, response === 'Accept')
         await FriendRequest.findOneAndDelete({
             senderId: requestSender._id,

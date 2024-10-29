@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".activities.ShowImagesActivity">
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/imageViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginVertical="8dp">
+        <ImageButton
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close"
+            android:background="@color/transparent"
+            tools:background="@color/black"
+            android:padding="8dp"
+            app:tint="@color/primary_icon_color"/>
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:singleLine="true"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:textSize="28dp" />
+        <ImageButton
+            android:id="@+id/btnDownload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/ic_download"
+            tools:background="@color/black"
+            app:tint="@color/primary_icon_color"/>
+    </LinearLayout>
+</FrameLayout>

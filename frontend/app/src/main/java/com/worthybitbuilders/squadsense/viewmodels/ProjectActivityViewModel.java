@@ -10,6 +10,9 @@ import com.worthybitbuilders.squadsense.services.RetrofitServices;
 import com.worthybitbuilders.squadsense.utils.ProjectTemplates;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +23,11 @@ import retrofit2.Response;
 public class ProjectActivityViewModel extends ViewModel {
     ProjectService projectService = RetrofitServices.getProjectService();
     private ProjectModel projectModel = null;
-    private MutableLiveData<ProjectModel> projectModelLiveData = new MutableLiveData<>();
+    private final MutableLiveData<ProjectModel> projectModelLiveData = new MutableLiveData<>();
 
     public ProjectActivityViewModel() {}
 
-    public void getProjectById(String projectId, OnGettingProjectFromRemote handler) {
+    public void getProjectById(String projectId, ApiCallHandlers handler) {
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         Call<ProjectModel> project = projectService.getProjectById(userId, projectId);
         project.enqueue(new Callback<ProjectModel>() {
@@ -55,7 +58,7 @@ public class ProjectActivityViewModel extends ViewModel {
      * The new project is automatically created by this method
      * which is then saved in the view model
      */
-    public void saveNewProjectToRemote(OnGettingProjectFromRemote handlers) {
+    public void saveNewProjectToRemote(ApiCallHandlers handlers) {
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         List<String> authors = new ArrayList<>();
         authors.add(userId);
@@ -81,7 +84,7 @@ public class ProjectActivityViewModel extends ViewModel {
         });
     }
 
-    public void addNewBoardToProject(OnCreateAndSaveNewBoardToRemote handlers) {
+    public void addNewBoardToProject(ApiCallHandlers handlers) {
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         Call<BoardContentModel> call = projectService.createAndGetNewBoardToProject(userId, projectModel.get_id());
         call.enqueue(new Callback<BoardContentModel>() {
@@ -101,6 +104,46 @@ public class ProjectActivityViewModel extends ViewModel {
         });
     }
 
+    public void updateBoardTitle(int boardPosition, String newTitle, ApiCallHandlers handlers) throws JSONException {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        JSONObject data = new JSONObject();
+        data.put("boardTitle", newTitle);
+        Call<Void> call = projectService.updateBoard(userId, getProjectId(), getProjectModel().getBoards().get(boardPosition).get_id(), data);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    getProjectModel().getBoards().get(boardPosition).setBoardTitle(newTitle);
+                    handlers.onSuccess();
+                } else handlers.onFailure(response.message());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                handlers.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public void removeBoard(int boardPosition, ApiCallHandlers handlers) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<Void> call = projectService.removeBoard(userId, getProjectId(), getProjectModel().getBoards().get(boardPosition).get_id());
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    getProjectModel().removeBoardAt(boardPosition);
+                    handlers.onSuccess();
+                } else handlers.onFailure(response.message());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                handlers.onFailure(t.getMessage());
+            }
+        });
+    }
+
     public ProjectModel getProjectModel() {
         return projectModelLiveData.getValue();
     }
@@ -109,12 +152,7 @@ public class ProjectActivityViewModel extends ViewModel {
         return projectModelLiveData;
     }
 
-    public interface OnGettingProjectFromRemote {
-        void onSuccess();
-        void onFailure(String message);
-    }
-
-    public interface OnCreateAndSaveNewBoardToRemote {
+    public interface ApiCallHandlers {
         void onSuccess();
         void onFailure(String message);
     }

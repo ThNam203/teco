@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.worthybitbuilders.squadsense.R;
@@ -26,6 +27,7 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardNumberItemModel
 import com.worthybitbuilders.squadsense.models.board_models.BoardStatusItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardTextItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardTimelineItemModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
 import com.worthybitbuilders.squadsense.viewmodels.BoardDetailItemViewModel;
 
@@ -50,6 +52,10 @@ public class BoardItemDetailColumnAdapter extends RecyclerView.Adapter {
         this.viewModel = viewModel;
         this.mContext = mContext;
         this.clickHandlers = clickHandlers;
+
+        viewModel.getItemsLiveData().observe((AppCompatActivity)mContext, boardDetailItemModel -> {
+            notifyDataSetChanged();
+        });
     }
 
     @NonNull
@@ -108,13 +114,13 @@ public class BoardItemDetailColumnAdapter extends RecyclerView.Adapter {
         } else if (holder instanceof BoardDetailTimelineItemViewHolder) {
             ((BoardDetailTimelineItemViewHolder) holder).setItemModel((BoardTimelineItemModel) cellItemModel, columnTitle, position);
         } else if (holder instanceof BoardDetailUpdateItemViewHolder) {
-            ((BoardDetailUpdateItemViewHolder) holder).setItemModel(columnTitle, position);
+            ((BoardDetailUpdateItemViewHolder) holder).setItemModel((BoardUpdateItemModel) cellItemModel, columnTitle);
         }
     }
 
     @Override
     public int getItemCount() {
-        if (viewModel.getItemsLiveData() != null)
+        if (viewModel.getItemsLiveData() != null && viewModel.getItemsLiveData().getValue() != null)
             return viewModel.getItemsLiveData().getValue().getCells().size();
         return 0;
     }

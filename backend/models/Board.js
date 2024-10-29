@@ -10,6 +10,10 @@ const columnCellModel = new mongoose.Schema(
             type: String,
             required: true,
         },
+        description: {
+            type: String,
+            default: '',
+        },
     },
     {
         _id: false,

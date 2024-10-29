@@ -18,11 +18,11 @@ public class BoardUpdateItemViewHolder extends AbstractViewHolder {
         this.btnEnterUpdate = itemView.findViewById(com.worthybitbuilders.squadsense.R.id.btnEnterUpdate);
     }
 
-    public void setItemModel(int rowPosition, String rowTitle) {
-        btnEnterUpdate.setOnClickListener((view) -> handlers.onUpdateItemClick(rowPosition, rowTitle));
+    public void setItemModel(BoardUpdateItemModel itemModel, int rowPosition, String rowTitle, String columnTitle) {
+        btnEnterUpdate.setOnClickListener((view) -> handlers.onUpdateItemClick(itemModel, rowPosition, rowTitle, columnTitle));
     }
 
     public interface UpdateItemClickHandlers {
-        void onUpdateItemClick(int rowPosition, String rowTitle);
+        void onUpdateItemClick(BoardUpdateItemModel itemModel, int rowPosition, String rowTitle, String columnTitle);
     }
 }

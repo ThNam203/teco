@@ -14,10 +14,6 @@ const projectSchema = new mongoose.Schema(
                 required: true,
             },
         ],
-        chosenPosition: {
-            type: String,
-            required: true,
-        },
         title: {
             type: String,
             required: true,

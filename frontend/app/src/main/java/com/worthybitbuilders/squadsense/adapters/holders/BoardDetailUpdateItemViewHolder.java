@@ -8,11 +8,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
 
 public class BoardDetailUpdateItemViewHolder extends RecyclerView.ViewHolder {
     UpdateItemClickHandlers handlers;
     ImageButton btnEnterUpdate;
-    private TextView tvTitleColumn;
+    private final TextView tvTitleColumn;
     public BoardDetailUpdateItemViewHolder(@NonNull View itemView, UpdateItemClickHandlers handlers) {
         super(itemView);
         this.handlers = handlers;
@@ -20,12 +21,12 @@ public class BoardDetailUpdateItemViewHolder extends RecyclerView.ViewHolder {
         this.btnEnterUpdate = itemView.findViewById(R.id.btnEnterUpdate);
     }
 
-    public void setItemModel(String columnTitle, int columnPosition) {
+    public void setItemModel(BoardUpdateItemModel itemModel, String columnTitle) {
         this.tvTitleColumn.setText(columnTitle);
-        btnEnterUpdate.setOnClickListener((view) -> handlers.onUpdateItemClick(columnPosition));
+        btnEnterUpdate.setOnClickListener((view) -> handlers.onUpdateItemClick(itemModel, columnTitle));
     }
 
     public interface UpdateItemClickHandlers {
-        void onUpdateItemClick(int columnPosition);
+        void onUpdateItemClick(BoardUpdateItemModel itemModel, String columnTitle);
     }
 }

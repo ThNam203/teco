@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -55,6 +56,13 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
     {
         void onNewColumnHeaderClick();
         void onNewRowHeaderClick();
+
+        /**
+         * These methods are different with ones above,
+         * these are for "non new" which is NOT the one to add a new row or column
+         */
+        void onRowHeaderClick(int rowPosition, String rowTitle);
+        void onColumnHeaderClick(BoardColumnHeaderModel headerModel, int columnPosition, View anchor);
     }
 
     public TableViewAdapter(Context context, BoardViewModel boardViewModel, OnClickHandlers handlers) {
@@ -133,7 +141,7 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
         } else if (holder instanceof BoardUserItemViewHolder) {
             ((BoardUserItemViewHolder) holder).setItemModel((BoardUserItemModel) cellItemModel, mContext);
         } else if (holder instanceof BoardUpdateItemViewHolder) {
-            ((BoardUpdateItemViewHolder) holder).setItemModel(rowPosition, rowTitle);
+            ((BoardUpdateItemViewHolder) holder).setItemModel((BoardUpdateItemModel) cellItemModel, rowPosition, rowTitle, columnTitle);
         } else if (holder instanceof BoardNumberItemViewHolder) {
             ((BoardNumberItemViewHolder) holder).setItemModel((BoardNumberItemModel) cellItemModel, columnTitle, columnPosition, rowPosition);
         } else if (holder instanceof BoardCheckboxItemViewHolder) {
@@ -149,14 +157,39 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
     @Override
     public AbstractViewHolder onCreateColumnHeaderViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.board_column_header_view, parent, false);
+
         return new BoardColumnHeaderViewHolder(layout);
     }
 
     @Override
     public void onBindColumnHeaderViewHolder(@NonNull AbstractViewHolder holder, @Nullable BoardColumnHeaderModel columnHeaderItemModel, int columnPosition) {
         BoardColumnHeaderViewHolder columnHolder = (BoardColumnHeaderViewHolder) holder;
+        if (columnHeaderItemModel == null) return;
+
+        // the column title can be too long, we must manually resize the column
+        if (columnHeaderItemModel.getColumnType() == BoardColumnHeaderModel.ColumnType.Status) {
+            columnHolder.itemView.setLayoutParams(new LinearLayout.LayoutParams(150, LinearLayout.LayoutParams.MATCH_PARENT));
+        } else if (columnHeaderItemModel.getColumnType() == BoardColumnHeaderModel.ColumnType.Text) {
+            columnHolder.itemView.setLayoutParams(new LinearLayout.LayoutParams(150, LinearLayout.LayoutParams.MATCH_PARENT));
+        } else if (columnHeaderItemModel.getColumnType() == BoardColumnHeaderModel.ColumnType.User) {
+            columnHolder.itemView.setLayoutParams(new LinearLayout.LayoutParams(80, LinearLayout.LayoutParams.MATCH_PARENT));
+        } else if (columnHeaderItemModel.getColumnType() == BoardColumnHeaderModel.ColumnType.NewColumn) {
+            columnHolder.itemView.setLayoutParams(new LinearLayout.LayoutParams(150, LinearLayout.LayoutParams.MATCH_PARENT));
+        } else if (columnHeaderItemModel.getColumnType() == BoardColumnHeaderModel.ColumnType.Number) {
+            columnHolder.itemView.setLayoutParams(new LinearLayout.LayoutParams(150, LinearLayout.LayoutParams.MATCH_PARENT));
+        } else if (columnHeaderItemModel.getColumnType() == BoardColumnHeaderModel.ColumnType.Update) {
+            columnHolder.itemView.setLayoutParams(new LinearLayout.LayoutParams(100, LinearLayout.LayoutParams.MATCH_PARENT));
+        } else if (columnHeaderItemModel.getColumnType() == BoardColumnHeaderModel.ColumnType.Checkbox) {
+            columnHolder.itemView.setLayoutParams(new LinearLayout.LayoutParams(80, LinearLayout.LayoutParams.MATCH_PARENT));
+        } else if (columnHeaderItemModel.getColumnType() == BoardColumnHeaderModel.ColumnType.Date) {
+            columnHolder.itemView.setLayoutParams(new LinearLayout.LayoutParams(180, LinearLayout.LayoutParams.MATCH_PARENT));
+        } else if (columnHeaderItemModel.getColumnType() == BoardColumnHeaderModel.ColumnType.TimeLine) {
+            columnHolder.itemView.setLayoutParams(new LinearLayout.LayoutParams(180, LinearLayout.LayoutParams.MATCH_PARENT));
+        }
+
         if (columnHeaderItemModel.getColumnType() == BoardColumnHeaderModel.ColumnType.NewColumn)
             holder.itemView.setOnClickListener((view) -> handlers.onNewColumnHeaderClick());
+        else holder.itemView.setOnClickListener((view) -> handlers.onColumnHeaderClick(columnHeaderItemModel, columnPosition, holder.itemView));
         columnHolder.setColumnHeaderModel(columnHeaderItemModel);
     }
 
@@ -176,6 +209,7 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
 
         if (rowHeaderItemModel.getIsAddNewRowRow())
             headerHolder.itemView.setOnClickListener(view -> handlers.onNewRowHeaderClick());
+        else headerHolder.itemView.setOnClickListener(view -> handlers.onRowHeaderClick(rowPosition, rowHeaderItemModel.getTitle()));
     }
 
     @NonNull

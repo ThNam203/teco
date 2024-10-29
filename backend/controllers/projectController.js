@@ -5,6 +5,17 @@ const cellModels = require('../models/Cell')
 const UpdateTask = require('../models/UpdateTask')
 const AppError = require('../utils/AppError')
 const asyncCatch = require('../utils/asyncCatch')
+const s3Controller = require('./awsS3Controllers')
+
+const removeUpdateTaskFunc = async (updateTaskId) => {
+    const deletedUpdateTask = await UpdateTask.findByIdAndDelete(updateTaskId)
+    if (deletedUpdateTask.files)
+        deletedUpdateTask.files.forEach((file) =>
+            s3Controller.deleteAnObject(file.location)
+        )
+
+    return deletedUpdateTask
+}
 
 const createACell = async (cell) => {
     let newCell
@@ -112,6 +123,14 @@ const updateACell = async (cell) => {
     return newCell
 }
 
+const removeACell = async (cell) => {
+    if (cell.cellType === 'CellUpdate') {
+        await removeUpdateTaskFunc(cell._id)
+    } else {
+        await cellModels.CellBase.findByIdAndDelete(cell._id)
+    }
+}
+
 const saveABoard = async (board) => {
     const { cells } = board
 
@@ -182,6 +201,32 @@ exports.createAndGetNewBoard = asyncCatch(async (req, res, next) => {
     res.status(200).json(newBoard)
 })
 
+exports.updateBoard = asyncCatch(async (req, res, next) => {
+    const { boardId } = req.params
+    const { boardTitle } = req.body.nameValuePairs
+
+    await Board.findByIdAndUpdate(boardId, {
+        boardTitle: boardTitle,
+    })
+
+    res.status(204).end()
+})
+
+exports.removeBoard = asyncCatch(async (req, res, next) => {
+    const { projectId, boardId } = req.params
+
+    const project = await Project.findById(projectId)
+    const deletedBoard = await Board.findById(boardId)
+    deleteABoard(deletedBoard)
+
+    const idx = project.boards.indexOf(deletedBoard._id)
+    project.boards.splice(idx, 1)
+    project.markModified('boards')
+    await project.save()
+
+    res.status(204).end()
+})
+
 exports.deleteRow = asyncCatch(async (req, res, next) => {
     const { boardId, deletedRowPosition } = req.body
     const board = await Board.findById(boardId)
@@ -215,17 +260,75 @@ exports.deleteColumn = asyncCatch(async (req, res, next) => {
 exports.addNewUpdateTask = asyncCatch(async (req, res, next) => {
     const { taskContent } = req.body
     const { cellId } = req.params
-    console.log(JSON.stringify(taskContent, null, 2))
-    console.log(JSON.stringify(req.files, null, 2))
-    res.status(500).end()
+
+    const fileLocations = []
+    if (req.files) {
+        req.files.forEach((file) => {
+            let fileType
+            if (!file.mimetype) fileType = 'Document'
+            else if (file.mimetype.startsWith('image/')) fileType = 'Image'
+            else if (file.mimetype.startsWith('video/')) fileType = 'Video'
+            else fileType = 'Document'
+
+            const newFile = {
+                location: file.location,
+                name: file.originalname,
+                fileType: fileType,
+            }
+
+            fileLocations.push(newFile)
+        })
+    }
+
+    const task = JSON.parse(taskContent)
+
+    const newTask = await UpdateTask.create({
+        author: task.author._id,
+        cellId: cellId,
+        content: task.content,
+        files: fileLocations,
+    })
+
+    if (!newTask) return next(new AppError('Unable to send update', 500))
+
+    res.status(204).end()
+})
+
+exports.toggleUpdateTaskLike = asyncCatch(async (req, res, next) => {
+    const { userId, updateTaskId } = req.params
+    const task = await UpdateTask.findById(updateTaskId)
+
+    const indexOfTheLiked = task.likedUsers.indexOf(userId)
+    if (indexOfTheLiked === -1) task.likedUsers.push(userId)
+    else task.likedUsers.splice(indexOfTheLiked, 1)
+    await task.save()
+    res.status(204).end()
 })
 
 exports.getAllUpdateTasksOfACell = asyncCatch(async (req, res, next) => {
-    const { cellId } = req.params
-    const updateTasks = await UpdateTask.find({ cellId: cellId }).sort({
-        createdAt: 1,
+    const { userId, cellId } = req.params
+
+    const updateTasks = await UpdateTask.find({ cellId: cellId })
+        .populate('author', '_id name email imageProfilePath')
+        .sort({
+            createdAt: -1,
+        })
+
+    const objectTasks = updateTasks.map((task) => {
+        const objectTask = task.toObject()
+        if (task.likedUsers.includes(userId)) objectTask.isLiked = true
+        else objectTask.isLiked = false
+        delete task.likedUsers
+        return objectTask
     })
-    res.status(200).json(updateTasks)
+
+    res.status(200).json(objectTasks)
+})
+
+exports.removeUpdateTask = asyncCatch(async (req, res, next) => {
+    const { updateTaskId } = req.params
+    removeUpdateTaskFunc(updateTaskId)
+    res.status(204).end()
 })
 
 exports.addNewRow = asyncCatch(async (req, res, next) => {
@@ -279,6 +382,68 @@ exports.addNewColumn = asyncCatch(async (req, res, next) => {
     board.markModified('cells')
     await board.save()
     res.status(200).json(newCellIds)
+})
+
+exports.removeColumn = asyncCatch(async (req, res, next) => {
+    const { boardId, columnPosition } = req.params
+    const board = await Board.findById(boardId).populate('cells', 'Cell')
+    if (!board) throw new AppError('Unable to find board', 404)
+
+    board.columnCells.splice(columnPosition, 1)
+    board.markModified('columnCells')
+
+    await Promise.all(
+        board.cells.map(async (row) => {
+            await removeACell(row.splice(columnPosition, 1)[0])
+        })
+    )
+    board.markModified('cells')
+    await board.save()
+
+    res.status(204).end()
+})
+
+exports.updateColumn = asyncCatch(async (req, res, next) => {
+    const { boardId, columnPosition } = req.params
+    const { description, title } = req.body.nameValuePairs
+
+    const board = await Board.findById(boardId)
+    if (!board) throw new AppError('Unable to find board', 404)
+
+    if (description) board.columnCells[columnPosition].description = description
+    if (title) board.columnCells[columnPosition].title = title
+    board.markModified('columnCells')
+    await board.save()
+    res.status(204).end()
+})
+
+exports.updateRow = asyncCatch(async (req, res, next) => {
+    const { boardId, rowPosition } = req.params
+    const { newTitle } = req.body.nameValuePairs
+
+    const board = await Board.findById(boardId)
+    if (!board) throw new AppError('Unable to find board', 404)
+
+    if (newTitle) board.rowCells[rowPosition] = newTitle
+    board.markModified('rowCells')
+    await board.save()
+    res.status(204).end()
+})
+
+exports.removeRow = asyncCatch(async (req, res, next) => {
+    const { rowPosition, boardId } = req.params
+    const board = await Board.findById(boardId).populate('cells', 'Cell')
+    if (!board) throw new AppError('Unable to find board', 404)
+
+    board.rowCells.splice(rowPosition, 1)
+    board.markModified('rowCells')
+
+    const deletedCells = board.cells.splice(rowPosition, 1)[0]
+    await Promise.all(deletedCells.map((cell) => removeACell(cell)))
+    board.markModified('cells')
+    await board.save()
+
+    res.status(204).end()
 })
 
 exports.saveNewProject = asyncCatch(async (req, res, next) => {

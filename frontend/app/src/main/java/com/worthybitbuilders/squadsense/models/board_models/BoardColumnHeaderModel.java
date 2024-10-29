@@ -36,10 +36,26 @@ public class BoardColumnHeaderModel {
     }
     private ColumnType columnType;
     private String title;
+    private String description;
 
     public BoardColumnHeaderModel(ColumnType columnType, String title) {
         this.columnType = columnType;
         this.title = title;
+        this.description = "";
+    }
+
+    public BoardColumnHeaderModel(ColumnType columnType, String title, String description) {
+        this.columnType = columnType;
+        this.title = title;
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public ColumnType getColumnType() {

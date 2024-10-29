@@ -3,6 +3,7 @@ package com.worthybitbuilders.squadsense.viewmodels;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -27,10 +28,15 @@ import com.worthybitbuilders.squadsense.services.ProjectService;
 import com.worthybitbuilders.squadsense.services.RetrofitServices;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import kotlin.NotImplementedError;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,8 +52,16 @@ public class BoardViewModel extends ViewModel {
     private final MutableLiveData<List<BoardRowHeaderModel>> mRowLiveData = new MutableLiveData<>(null);
     private final MutableLiveData<List<List<BoardBaseItemModel>>> mCellLiveData = new MutableLiveData<>(null);
     private final MutableLiveData<String> boardTitleLiveData = new MutableLiveData<>(null);
-
     private final ProjectService projectService = RetrofitServices.getProjectService();
+
+    // for sorting features
+    private static SortState sortState = SortState.UNSORTED;
+    private static int sortingColumnPosition = -1;
+    public enum SortState {
+        ASCENDING,
+        DESCENDING,
+        UNSORTED,
+    }
 
     public BoardViewModel() {}
 
@@ -59,6 +73,14 @@ public class BoardViewModel extends ViewModel {
         } catch (NullPointerException e) {
             throw new NotImplementedError();
         }
+    }
+
+    public static SortState getSortState() {
+        return sortState;
+    }
+
+    public static int getSortingColumnPosition() {
+        return sortingColumnPosition;
     }
 
     public String getProjectId() {
@@ -137,8 +159,7 @@ public class BoardViewModel extends ViewModel {
         List<List<BoardBaseItemModel>> data = new ArrayList<>();
 
         contentModel.getCells().forEach(itemRow -> {
-            List<BoardBaseItemModel> newItemRow = new ArrayList<>();
-            itemRow.forEach(item -> newItemRow.add(item));
+            List<BoardBaseItemModel> newItemRow = new ArrayList<>(itemRow);
             // add the empty cells for "+ New Column"
             newItemRow.add(new BoardEmptyItemModel());
             data.add(newItemRow);
@@ -168,7 +189,7 @@ public class BoardViewModel extends ViewModel {
         Call<List<String>> call = projectService.addNewColumnToRemote(userId, projectId, boardId, new NewColumnRequestModel(newColumnModel, itemModels));
         call.enqueue(new Callback<List<String>>() {
             @Override
-            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     mColumnHeaderModelList.add(columnPosition, newColumnModel);
                     for (int i = 0; i < mCellModelList.size(); i++) {
@@ -183,10 +204,71 @@ public class BoardViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<List<String>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
                 throw new NotImplementedError();
             }
         });
+    }
+
+    public void deleteColumn(int columnPosition, DeleteColumnHandler handler) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<Void> call = projectService.deleteAColumn(userId, projectId, boardId, columnPosition);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    mColumnHeaderModelList.remove(columnPosition);
+                    for (int i = 0; i < mCellModelList.size(); i++) {
+                        mCellModelList.get(i).remove(columnPosition);
+                    }
+
+                    mColumnLiveData.setValue(mColumnHeaderModelList);
+                    mCellLiveData.setValue(mCellModelList);
+                    handler.onSuccess();
+                } else handler.onFailure(response.message());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                handler.onFailure(t.getMessage());
+            }
+        });
+    };
+
+    /**
+     * there are 2 parts that can be updated: title and description
+     * @param isChangingDescription: true if updating description, otherwise it's updating title
+     */
+    public void updateColumn(int columnPosition, String newContent, Boolean isChangingDescription, UpdateColumnHandler handler) throws JSONException {
+        JSONObject data = new JSONObject();
+        if (isChangingDescription) data.put("description", newContent);
+        else data.put("title", newContent) ;
+
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<Void> call = projectService.updateAColumn(userId, projectId, boardId, columnPosition, data);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    if (isChangingDescription)
+                        mColumnHeaderModelList.get(columnPosition).setDescription(newContent);
+                    else mColumnHeaderModelList.get(columnPosition).setTitle(newContent);
+
+                    mColumnLiveData.setValue(mColumnHeaderModelList);
+                    handler.onSuccess();
+                } else handler.onFailure(response.message());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                handler.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public Call<Void> deleteRow(int rowPosition) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        return projectService.deleteARow(userId, projectId, boardId, rowPosition);
     }
 
     public void createNewRow(String title) {
@@ -196,6 +278,8 @@ public class BoardViewModel extends ViewModel {
         List<BoardBaseItemModel> newRowItems = new ArrayList<>();
 
         // the size() - 1 is to remove the empty "+ New Column"
+        // we then later add it on the call "addNewRowToRemote" if "isSuccessful" below
+        // because we are not uploading the "+ New Column" cell type
         for (int i = 0; i < mColumnHeaderModelList.size() - 1; i++) {
             newRowItems.add(BoardItemFactory.createNewItem(mColumnHeaderModelList.get(i).getColumnType()));
         }
@@ -204,11 +288,14 @@ public class BoardViewModel extends ViewModel {
         Call<List<String>> call = projectService.addNewRowToRemote(userId, projectId, boardId, new NewRowRequestModel(newRowHeaderModel, newRowItems));
         call.enqueue(new Callback<List<String>>() {
             @Override
-            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     mRowHeaderModelList.add(columnPosition, newRowHeaderModel);
 
                     // set the _id that is returned from server
+                    // and also add a "+ New Column" cell because we cut it off
+                    // because the reason above
+                    newRowItems.add(new BoardEmptyItemModel());
                     for (int i = 0; i < newRowItems.size(); i++) {
                         newRowItems.get(i).set_id(response.body().get(i));
                     }
@@ -219,7 +306,7 @@ public class BoardViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<List<String>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
                 throw new NotImplementedError();
             }
         });
@@ -249,5 +336,19 @@ public class BoardViewModel extends ViewModel {
             default:
                 throw new RuntimeException();
         }
+    }
+
+//    public void sortColumn(int columnPosition, SortState sortState) {
+//        BoardContentModel sortedContentModel = new BoardContentModel(boardTitle, mRowHeaderModelList, mColumnHeaderModelList, mCellModelList);
+//    }
+
+    public interface DeleteColumnHandler {
+        void onSuccess();
+        void onFailure(String message);
+    }
+
+    public interface UpdateColumnHandler {
+        void onSuccess();
+        void onFailure(String message);
     }
 }

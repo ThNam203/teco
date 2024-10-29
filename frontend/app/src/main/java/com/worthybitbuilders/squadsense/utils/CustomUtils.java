@@ -2,11 +2,13 @@ package com.worthybitbuilders.squadsense.utils;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -46,5 +48,20 @@ public class CustomUtils {
                 throw  new NullPointerException();
             }
         }
+    }
+
+    public static String mongooseDateToFormattedString(String mongooseDate) {
+
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+        Date formattedDate;
+        try {
+            formattedDate = sdf.parse(mongooseDate);
+        } catch (ParseException e) {
+            throw new RuntimeException();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(formattedDate);
+        return String.format(Locale.US, "%s %d, %d", CustomUtils.convertIntToMonth(calendar.get(Calendar.MONTH)),calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR));
     }
 }

@@ -7,7 +7,7 @@ public class ProjectModel {
     private String _id;
     private String creatorId;
     private List<String> memberIds;
-    private int chosenPosition;
+    private transient int chosenPosition = 0;
     private String title;
     private List<BoardContentModel> boards;
     private String updatedAt;
@@ -31,11 +31,10 @@ public class ProjectModel {
     /**
      * This constructor is used to create when retrieving data from server
      */
-    public ProjectModel(String _id, String creatorId, List<String> memberIds, int chosenPosition, String title, List<BoardContentModel> boards, String updatedAt) {
+    public ProjectModel(String _id, String creatorId, List<String> memberIds, String title, List<BoardContentModel> boards, String updatedAt) {
         this._id = _id;
         this.creatorId = creatorId;
         this.memberIds = memberIds;
-        this.chosenPosition = chosenPosition;
         this.title = title;
         this.boards = boards;
         this.updatedAt = updatedAt;
@@ -79,7 +78,7 @@ public class ProjectModel {
     }
 
     public void setMemberIds(List<String> adminIds) {
-        this.memberIds = memberIds;
+        this.memberIds = adminIds;
     }
 
     public void addBoard(BoardContentModel newBoard) {

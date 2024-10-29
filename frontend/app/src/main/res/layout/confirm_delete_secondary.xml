@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/curved_small_background"
+    android:backgroundTint="#353535"
+    android:paddingHorizontal="16dp"
+    android:paddingTop="16dp">
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Deleted column Completion?"
+        android:textSize="22sp"
+        android:textColor="@color/primary_word_color"/>
+    <TextView
+        android:id="@+id/tvAdditionalContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Deleted column Completion?"
+        android:layout_marginVertical="16dp"
+        android:textSize="18sp"
+        android:textColor="#a4a4a4"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CANCEL"
+            android:background="@color/transparent"/>
+        <Button
+            android:id="@+id/btnConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DELETE"
+            android:background="@color/transparent"/>
+    </LinearLayout>
+</LinearLayout>

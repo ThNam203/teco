@@ -11,9 +11,9 @@ const s3Client = new S3Client({
     },
 })
 
-exports.deleteOldProfileImage = (path) => {
+exports.deleteAnObject = (path) => {
     const command = new DeleteObjectCommand({
-        Bucket: 'workwise',
+        Bucket: 'squadsense',
         Key: path.substring(path.lastIndexOf('/') + 1, path.length),
     })
 
@@ -23,9 +23,14 @@ exports.deleteOldProfileImage = (path) => {
 exports.s3Upload = multer({
     storage: multerS3({
         s3: s3Client,
-        bucket: 'workwise',
+        bucket: 'squadsense',
         acl: 'public-read',
-        contentType: multerS3.AUTO_CONTENT_TYPE,
+        contentType: function (req, file, cb) {
+            cb(null, file.mimetype)
+        },
+        contentDisposition: function (req, file, cb) {
+            cb(null, file.originalname)
+        },
         key: function (req, file, cb) {
             cb(null, uuid.v4())
         },

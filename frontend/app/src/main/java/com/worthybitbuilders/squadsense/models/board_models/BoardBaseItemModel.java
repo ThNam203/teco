@@ -1,7 +1,5 @@
 package com.worthybitbuilders.squadsense.models.board_models;
 
-import com.google.gson.annotations.SerializedName;
-
 public abstract class BoardBaseItemModel {
     private String _id;
     private String cellType;

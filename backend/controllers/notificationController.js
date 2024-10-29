@@ -10,7 +10,6 @@ exports.getNotificationByReceiverId = asyncCatch(async (req, res, next) => {
     if (!listNotifications)
         return next(new AppError('No notification found!', 400))
 
-    console.log(listNotifications)
     res.status(200).json(listNotifications)
 })
 

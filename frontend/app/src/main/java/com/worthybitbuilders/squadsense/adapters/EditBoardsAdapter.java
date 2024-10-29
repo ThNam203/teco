@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -29,18 +30,22 @@ import com.worthybitbuilders.squadsense.databinding.BoardEditBoardsViewBinding;
 import com.worthybitbuilders.squadsense.databinding.ConfirmDeleteViewBinding;
 import com.worthybitbuilders.squadsense.models.board_models.BoardContentModel;
 import com.worthybitbuilders.squadsense.models.board_models.ProjectModel;
+import com.worthybitbuilders.squadsense.viewmodels.BoardViewModel;
+import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class EditBoardsAdapter extends RecyclerView.Adapter<EditBoardsAdapter.EditBoardItemViewHolder> {
-    ProjectModel projectModel;
     ClickHandlers handlers;
-    private Context context;
+    private final Context context;
+    private final ProjectActivityViewModel projectActivityViewModel;
 
-    public EditBoardsAdapter(ProjectModel projectModel, Context context) {
-        this.projectModel = projectModel;
+    public EditBoardsAdapter(ProjectActivityViewModel projectActivityViewModel, Context context) {
         this.context = context;
+        this.projectActivityViewModel = projectActivityViewModel;
     }
 
     public void setHandlers(ClickHandlers handlers) {
@@ -56,15 +61,16 @@ public class EditBoardsAdapter extends RecyclerView.Adapter<EditBoardsAdapter.Ed
 
     @Override
     public void onBindViewHolder(@NonNull EditBoardItemViewHolder holder, int position) {
+        ProjectModel projectModel = projectActivityViewModel.getProjectModel();
         holder.bind(projectModel.getBoards().get(position).getBoardTitle(), handlers, projectModel.getChosenPosition(), position);
     }
 
     @Override
     public int getItemCount() {
-        return projectModel.getBoards().size();
+        return projectActivityViewModel.getProjectModel().getBoards().size();
     }
 
-    public static class EditBoardItemViewHolder extends RecyclerView.ViewHolder {
+    public class EditBoardItemViewHolder extends RecyclerView.ViewHolder {
         private final EditText etBoardName;
         private final TextView tvBoardName;
         private final ImageButton btnMoreOptions;
@@ -94,10 +100,24 @@ public class EditBoardsAdapter extends RecyclerView.Adapter<EditBoardsAdapter.Ed
             this.btnConfirmRename.setOnClickListener(view -> {
                 String newTitle = this.etBoardName.getText().toString();
                 if (newTitle.isEmpty()) return;
-                handlers.onRenameClick(position, newTitle);
-                this.tvBoardName.setVisibility(View.VISIBLE);
-                this.etBoardName.setVisibility(View.GONE);
-                this.btnConfirmRename.setVisibility(View.GONE);
+                try {
+                    projectActivityViewModel.updateBoardTitle(position, newTitle, new ProjectActivityViewModel.ApiCallHandlers() {
+                        @Override
+                        public void onSuccess() {
+                            handlers.onRenameClick(position, newTitle);
+                            tvBoardName.setVisibility(View.VISIBLE);
+                            etBoardName.setVisibility(View.GONE);
+                            btnConfirmRename.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onFailure(String message) {
+                            if (context != null) Toast.makeText(context, "Unable to rename board, please try again", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } catch (JSONException e) {
+                    if (context != null) Toast.makeText(context, "Unable to rename board, please try again", Toast.LENGTH_SHORT).show();
+                }
             });
         }
 
@@ -113,7 +133,6 @@ public class EditBoardsAdapter extends RecyclerView.Adapter<EditBoardsAdapter.Ed
                 popupWindow.dismiss();
             });
             binding.btnDeleteBoard.setOnClickListener(view -> {
-//                showConfirmDelete(position, currentTitle);
                 showConfirmDelete(position, currentTitle);
                 popupWindow.dismiss();
             });
@@ -137,8 +156,18 @@ public class EditBoardsAdapter extends RecyclerView.Adapter<EditBoardsAdapter.Ed
             binding.btnClosePopup.setOnClickListener(view -> dialog.dismiss());
             binding.btnCancel.setOnClickListener(view -> dialog.dismiss());
             binding.btnAccept.setOnClickListener(view -> {
-                handlers.onRemoveClick(position);
-                dialog.dismiss();
+                projectActivityViewModel.removeBoard(position, new ProjectActivityViewModel.ApiCallHandlers() {
+                    @Override
+                    public void onSuccess() {
+                        handlers.onRemoveClick(position);
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        if (context != null) Toast.makeText(context, "Unable to remove board, please try again", Toast.LENGTH_SHORT).show();
+                    }
+                });
             });
 
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

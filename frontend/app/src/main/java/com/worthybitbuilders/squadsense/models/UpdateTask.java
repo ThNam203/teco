@@ -3,49 +3,83 @@ package com.worthybitbuilders.squadsense.models;
 import java.util.List;
 
 public class UpdateTask {
-    private String authorId;
-    private transient String authorName;
-    private transient String authorImagePath;
+    private class UpdateTaskAuthor {
+        public String _id;
+        public String name;
+        public String email;
+        public String profileImagePath;
+        public UpdateTaskAuthor(String _id) {
+            this._id = _id;
+        }
+
+        public UpdateTaskAuthor(String _id, String name, String profileImagePath) {
+            this._id = _id;
+            this.name = name;
+            this.profileImagePath = profileImagePath;
+        }
+    }
+
+    public class UpdateTaskFile {
+        public String location;
+        public String name;
+        public String fileType;
+
+        public UpdateTaskFile(String location, String name, String fileType) {
+            this.location = location;
+            this.name = name;
+            this.fileType = fileType;
+        }
+    }
+
+    private String _id;
+    private UpdateTaskAuthor author;
+    private String cellId;
     private String content;
-    private transient List<String> files;
-    private transient String createdAt;
+    private List<UpdateTaskFile> files;
+    private int likeCount;
+    private boolean isLiked;
+    private String createdAt;
 
     public UpdateTask(String authorId, String content) {
-        this.authorId = authorId;
+        this.author = new UpdateTaskAuthor(authorId);
         this.content = content;
     }
 
-    public UpdateTask(String authorId, String authorName, String authorImagePath, String content, List<String> files, String createdAt) {
-        this.authorId = authorId;
-        this.authorName = authorName;
-        this.authorImagePath = authorImagePath;
-        this.content = content;
-        this.files = files;
-        this.createdAt = createdAt;
+    public String get_id() {
+        return _id;
+    }
+
+    public String getCellId() {
+        return cellId;
+    }
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
     }
 
     public String getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(String authorId) {
-        this.authorId = authorId;
+        return author._id;
     }
 
     public String getAuthorName() {
-        return authorName;
+        return author.name;
     }
-
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
-    }
+    public String getAuthorEmail() { return author. email; }
 
     public String getAuthorImagePath() {
-        return authorImagePath;
-    }
-
-    public void setAuthorImagePath(String authorImagePath) {
-        this.authorImagePath = authorImagePath;
+        return author.profileImagePath;
     }
 
     public String getContent() {
@@ -56,19 +90,11 @@ public class UpdateTask {
         this.content = content;
     }
 
-    public List<String> getFiles() {
+    public List<UpdateTaskFile> getFiles() {
         return files;
-    }
-
-    public void setFiles(List<String> files) {
-        this.files = files;
     }
 
     public String getCreatedAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
     }
 }

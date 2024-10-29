@@ -17,13 +17,18 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel
 import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.ProjectModel;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
@@ -43,9 +48,21 @@ public interface ProjectService {
     @POST("{userId}/project/{projectId}/board")
     Call<BoardContentModel> createAndGetNewBoardToProject(@Path("userId") String userId, @Path("projectId") String projectId);
 
+    @PUT("{userId}/project/{projectId}/board/{boardId}")
+    Call<Void> updateBoard(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Body JSONObject newTitle);
+
+    @DELETE("{userId}/project/{projectId}/board/{boardId}")
+    Call<Void> removeBoard(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId);
+
     /** The List<String> is the cell ids that are returned from server */
     @PUT("{userId}/project/{projectId}/board/{boardId}/column")
     Call<List<String>> addNewColumnToRemote(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Body NewColumnRequestModel newColumn);
+
+    @DELETE("{userId}/project/{projectId}/board/{boardId}/column/{columnPosition}")
+    Call<Void> deleteAColumn(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("columnPosition") int columnPosition);
+
+    @PUT("{userId}/project/{projectId}/board/{boardId}/column/{columnPosition}")
+    Call<Void> updateAColumn(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("columnPosition") int columnPosition, @Body JSONObject newDescription);
 
     /** The List<String> is the cell ids that are returned from server */
     @PUT("{userId}/project/{projectId}/board/{boardId}/row")
@@ -54,13 +71,26 @@ public interface ProjectService {
     @GET("{userId}/project/{projectId}/board/{boardId}/row/{rowPosition}")
     Call<BoardDetailItemModel> getCellsInARow(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("rowPosition") Integer rowPosition);
 
+    @PUT("{userId}/project/{projectId}/board/{boardId}/row/{rowPosition}")
+    Call<Void> updateRowTitle(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("rowPosition") Integer rowPosition, @Body JSONObject rowTitle);
+
+    @DELETE("{userId}/project/{projectId}/board/{boardId}/row/{rowPosition}")
+    Call<Void> deleteARow(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("rowPosition") Integer rowPosition);
+
     @GET("{userId}/project/{projectId}/board/{boardId}/cell-update/{cellId}")
     Call<List<UpdateTask>> getAllUpdateTasksOfACell(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId);
 
-    // CELL UPDATES
+    @PATCH("{userId}/project/{projectId}/board/{boardId}/cell-update/{cellId}/{updateTaskId}")
+    Call<Void> toggleLikeUpdateTask(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Path("updateTaskId") String updateTaskId);
+
     @Multipart
-    @POST("{userId}/project/{projectId}/board/{boardId}/cell/{cellId}")
-    Call<UpdateTask> createNewUpdateTaskToRemote(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Part List<MultipartBody.Part> files, @Part UpdateTask taskContent);
+    @POST("{userId}/project/{projectId}/board/{boardId}/cell-update/{cellId}")
+    Call<Void> createNewUpdateTaskToRemote(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Part List<MultipartBody.Part> files, @Part("taskContent") UpdateTask taskContent);
+
+    @DELETE("{userId}/project/{projectId}/board/{boardId}/cell-update/{cellId}/{updateTaskId}")
+    Call<Void> deleteUpdateTask(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Path("updateTaskId") String updateTaskId);
+
+    // CELL UPDATES
     @PUT("{userId}/project/{projectId}/board/{boardId}/cell/{cellId}")
     Call<Void> updateCellToRemote(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Body BoardStatusItemModel cellModel);
     @PUT("{userId}/project/{projectId}/board/{boardId}/cell/{cellId}")

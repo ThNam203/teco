@@ -45,7 +45,8 @@
     </LinearLayout>
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
         <LinearLayout
             android:id="@+id/buttonsContainer"
             android:layout_width="wrap_content"
@@ -58,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:text="Columns"
                 android:padding="8dp"
+                android:layout_marginEnd="8dp"
                 android:backgroundTint="#2b2b2b"
                 app:icon="@drawable/ic_table_sheet"
                 android:textAllCaps="false"

@@ -2,6 +2,7 @@ package com.worthybitbuilders.squadsense.fragments;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.DatePickerDialog;
@@ -41,6 +42,7 @@ import com.worthybitbuilders.squadsense.databinding.BoardStatusItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardTextItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardTimelineItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.FragmentBoardDetailColumnBinding;
+import com.worthybitbuilders.squadsense.models.BoardDetailItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardBaseItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardDateItemModel;
@@ -48,6 +50,7 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardNumberItemModel
 import com.worthybitbuilders.squadsense.models.board_models.BoardStatusItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardTextItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardTimelineItemModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
 import com.worthybitbuilders.squadsense.utils.CustomUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
@@ -70,23 +73,27 @@ public class BoardDetailColumnFragment extends Fragment {
     BoardDetailItemViewModel viewModel;
     private FragmentBoardDetailColumnBinding binding;
     private BoardItemDetailColumnAdapter adapter;
-    private String projectId;
-    private String boardId;
-    public BoardDetailColumnFragment(BoardDetailItemViewModel viewModel, String projectId, String boardId) {
-        this.viewModel = viewModel;
-        this.projectId = projectId;
-        this.boardId = boardId;
+
+    public static BoardDetailColumnFragment newInstance() {
+        BoardDetailColumnFragment fragment = new BoardDetailColumnFragment();
+        return fragment;
+    }
+    public BoardDetailColumnFragment() {}
+
+    public interface ItemClickHelper {
+        void onUpdateItemClick(BoardUpdateItemModel itemModel, String columnTitle);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentBoardDetailColumnBinding.inflate(getLayoutInflater());
+        viewModel = new ViewModelProvider(getActivity()).get(BoardDetailItemViewModel.class);
 
         adapter = new BoardItemDetailColumnAdapter(viewModel, getActivity(), new BoardItemDetailColumnAdapter.ClickHandlers() {
             @Override
-            public void onUpdateItemClick(int columnPos) {
-
+            public void onUpdateItemClick(BoardUpdateItemModel itemModel, String columnTitle) {
+                ((ItemClickHelper) getActivity()).onUpdateItemClick(itemModel, columnTitle);
             }
 
             @Override
@@ -152,7 +159,7 @@ public class BoardDetailColumnFragment extends Fragment {
 
             Dialog loadingDialog = DialogUtils.GetLoadingDialog(getActivity());
             loadingDialog.show();
-            viewModel.updateACell(itemModel, projectId, boardId).enqueue(new Callback<Void>() {
+            viewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
@@ -195,7 +202,7 @@ public class BoardDetailColumnFragment extends Fragment {
             itemModel.setContent(newContent);
             Dialog loadingDialog = DialogUtils.GetLoadingDialog(getActivity());
             loadingDialog.show();
-            viewModel.updateACell(itemModel, projectId, boardId).enqueue(new Callback<Void>() {
+            viewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
@@ -278,7 +285,7 @@ public class BoardDetailColumnFragment extends Fragment {
 
             Dialog loadingDialog = DialogUtils.GetLoadingDialog(getActivity());
             loadingDialog.show();
-            viewModel.updateACell(statusItemModel, projectId, boardId).enqueue(new Callback<Void>() {
+            viewModel.updateACell(statusItemModel).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
@@ -382,7 +389,7 @@ public class BoardDetailColumnFragment extends Fragment {
 
             Dialog loadingDialog = DialogUtils.GetLoadingDialog(getActivity());
             loadingDialog.show();
-            Call<Void> cellUpdateCall = viewModel.updateACell(itemModel, projectId, boardId);
+            Call<Void> cellUpdateCall = viewModel.updateACell(itemModel);
             cellUpdateCall.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
@@ -466,7 +473,7 @@ public class BoardDetailColumnFragment extends Fragment {
         Dialog loadingDialog = DialogUtils.GetLoadingDialog(getActivity());
         loadingDialog.show();
         itemModel.setChecked(!itemModel.getChecked());
-        viewModel.updateACell(itemModel, projectId, boardId).enqueue(new Callback<Void>() {
+        viewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
@@ -536,7 +543,7 @@ public class BoardDetailColumnFragment extends Fragment {
             itemModel.setEndMonth(dialogEndMonth.get());
             itemModel.setEndDay(dialogEndDay.get());
 
-            viewModel.updateACell(itemModel, projectId, boardId).enqueue(new Callback<Void>() {
+            viewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
@@ -652,7 +659,7 @@ public class BoardDetailColumnFragment extends Fragment {
 
             Dialog loadingDialog = DialogUtils.GetLoadingDialog(getActivity());
             loadingDialog.show();
-            viewModel.updateACell(itemModel, projectId, boardId).enqueue(new Callback<Void>() {
+            viewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
