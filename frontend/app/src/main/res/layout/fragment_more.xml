@@ -75,20 +75,15 @@
                     android:textSize="24dp" />
             </LinearLayout>
 
-
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
                     android:id="@+id/btn_inbox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/background_btn_stroke">
+                    android:background="@drawable/background_btn_stroke"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="50dp"
@@ -133,117 +128,6 @@
                         android:src="@drawable/ic_arrow_right"
                         app:tint="@color/primary_icon_second_color" />
                 </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_myteam"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/background_btn_stroke">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_team" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:text="My team"
-                            android:textColor="@color/primary_word_color"
-                            android:textSize="24dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:text="1 Contact"
-                            android:textColor="@color/primary_word_second_color"
-                            android:textSize="24dp" />
-
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_arrow_right"
-                        app:tint="@color/primary_icon_second_color" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_search_everywhere"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/background_btn_stroke">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_search_phone" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:text="Search everywhere"
-                            android:textColor="@color/primary_word_color"
-                            android:textSize="24dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:ellipsize="end"
-                            android:singleLine="true"
-                            android:text="Boards, dashboards, dsadad"
-                            android:textColor="@color/primary_word_second_color"
-                            android:textSize="24dp" />
-
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_arrow_right"
-                        app:tint="@color/primary_icon_second_color" />
-                </LinearLayout>
-            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"

@@ -64,13 +64,7 @@
             android:name=".activities.AddBoardActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.SearchEverywhereActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.NotificationSettingActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.TeamActivity"
             android:exported="false" />
         <activity
             android:name=".activities.InboxActivity"

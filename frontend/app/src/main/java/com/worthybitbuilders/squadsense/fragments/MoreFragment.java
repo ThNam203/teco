@@ -3,10 +3,8 @@ package com.worthybitbuilders.squadsense.fragments;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,19 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.activities.EditProfileActivity;
 import com.worthybitbuilders.squadsense.activities.LogInActivity;
 import com.worthybitbuilders.squadsense.activities.InboxActivity;
-import com.worthybitbuilders.squadsense.activities.TeamActivity;
 import com.worthybitbuilders.squadsense.activities.NotificationSettingActivity;
 import com.worthybitbuilders.squadsense.activities.OpenProfileActivity;
-import com.worthybitbuilders.squadsense.activities.SearchEverywhereActivity;
 import com.worthybitbuilders.squadsense.databinding.FragmentMoreBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
@@ -75,19 +69,6 @@ public class MoreFragment extends Fragment {
             }
         });
 
-        binding.btnMyteam.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btnMyteam_showActivity();
-            }
-        });
-
-        binding.btnSearchEverywhere.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btnSearchEverywhere_showActivity();
-            }
-        });
         binding.profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,16 +91,8 @@ public class MoreFragment extends Fragment {
         LoadData();
     }
 
-    private void btnSearchEverywhere_showActivity() {
-        ActivityUtils.switchToActivity(getContext(), SearchEverywhereActivity.class);
-    }
-
     private void btnProfile_showActivity() {
         ActivityUtils.switchToActivity(getContext(), OpenProfileActivity.class);
-    }
-
-    private void btnMyteam_showActivity() {
-        ActivityUtils.switchToActivity(getContext(), TeamActivity.class);
     }
 
     private void btnInbox_showActivity() {

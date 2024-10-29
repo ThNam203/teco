@@ -111,3 +111,26 @@ exports.replyFriendRequest = asyncCatch(async (req, res, next) => {
 
     res.status(204).end()
 })
+
+exports.getFriendById = asyncCatch(async (req, res, next) => {
+    const { userId } = req.params
+    const listFriend = await Friend.find({
+        $or: [{ firstId: userId }, { secondId: userId }],
+    })
+    if (!listFriend) return next(new AppError('No notification found!', 400))
+    console.log(listFriend)
+
+    const otherIds = []
+
+    listFriend.forEach((friend) => {
+        if (friend.firstId !== userId) {
+            otherIds.push(friend.firstId)
+        } else {
+            otherIds.push(friend.secondId)
+        }
+    })
+
+    const listUser = await User.find({ _id: { $in: otherIds } })
+    console.log(listUser)
+    res.status(200).json(listUser)
+})
