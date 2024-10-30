@@ -24,10 +24,11 @@
             android:src="@drawable/ic_arrow_back"
             app:tint="@color/primary_icon_color" />
         <TextView
+            android:id="@+id/title"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Inbox / 0"
+            android:text="Inbox (0)"
             android:paddingLeft="20dp"
             android:layout_gravity="center"
             android:textColor="@color/white"
@@ -35,18 +36,31 @@
             android:textStyle="bold" />
         <ImageButton
             android:id="@+id/btn_add_chat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:backgroundTint="@color/transparent"
             android:src="@drawable/ic_add"
             app:tint="@color/primary_icon_color" />
+        <ImageButton
+            android:id="@+id/btn_close"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/transparent"
+            android:src="@drawable/ic_close"
+            android:layout_gravity="center"
+            app:tint="@color/primary_icon_color"
+            android:visibility="gone"/>
     </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_friends"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_inbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"/>
-
     <LinearLayout
         android:id="@+id/default_inbox"
         android:layout_width="match_parent"
@@ -81,4 +95,39 @@
             android:textColor="@color/primary_word_color"
             android:textSize="24dp"/>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/image_no_friend_found"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:background="@color/transparent"
+            android:src="@drawable/no_thing_found" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:text="Oops! No friends here"
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:background="@color/transparent"
+            android:textColor="@color/primary_word_color"
+            android:textSize="28dp"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="Come join us and make some new ones!"
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:background="@color/transparent"
+            android:textColor="@color/primary_word_color"
+            android:textSize="24dp"/>
+    </LinearLayout>
+
 </LinearLayout>
