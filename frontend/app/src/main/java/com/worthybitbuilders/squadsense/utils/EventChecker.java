@@ -16,8 +16,8 @@ public class EventChecker {
         this.callback = callback;
     }
 
-    public int addEventStatusAndGetCode(boolean isEventComplete) {
-        eventStatusList.add(isEventComplete);
+    public int addEventStatusAndGetCode() {
+        eventStatusList.add(false);
         return eventStatusList.size() - 1;
     }
 

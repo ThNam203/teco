@@ -25,6 +25,7 @@ const sendNotificationOnReply = async (sender, receiver, isAccept) => {
     await Notification.findOneAndDelete({
         senderId: receiver._id,
         receiverId: sender._id,
+        notificationType: 'FriendRequest',
     })
 }
 

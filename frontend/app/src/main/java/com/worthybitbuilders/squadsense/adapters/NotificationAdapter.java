@@ -9,10 +9,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.activities.InboxActivity;
 import com.worthybitbuilders.squadsense.models.Notification;
+import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 
 import java.util.List;
 
@@ -24,9 +27,7 @@ public class NotificationAdapter extends RecyclerView.Adapter {
     private OnActionCallback callback;
 
     public interface OnActionCallback {
-        void OnAccept(int position);
-        void OnDeny(int position);
-
+        void OnClick(int position);
         void OnShowingOption(int position);
 
     }
@@ -92,15 +93,13 @@ public class NotificationAdapter extends RecyclerView.Adapter {
 
     private class FriendRequestNotificationHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvContent, tvTimestamps;
-        AppCompatButton btnAccept, btnDeny;
-
+        ImageButton btnMore;
         FriendRequestNotificationHolder(View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.title);
             tvContent = (TextView) itemView.findViewById(R.id.content);
             tvTimestamps = (TextView) itemView.findViewById(R.id.timestamps);
-            btnAccept = (AppCompatButton) itemView.findViewById(R.id.btn_accept);
-            btnDeny = (AppCompatButton) itemView.findViewById(R.id.btn_deny);
+            btnMore = (ImageButton) itemView.findViewById(R.id.btn_more);
         }
 
         void bind(Notification notification, int position) {
@@ -108,16 +107,17 @@ public class NotificationAdapter extends RecyclerView.Adapter {
             tvContent.setText(notification.getContent());
             tvTimestamps.setText(notification.getTimeCreated());
 
-            btnAccept.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    callback.OnAccept(position);
+                    callback.OnClick(position);
                 }
             });
-            btnDeny.setOnClickListener(new View.OnClickListener() {
+
+            btnMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    callback.OnDeny(position);
+                    callback.OnShowingOption(position);
                 }
             });
         }

@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.activities.FriendActivity;
 import com.worthybitbuilders.squadsense.activities.InboxActivity;
 import com.worthybitbuilders.squadsense.activities.LogInActivity;
 import com.worthybitbuilders.squadsense.activities.NotificationSettingActivity;
@@ -27,23 +28,31 @@ import com.worthybitbuilders.squadsense.databinding.FragmentMoreBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
+import com.worthybitbuilders.squadsense.utils.EventChecker;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
+
+import java.util.List;
 
 public class MoreFragment extends Fragment {
 
     private FragmentMoreBinding binding;
     private UserViewModel userViewModel;
+    private FriendViewModel friendViewModel;
     Dialog loadingDialog;
+
+    EventChecker eventChecker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentMoreBinding.inflate(getLayoutInflater());
-
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        friendViewModel = new ViewModelProvider(this).get(FriendViewModel.class);
+        eventChecker = new EventChecker();
         loadingDialog = DialogUtils.GetLoadingDialog(getContext());
 
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         LoadData();
 
         //set onclick of buttons here
@@ -65,6 +74,13 @@ public class MoreFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 btnInbox_showActivity();
+            }
+        });
+
+        binding.btnFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnFriend_showActivity();
             }
         });
 
@@ -97,6 +113,9 @@ public class MoreFragment extends Fragment {
 
     private void btnInbox_showActivity() {
         ActivityUtils.switchToActivity(getContext(), InboxActivity.class);
+    }
+    private void btnFriend_showActivity() {
+        ActivityUtils.switchToActivity(getContext(), FriendActivity.class);
     }
 
     private void btnNotificationSetting_showActivity() {
@@ -134,6 +153,19 @@ public class MoreFragment extends Fragment {
 
     private void LoadData(){
         loadingDialog.show();
+        eventChecker.setActionWhenComplete(new EventChecker.CompleteCallback() {
+            @Override
+            public void Action() {
+                loadingDialog.dismiss();
+            }
+        });
+        LoadAvatarData();
+        LoadBtnYourFriend();
+    }
+
+    private void LoadAvatarData()
+    {
+        int LOAD_AVATAR_DATA_CODE = eventChecker.addEventStatusAndGetCode();
         userViewModel.getUserById(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), new UserViewModel.UserCallback() {
             @Override
             public void onSuccess(UserModel user) {
@@ -164,18 +196,19 @@ public class MoreFragment extends Fragment {
                 else
                     loadAvatarView(false);
 
-                loadingDialog.dismiss();
+                eventChecker.markEventAsCompleteAndDoActionIfNeeded(LOAD_AVATAR_DATA_CODE);
             }
 
             @Override
             public void onFailure(String message) {
-                loadingDialog.dismiss();
+                eventChecker.markEventAsCompleteAndDoActionIfNeeded(LOAD_AVATAR_DATA_CODE);
                 Toast t = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
                 t.setGravity(Gravity.TOP, 0, 0);
                 t.show();
             }
         });
     }
+
     private void loadAvatarView(boolean hasAvatar)
     {
         if(hasAvatar)
@@ -188,5 +221,26 @@ public class MoreFragment extends Fragment {
             binding.imageProfileBorder.setVisibility(View.GONE);
             binding.defaultImageProfile.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void LoadBtnYourFriend()
+    {
+        int LOAD_BTN_YOUR_FRIEND = eventChecker.addEventStatusAndGetCode();
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        friendViewModel.getFriendById(userId, new FriendViewModel.getFriendCallback() {
+            @Override
+            public void onSuccess(List<UserModel> friends) {
+                int size = friends.size();
+                String descFriend = String.valueOf(size) + " " + (size < 2 ? "person" : "persons");
+                binding.descFriend.setText(descFriend);
+                eventChecker.markEventAsCompleteAndDoActionIfNeeded(LOAD_BTN_YOUR_FRIEND);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                eventChecker.markEventAsCompleteAndDoActionIfNeeded(LOAD_BTN_YOUR_FRIEND);
+            }
+        });
     }
 }

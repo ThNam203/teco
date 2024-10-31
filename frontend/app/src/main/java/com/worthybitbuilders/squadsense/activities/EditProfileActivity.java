@@ -173,7 +173,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 if(avatarUri != null)
                 {
-                    final int SAVE_AVATAR_INDEX = eventChecker.addEventStatusAndGetCode(false);
+                    final int SAVE_AVATAR_INDEX = eventChecker.addEventStatusAndGetCode();
                     File avatarFile = UriToFile(avatarUri);
                     RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), avatarFile);
                     MultipartBody.Part avatarFilePart = MultipartBody.Part.createFormData("avatar-file", avatarFile.getName(), requestBody);
@@ -195,7 +195,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 currentUser.setIntroduction(binding.introduction.getText().toString());
                 currentUser.setPhoneNumber(binding.phonenumber.getText().toString());
                 currentUser.setBirthday(binding.birthday.getText().toString());
-                final int SAVE_INFO_USER_INDEX = eventChecker.addEventStatusAndGetCode(false);
+                final int SAVE_INFO_USER_INDEX = eventChecker.addEventStatusAndGetCode();
                 userViewModel.updateUser(currentUser, new UserViewModel.UserCallback() {
                     @Override
                     public void onSuccess(UserModel user) {

@@ -35,17 +35,6 @@
                 android:textSize="24dp"
                 android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/btn_more"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:backgroundTint="@color/transparent"
-                android:contentDescription="btn add person"
-                android:minHeight="48dp"
-                android:src="@drawable/ic_more_setting"
-                app:tint="@color/white" />
-
         </LinearLayout>
 
     </LinearLayout>

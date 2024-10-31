@@ -45,16 +45,6 @@
                 android:textColor="@color/primary_word_second_color"
                 android:textSize="16dp"
                 android:textStyle="bold" />
-            <ImageButton
-                android:id="@+id/btn_more"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:backgroundTint="@color/transparent"
-                android:contentDescription="btn add person"
-                android:minHeight="48dp"
-                android:src="@drawable/ic_more_setting"
-                app:tint="@color/white" />
         </LinearLayout>
         <LinearLayout
             android:layout_margin="10dp"
@@ -71,6 +61,36 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="Hihi"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_accept"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:background="@drawable/background_btn_corner"
+                android:backgroundTint="@color/green"
+                android:text="Accept"
+                android:textAllCaps="false"
+                android:textColor="@color/primary_word_color"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_marginRight="20dp"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_deny"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:background="@drawable/background_btn_corner"
+                android:backgroundTint="@color/light_red"
+                android:text="Deny"
+                android:textAllCaps="false"
+                android:textColor="@color/primary_word_color"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
         </LinearLayout>
     </LinearLayout>
 

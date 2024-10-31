@@ -22,6 +22,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.activities.FriendRequestActivity;
+import com.worthybitbuilders.squadsense.activities.InboxActivity;
 import com.worthybitbuilders.squadsense.activities.NotificationSettingActivity;
 import com.worthybitbuilders.squadsense.adapters.NotificationAdapter;
 import com.worthybitbuilders.squadsense.databinding.FragmentNotificationBinding;
@@ -85,25 +87,8 @@ public class NotificationFragment extends Fragment {
 
         notificationAdapter.setOnReplyListener(new NotificationAdapter.OnActionCallback() {
             @Override
-            public void OnAccept(int position) {
-                String response = "Accept";
-                ReplyFriendRequest(response, position);
-
-                listNotification.remove(position);
-                tempListNotification.remove(position);
-                binding.recyclerviewNotification.setAdapter(notificationAdapter);
-                ReloadNotificationView();
-            }
-
-            @Override
-            public void OnDeny(int position) {
-                String response = "Deny";
-                ReplyFriendRequest(response, position);
-
-                listNotification.remove(position);
-                tempListNotification.remove(position);
-                binding.recyclerviewNotification.setAdapter(notificationAdapter);
-                ReloadNotificationView();
+            public void OnClick(int position) {
+                ActivityUtils.switchToActivity(getContext(), FriendRequestActivity.class);
             }
 
             @Override
@@ -209,7 +194,7 @@ public class NotificationFragment extends Fragment {
                 ActivityUtils.switchToActivity(getContext(), NotificationSettingActivity.class);
                 return true;
             case R.id.option_delete:
-                DeleteNotification(selectedNotification.getId());
+                DeleteNotification(selectedNotification);
                 listNotification.remove(selectedNotification);
                 tempListNotification.remove(selectedNotification);
                 binding.recyclerviewNotification.setAdapter(notificationAdapter);
@@ -234,28 +219,11 @@ public class NotificationFragment extends Fragment {
         }
     }
 
-    private void ReplyFriendRequest(String response, int position){
-        String replierId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
-        String requestSender = listNotification.get(position).getSenderId();
-        friendViewModel.reply(replierId, requestSender, response, new FriendViewModel.FriendRequestCallback() {
-            @Override
-            public void onSuccess() {
-                Toast t = Toast.makeText(getContext(), "reply was sent!!", Toast.LENGTH_SHORT);
-                t.setGravity(Gravity.TOP,0,0);
-                t.show();
-            }
+    private void DeleteNotification(Notification notification){
+        if(notification.getNotificationType().equals("FriendRequest"))
+            DeleteFriendRequest(notification);
 
-            @Override
-            public void onFailure(String message) {
-                Toast t = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
-                t.setGravity(Gravity.TOP,0,0);
-                t.show();
-            }
-        });
-    }
-
-    private void DeleteNotification(String notificationId){
-        notificationViewModel.deleteNotification(notificationId, new NotificationViewModel.deleteNotificationCallback() {
+        notificationViewModel.deleteNotification(notification.getId(), new NotificationViewModel.deleteNotificationCallback() {
             @Override
             public void onSuccess() {
                 Toast t = Toast.makeText(getContext(), "notification deleted", Toast.LENGTH_SHORT);
@@ -348,5 +316,25 @@ public class NotificationFragment extends Fragment {
         buttonList.add(binding.btnTodayNotification);
 
         binding.btnAllNotification.setSelected(true);
+    }
+
+    private void DeleteFriendRequest(Notification notificationOfFriendRequest){
+        String replierId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        String requestSender = notificationOfFriendRequest.getSenderId();
+        friendViewModel.reply(replierId, requestSender, "Deny", new FriendViewModel.FriendRequestCallback() {
+            @Override
+            public void onSuccess() {
+                Toast t = Toast.makeText(getContext(), "you have just denied the request!!", Toast.LENGTH_SHORT);
+                t.setGravity(Gravity.TOP,0,0);
+                t.show();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Toast t = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
+                t.setGravity(Gravity.TOP,0,0);
+                t.show();
+            }
+        });
     }
 }
