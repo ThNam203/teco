@@ -32,6 +32,7 @@ import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.Convert;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.NotificationViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
@@ -79,9 +80,7 @@ public class NotificationFragment extends Fragment {
 
             @Override
             public void onFailure(String message) {
-                Toast t = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
-                t.setGravity(Gravity.TOP, 0, 0);
-                t.show();
+                ToastUtils.showToastError(getContext(), message, Gravity.TOP);
             }
         });
 
@@ -226,16 +225,12 @@ public class NotificationFragment extends Fragment {
         notificationViewModel.deleteNotification(notification.getId(), new NotificationViewModel.deleteNotificationCallback() {
             @Override
             public void onSuccess() {
-                Toast t = Toast.makeText(getContext(), "notification deleted", Toast.LENGTH_SHORT);
-                t.setGravity(Gravity.TOP, 0, 0);
-                t.show();
+                ToastUtils.showToastSuccess(getContext(), "notification deleted", Gravity.TOP);
             }
 
             @Override
             public void onFailure(String message) {
-                Toast t = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
-                t.setGravity(Gravity.TOP, 0, 0);
-                t.show();
+                ToastUtils.showToastError(getContext(), message, Gravity.TOP);
             }
         });
     }
@@ -258,7 +253,7 @@ public class NotificationFragment extends Fragment {
 
                 if(!friendViewModel.IsValidEmail(receiverEmail))
                 {
-                    Toast.makeText(getContext(), "Invalid email", Toast.LENGTH_SHORT).show();
+                    ToastUtils.showToastError(getContext(), "Invalid email", Gravity.TOP);
                     return;
                 }
 
@@ -268,25 +263,19 @@ public class NotificationFragment extends Fragment {
                         friendViewModel.createRequest(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), user.getId(), new FriendViewModel.FriendRequestCallback() {
                             @Override
                             public void onSuccess() {
-                                Toast t = Toast.makeText(getContext(), "request was sent to " + receiverEmail + "!!", Toast.LENGTH_SHORT);
-                                t.setGravity(Gravity.TOP, 0, 0);
-                                t.show();
+                                ToastUtils.showToastSuccess(getContext(), "request was sent to " + receiverEmail + "!!", Gravity.TOP);
                             }
 
                             @Override
                             public void onFailure(String message) {
-                                Toast t = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
-                                t.setGravity(Gravity.TOP, 0, 0);
-                                t.show();
+                                ToastUtils.showToastError(getContext(), message, Gravity.TOP);
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(String message) {
-                        Toast t = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
-                        t.setGravity(Gravity.TOP, 0, 0);
-                        t.show();
+                        ToastUtils.showToastError(getContext(), message, Gravity.TOP);
                     }
                 });
             }
@@ -324,16 +313,12 @@ public class NotificationFragment extends Fragment {
         friendViewModel.reply(replierId, requestSender, "Deny", new FriendViewModel.FriendRequestCallback() {
             @Override
             public void onSuccess() {
-                Toast t = Toast.makeText(getContext(), "you have just denied the request!!", Toast.LENGTH_SHORT);
-                t.setGravity(Gravity.TOP,0,0);
-                t.show();
+                ToastUtils.showToastSuccess(getContext(), "you have just denied the request!!", Gravity.TOP);
             }
 
             @Override
             public void onFailure(String message) {
-                Toast t = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
-                t.setGravity(Gravity.TOP,0,0);
-                t.show();
+                ToastUtils.showToastError(getContext(), message, Gravity.TOP);
             }
         });
     }
