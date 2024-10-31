@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -12,6 +13,9 @@ import com.worthybitbuilders.squadsense.fragments.HomeFragment;
 import com.worthybitbuilders.squadsense.fragments.MoreFragment;
 import com.worthybitbuilders.squadsense.fragments.NotificationFragment;
 import com.worthybitbuilders.squadsense.fragments.WorkFragment;
+import com.worthybitbuilders.squadsense.utils.SocketUtil;
+
+import java.net.URISyntaxException;
 
 public class MainActivity extends AppCompatActivity {
 

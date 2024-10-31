@@ -1,9 +1,11 @@
 package com.worthybitbuilders.squadsense.services;
 
+import com.worthybitbuilders.squadsense.models.ChatRoom;
 import com.worthybitbuilders.squadsense.models.LoginRequest;
 import com.worthybitbuilders.squadsense.models.UserModel;
 
 import java.io.File;
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -29,6 +31,9 @@ public interface UserService {
 
     @POST("update-user")
     Call<UserModel> updateUser(@Body UserModel user);
+
+    @GET("{userId}/chatroom")
+    Call<List<ChatRoom>> getAllChatroom(@Path("userId") String userId);
 
     @POST("signup")
     Call<Void> createNewUser(@Body UserModel newUser);

@@ -16,38 +16,44 @@ import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.adapters.FriendItemAdapter;
 import com.worthybitbuilders.squadsense.adapters.NotificationAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityInboxBinding;
+import com.worthybitbuilders.squadsense.models.ChatRoom;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.viewmodels.ChatRoomViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.LoginViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class InboxActivity extends AppCompatActivity {
     ActivityInboxBinding binding;
     FriendViewModel friendViewModel;
-    private FriendItemAdapter friendItemAdapter;
+    ChatRoomViewModel chatRoomViewModel;
+
     Dialog loadingDialog;
+    private FriendItemAdapter friendItemAdapter;
     private List<UserModel> friendList = new ArrayList<>();
     private UserModel selectedFriend = null;
-
     private final int VIEW_INBOX = 0;
     private final int VIEW_FRIEND = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         binding = ActivityInboxBinding.inflate(getLayoutInflater());
         friendViewModel = new ViewModelProvider(this).get(FriendViewModel.class);
+        chatRoomViewModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
 
         binding.rvFriends.setLayoutManager(new LinearLayoutManager(this));
         friendItemAdapter = new FriendItemAdapter(this, friendList);
         loadingDialog = DialogUtils.GetLoadingDialog(this);
 
+        loadChatRooms();
 
         binding.btnAddChat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,21 +80,15 @@ public class InboxActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
     }
 
-    private void LoadFriends()
+    private void loadChatRooms()
     {
+        Dialog loadingDialog = DialogUtils.GetLoadingDialog(this);
         loadingDialog.show();
-        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
-        friendViewModel.getFriendById(userId, new FriendViewModel.getFriendCallback() {
+        chatRoomViewModel.getChatRooms(new ChatRoomViewModel.ApiCallHandler() {
             @Override
-            public void onSuccess(List<UserModel> friends) {
-                friendList.clear();
-                for (UserModel friend : friends)
-                {
-                    friendList.add(friend);
-                }
-                binding.rvFriends.setAdapter(friendItemAdapter);
-                LoadView(VIEW_FRIEND);
+            public void onSuccess() {
                 loadingDialog.dismiss();
+                updateUI();
             }
 
             @Override

@@ -53,9 +53,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class EditProfileActivity extends AppCompatActivity {
-
     private ActivityEditProfileBinding binding;
-
     private UserViewModel userViewModel;
     private UserModel currentUser;
     private Uri avatarUri;

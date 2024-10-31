@@ -210,7 +210,7 @@ public class BoardViewModel extends ViewModel {
         });
     }
 
-    public void deleteColumn(int columnPosition, DeleteColumnHandler handler) {
+    public void deleteColumn(int columnPosition, ApiCallHandler handler) {
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         Call<Void> call = projectService.deleteAColumn(userId, projectId, boardId, columnPosition);
         call.enqueue(new Callback<Void>() {
@@ -239,7 +239,7 @@ public class BoardViewModel extends ViewModel {
      * there are 2 parts that can be updated: title and description
      * @param isChangingDescription: true if updating description, otherwise it's updating title
      */
-    public void updateColumn(int columnPosition, String newContent, Boolean isChangingDescription, UpdateColumnHandler handler) throws JSONException {
+    public void updateColumn(int columnPosition, String newContent, Boolean isChangingDescription, ApiCallHandler handler) throws JSONException {
         JSONObject data = new JSONObject();
         if (isChangingDescription) data.put("description", newContent);
         else data.put("title", newContent) ;
@@ -342,12 +342,7 @@ public class BoardViewModel extends ViewModel {
 //        BoardContentModel sortedContentModel = new BoardContentModel(boardTitle, mRowHeaderModelList, mColumnHeaderModelList, mCellModelList);
 //    }
 
-    public interface DeleteColumnHandler {
-        void onSuccess();
-        void onFailure(String message);
-    }
-
-    public interface UpdateColumnHandler {
+    public interface ApiCallHandler {
         void onSuccess();
         void onFailure(String message);
     }

@@ -11,6 +11,9 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' }
+
+        // for webrtc
+        jcenter()
     }
 }
 rootProject.name = "monday_app_project"

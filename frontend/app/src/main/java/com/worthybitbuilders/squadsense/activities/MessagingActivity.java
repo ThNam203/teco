@@ -6,40 +6,31 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
 import com.worthybitbuilders.squadsense.adapters.MessageAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityMessagingBinding;
 import com.worthybitbuilders.squadsense.models.ChatMessage;
+import com.worthybitbuilders.squadsense.utils.SocketUtil;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
-import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class MessagingActivity extends AppCompatActivity {
     private ActivityMessagingBinding binding;
-    private Socket io;
     private MessageAdapter messageAdapter;
     private final ArrayList<ChatMessage> mMessageList = new ArrayList<>();
-    {
-        try {
-            io = IO.socket("http://10.0.140.194:3000");
-        } catch (URISyntaxException e) {}
-    }
-
-    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+    private final Socket socket = SocketUtil.getInstance();
+    private final Emitter.Listener onNewMessage = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
             MessagingActivity.this.runOnUiThread(() -> {
                 ChatMessage newMessage = new Gson().fromJson((String)args[0], ChatMessage.class);
-                Log.e("New Message" , newMessage.toString());
                 String _id = newMessage.get_id();
                 String chatRoomId = newMessage.getChatRoomId();
                 String senderId = newMessage.getSenderId();
@@ -57,16 +48,16 @@ public class MessagingActivity extends AppCompatActivity {
         String message = String.valueOf(binding.etEnterMessage.getText());
         ChatMessage sendMessage = new ChatMessage("1", message, "Nam");
         String jsonData = new Gson().toJson(sendMessage);
-        io.emit("newMessage", jsonData);
+        socket.emit("newMessage", jsonData);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
-        io.connect();
-        io.emit("joinMessageRoom", "1");
-        io.on("newMessage", onNewMessage);
+        socket.connect();
+        socket.emit("joinMessageRoom", "1");
+        socket.on("newMessage", onNewMessage);
         binding = ActivityMessagingBinding.inflate(getLayoutInflater());
 
         binding.rvMessage.setLayoutManager(new LinearLayoutManager(this));

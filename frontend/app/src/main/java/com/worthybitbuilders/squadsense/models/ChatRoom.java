@@ -1,13 +1,41 @@
 package com.worthybitbuilders.squadsense.models;
 
+import java.util.List;
+
 public class ChatRoom {
-    String title;
-    UserModel[] members;
-    String logoPath;
+    public static class Member {
+        public String _id;
+        public String name;
+        public String imageProfilePath;
+
+        public Member(String _id, String name, String imageProfilePath) {
+            this._id = _id;
+            this.name = name;
+            this.imageProfilePath = imageProfilePath;
+        }
+
+        public String get_id() {
+            return _id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getImageProfilePath() {
+            return imageProfilePath;
+        }
+    }
+    private String _id;
+    private String title;
+    private List<Member> members;
+    private String logoPath;
+    public String lastMessage;
 
     public ChatRoom() {}
-    public ChatRoom(String title, UserModel[] members, String logoPath)
-    {
+
+    public ChatRoom(String _id, String title, List<Member> members, String logoPath) {
+        this._id = _id;
         this.title = title;
         this.members = members;
         this.logoPath = logoPath;
@@ -17,23 +45,16 @@ public class ChatRoom {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public UserModel[] getMembers() {
+    public List<Member> getMembers() {
         return members;
-    }
-
-    public void setMembers(UserModel[] members) {
-        this.members = members;
     }
 
     public String getLogoPath() {
         return logoPath;
     }
 
-    public void setLogoPath(String logoPath) {
-        this.logoPath = logoPath;
+    // TODO: LAST MESSAGE FUNCTIONALITY
+    public String getLastMessage() {
+        return lastMessage;
     }
 }

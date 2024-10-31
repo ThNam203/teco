@@ -19,8 +19,6 @@ public class SharedPreferencesManager {
             return key;
         }
     }
-
-    private static SharedPreferencesManager instance;
     private static SharedPreferences sharedPreferences;
 
     public static void init(Context context) {

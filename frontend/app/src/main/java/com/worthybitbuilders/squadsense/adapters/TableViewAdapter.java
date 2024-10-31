@@ -1,7 +1,6 @@
 package com.worthybitbuilders.squadsense.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +37,8 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardTimelineItemMod
 import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
 import com.worthybitbuilders.squadsense.viewmodels.BoardViewModel;
+
+import kotlin.NotImplementedError;
 
 public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderModel, BoardRowHeaderModel, BoardBaseItemModel> {
     private final BoardViewModel boardViewModel;
@@ -125,7 +126,7 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
             return new BoardTimelineItemViewHolder(view, handlers);
         }
 
-        return null;
+        throw new NotImplementedError();
     }
 
     @Override
@@ -157,7 +158,6 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
     @Override
     public AbstractViewHolder onCreateColumnHeaderViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.board_column_header_view, parent, false);
-
         return new BoardColumnHeaderViewHolder(layout);
     }
 
@@ -205,6 +205,7 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
     @Override
     public void onBindRowHeaderViewHolder(@NonNull AbstractViewHolder holder, @Nullable BoardRowHeaderModel rowHeaderItemModel, int rowPosition) {
         BoardRowHeaderViewHolder headerHolder = (BoardRowHeaderViewHolder) holder;
+        if (rowHeaderItemModel == null) return;
         headerHolder.setRowHeaderModel(rowHeaderItemModel);
 
         if (rowHeaderItemModel.getIsAddNewRowRow())

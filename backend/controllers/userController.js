@@ -21,9 +21,6 @@ const deleteOldProfileImage = (path) => {
         Key: path.substring(path.lastIndexOf('/') + 1, path.length),
     })
 
-    console.log(
-        'deleting.........................................................................'
-    )
     s3Client.send(command).catch(() => {})
 }
 
@@ -41,9 +38,6 @@ exports.uploadProfileImage = multer({
 
 exports.updateProfileImage = asyncCatch(async (req, res, next) => {
     const { key: avatarFile } = req.file
-    console.log(
-        'updating...................................................................................'
-    )
     if (!avatarFile) {
         return next(new Error('Unable to upload profile image'))
     }
@@ -65,8 +59,6 @@ exports.getUserById = asyncCatch(async (req, res, next) => {
     const user = await User.findById(userId)
     if (!user) return next(new AppError('No user found!', 400))
 
-    console.log(user)
-
     res.status(200).json(user)
 })
 
@@ -82,7 +74,6 @@ exports.getUserByEmail = asyncCatch(async (req, res, next) => {
     const user = await User.findOne({ email: email })
     if (!user) return next(new AppError('No email found!', 400))
 
-    console.log(user)
     res.status(200).json(user)
 })
 
@@ -95,6 +86,19 @@ exports.updateUser = asyncCatch(async (req, res, next) => {
     if (!updatedUser) return next(new AppError('No user found!', 400))
 
     res.status(200).json(updatedUser)
+})
+
+exports.getAllChatrooms = asyncCatch(async (req, res, next) => {
+    const { userId } = req.params
+    // const chatrooms = await ChatRoom.find({ members: { $in: [userId] } })
+    const user = await User.findById(userId).populate({
+        path: 'chatRooms',
+        populate: {
+            path: 'members',
+            select: '_id name profileImagePath',
+        },
+    })
+    res.status(200).json(user.chatRooms)
 })
 
 exports.addNewUser = asyncCatch(async (req, res, next) => {

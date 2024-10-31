@@ -254,7 +254,7 @@ public class ProjectActivity extends AppCompatActivity {
                 return;
             }
             try {
-                boardViewModel.updateColumn(columnPosition, newName, false, new BoardViewModel.UpdateColumnHandler() {
+                boardViewModel.updateColumn(columnPosition, newName, false, new BoardViewModel.ApiCallHandler() {
                     @Override
                     public void onSuccess() {
                         dialog.dismiss();
@@ -306,7 +306,7 @@ public class ProjectActivity extends AppCompatActivity {
                 loadingDialog.show();
                 String newDescription = binding.etDescription.getText().toString();
                 try {
-                    boardViewModel.updateColumn(columnPos, newDescription, true, new BoardViewModel.UpdateColumnHandler() {
+                    boardViewModel.updateColumn(columnPos, newDescription, true, new BoardViewModel.ApiCallHandler() {
                         @Override
                         public void onSuccess() {
                             dialog.dismiss();
@@ -343,7 +343,7 @@ public class ProjectActivity extends AppCompatActivity {
         binding.tvAdditionalContent.setText("This column will be removed from the board");
         binding.btnCancel.setOnClickListener(view -> confirmDialog.dismiss());
         binding.btnConfirm.setOnClickListener(view -> {
-            boardViewModel.deleteColumn(columnPosition, new BoardViewModel.DeleteColumnHandler() {
+            boardViewModel.deleteColumn(columnPosition, new BoardViewModel.ApiCallHandler() {
                 @Override
                 public void onSuccess() {
                     confirmDialog.dismiss();

@@ -1,18 +1,21 @@
 const { v4 } = require('uuid')
 const Message = require('../models/Message')
 const socketIO = require('./socket')
+const ChatRoom = require('../models/ChatRoom')
 
 const io = socketIO.getIO()
 
-// const joinChatRooms = async (userId, socket) => {
-//     const chatrooms = await ChatRoom.find({ members: { $in: [userId] } })
-//     chatrooms.forEach((chatroom) => {
-//         socket.join(chatroom._id.toString())
-//     })
-// }
+const joinChatRooms = async (userId, socket) => {
+    const chatrooms = await ChatRoom.find({ members: { $in: [userId] } })
+    chatrooms.forEach((chatroom) => {
+        socket.join(chatroom._id.toString())
+    })
+}
 
 io.on('connection', (socket) => {
-    //joinChatRooms(socket.handshake.auth.userId, socket)
+    joinChatRooms(socket.handshake.query.userId, socket)
+
+    console.log('co mot thang join ne ae')
     socket.on('joinMessageRoom', (data) => {
         const chatRoomId = data
         if (!socket.rooms.has(chatRoomId)) {
@@ -46,20 +49,20 @@ io.on('connection', (socket) => {
 
     socket.on('newMessage', async (data) => {
         const { chatRoomId, message, senderId } = JSON.parse(data)
-        // const chatRoom = await ChatRoom.findById(chatRoomId)
-        // if (!chatRoom)
-        //     return socket
-        //         .in(chatRoomId)
-        //         .emit('roomNotFound', 'Unable to find the chat room')
+        const chatRoom = await ChatRoom.findById(chatRoomId)
+        if (!chatRoom)
+            return socket
+                .in(chatRoomId)
+                .emit('roomNotFound', 'Unable to find the chat room')
 
-        // const newChatMessage = await Message.create({
-        //     chatRoomId,
-        //     message,
-        //     senderId,
-        // })
+        const newChatMessage = await Message.create({
+            chatRoomId,
+            message,
+            senderId,
+        })
 
-        // if (!newChatMessage)
-        //     return socket.emit('messageError', 'Unable to send new message')
+        if (!newChatMessage)
+            return socket.emit('messageError', 'Unable to send new message')
 
         io.in(chatRoomId).emit(
             'newMessage',
