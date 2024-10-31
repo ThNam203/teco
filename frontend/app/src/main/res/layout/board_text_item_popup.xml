@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/background_page_corner_top_left_and_right"
-    android:backgroundTint="@color/primary_third_color">
+    android:backgroundTint="@color/primary_second_color">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             tools:text="Status"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_word_color"
             android:textSize="28dp"
             android:textStyle="bold" />
         <Button
@@ -57,7 +57,7 @@
         android:hint="Enter your text..."
         android:minHeight="100dp"
         android:maxHeight="300dp"
-        android:textColorHint="@color/primary_word_color"
+        android:textColorHint="@color/primary_word_second_color"
         android:textColor="@color/primary_word_color"
         android:layout_marginHorizontal="32dp"
         android:layout_marginVertical="16dp"
@@ -69,7 +69,7 @@
         android:padding="8dp"
         android:text="Clear"
         android:textSize="18sp"
-        android:textColor="#c1d3ea"
+        android:textColor="@color/primary_word_second_color"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="32dp"/>
 </LinearLayout>

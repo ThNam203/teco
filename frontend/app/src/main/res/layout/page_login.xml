@@ -88,7 +88,7 @@
             android:text="Log in"
             android:textAllCaps="false"
             android:textSize="20dp"
-            android:textColor="@color/primary_word_color"
+            android:textColor="@color/white"
             android:layout_marginTop="30dp"/>
 
         <Button

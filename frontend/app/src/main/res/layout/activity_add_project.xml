@@ -84,7 +84,7 @@
                 android:layout_gravity="center"
                 android:text="Create new board"
                 android:textAllCaps="false"
-                android:textColor="@color/primary_word_color"
+                android:textColor="@color/white"
                 android:textSize="20dp" />
         </LinearLayout>
     </ScrollView>

@@ -25,7 +25,7 @@
             android:gravity="center_vertical"
             android:paddingHorizontal="16dp"
             android:singleLine="true"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_word_color"
             android:textSize="@dimen/tableview_default_text_size"
             tools:text="Header Data" />
     </androidx.constraintlayout.widget.ConstraintLayout>

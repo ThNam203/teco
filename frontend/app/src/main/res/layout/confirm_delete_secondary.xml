@@ -5,7 +5,7 @@
     android:layout_width="400dp"
     android:layout_height="wrap_content"
     android:background="@drawable/curved_small_background"
-    android:backgroundTint="#353535"
+    android:backgroundTint="@color/primary_second_color"
     android:paddingHorizontal="16dp"
     android:paddingTop="16dp">
     <TextView
@@ -33,12 +33,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CANCEL"
+            android:textColor="@color/primary_word_second_color"
             android:background="@color/transparent"/>
         <Button
             android:id="@+id/btnConfirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="DELETE"
+            android:textColor="@color/light_red"
             android:background="@color/transparent"/>
     </LinearLayout>
 </LinearLayout>

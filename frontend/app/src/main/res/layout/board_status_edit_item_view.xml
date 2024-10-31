@@ -26,10 +26,10 @@
         android:layout_weight="1"
         android:paddingHorizontal="16dp"
         android:paddingVertical="12dp"
-        android:textColor="@color/primary_word_color"
+        android:textColor="@color/white"
         android:singleLine="true"
         tools:text="LSDFL:SDKJFL:SKDJFLSDJFL:asdfasdSDKJF:LSDJF"
-        android:background="@color/blue"/>
+        android:background="@color/grey"/>
     <ImageButton
         android:id="@+id/btnDelete"
         android:layout_width="32dp"

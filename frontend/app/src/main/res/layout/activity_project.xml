@@ -60,6 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:background="@drawable/background_btn_corner"
+                    android:backgroundTint="@color/primary_btn_second_color"
                     android:text="Main Table"
                     android:textAllCaps="false"
                     android:textSize="18sp"
@@ -77,6 +78,7 @@
                     android:layout_height="36dp"
                     android:layout_toRightOf="@id/btnShowTables"
                     android:background="@drawable/background_btn_corner"
+                    android:backgroundTint="@color/primary_btn_second_color"
                     android:text="Filter"
                     android:textAllCaps="false"
                     android:textSize="18sp"
@@ -93,6 +95,7 @@
                     android:layout_height="36dp"
                     android:layout_alignParentEnd="true"
                     android:background="@drawable/background_btn_corner"
+                    android:backgroundTint="@color/primary_btn_second_color"
                     android:src="@drawable/ic_search"
                     app:tint="@color/primary_icon_color" />
             </LinearLayout>

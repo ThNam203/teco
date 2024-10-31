@@ -31,6 +31,6 @@
             android:backgroundTint="@color/transparent"
             android:contentDescription="Task item user"
             android:src="@drawable/ic_person"
-            app:tint="@color/white"/>
+            app:tint="@color/primary_icon_color"/>
     </FrameLayout>
 </LinearLayout>

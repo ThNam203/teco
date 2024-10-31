@@ -23,14 +23,15 @@
                 android:contentDescription="btn add person"
                 android:minHeight="48dp"
                 android:src="@drawable/ic_close"
-                app:tint="@color/white" />
+                app:tint="@color/primary_icon_color" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Show by"
                 android:layout_centerInParent="true"
+                android:text="Show by"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/primary_word_color"
                 android:textSize="24dp"
                 android:textStyle="bold" />
         </RelativeLayout>

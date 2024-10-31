@@ -96,11 +96,11 @@ public class OpenProfileActivity extends AppCompatActivity {
                     loadAvatarView(false);
 
                 //set introduction
-                color = getResources().getColor(R.color.primary_word_color);
+                color = getResources().getColor(R.color.primary_word_color, getTheme());
                 if(introduction == null || introduction.isEmpty())
                 {
                     introduction = "Add introduction";
-                    color = getResources().getColor(R.color.primary_word_second_color);
+                    color = getResources().getColor(R.color.primary_word_second_color, getTheme());
                 }
                 binding.introduction.setText(introduction);
                 binding.introduction.setTextColor(color);
@@ -109,21 +109,21 @@ public class OpenProfileActivity extends AppCompatActivity {
                 binding.email.setText(email);
 
                 //set phonenumber
-                color = getResources().getColor(R.color.primary_word_color);
+                color = getResources().getColor(R.color.primary_word_color, getTheme());
                 if(phonenumber == null || phonenumber.isEmpty())
                 {
                     phonenumber = "Add a phone number";
-                    color = getResources().getColor(R.color.primary_word_second_color);
+                    color = getResources().getColor(R.color.primary_word_second_color, getTheme());
                 }
                 binding.phonenumber.setText(phonenumber);
                 binding.phonenumber.setTextColor(color);
 
                 //set birthday
-                color = getResources().getColor(R.color.primary_word_color);
+                color = getResources().getColor(R.color.primary_word_color, getTheme());
                 if(birthday == null || birthday.isEmpty())
                 {
                     birthday = "Add a birthday";
-                    color = getResources().getColor(R.color.primary_word_second_color);
+                    color = getResources().getColor(R.color.primary_word_second_color, getTheme());
                 }
                 binding.birthday.setText(birthday);
                 binding.birthday.setTextColor(color);

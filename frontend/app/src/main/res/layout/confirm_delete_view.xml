@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/primary_third_color">
+    android:background="@color/primary_second_color">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
             tools:text="Status"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_word_color"
             android:textSize="28dp"
             android:textStyle="bold" />
         <ImageButton
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         tools:text="Are you sure to delete"
         android:textSize="18sp"
-        android:textColorHint="@color/primary_word_color"
+        android:textColorHint="@color/primary_word_second_color"
         android:textColor="@color/primary_word_color"
         android:layout_margin="32dp"
         android:background="@null"/>
@@ -59,7 +59,7 @@
             android:padding="8dp"
             android:text="Cancel"
             android:textSize="18sp"
-            android:textColor="#c1d3ea"
+            android:textColor="@color/primary_word_second_color"
             android:layout_marginBottom="16dp"/>
         <TextView
             android:id="@+id/btnAccept"
@@ -68,7 +68,7 @@
             android:padding="8dp"
             android:text="Accept"
             android:textSize="18sp"
-            android:textColor="#c1d3ea"
+            android:textColor="@color/green"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"/>
     </LinearLayout>

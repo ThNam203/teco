@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_close"
-            app:tint="@color/primary_word_color"
+            app:tint="@color/primary_icon_color"
             android:backgroundTint="@color/transparent"/>
         <TextView
             android:layout_width="0dp"
@@ -37,7 +37,7 @@
             android:padding="16dp"
             android:text="Save"
             android:layout_marginEnd="16dp"
-            android:textColor="#04529c"
+            android:textColor="@color/primary_word_third_color"
             android:textSize="18sp"/>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView

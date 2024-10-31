@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:background="@color/black"
+    tools:background="@color/primary_color"
     tools:context=".fragments.BoardDetailUpdateFragment">
     <LinearLayout
         android:id="@+id/emptyNotification"
@@ -59,12 +59,12 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:textColor="@color/grey"
+            android:textColor="@color/primary_word_second_color"
             android:text="Write your update..."/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_send"
-            app:tint="@color/grey"/>
+            app:tint="@color/primary_icon_second_color"/>
     </LinearLayout>
 </LinearLayout>

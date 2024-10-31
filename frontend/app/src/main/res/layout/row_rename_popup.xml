@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/background_page_corner_top_left_and_right"
-    android:backgroundTint="@color/primary_third_color">
+    android:backgroundTint="@color/primary_second_color">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:text="Edit name"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_word_color"
             android:textSize="28dp"
             android:textStyle="bold" />
         <Button

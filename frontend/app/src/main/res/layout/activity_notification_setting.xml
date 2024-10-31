@@ -31,7 +31,7 @@
             android:text="Notification Settings"
             android:textAlignment="center"
             android:layout_gravity="center"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_word_color"
             android:textSize="28dp"
             android:textStyle="bold" />
     </LinearLayout>

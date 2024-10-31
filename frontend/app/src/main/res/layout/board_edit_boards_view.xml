@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_close"
-            app:tint="@color/primary_word_color"
+            app:tint="@color/primary_icon_color"
             android:layout_gravity="center_vertical"
             android:backgroundTint="@color/transparent"/>
     </FrameLayout>
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:background="@drawable/curved_big_background"
-                android:backgroundTint="#464646"
+                android:backgroundTint="@color/primary_second_color"
                 android:padding="16dp"
                 android:layout_marginHorizontal="16dp">
                 <ImageView
@@ -85,13 +85,13 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="Organize your workload in any way you like to"
-                        android:textColor="#9c9c9c"/>
+                        android:textColor="@color/primary_word_second_color"/>
                     <TextView
                         android:id="@+id/btnNewBoard"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="+ Add new board"
-                        android:textColor="#68a5ec"/>
+                        android:textColor="@color/primary_word_third_color"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

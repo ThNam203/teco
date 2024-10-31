@@ -114,12 +114,7 @@ public class NotificationFragment extends Fragment {
                 binding.recyclerviewNotification.setAdapter(notificationAdapter);
                 ReloadNotificationView();
 
-                //change color button selected
-                for (Button btn : buttonList)
-                {
-                    btn.setSelected(false);
-                }
-                binding.btnAllNotification.setSelected(true);
+                setSelectedBtnInScrollView(binding.btnAllNotification, buttonList);
             }
         });
 
@@ -142,12 +137,7 @@ public class NotificationFragment extends Fragment {
                 binding.recyclerviewNotification.setAdapter(notificationAdapter);
                 ReloadNotificationView();
 
-                //change color button selected
-                for (Button btn : buttonList)
-                {
-                    btn.setSelected(false);
-                }
-                binding.btnTodayNotification.setSelected(true);
+                setSelectedBtnInScrollView(binding.btnTodayNotification, buttonList);
             }
         });
 
@@ -160,12 +150,7 @@ public class NotificationFragment extends Fragment {
                 binding.recyclerviewNotification.setAdapter(notificationAdapter);
                 ReloadNotificationView();
 
-                //change color button selected
-                for (Button btn : buttonList)
-                {
-                    btn.setSelected(false);
-                }
-                binding.btnMentionedNotification.setSelected(true);
+                setSelectedBtnInScrollView(binding.btnMentionedNotification, buttonList);
             }
         });
 
@@ -203,6 +188,23 @@ public class NotificationFragment extends Fragment {
                 return super.onContextItemSelected(item);
         }
     }
+
+    private void setSelectedBtnInScrollView(Button selectedButton, List<Button> listBtn)
+    {
+        //change color button unselected selected
+        for (Button btn : listBtn)
+        {
+            btn.setSelected(false);
+            int color = getResources().getColor(R.color.primary_word_color, getActivity().getTheme());
+            btn.setTextColor(color);
+        }
+
+        //change color of selected button
+        selectedButton.setSelected(true);
+        int color = getResources().getColor(R.color.white, getActivity().getTheme());
+        selectedButton.setTextColor(color);
+    }
+
 
     private void ReloadNotificationView()
     {
@@ -305,6 +307,8 @@ public class NotificationFragment extends Fragment {
         buttonList.add(binding.btnTodayNotification);
 
         binding.btnAllNotification.setSelected(true);
+        int color = getResources().getColor(R.color.white, getActivity().getTheme());
+        binding.btnAllNotification.setTextColor(color);
     }
 
     private void DeleteFriendRequest(Notification notificationOfFriendRequest){

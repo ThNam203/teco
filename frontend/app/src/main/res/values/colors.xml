@@ -10,22 +10,22 @@
 
     <!--    dark theme color   -->
 
-    <color name="primary_color">#111111</color>
-    <color name="primary_second_color">#474747</color>
+    <color name="primary_color">#ffffff</color>
+    <color name="primary_second_color">#f5f6f8</color>
     <color name="primary_third_color">#2c2c2c</color>
-    <color name="primary_word_color">#FAFAFA</color>
-    <color name="primary_word_second_color">#a9a9a9</color>
+    <color name="primary_word_color">#323232</color>
+    <color name="primary_word_second_color">#6a697a</color>
     <color name="primary_word_third_color">#0075e2</color>
-    <color name="primary_icon_color">#fbfbfb</color>
-    <color name="primary_icon_second_color">#a3a3a3</color>
+    <color name="primary_icon_color">#323232</color>
+    <color name="primary_icon_second_color">#63636c</color>
     <color name="primary_btn_color">#0075e2</color>
-    <color name="primary_btn_second_color">#636363</color>
-    <color name="btn_disabled_color">#636363</color>
+    <color name="primary_btn_second_color">#e8e8f0</color>
+    <color name="btn_disabled_color">#e8e8f0</color>
     <color name="btn_enabled_color">#0075e2</color>
     <color name="primary_splitter_color">#ccc</color>
     <color name="chosen_color">#00aefd</color>
     <color name="darkgrey_translucent">#EE444444</color>
-    <color name="toggle_track_on_color">#0c314f</color>
+    <color name="toggle_track_on_color">#6ca8f4</color>
     <color name="toggle_track_off_color">#595959</color>
     <color name="toggle_thumb_on_color">#0072ec</color>
     <color name="toggle_thumb_off_color">#bababa</color>

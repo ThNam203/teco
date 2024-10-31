@@ -18,7 +18,7 @@
         android:background="@color/transparent"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_table_sheet"
-        app:tint="@color/white"/>
+        app:tint="@color/primary_icon_color"/>
     <EditText
         android:id="@+id/etBoardName"
         android:layout_width="0dp"
@@ -67,5 +67,5 @@
         android:background="@color/transparent"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_more_setting"
-        app:tint="@color/white"/>
+        app:tint="@color/primary_icon_color"/>
 </LinearLayout>

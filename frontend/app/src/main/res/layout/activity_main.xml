@@ -16,10 +16,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/nav_bottom"
         android:layout_alignParentBottom="true"
-        android:background="@color/black"
+        android:background="@color/primary_color"
         android:contentDescription="navigation bottom"
         app:menu="@menu/menu"
-        app:itemTextColor="@color/white"
-        app:itemIconTint="@color/white" />
+        app:itemTextColor="@color/primary_icon_color"
+        app:itemIconTint="@color/primary_word_color" />
 
 </RelativeLayout>

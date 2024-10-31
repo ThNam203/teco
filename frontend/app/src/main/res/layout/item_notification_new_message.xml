@@ -53,7 +53,7 @@
                 android:contentDescription="btn add person"
                 android:minHeight="48dp"
                 android:src="@drawable/ic_more_setting"
-                app:tint="@color/white" />
+                app:tint="@color/primary_icon_color" />
 
         </LinearLayout>
 
@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
+                android:textColor="@color/primary_word_color"
                 android:text="Hihi"/>
         </LinearLayout>
     </LinearLayout>

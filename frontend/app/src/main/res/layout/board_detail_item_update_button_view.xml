@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:text="Updates"
     android:padding="8dp"
-    android:backgroundTint="#2b2b2b"
+    android:backgroundTint="@color/primary_second_color"
     app:icon="@drawable/ic_add_message"
     android:textAllCaps="false"
     android:textColor="@color/primary_word_color"/>

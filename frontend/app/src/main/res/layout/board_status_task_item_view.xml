@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:background="@drawable/background_btn_corner"
-    android:backgroundTint="#9c9c9c"
+    android:backgroundTint="@color/primary_second_color"
     android:gravity="center"
     android:paddingVertical="10dp"
     android:textColor="@color/primary_word_color"

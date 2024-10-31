@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/background_page_corner_top_left_and_right"
-    android:backgroundTint="@color/primary_third_color">
+    android:backgroundTint="@color/primary_second_color">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             tools:text="Date"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_word_color"
             android:textSize="28dp"
             android:textStyle="bold" />
         <Button
@@ -44,7 +44,9 @@
             android:padding="0dp"
             android:layout_marginEnd="16dp"
             android:text="Save"
-            android:backgroundTint="#0073ea"/>
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/primary_btn_color"/>
     </LinearLayout>
     <View
         android:layout_width="match_parent"

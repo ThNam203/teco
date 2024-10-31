@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/background_page_corner_top_left_and_right"
-    android:backgroundTint="#2b2b2b">
+    android:backgroundTint="@color/primary_second_color">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:text="Create new column"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_word_color"
             android:textSize="28dp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -55,33 +55,41 @@
                 android:id="@+id/btnAddStatusItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#464646"
-                app:icon="@drawable/ic_status_item"
+                android:backgroundTint="@color/primary_btn_second_color"
+                android:drawableLeft="@drawable/ic_status_item"
+                android:drawableTint="@color/primary_icon_color"
                 android:text="Status"
+                android:textColor="@color/primary_word_color"
                 android:textAllCaps="false"/>
             <Button
                 android:id="@+id/btnAddDateItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#464646"
-                app:icon="@drawable/ic_date_item"
+                android:backgroundTint="@color/primary_btn_second_color"
+                android:drawableLeft="@drawable/ic_date_item"
+                android:drawableTint="@color/primary_icon_color"
                 android:textAllCaps="false"
+                android:textColor="@color/primary_word_color"
                 android:text="Date"/>
             <Button
                 android:id="@+id/btnAddNumberItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#464646"
-                app:icon="@drawable/ic_number_item"
+                android:backgroundTint="@color/primary_btn_second_color"
+                android:drawableLeft="@drawable/ic_number_item"
+                android:drawableTint="@color/primary_icon_color"
                 android:text="Number"
+                android:textColor="@color/primary_word_color"
                 android:textAllCaps="false"/>
             <Button
                 android:id="@+id/btnAddCheckboxItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#464646"
-                app:icon="@drawable/ic_checkbox_item"
+                android:backgroundTint="@color/primary_btn_second_color"
+                android:drawableLeft="@drawable/ic_checkbox_item"
+                android:drawableTint="@color/primary_icon_color"
                 android:text="Checkbox"
+                android:textColor="@color/primary_word_color"
                 android:textAllCaps="false"/>
         </LinearLayout>
         <LinearLayout
@@ -95,33 +103,41 @@
                 android:id="@+id/btnAddUserItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#464646"
-                app:icon="@drawable/ic_user_item"
+                android:backgroundTint="@color/primary_btn_second_color"
+                android:drawableLeft="@drawable/ic_user_item"
+                android:drawableTint="@color/primary_icon_color"
                 android:text="People"
+                android:textColor="@color/primary_word_color"
                 android:textAllCaps="false"/>
             <Button
                 android:id="@+id/btnAddTextItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#464646"
-                app:icon="@drawable/ic_text_item"
+                android:backgroundTint="@color/primary_btn_second_color"
+                android:drawableLeft="@drawable/ic_text_item"
+                android:drawableTint="@color/primary_icon_color"
                 android:text="Text"
+                android:textColor="@color/primary_word_color"
                 android:textAllCaps="false"/>
             <Button
                 android:id="@+id/btnAddTimelineItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#464646"
-                app:icon="@drawable/ic_timeline_item"
+                android:backgroundTint="@color/primary_btn_second_color"
+                android:drawableLeft="@drawable/ic_timeline_item"
+                android:drawableTint="@color/primary_icon_color"
                 android:text="Timeline"
+                android:textColor="@color/primary_word_color"
                 android:textAllCaps="false"/>
             <Button
                 android:id="@+id/btnAddUpdateItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#464646"
-                app:icon="@drawable/ic_update_item"
+                android:backgroundTint="@color/primary_btn_second_color"
+                android:drawableLeft="@drawable/ic_update_item"
+                android:drawableTint="@color/primary_icon_color"
                 android:text="Update"
+                android:textColor="@color/primary_word_color"
                 android:textAllCaps="false"/>
         </LinearLayout>
     </LinearLayout>
@@ -131,7 +147,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="More columns"
-        android:textSize="22sp"
+        android:textSize="20dp"
         android:layout_marginVertical="12dp"
         android:textColor="#74a9e6"/>
 </LinearLayout>

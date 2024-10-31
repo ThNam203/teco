@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Title"
-                android:textColor="@color/white"
+                android:textColor="@color/primary_word_color"
                 android:textSize="24dp"
                 android:textStyle="bold"
                 android:ellipsize="end"
@@ -54,7 +54,7 @@
                 android:contentDescription="btn add person"
                 android:minHeight="48dp"
                 android:src="@drawable/ic_more_setting"
-                app:tint="@color/white" />
+                app:tint="@color/primary_icon_color" />
         </LinearLayout>
         <LinearLayout
             android:layout_margin="10dp"
@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
+                android:textColor="@color/primary_word_color"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="Hihi"/>
