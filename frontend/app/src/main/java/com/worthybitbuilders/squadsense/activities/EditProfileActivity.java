@@ -86,11 +86,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 if(user.getProfileImagePath() != null && !user.getProfileImagePath().isEmpty())
                 {
                     try{
-                        String profileImagePath = user.getProfileImagePath();
-                        String publicProfileImageURL = String.format("https://squadsense.s3.ap-southeast-1.amazonaws.com/%s", profileImagePath);
-
                         Glide.with(EditProfileActivity.this)
-                                .load(publicProfileImageURL)
+                                .load(user.getProfileImagePath())
                                 .into(binding.imageProfile);
                         loadAvatarView(true);
                     }

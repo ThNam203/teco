@@ -54,6 +54,8 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(getLayoutInflater());
         viewModel = new ViewModelProvider(getActivity()).get(MainActivityViewModel.class);
+        friendViewModel = new ViewModelProvider(getActivity()).get(FriendViewModel.class);
+        userViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
 
         // THERE IS ONLY "ONFAILURE" method
         Dialog loadingDialog = DialogUtils.GetLoadingDialog(getContext());
