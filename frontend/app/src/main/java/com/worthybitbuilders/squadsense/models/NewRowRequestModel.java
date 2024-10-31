@@ -1,7 +1,6 @@
 package com.worthybitbuilders.squadsense.models;
 
 import com.worthybitbuilders.squadsense.models.board_models.BoardBaseItemModel;
-import com.worthybitbuilders.squadsense.models.board_models.BoardColumnHeaderModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardRowHeaderModel;
 
 import java.util.List;

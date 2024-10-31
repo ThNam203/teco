@@ -37,8 +37,7 @@ exports.uploadProfileImage = multer({
 })
 
 exports.updateProfileImage = asyncCatch(async (req, res, next) => {
-    const { key: avatarFile } = req.file
-    if (!avatarFile) {
+    if (!req.file) {
         return next(new Error('Unable to upload profile image'))
     }
 
@@ -48,10 +47,10 @@ exports.updateProfileImage = asyncCatch(async (req, res, next) => {
         deleteOldProfileImage(user.profileImagePath)
     }
 
-    user.profileImagePath = avatarFile
+    user.profileImagePath = req.file.location
     await user.save()
 
-    res.status(200).json({ imagePath: avatarFile })
+    res.status(200).json({ imagePath: req.file.location })
 })
 
 exports.getUserById = asyncCatch(async (req, res, next) => {

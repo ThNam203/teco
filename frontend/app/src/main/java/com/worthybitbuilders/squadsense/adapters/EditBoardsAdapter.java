@@ -6,11 +6,9 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -19,23 +17,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.databinding.BoardAddNewRowPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardEditBoardsOptionMoreBinding;
-import com.worthybitbuilders.squadsense.databinding.BoardEditBoardsViewBinding;
 import com.worthybitbuilders.squadsense.databinding.ConfirmDeleteViewBinding;
-import com.worthybitbuilders.squadsense.models.board_models.BoardContentModel;
 import com.worthybitbuilders.squadsense.models.board_models.ProjectModel;
-import com.worthybitbuilders.squadsense.viewmodels.BoardViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
 
 import org.json.JSONException;
 
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class EditBoardsAdapter extends RecyclerView.Adapter<EditBoardsAdapter.EditBoardItemViewHolder> {

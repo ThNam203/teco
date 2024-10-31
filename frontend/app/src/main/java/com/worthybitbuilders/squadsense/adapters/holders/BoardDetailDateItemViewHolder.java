@@ -9,8 +9,6 @@ import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.models.board_models.BoardDateItemModel;
 
-import java.util.Date;
-
 public class BoardDetailDateItemViewHolder extends AbstractViewHolder {
     private TextView tvContent;
     private TextView tvTitleColumn;

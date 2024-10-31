@@ -33,15 +33,12 @@ import com.worthybitbuilders.squadsense.activities.SearchActivity;
 import com.worthybitbuilders.squadsense.adapters.ProjectAdapter;
 import com.worthybitbuilders.squadsense.databinding.FragmentHomeBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
+import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.MainActivityViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
-import com.worthybitbuilders.squadsense.activities.AddBoardActivity;
-import com.worthybitbuilders.squadsense.activities.SearchActivity;
-import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
-import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;

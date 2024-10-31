@@ -31,6 +31,9 @@ const sendNotificationOnReply = async (sender, receiver, isAccept) => {
 const sendNotificationOnRequest = async (sender, receiver) => {
     const message = `${sender.name} has sent you a friend request`
 
+    console.log(sender)
+    console.log(receiver)
+
     await Notification.create({
         senderId: sender._id,
         receiverId: receiver._id,

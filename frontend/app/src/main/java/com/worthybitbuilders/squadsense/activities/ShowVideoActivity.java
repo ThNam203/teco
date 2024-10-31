@@ -1,16 +1,14 @@
 package com.worthybitbuilders.squadsense.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.MediaController;
 
-import com.worthybitbuilders.squadsense.R;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.worthybitbuilders.squadsense.databinding.ActivityShowVideoBinding;
 
 import java.util.Objects;

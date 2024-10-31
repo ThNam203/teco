@@ -3,7 +3,6 @@ package com.worthybitbuilders.squadsense.adapters.holders;
 import android.view.View;
 import android.widget.TextView;
 
-import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractSorterViewHolder;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.models.board_models.BoardColumnHeaderModel;

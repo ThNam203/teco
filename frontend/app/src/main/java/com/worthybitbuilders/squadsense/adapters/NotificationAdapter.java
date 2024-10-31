@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.worthybitbuilders.squadsense.models.Notification;
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.models.Notification;
 
 import java.util.List;
 

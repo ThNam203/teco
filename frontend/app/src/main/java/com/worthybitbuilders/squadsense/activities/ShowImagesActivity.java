@@ -1,8 +1,5 @@
 package com.worthybitbuilders.squadsense.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +8,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.widget.Toast;
 
-import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.adapters.UpdateTaskFileAdapter;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.widget.ViewPager2;
+
 import com.worthybitbuilders.squadsense.adapters.ViewPagerImageAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityShowImagesBinding;
 

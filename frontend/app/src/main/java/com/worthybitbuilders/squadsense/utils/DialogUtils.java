@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.databinding.BoardAddNewRowPopupBinding;
 
 public class DialogUtils {
     public static Dialog GetLoadingDialog(Context context) {

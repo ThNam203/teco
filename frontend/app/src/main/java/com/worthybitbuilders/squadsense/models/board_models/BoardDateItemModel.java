@@ -2,8 +2,6 @@ package com.worthybitbuilders.squadsense.models.board_models;
 
 import com.worthybitbuilders.squadsense.utils.CustomUtils;
 
-import java.util.Base64;
-import java.util.Date;
 import java.util.Locale;
 
 public class BoardDateItemModel extends BoardBaseItemModel {

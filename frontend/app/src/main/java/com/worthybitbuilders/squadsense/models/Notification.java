@@ -1,13 +1,8 @@
 package com.worthybitbuilders.squadsense.models;
 
-import android.view.Gravity;
-import android.widget.Toast;
-
 import com.worthybitbuilders.squadsense.utils.Convert;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class Notification {

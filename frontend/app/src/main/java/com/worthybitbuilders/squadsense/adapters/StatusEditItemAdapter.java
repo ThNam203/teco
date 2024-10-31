@@ -2,7 +2,6 @@ package com.worthybitbuilders.squadsense.adapters;
 
 import android.graphics.Color;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.models.board_models.BoardStatusItemModel;
-
-import java.util.List;
 
 public class StatusEditItemAdapter extends RecyclerView.Adapter {
     private final BoardStatusItemModel itemModel;

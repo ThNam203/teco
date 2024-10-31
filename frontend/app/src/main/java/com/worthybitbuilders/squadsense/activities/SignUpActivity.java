@@ -1,9 +1,5 @@
 package com.worthybitbuilders.squadsense.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,11 +7,15 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Toast;
 
-import com.worthybitbuilders.squadsense.models.UserModel;
-import com.worthybitbuilders.squadsense.viewmodels.SignUpViewModel;
-import com.worthybitbuilders.squadsense.databinding.ActivitySignUpBinding;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.databinding.ActivitySignUpBinding;
+import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
+import com.worthybitbuilders.squadsense.viewmodels.SignUpViewModel;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.

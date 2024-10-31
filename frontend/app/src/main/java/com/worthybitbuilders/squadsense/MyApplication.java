@@ -1,14 +1,9 @@
 package com.worthybitbuilders.squadsense;
 
 import android.app.Application;
-import android.widget.Toast;
 
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.SocketUtil;
-
-import java.net.URISyntaxException;
-
-import io.socket.client.Socket;
 
 public class MyApplication extends Application {
     @Override

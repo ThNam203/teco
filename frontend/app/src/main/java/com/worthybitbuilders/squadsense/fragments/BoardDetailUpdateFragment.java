@@ -1,25 +1,21 @@
 package com.worthybitbuilders.squadsense.fragments;
 
-import androidx.lifecycle.ViewModelProvider;
-
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.worthybitbuilders.squadsense.activities.NewUpdateTaskActivity;
 import com.worthybitbuilders.squadsense.adapters.UpdateTaskAdapter;
 import com.worthybitbuilders.squadsense.databinding.FragmentBoardDetailUpdateBinding;
-import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.viewmodels.BoardDetailItemViewModel;
 
 public class BoardDetailUpdateFragment extends Fragment {

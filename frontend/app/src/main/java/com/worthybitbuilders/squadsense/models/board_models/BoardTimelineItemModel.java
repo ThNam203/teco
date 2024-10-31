@@ -1,17 +1,8 @@
 package com.worthybitbuilders.squadsense.models.board_models;
 
-import com.google.android.material.datepicker.MaterialDatePicker;
 import com.worthybitbuilders.squadsense.utils.CustomUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 public class BoardTimelineItemModel extends BoardBaseItemModel {
     private int startYear = -1;

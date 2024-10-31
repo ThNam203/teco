@@ -6,7 +6,6 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
-import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
 
 public class BoardUpdateItemViewHolder extends AbstractViewHolder {

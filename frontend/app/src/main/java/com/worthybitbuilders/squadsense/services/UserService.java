@@ -4,7 +4,6 @@ import com.worthybitbuilders.squadsense.models.ChatRoom;
 import com.worthybitbuilders.squadsense.models.LoginRequest;
 import com.worthybitbuilders.squadsense.models.UserModel;
 
-import java.io.File;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -14,7 +13,6 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 

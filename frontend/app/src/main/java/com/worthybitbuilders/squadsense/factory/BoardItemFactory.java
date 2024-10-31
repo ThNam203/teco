@@ -12,8 +12,6 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardTimelineItemMod
 import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
 
-import java.util.ArrayList;
-
 public class BoardItemFactory {
     public static BoardBaseItemModel createNewItem(BoardColumnHeaderModel.ColumnType type) {
         BoardBaseItemModel newItem = null;

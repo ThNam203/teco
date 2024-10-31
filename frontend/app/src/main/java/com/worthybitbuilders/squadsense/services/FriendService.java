@@ -1,7 +1,6 @@
 package com.worthybitbuilders.squadsense.services;
 
 import com.worthybitbuilders.squadsense.models.FriendRequest;
-import com.worthybitbuilders.squadsense.models.Notification;
 import com.worthybitbuilders.squadsense.models.UserModel;
 
 import java.util.List;

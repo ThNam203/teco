@@ -1,10 +1,5 @@
 package com.worthybitbuilders.squadsense.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.lifecycle.ViewModelProvider;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -13,18 +8,22 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Toast;
 
-import com.worthybitbuilders.squadsense.MainActivity;
-import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.viewmodels.LoginViewModel;
-import com.worthybitbuilders.squadsense.databinding.PageLoginBinding;
-import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
-import com.worthybitbuilders.squadsense.utils.ActivityUtils;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.worthybitbuilders.squadsense.MainActivity;
+import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.databinding.PageLoginBinding;
+import com.worthybitbuilders.squadsense.utils.ActivityUtils;
+import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.viewmodels.LoginViewModel;
 
 public class LogInActivity extends AppCompatActivity {
     private PageLoginBinding binding;

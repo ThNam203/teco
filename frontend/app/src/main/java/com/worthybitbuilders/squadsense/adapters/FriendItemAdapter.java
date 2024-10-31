@@ -1,21 +1,17 @@
 package com.worthybitbuilders.squadsense.adapters;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.models.Notification;
 import com.worthybitbuilders.squadsense.models.UserModel;
 
 import java.util.List;
@@ -28,7 +24,6 @@ public class FriendItemAdapter extends RecyclerView.Adapter {
 
     public interface OnActionCallback {
         void OnClick(int position);
-        void OnShowingOption(int position);
     }
 
     public FriendItemAdapter(Context context, List<UserModel> friendList) {
@@ -79,12 +74,10 @@ public class FriendItemAdapter extends RecyclerView.Adapter {
     private class FriendItemHolder extends RecyclerView.ViewHolder {
         TextView tvFriendName;
         ImageView friendAvatar;
-        ImageButton btnMore;
         FriendItemHolder(View itemView) {
             super(itemView);
-            tvFriendName = (TextView) itemView.findViewById(R.id.friend_name);
-            friendAvatar = (ImageView) itemView.findViewById(R.id.friend_avatar);
-            btnMore = (ImageButton) itemView.findViewById(R.id.btn_more);
+            tvFriendName = itemView.findViewById(R.id.friend_name);
+            friendAvatar = itemView.findViewById(R.id.friend_avatar);
         }
 
         void bind(UserModel friend, int position) {
@@ -99,20 +92,7 @@ public class FriendItemAdapter extends RecyclerView.Adapter {
                         .into(friendAvatar);
             }
 
-            btnMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    callback.OnShowingOption(position);
-                }
-            });
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    callback.OnClick(position);
-                }
-            });
-
+            itemView.setOnClickListener(view -> callback.OnClick(position));
         }
     }
 }

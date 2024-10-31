@@ -5,7 +5,6 @@ import android.util.Patterns;
 
 import androidx.lifecycle.ViewModel;
 
-
 import com.google.gson.Gson;
 import com.worthybitbuilders.squadsense.models.ErrorResponse;
 import com.worthybitbuilders.squadsense.models.FriendRequest;

@@ -1,6 +1,5 @@
 package com.worthybitbuilders.squadsense.viewmodels;
 
-import android.util.Log;
 import android.util.Patterns;
 
 import androidx.lifecycle.ViewModel;
@@ -13,9 +12,6 @@ import com.worthybitbuilders.squadsense.services.RetrofitServices;
 import com.worthybitbuilders.squadsense.services.UserService;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.SocketUtil;
-
-import java.io.IOException;
-import java.net.Socket;
 
 import retrofit2.Call;
 import retrofit2.Callback;

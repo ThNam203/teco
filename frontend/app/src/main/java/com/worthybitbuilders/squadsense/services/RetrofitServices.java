@@ -18,7 +18,6 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel
 import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
 
 import java.lang.reflect.Type;
-import java.util.Map;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

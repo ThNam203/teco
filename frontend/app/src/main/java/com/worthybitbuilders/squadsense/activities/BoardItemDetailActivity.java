@@ -1,10 +1,5 @@
 package com.worthybitbuilders.squadsense.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,13 +16,15 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.databinding.ActivityBoardItemDetailBinding;
-import com.worthybitbuilders.squadsense.databinding.BoardTextItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.ConfirmDeleteSecondaryBinding;
 import com.worthybitbuilders.squadsense.databinding.RowMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.databinding.RowRenamePopupBinding;
-import com.worthybitbuilders.squadsense.databinding.UpdateTaskMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.factory.BoardItemDetailViewModelFactory;
 import com.worthybitbuilders.squadsense.fragments.BoardDetailColumnFragment;
 import com.worthybitbuilders.squadsense.fragments.BoardDetailUpdateFragment;
@@ -35,7 +32,6 @@ import com.worthybitbuilders.squadsense.models.BoardDetailItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.viewmodels.BoardDetailItemViewModel;
-import com.worthybitbuilders.squadsense.viewmodels.BoardViewModel;
 
 import org.json.JSONException;
 
@@ -43,10 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class BoardItemDetailActivity extends AppCompatActivity implements BoardDetailColumnFragment.ItemClickHelper {
     // first is button reference, second is its id

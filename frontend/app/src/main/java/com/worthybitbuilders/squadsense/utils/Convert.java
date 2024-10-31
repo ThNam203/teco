@@ -1,7 +1,5 @@
 package com.worthybitbuilders.squadsense.utils;
 
-import android.util.Patterns;
-
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;

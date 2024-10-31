@@ -1,5 +1,7 @@
 package com.worthybitbuilders.squadsense.models.board_models;
+
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+
 import java.util.ArrayList;
 import java.util.List;
 

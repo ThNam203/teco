@@ -1,19 +1,15 @@
 package com.worthybitbuilders.squadsense.adapters;
 
-import android.app.Dialog;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
@@ -27,7 +23,6 @@ import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.activities.ShowImagesActivity;
 import com.worthybitbuilders.squadsense.activities.ShowVideoActivity;
-import com.worthybitbuilders.squadsense.databinding.ConfirmDeleteViewBinding;
 import com.worthybitbuilders.squadsense.databinding.UpdateTaskMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.databinding.UpdateTaskViewBinding;
 import com.worthybitbuilders.squadsense.models.UpdateTask;
@@ -39,7 +34,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import kotlin.NotImplementedError;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

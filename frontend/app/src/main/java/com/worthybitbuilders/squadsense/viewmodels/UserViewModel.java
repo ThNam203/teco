@@ -11,7 +11,6 @@ import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.services.RetrofitServices;
 import com.worthybitbuilders.squadsense.services.UserService;
 
-import java.io.File;
 import java.io.IOException;
 
 import okhttp3.MultipartBody;
