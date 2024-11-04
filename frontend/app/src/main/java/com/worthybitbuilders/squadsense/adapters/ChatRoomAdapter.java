@@ -19,9 +19,11 @@ import java.util.Objects;
 
 public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRoomViewHolder> {
     private final List<ChatRoom> chatRooms;
+    private final ChatRoomClickHandlers handlers;
 
-    public ChatRoomAdapter(List<ChatRoom> chatRooms) {
+    public ChatRoomAdapter(List<ChatRoom> chatRooms, ChatRoomClickHandlers handlers) {
         this.chatRooms = chatRooms;
+        this.handlers = handlers;
     }
 
     @NonNull
@@ -33,7 +35,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
 
     @Override
     public void onBindViewHolder(@NonNull ChatRoomViewHolder holder, int position) {
-        holder.bind(chatRooms.get(position));
+        holder.bind(chatRooms.get(position), this.handlers);
     }
 
     @Override
@@ -53,22 +55,23 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
             tvLastMessage = itemView.findViewById(R.id.tvChatRoomLastMessage);
         }
 
-        public void bind(ChatRoom chatRoom) {
+        public void bind(ChatRoom chatRoom, ChatRoomClickHandlers handlers) {
+            itemView.setOnClickListener(view -> handlers.onChatRoomClick(chatRoom));
             tvLastMessage.setText(chatRoom.getLastMessage());
 
-            if (chatRoom.getTitle().isEmpty()) {
+            if (chatRoom.getTitle() == null || chatRoom.getTitle().isEmpty()) {
                 String otherUserName = null;
                 String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
                 // get the user that is different from the current user to take name
                 for (int i = 0; i < chatRoom.getMembers().size(); i++) {
-                    if (!Objects.equals(chatRoom.getMembers().get(i).getName(), userId)) {
+                    if (!Objects.equals(chatRoom.getMembers().get(i).get_id(), userId)) {
                         otherUserName = chatRoom.getMembers().get(i).getName();
                     }
                 }
                 tvChatRoomTitle.setText(otherUserName);
             } else tvChatRoomTitle.setText(chatRoom.getTitle());
 
-            if (!chatRoom.getLogoPath().isEmpty())
+            if (chatRoom.getLogoPath() != null && !chatRoom.getLogoPath().isEmpty())
                 Glide.with(ivChatRoomImage)
                     .load(chatRoom.getLogoPath())
                     .placeholder(R.drawable.ic_chat_room_default_icon)
@@ -78,16 +81,20 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
                 String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
                 // get the first user that is different from the current user to take the image
                 for (int i = 0; i < chatRoom.getMembers().size(); i++) {
-                    if (!Objects.equals(chatRoom.getMembers().get(i).getName(), userId)) {
+                    if (!Objects.equals(chatRoom.getMembers().get(i).get_id(), userId)) {
                         imagePath = chatRoom.getMembers().get(i).getImageProfilePath();
                     }
                 }
 
                 Glide.with(ivChatRoomImage)
                         .load(imagePath)
-                        .placeholder(R.drawable.ic_chat_room_default_icon)
+                        .placeholder(R.drawable.ic_user)
                         .into(ivChatRoomImage);
             }
         }
+    }
+
+    public interface ChatRoomClickHandlers {
+        void onChatRoomClick(ChatRoom chatRoom);
     }
 }

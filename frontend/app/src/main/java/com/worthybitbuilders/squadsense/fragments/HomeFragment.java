@@ -164,45 +164,42 @@ public class HomeFragment extends Fragment {
         EditText inputEmail = (EditText) dialog.findViewById(R.id.input_email);
 
 
-        btnInvite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String receiverEmail = inputEmail.getText().toString();
+        btnInvite.setOnClickListener(view -> {
+            String receiverEmail = inputEmail.getText().toString();
 
-                if(!friendViewModel.IsValidEmail(receiverEmail))
-                {
-                    Toast.makeText(getContext(), "Invalid email", Toast.LENGTH_SHORT).show();
-                    return;
+            if(!friendViewModel.IsValidEmail(receiverEmail))
+            {
+                Toast.makeText(getContext(), "Invalid email", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            userViewModel.getUserByEmail(receiverEmail, new UserViewModel.UserCallback() {
+                @Override
+                public void onSuccess(UserModel user) {
+                    friendViewModel.createRequest(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), user.getId(), new FriendViewModel.FriendRequestCallback() {
+                        @Override
+                        public void onSuccess() {
+                            Toast t = Toast.makeText(getContext(), "Request was sent to " + receiverEmail + "!!", Toast.LENGTH_SHORT);
+                            t.setGravity(Gravity.TOP, 0, 0);
+                            t.show();
+                        }
+
+                        @Override
+                        public void onFailure(String message) {
+                            Toast t = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
+                            t.setGravity(Gravity.TOP, 0, 0);
+                            t.show();
+                        }
+                    });
                 }
 
-                userViewModel.getUserByEmail(receiverEmail, new UserViewModel.UserCallback() {
-                    @Override
-                    public void onSuccess(UserModel user) {
-                        friendViewModel.createRequest(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), user.getId(), new FriendViewModel.FriendRequestCallback() {
-                            @Override
-                            public void onSuccess() {
-                                Toast t = Toast.makeText(getContext(), "request was sent to " + receiverEmail + "!!", Toast.LENGTH_SHORT);
-                                t.setGravity(Gravity.TOP, 0, 0);
-                                t.show();
-                            }
-
-                            @Override
-                            public void onFailure(String message) {
-                                Toast t = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
-                                t.setGravity(Gravity.TOP, 0, 0);
-                                t.show();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onFailure(String message) {
-                        Toast t = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
-                        t.setGravity(Gravity.TOP, 0, 0);
-                        t.show();
-                    }
-                });
-            }
+                @Override
+                public void onFailure(String message) {
+                    Toast t = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
+                    t.setGravity(Gravity.TOP, 0, 0);
+                    t.show();
+                }
+            });
         });
 
         btnClosePopup.setOnClickListener(new View.OnClickListener() {

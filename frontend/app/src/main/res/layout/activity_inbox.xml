@@ -16,10 +16,7 @@
             android:id="@+id/btn_back"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerInParent="true"
             android:backgroundTint="@color/transparent"
-            android:contentDescription="btn add person"
             android:minHeight="48dp"
             android:src="@drawable/ic_arrow_back"
             app:tint="@color/primary_icon_color" />
@@ -55,6 +52,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_inbox"
         android:layout_width="match_parent"
+        android:layout_margin="16dp"
         android:layout_height="wrap_content"
         android:visibility="gone"/>
     <LinearLayout

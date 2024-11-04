@@ -11,7 +11,6 @@ import com.worthybitbuilders.squadsense.models.LoginRequest;
 import com.worthybitbuilders.squadsense.services.RetrofitServices;
 import com.worthybitbuilders.squadsense.services.UserService;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
-import com.worthybitbuilders.squadsense.utils.SocketUtil;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,8 +43,7 @@ public class LoginViewModel extends ViewModel {
                     JWT jwt = new JWT(jwtString);
                     String userId = jwt.getClaim("id").asString();
                     SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.USER_ID, userId);
-                    SocketUtil.InitializeIO(userId);
-                    callback.onSuccess();
+                    callback.onSuccess(userId);
                 }
                 else {
                     ErrorResponse err = null;
@@ -66,7 +64,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     public interface LogInCallback {
-        public void onSuccess();
+        public void onSuccess(String userId);
         public void onFailure(String message);
     }
 }

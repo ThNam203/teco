@@ -3,6 +3,7 @@ package com.worthybitbuilders.squadsense.viewmodels;
 
 import android.util.Patterns;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
 import com.google.gson.Gson;
@@ -59,7 +60,7 @@ public class FriendViewModel extends ViewModel {
         Call<String> result = friendService.replyRequest(response, new FriendRequest(senderId, reveiverId));
         result.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
                     callback.onSuccess();
                 }

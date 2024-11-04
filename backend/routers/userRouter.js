@@ -14,6 +14,5 @@ router
         userController.uploadProfileImage.single('avatar-file'),
         userController.updateProfileImage
     )
-router.route('/:userId/chatroom/').get(userController.getAllChatrooms)
 
 module.exports = router

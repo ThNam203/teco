@@ -32,9 +32,6 @@ const sendNotificationOnReply = async (sender, receiver, isAccept) => {
 const sendNotificationOnRequest = async (sender, receiver) => {
     const message = `${sender.name} has sent you a friend request`
 
-    console.log(sender)
-    console.log(receiver)
-
     await Notification.create({
         senderId: sender._id,
         receiverId: receiver._id,
@@ -120,7 +117,6 @@ exports.getFriendById = asyncCatch(async (req, res, next) => {
         $or: [{ firstId: userId }, { secondId: userId }],
     })
     if (!listFriend) return next(new AppError('No notification found!', 400))
-    console.log(listFriend)
 
     const otherIds = []
 
@@ -133,6 +129,5 @@ exports.getFriendById = asyncCatch(async (req, res, next) => {
     })
 
     const listUser = await User.find({ _id: { $in: otherIds } })
-    console.log(listUser)
     res.status(200).json(listUser)
 })

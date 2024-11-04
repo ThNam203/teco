@@ -30,9 +30,6 @@ public interface UserService {
     @POST("update-user")
     Call<UserModel> updateUser(@Body UserModel user);
 
-    @GET("{userId}/chatroom")
-    Call<List<ChatRoom>> getAllChatroom(@Path("userId") String userId);
-
     @POST("signup")
     Call<Void> createNewUser(@Body UserModel newUser);
 

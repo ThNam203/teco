@@ -7,6 +7,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.worthybitbuilders.squadsense.models.ChatRoom;
 import com.worthybitbuilders.squadsense.models.board_models.BoardBaseItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardDateItemModel;
@@ -29,11 +30,11 @@ public class RetrofitServices {
     private static ProjectService projectService = null;
     private final static String BASE_URL = "http://192.168.1.4:3000/";
 
-    private static Gson mGson = new GsonBuilder()
+    private static final Gson mGson = new GsonBuilder()
             .registerTypeAdapter(BoardBaseItemModel.class, new BoardCellDeserializer())
             .create();
 
-    private static Retrofit retrofit = new Retrofit.Builder()
+    private static final Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create(mGson))
                     .build();
@@ -51,6 +52,11 @@ public class RetrofitServices {
     public static NotificationService getNotificationService() {
         if (notificationService == null) notificationService = retrofit.create(NotificationService.class);
         return notificationService;
+    }
+
+    public static ChatRoomService getChatRoomService() {
+        if (chatRoomService == null) chatRoomService = retrofit.create(ChatRoomService.class);
+        return chatRoomService;
     }
     
     public static ProjectService getProjectService() {

@@ -23,7 +23,10 @@ import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.databinding.PageLoginBinding;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.utils.SocketClient;
 import com.worthybitbuilders.squadsense.viewmodels.LoginViewModel;
+
+import java.util.Objects;
 
 public class LogInActivity extends AppCompatActivity {
     private PageLoginBinding binding;
@@ -35,7 +38,7 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = PageLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
@@ -95,8 +98,9 @@ public class LogInActivity extends AppCompatActivity {
                 startLoadingIndicator();
                 loginViewModel.logIn(inputEmail, inputPassword, new LoginViewModel.LogInCallback() {
                     @Override
-                    public void onSuccess() {
+                    public void onSuccess(String userId) {
                         stopLoadingIndicator();
+                        SocketClient.InitializeIO(getApplication(), userId);
                         SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.USER_EMAIL, inputEmail);
                         ActivityUtils.switchToActivity(LogInActivity.this, MainActivity.class);
                         finish();

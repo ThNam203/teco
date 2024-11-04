@@ -15,7 +15,6 @@ const joinChatRooms = async (userId, socket) => {
 io.on('connection', (socket) => {
     joinChatRooms(socket.handshake.query.userId, socket)
 
-    console.log('co mot thang join ne ae')
     socket.on('joinMessageRoom', (data) => {
         const chatRoomId = data
         if (!socket.rooms.has(chatRoomId)) {
@@ -31,20 +30,23 @@ io.on('connection', (socket) => {
     })
 
     socket.on('offerVideoCall', (data) => {
-        const { offerDescription, chatRoomId } = data
-        socket.to(chatRoomId).emit('offerVideoCall', {
-            offerDescription,
+        console.log('onOfferVideoCall')
+        const { sdp, chatRoomId } = data
+        const offer = JSON.stringify({
+            chatRoomId: chatRoomId,
+            sdp: sdp,
         })
+
+        socket.to(chatRoomId).emit('offerVideoCall', offer)
     })
 
     socket.on('answerOfferVideoCall', (data) => {
-        const { answerDescription, chatRoomId } = data
-        socket.to(chatRoomId).emit('answerOfferVideoCall', answerDescription)
+        const { sdp, chatRoomId } = data
+        socket.to(chatRoomId).emit('answerOfferVideoCall', sdp)
     })
 
     socket.on('iceCandidate', (data) => {
-        const { iceCandidate, chatRoomId } = data
-        socket.to(chatRoomId).emit('iceCandidate', iceCandidate)
+        socket.to(data.chatRoomId).emit('iceCandidate', data)
     })
 
     socket.on('newMessage', async (data) => {
@@ -55,28 +57,22 @@ io.on('connection', (socket) => {
                 .in(chatRoomId)
                 .emit('roomNotFound', 'Unable to find the chat room')
 
-        const newChatMessage = await Message.create({
+        let newChatMessage = await Message.create({
             chatRoomId,
             message,
-            senderId,
+            sender: senderId,
         })
 
         if (!newChatMessage)
             return socket.emit('messageError', 'Unable to send new message')
 
-        io.in(chatRoomId).emit(
-            'newMessage',
-            JSON.stringify({
-                _id: v4(),
-                chatRoomId,
-                message,
-                senderId,
-                createdAt: Date.now(),
-            })
+        newChatMessage = await newChatMessage.populate(
+            'sender',
+            '_id name profileImagePath'
         )
+
+        io.in(chatRoomId).emit('newMessage', newChatMessage)
     })
 
-    socket.on('disconnect', () => {
-        console.log('co mot thang disconnect ne')
-    })
+    socket.on('disconnect', () => {})
 })

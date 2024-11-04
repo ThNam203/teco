@@ -17,52 +17,34 @@ import com.worthybitbuilders.squadsense.models.UserModel;
 import java.util.List;
 
 public class FriendItemAdapter extends RecyclerView.Adapter {
-    private static final int VIEW_TYPE_DEFAULT_FRIEND = 0;
-    private Context context;
-    private List<UserModel> friendList;
+    private final List<UserModel> friendList;
     private OnActionCallback callback;
 
     public interface OnActionCallback {
         void OnClick(int position);
     }
 
-    public FriendItemAdapter(Context context, List<UserModel> friendList) {
-        this.context = context;
+    public FriendItemAdapter(List<UserModel> friendList) {
         this.friendList = friendList;
     }
 
-    public void setOnClickListener(OnActionCallback callback)
-    {
+    public void setOnClickListener(OnActionCallback callback) {
         this.callback = callback;
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return VIEW_TYPE_DEFAULT_FRIEND;
-    }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
-
-        if (viewType == VIEW_TYPE_DEFAULT_FRIEND) {
-            view = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_friend, parent, false);
             return new FriendItemHolder(view);
-        }
-        return null;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         UserModel friend= (UserModel) friendList.get(position);
-
-        switch (holder.getItemViewType()) {
-            case VIEW_TYPE_DEFAULT_FRIEND:
-                ((FriendItemAdapter.FriendItemHolder) holder).bind(friend, position);
-                break;
-        }
+        ((FriendItemAdapter.FriendItemHolder) holder).bind(friend, position);
     }
 
 
@@ -82,15 +64,11 @@ public class FriendItemAdapter extends RecyclerView.Adapter {
 
         void bind(UserModel friend, int position) {
             tvFriendName.setText(friend.getName());
-            String imagePath = friend.getProfileImagePath();
 
-            if(imagePath != null && !imagePath.isEmpty())
-            {
-                String publicProfileImageURL = String.format("https://squadsense.s3.ap-southeast-1.amazonaws.com/%s", imagePath);
-                Glide.with(itemView.getContext())
-                        .load(publicProfileImageURL)
-                        .into(friendAvatar);
-            }
+            Glide.with(itemView.getContext())
+                    .load(friend.getProfileImagePath())
+                    .placeholder(R.drawable.ic_user)
+                    .into(friendAvatar);
 
             itemView.setOnClickListener(view -> callback.OnClick(position));
         }

@@ -5,7 +5,11 @@ const router = express.Router({
     mergeParams: true,
 })
 
-router.route('').post(chatRoomController.createNewChatRoom)
-router.route('/:userId').get(chatRoomController.getAllChatroomsOfUser)
+router
+    .route('')
+    .get(chatRoomController.getAllChatroomsOfUser)
+    .post(chatRoomController.createNewChatRoom)
+
+router.route('/:chatRoomId').get(chatRoomController.getAllMessage)
 
 module.exports = router

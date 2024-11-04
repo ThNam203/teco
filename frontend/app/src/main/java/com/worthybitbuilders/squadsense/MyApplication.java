@@ -3,7 +3,7 @@ package com.worthybitbuilders.squadsense;
 import android.app.Application;
 
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
-import com.worthybitbuilders.squadsense.utils.SocketUtil;
+import com.worthybitbuilders.squadsense.utils.SocketClient;
 
 public class MyApplication extends Application {
     @Override
@@ -17,7 +17,7 @@ public class MyApplication extends Application {
          */
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         if (!userId.isEmpty()) {
-            SocketUtil.InitializeIO(userId);
+            SocketClient.InitializeIO(this, userId);
         }
     }
 }

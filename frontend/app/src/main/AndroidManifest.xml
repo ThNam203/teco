@@ -33,6 +33,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="s">
         <activity
+            android:name=".activities.CallVideoActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.FriendRequestActivity"
             android:exported="false" />
         <activity

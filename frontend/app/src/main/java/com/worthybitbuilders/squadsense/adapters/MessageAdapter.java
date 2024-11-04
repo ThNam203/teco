@@ -13,14 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.models.ChatMessage;
+import com.worthybitbuilders.squadsense.utils.CustomUtils;
+import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 
 import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
-    private Context mContext;
-    private List<ChatMessage> mMessageList;
+    private static final String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+    private final Context mContext;
+    private final List<ChatMessage> mMessageList;
     public MessageAdapter(Context context, List<ChatMessage> messageList) {
         mContext = context;
         mMessageList = messageList;
@@ -29,7 +32,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         ChatMessage message = (ChatMessage) mMessageList.get(position);
-        if (message.getSenderId().equals("Nam")) {
+        if (message.getSender()._id.equals(userId)) {
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
             return VIEW_TYPE_MESSAGE_RECEIVED;
@@ -84,9 +87,10 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
         void bind(ChatMessage message) {
             tvMessage.setText(message.getMessage());
-            tvTimestamp.setText(message.getCreatedAt());
+            String formattedDate = CustomUtils.mongooseDateToFormattedString(message.getCreatedAt());
+            tvTimestamp.setText(formattedDate);
             Glide.with(mContext)
-                    .load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2dJvTtODLGbNdOEaU7lw4AWv_zDkEhKdrktB1QUA&s")
+                    .load(message.getSender().profileImagePath)
                     .placeholder(R.drawable.ic_user)
                     .into(ivProfileImage);
         }
@@ -103,7 +107,8 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
         void bind(ChatMessage message) {
             tvMessage.setText(message.getMessage());
-            tvTimestamp.setText(message.getCreatedAt());
+            String formattedDate = CustomUtils.mongooseDateToFormattedString(message.getCreatedAt());
+            tvTimestamp.setText(formattedDate);
         }
     }
 }

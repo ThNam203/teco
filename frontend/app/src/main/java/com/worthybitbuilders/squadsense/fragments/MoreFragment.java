@@ -30,6 +30,7 @@ import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.EventChecker;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.utils.SocketClient;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
@@ -56,47 +57,15 @@ public class MoreFragment extends Fragment {
         LoadData();
 
         //set onclick of buttons here
-        binding.btnNotificationSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btnNotificationSetting_showActivity();
-            }
-        });
-
-        binding.btnTheme.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btnTheme_showPopup();
-            }
-        });
-
-        binding.btnInbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btnInbox_showActivity();
-            }
-        });
-
-        binding.btnFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btnFriend_showActivity();
-            }
-        });
-
-        binding.profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btnProfile_showActivity();
-            }
-        });
-        binding.btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ActivityUtils.switchToActivity(getContext(), LogInActivity.class);
-                SharedPreferencesManager.clearData();
-                getActivity().finish();
-            }
+        binding.btnNotificationSettings.setOnClickListener(view -> btnNotificationSetting_showActivity());
+        binding.btnTheme.setOnClickListener(view -> btnTheme_showPopup());
+        binding.btnInbox.setOnClickListener(view -> btnInbox_showActivity());
+        binding.profile.setOnClickListener(view -> btnProfile_showActivity());
+        binding.btnLogout.setOnClickListener(view -> {
+            ActivityUtils.switchToActivity(getContext(), LogInActivity.class);
+            SharedPreferencesManager.clearData();
+            SocketClient.getInstance().disconnect();
+            getActivity().finish();
         });
         return binding.getRoot();
     }

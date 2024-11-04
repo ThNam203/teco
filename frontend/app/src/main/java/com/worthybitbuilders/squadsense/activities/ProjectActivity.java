@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -198,14 +200,20 @@ public class ProjectActivity extends AppCompatActivity {
         if (headerModel.getColumnType() == BoardColumnHeaderModel.ColumnType.Update) {
             binding.btnSortAsc.setVisibility(View.GONE);
             binding.btnSortDesc.setVisibility(View.GONE);
+        } else if (boardViewModel.getSortingColumnPosition() == columnPosition) {
+            if (boardViewModel.getSortState() == BoardViewModel.SortState.ASCENDING)
+                DrawableCompat.setTint(binding.btnSortAscContainer.getBackground(), Color.parseColor("#8ecae6"));
+            else DrawableCompat.setTint(binding.btnSortAscContainer.getBackground(), ContextCompat.getColor(ProjectActivity.this, R.color.transparent));
         }
 
         binding.btnSortAsc.setOnClickListener(view -> {
-            // TODO: SORT
+            boardViewModel.sortColumn(columnPosition, BoardViewModel.SortState.ASCENDING, boardAdapter);
+            popupWindow.dismiss();
         });
 
         binding.btnSortDesc.setOnClickListener(view -> {
-            // TODO: SORT
+            boardViewModel.sortColumn(columnPosition, BoardViewModel.SortState.DESCENDING, boardAdapter);
+            popupWindow.dismiss();
         });
 
         binding.btnDescription.setOnClickListener(view -> {

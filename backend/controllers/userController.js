@@ -87,19 +87,6 @@ exports.updateUser = asyncCatch(async (req, res, next) => {
     res.status(200).json(updatedUser)
 })
 
-exports.getAllChatrooms = asyncCatch(async (req, res, next) => {
-    const { userId } = req.params
-    // const chatrooms = await ChatRoom.find({ members: { $in: [userId] } })
-    const user = await User.findById(userId).populate({
-        path: 'chatRooms',
-        populate: {
-            path: 'members',
-            select: '_id name profileImagePath',
-        },
-    })
-    res.status(200).json(user.chatRooms)
-})
-
 exports.addNewUser = asyncCatch(async (req, res, next) => {
     const newUser = new User({
         name: req.body.name,
