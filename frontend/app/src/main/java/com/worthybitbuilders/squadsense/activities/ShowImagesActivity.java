@@ -13,6 +13,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.worthybitbuilders.squadsense.adapters.ViewPagerImageAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityShowImagesBinding;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +46,7 @@ public class ShowImagesActivity extends AppCompatActivity {
             request.setTitle(imageName);
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, imageName);
-            Toast.makeText(this, "Started download", Toast.LENGTH_LONG).show();
+            ToastUtils.showToastSuccess(this, "Started download", Toast.LENGTH_LONG);
             downloadManager.enqueue(request);
         });
         binding.imageViewPager.setAdapter(adapter);

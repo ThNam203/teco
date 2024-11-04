@@ -27,6 +27,7 @@ import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.NotificationViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
@@ -100,7 +101,7 @@ public class FriendRequestActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Toast.makeText(FriendRequestActivity.this, message, Toast.LENGTH_SHORT).show();
+                ToastUtils.showToastError(FriendRequestActivity.this, message, Toast.LENGTH_SHORT);
                 loadingDialog.dismiss();
             }
         });
@@ -148,16 +149,12 @@ public class FriendRequestActivity extends AppCompatActivity {
         friendViewModel.reply(replierId, requestSender, response, new FriendViewModel.FriendRequestCallback() {
             @Override
             public void onSuccess() {
-                Toast t = Toast.makeText(FriendRequestActivity.this, "reply was sent!!", Toast.LENGTH_SHORT);
-                t.setGravity(Gravity.TOP,0,0);
-                t.show();
+                ToastUtils.showToastSuccess(FriendRequestActivity.this, "Reply sent successfully!", Toast.LENGTH_SHORT);
             }
 
             @Override
             public void onFailure(String message) {
-                Toast t = Toast.makeText(FriendRequestActivity.this, message, Toast.LENGTH_SHORT);
-                t.setGravity(Gravity.TOP,0,0);
-                t.show();
+                ToastUtils.showToastError(FriendRequestActivity.this, message, Toast.LENGTH_SHORT);
             }
         });
     }
@@ -179,7 +176,7 @@ public class FriendRequestActivity extends AppCompatActivity {
 
                 if(!friendViewModel.IsValidEmail(receiverEmail))
                 {
-                    Toast.makeText(FriendRequestActivity.this, "Invalid email", Toast.LENGTH_SHORT).show();
+                    ToastUtils.showToastError(FriendRequestActivity.this, "Invalid email", Toast.LENGTH_SHORT);
                     return;
                 }
 
@@ -189,25 +186,19 @@ public class FriendRequestActivity extends AppCompatActivity {
                         friendViewModel.createRequest(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), user.getId(), new FriendViewModel.FriendRequestCallback() {
                             @Override
                             public void onSuccess() {
-                                Toast t = Toast.makeText(FriendRequestActivity.this, "request was sent to " + receiverEmail + "!!", Toast.LENGTH_SHORT);
-                                t.setGravity(Gravity.TOP, 0, 0);
-                                t.show();
+                                ToastUtils.showToastSuccess(FriendRequestActivity.this, "Request is sent to " + receiverEmail + "!", Toast.LENGTH_SHORT);
                             }
 
                             @Override
                             public void onFailure(String message) {
-                                Toast t = Toast.makeText(FriendRequestActivity.this, message, Toast.LENGTH_SHORT);
-                                t.setGravity(Gravity.TOP, 0, 0);
-                                t.show();
+                                ToastUtils.showToastError(FriendRequestActivity.this, message, Toast.LENGTH_SHORT);
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(String message) {
-                        Toast t = Toast.makeText(FriendRequestActivity.this, message, Toast.LENGTH_SHORT);
-                        t.setGravity(Gravity.TOP, 0, 0);
-                        t.show();
+                        ToastUtils.showToastError(FriendRequestActivity.this, message, Toast.LENGTH_SHORT);
                     }
                 });
             }

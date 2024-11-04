@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.worthybitbuilders.squadsense.activities.NewUpdateTaskActivity;
 import com.worthybitbuilders.squadsense.adapters.UpdateTaskAdapter;
 import com.worthybitbuilders.squadsense.databinding.FragmentBoardDetailUpdateBinding;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.BoardDetailItemViewModel;
 
 public class BoardDetailUpdateFragment extends Fragment {
@@ -90,7 +91,7 @@ public class BoardDetailUpdateFragment extends Fragment {
             @Override
             public void onFailure(String message) {
                 if (getActivity() != null)
-                    Toast.makeText(getActivity(), "Unable to retrieve data", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(getActivity(), message, Toast.LENGTH_LONG);
                 binding.progressBar.setVisibility(View.INVISIBLE);
             }
         });

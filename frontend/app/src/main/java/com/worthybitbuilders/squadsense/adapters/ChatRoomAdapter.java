@@ -57,7 +57,7 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
 
         public void bind(ChatRoom chatRoom, ChatRoomClickHandlers handlers) {
             itemView.setOnClickListener(view -> handlers.onChatRoomClick(chatRoom));
-            tvLastMessage.setText(chatRoom.getLastMessage());
+            if (chatRoom.getLastMessage() != null) tvLastMessage.setText(chatRoom.getLastMessage());
 
             if (chatRoom.getTitle() == null || chatRoom.getTitle().isEmpty()) {
                 String otherUserName = null;

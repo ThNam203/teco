@@ -21,7 +21,7 @@
             android:layout_height="40dp"
             tools:src="@drawable/ic_user"
             android:layout_marginEnd="16dp"
-            app:shapeAppearanceOverlay="@style/roundedImageView"/>
+            app:shapeAppearanceOverlay="@style/RoundedImageView"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"

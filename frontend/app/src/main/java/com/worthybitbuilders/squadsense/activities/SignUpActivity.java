@@ -15,6 +15,7 @@ import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.databinding.ActivitySignUpBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.SignUpViewModel;
 
 /**
@@ -67,7 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         binding.btnNext.setOnClickListener((view) -> {
             if (!binding.etPassword.getText().toString().equals(binding.etRePassword.getText().toString())) {
-                Toast.makeText(SignUpActivity.this, "The passwords entered do not match", Toast.LENGTH_SHORT).show();
+                ToastUtils.showToastError(SignUpActivity.this, "The passwords entered do not match", Toast.LENGTH_SHORT);
                 return;
             }
 
@@ -81,14 +82,14 @@ public class SignUpActivity extends AppCompatActivity {
             viewModel.signUp(newUser, new SignUpViewModel.SignUpCallback() {
                 @Override
                 public void onSuccess() {
-                    Toast.makeText(SignUpActivity.this, "Signed up successfully", Toast.LENGTH_SHORT).show();
+                    ToastUtils.showToastSuccess(SignUpActivity.this, "Welcome back!", Toast.LENGTH_SHORT);
                     ActivityUtils.switchToActivity(SignUpActivity.this, LogInActivity.class);
                     finish();
                 }
 
                 @Override
                 public void onFailure(String message) {
-                    Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_SHORT).show();
+                    ToastUtils.showToastError(SignUpActivity.this, message, Toast.LENGTH_SHORT);
                     stopLoadingIndicator();
                 }
             });

@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
@@ -208,8 +210,10 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
         if (rowHeaderItemModel == null) return;
         headerHolder.setRowHeaderModel(rowHeaderItemModel);
 
-        if (rowHeaderItemModel.getIsAddNewRowRow())
+        if (rowHeaderItemModel.getIsAddNewRowRow()) {
             headerHolder.itemView.setOnClickListener(view -> handlers.onNewRowHeaderClick());
+            headerHolder.container.setBackground(ContextCompat.getDrawable(mContext, R.drawable.background_board_new_row_header));
+        }
         else headerHolder.itemView.setOnClickListener(view -> handlers.onRowHeaderClick(rowPosition, rowHeaderItemModel.getTitle()));
     }
 

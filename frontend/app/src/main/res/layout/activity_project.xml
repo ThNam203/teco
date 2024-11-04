@@ -22,7 +22,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/transparent"
-                android:contentDescription="btn add person"
                 android:minHeight="48dp"
                 android:src="@drawable/ic_arrow_back"
                 app:tint="@color/primary_icon_color" />
@@ -33,18 +32,18 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="@color/white"
+                android:textColor="@color/primary_word_color"
                 android:textSize="28sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="Start from scratch"/>
             <ImageButton
                 android:id="@+id/btnMoreOptions"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:backgroundTint="@color/transparent"
-                android:contentDescription="btn add person"
                 android:minHeight="48dp"
                 android:src="@drawable/ic_more_setting"
-                app:tint="@color/white" />
+                app:tint="@color/primary_icon_color" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -108,8 +107,8 @@
                     android:layout_height="wrap_content"
                     app:row_header_width="150dp"
                     app:column_header_height="@dimen/tableview_default_height"
-                    app:unselected_color="#141414"
-                    app:selected_color="#141414"
+                    app:unselected_color="@color/transparent"
+                    app:selected_color="@color/transparent"
                     app:show_horizontal_separator="false"
                     app:show_vertical_separator="false" />
             </androidx.core.widget.NestedScrollView>

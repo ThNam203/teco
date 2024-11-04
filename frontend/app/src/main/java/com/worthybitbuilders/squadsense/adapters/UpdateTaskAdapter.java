@@ -1,5 +1,6 @@
 package com.worthybitbuilders.squadsense.adapters;
 
+import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import com.worthybitbuilders.squadsense.databinding.UpdateTaskMoreOptionsBinding
 import com.worthybitbuilders.squadsense.databinding.UpdateTaskViewBinding;
 import com.worthybitbuilders.squadsense.models.UpdateTask;
 import com.worthybitbuilders.squadsense.utils.CustomUtils;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.BoardDetailItemViewModel;
 
 import java.util.ArrayList;
@@ -39,16 +41,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.UpdateTaskViewHolder> {
-    private Context context;
-    private BoardDetailItemViewModel viewModel;
+    private final Context context;
+    private final BoardDetailItemViewModel viewModel;
     private List<UpdateTask> updateTasks = new ArrayList<>();
-    private Handlers handlers;
+    private final Handlers handlers;
     public UpdateTaskAdapter(Context context, BoardDetailItemViewModel viewModel, Handlers handlers) {
         this.context = context;
         this.viewModel = viewModel;
         this.handlers = handlers;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(List<UpdateTask> updateTasks) {
         this.updateTasks = updateTasks;
         notifyDataSetChanged();
@@ -105,19 +108,18 @@ public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.Up
             binding.btnRemove.setOnClickListener(view -> {
                 viewModel.deleteUpdateTask(task.getCellId(), task.get_id()).enqueue(new Callback<Void>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                         if (response.isSuccessful()) {
-                            Toast.makeText(context, "Update deleted", Toast.LENGTH_SHORT).show();
                             updateTasks.remove(position);
                             notifyItemRemoved(position);
                             notifyItemRangeChanged(position, updateTasks.size());
                             if (updateTasks.size() == 0) handlers.onAllUpdateTasksDeleted();
-                        } else Toast.makeText(context, "Unable to delete, try again", Toast.LENGTH_SHORT).show();
+                        } else ToastUtils.showToastError(context, response.message(), Toast.LENGTH_SHORT);
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Toast.makeText(context, "Unable to delete, try again", Toast.LENGTH_SHORT).show();
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                        ToastUtils.showToastError(context, "Unable to delete, try again", Toast.LENGTH_SHORT);
                     }
                 });
 
@@ -144,14 +146,14 @@ public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.Up
                             else task.setLikeCount(task.getLikeCount() - 1);
                             notifyItemChanged(position);
                         } else if (context != null) {
-                            Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                            ToastUtils.showToastError(context, response.message(), Toast.LENGTH_SHORT);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                         if (context != null) {
-                            Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                            ToastUtils.showToastError(context, "Something went wrong", Toast.LENGTH_SHORT);
                         }
                     }
                 });
@@ -218,7 +220,7 @@ public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.Up
                     DownloadManager.Request request = new DownloadManager.Request(fileUri);
                     request.setTitle(file.name);
                     request.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, file.name);
-                    Toast.makeText(context, "Started download", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastSuccess(context, "Started download", Toast.LENGTH_LONG);
                     downloadManager.enqueue(request);
                 });
 

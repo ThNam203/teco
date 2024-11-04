@@ -27,6 +27,7 @@ import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.NotificationViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
@@ -101,7 +102,7 @@ public class FriendActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Toast.makeText(FriendActivity.this, message, Toast.LENGTH_SHORT).show();
+                ToastUtils.showToastError(FriendActivity.this, message, Toast.LENGTH_SHORT);
                 loadingDialog.dismiss();
             }
         });
@@ -145,7 +146,7 @@ public class FriendActivity extends AppCompatActivity {
 
                 if(!friendViewModel.IsValidEmail(receiverEmail))
                 {
-                    Toast.makeText(FriendActivity.this, "Invalid email", Toast.LENGTH_SHORT).show();
+                    ToastUtils.showToastError(FriendActivity.this, "Invalid email", Toast.LENGTH_SHORT);
                     return;
                 }
 
@@ -155,25 +156,19 @@ public class FriendActivity extends AppCompatActivity {
                         friendViewModel.createRequest(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), user.getId(), new FriendViewModel.FriendRequestCallback() {
                             @Override
                             public void onSuccess() {
-                                Toast t = Toast.makeText(FriendActivity.this, "request was sent to " + receiverEmail + "!!", Toast.LENGTH_SHORT);
-                                t.setGravity(Gravity.TOP, 0, 0);
-                                t.show();
+                                ToastUtils.showToastSuccess(FriendActivity.this, "Request is sent to " + receiverEmail + "!", Toast.LENGTH_SHORT);
                             }
 
                             @Override
                             public void onFailure(String message) {
-                                Toast t = Toast.makeText(FriendActivity.this, message, Toast.LENGTH_SHORT);
-                                t.setGravity(Gravity.TOP, 0, 0);
-                                t.show();
+                                ToastUtils.showToastError(FriendActivity.this, message, Toast.LENGTH_SHORT);
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(String message) {
-                        Toast t = Toast.makeText(FriendActivity.this, message, Toast.LENGTH_SHORT);
-                        t.setGravity(Gravity.TOP, 0, 0);
-                        t.show();
+                        ToastUtils.showToastError(FriendActivity.this, message, Toast.LENGTH_SHORT);
                     }
                 });
             }

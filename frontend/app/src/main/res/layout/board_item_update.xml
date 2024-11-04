@@ -14,6 +14,6 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_add_message"
             android:backgroundTint="@color/transparent"
-            app:tint="@color/white"/>
+            app:tint="@color/primary_icon_color"/>
     </FrameLayout>
 </LinearLayout>

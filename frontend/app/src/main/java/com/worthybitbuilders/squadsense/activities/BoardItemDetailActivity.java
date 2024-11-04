@@ -31,6 +31,7 @@ import com.worthybitbuilders.squadsense.fragments.BoardDetailUpdateFragment;
 import com.worthybitbuilders.squadsense.models.BoardDetailItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.BoardDetailItemViewModel;
 
 import org.json.JSONException;
@@ -78,7 +79,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
 
         // check if user press "update" column or "row header"
         if (rowPosition == -1 || projectId.isEmpty() || boardId.isEmpty()) {
-            Toast.makeText(this, "Something went wrong, please try again", Toast.LENGTH_LONG).show();
+            ToastUtils.showToastError(this, "Something went wrong, please try again", Toast.LENGTH_LONG);
             finish();
         }
 
@@ -120,7 +121,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
 
             @Override
             public void onFailure(String message) {
-                Toast.makeText(BoardItemDetailActivity.this, "Unable to get data, please try again", Toast.LENGTH_LONG).show();
+                ToastUtils.showToastError(BoardItemDetailActivity.this, message, Toast.LENGTH_LONG);
                 loadingDialog.dismiss();
             }
         });
@@ -172,11 +173,11 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
 
                     @Override
                     public void onFailure(String message) {
-                        Toast.makeText(BoardItemDetailActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToastError(BoardItemDetailActivity.this, message, Toast.LENGTH_SHORT);
                     }
                 });
             } catch (JSONException e) {
-                Toast.makeText(BoardItemDetailActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                ToastUtils.showToastError(BoardItemDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT);
             }
         });
 
@@ -199,7 +200,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         binding.btnSaveTextItem.setOnClickListener(view -> {
             String newContent = String.valueOf(binding.etTextItem.getText());
             if (newContent.isEmpty()) {
-                Toast.makeText(BoardItemDetailActivity.this, "Name should not be empty", Toast.LENGTH_SHORT).show();
+                ToastUtils.showToastError(BoardItemDetailActivity.this, "Name should not be empty", Toast.LENGTH_SHORT);
                 return;
             }
 
@@ -213,11 +214,11 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
 
                     @Override
                     public void onFailure(String message) {
-                        Toast.makeText(BoardItemDetailActivity.this, "Unable to rename, please try again", Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToastError(BoardItemDetailActivity.this, message, Toast.LENGTH_SHORT);
                     }
                 });
             } catch (JSONException e) {
-                Toast.makeText(BoardItemDetailActivity.this, "Unable to rename, please try again", Toast.LENGTH_SHORT).show();
+                ToastUtils.showToastError(BoardItemDetailActivity.this, "Unable to rename, please try again", Toast.LENGTH_SHORT);
             }
         });
 

@@ -22,6 +22,7 @@ import com.worthybitbuilders.squadsense.databinding.ActivityMessagingBinding;
 import com.worthybitbuilders.squadsense.factory.MessageActivityViewModelFactory;
 import com.worthybitbuilders.squadsense.models.ChatMessage;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.MessageActivityViewModel;
 
 import java.util.Objects;
@@ -67,7 +68,7 @@ public class MessagingActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Toast.makeText(MessagingActivity.this, "Unable to get your messages", Toast.LENGTH_LONG).show();
+                ToastUtils.showToastError(MessagingActivity.this, "Unable to get your messages", Toast.LENGTH_LONG);
                 loadingDialog.dismiss();
             }
         });

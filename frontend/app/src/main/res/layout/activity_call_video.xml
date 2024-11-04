@@ -48,7 +48,7 @@
                 android:id="@+id/incomingCallAcceptBtn"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                app:shapeAppearanceOverlay="@style/roundedImageView"
+                app:shapeAppearanceOverlay="@style/RoundedImageView"
                 android:src="@drawable/ic_call"
                 app:contentPadding="8dp"
                 android:background="#4ed964"/>
@@ -60,7 +60,7 @@
                 android:id="@+id/incomingCallDenyBtn"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                app:shapeAppearanceOverlay="@style/roundedImageView"
+                app:shapeAppearanceOverlay="@style/RoundedImageView"
                 android:src="@drawable/ic_call_end"
                 app:contentPadding="8dp"
                 android:background="#ff3b2c"/>

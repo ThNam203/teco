@@ -31,6 +31,7 @@ import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.EventChecker;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.SocketClient;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
@@ -159,7 +160,7 @@ public class MoreFragment extends Fragment {
                     }
                     catch (Exception e)
                     {
-                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToastError(getContext(), e.getMessage(), Toast.LENGTH_SHORT);
                     }
                 }
                 else
@@ -171,9 +172,7 @@ public class MoreFragment extends Fragment {
             @Override
             public void onFailure(String message) {
                 eventChecker.markEventAsCompleteAndDoActionIfNeeded(LOAD_AVATAR_DATA_CODE);
-                Toast t = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
-                t.setGravity(Gravity.TOP, 0, 0);
-                t.show();
+                ToastUtils.showToastError(getContext(), message, Toast.LENGTH_SHORT);
             }
         });
     }
@@ -207,7 +206,7 @@ public class MoreFragment extends Fragment {
 
             @Override
             public void onFailure(String message) {
-                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                ToastUtils.showToastError(getContext(), message, Toast.LENGTH_SHORT);
                 eventChecker.markEventAsCompleteAndDoActionIfNeeded(LOAD_BTN_YOUR_FRIEND);
             }
         });

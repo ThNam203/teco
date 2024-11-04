@@ -34,6 +34,7 @@ import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.EventChecker;
 import com.worthybitbuilders.squadsense.utils.ImageUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
 import java.io.File;
@@ -93,7 +94,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     }
                     catch (Exception e)
                     {
-                        Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToastError(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT);
                     }
                 }
                 else
@@ -125,9 +126,7 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onFailure(String message) {
                 loadingDialog.dismiss();
-                Toast t = Toast.makeText(EditProfileActivity.this, message, Toast.LENGTH_SHORT);
-                t.setGravity(Gravity.TOP, 0, 0);
-                t.show();
+                ToastUtils.showToastError(EditProfileActivity.this, message, Toast.LENGTH_SHORT);
             }
         });
 
@@ -182,13 +181,13 @@ public class EditProfileActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess() {
                             eventChecker.markEventAsCompleteAndDoActionIfNeeded(SAVE_AVATAR_INDEX);
-                            Toast.makeText(EditProfileActivity.this, "Save image successfully!", Toast.LENGTH_SHORT).show();
+                            ToastUtils.showToastSuccess(EditProfileActivity.this, "Save image successfully!", Toast.LENGTH_SHORT);
                         }
 
                         @Override
                         public void onFailure(String message) {
                             eventChecker.markEventAsCompleteAndDoActionIfNeeded(SAVE_AVATAR_INDEX);
-                            Toast.makeText(EditProfileActivity.this, "Save image failed", Toast.LENGTH_SHORT).show();
+                            ToastUtils.showToastError(EditProfileActivity.this, "Save image failed", Toast.LENGTH_SHORT);
                         }
                     });
                 }
@@ -200,17 +199,13 @@ public class EditProfileActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(UserModel user) {
                         eventChecker.markEventAsCompleteAndDoActionIfNeeded(SAVE_INFO_USER_INDEX);
-                        Toast t = Toast.makeText(EditProfileActivity.this, "user updated!", Toast.LENGTH_SHORT);
-                        t.setGravity(Gravity.TOP, 0, 0);
-                        t.show();
+                        ToastUtils.showToastSuccess(EditProfileActivity.this, "user updated!", Toast.LENGTH_SHORT);
                     }
 
                     @Override
                     public void onFailure(String message) {
                         eventChecker.markEventAsCompleteAndDoActionIfNeeded(SAVE_INFO_USER_INDEX);
-                        Toast t = Toast.makeText(EditProfileActivity.this, message, Toast.LENGTH_SHORT);
-                        t.setGravity(Gravity.TOP, 0, 0);
-                        t.show();
+                        ToastUtils.showToastError(EditProfileActivity.this, message, Toast.LENGTH_SHORT);
                     }
                 });
             }
@@ -277,7 +272,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         binding.imageProfile.setImageURI(avatarUri);
                         loadAvatarView(true);
                     } else {
-                        Toast.makeText(this, "capture image failed, please try again", Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToastError(this, "Capture image failed, please try again", Toast.LENGTH_SHORT);
                     }
                 }
         }
@@ -344,7 +339,7 @@ public class EditProfileActivity extends AppCompatActivity {
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                Toast.makeText(this, "Unable to take picture, please try again", Toast.LENGTH_LONG).show();
+                ToastUtils.showToastError(this, "Unable to take picture, please try again", Toast.LENGTH_LONG);
             }
 
             if (photoFile != null) {
@@ -355,7 +350,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 startActivityIfNeeded(takePictureIntent, CAMERA_PERMISSION_REQUEST_CODE);
             }
         } else {
-            Toast.makeText(this, "No usable camera, operation failed", Toast.LENGTH_LONG).show();
+            ToastUtils.showToastError(this, "No usable camera, operation failed", Toast.LENGTH_LONG);
         }
     }
 

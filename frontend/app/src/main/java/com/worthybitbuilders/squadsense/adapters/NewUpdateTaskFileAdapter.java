@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.utils.ImageUtils;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -74,7 +75,7 @@ public class NewUpdateTaskFileAdapter extends RecyclerView.Adapter<NewUpdateTask
                     Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, Math.round(bitmap.getWidth() * ratio), Math.round(bitmap.getHeight() * ratio), true);
                     this.ivFileImage.setImageBitmap(scaledBitmap);
                 } catch (IOException e) {
-                    Toast.makeText(mContext, "Unable to get the photo", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(mContext, "Unable to get the photo", Toast.LENGTH_LONG);
                 }
             }
 

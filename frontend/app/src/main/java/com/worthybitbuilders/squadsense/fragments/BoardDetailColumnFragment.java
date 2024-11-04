@@ -48,6 +48,7 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel
 import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
 import com.worthybitbuilders.squadsense.utils.CustomUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.BoardDetailItemViewModel;
 
 import java.time.Instant;
@@ -158,7 +159,7 @@ public class BoardDetailColumnFragment extends Fragment {
                     if (response.isSuccessful()) {
                         adapter.notifyItemChanged(columnPos);
                     } else {
-                        Toast.makeText(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG).show();
+                        ToastUtils.showToastError(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG);
                     }
 
                     loadingDialog.dismiss();
@@ -167,7 +168,7 @@ public class BoardDetailColumnFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG);
                     loadingDialog.dismiss();
                     dialog.dismiss();
                 }
@@ -201,7 +202,7 @@ public class BoardDetailColumnFragment extends Fragment {
                     if (response.isSuccessful()) {
                         adapter.notifyItemChanged(columnPos);
                     } else {
-                        Toast.makeText(getActivity(), "Unable to save the cell", Toast.LENGTH_LONG).show();
+                        ToastUtils.showToastError(getActivity(), "Unable to save the cell", Toast.LENGTH_LONG);
                     }
 
                     loadingDialog.dismiss();
@@ -210,7 +211,7 @@ public class BoardDetailColumnFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Unable to save the cell", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(getActivity(), "Unable to save the cell", Toast.LENGTH_LONG);
                     loadingDialog.dismiss();
                     dialog.dismiss();
                 }
@@ -285,7 +286,7 @@ public class BoardDetailColumnFragment extends Fragment {
                         adapter.notifyItemChanged(columnPos);
                         statusContentsAdapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(getActivity(), "Unable to save", Toast.LENGTH_LONG).show();
+                        ToastUtils.showToastError(getActivity(), "Unable to save", Toast.LENGTH_LONG);
                     }
 
                     loadingDialog.dismiss();
@@ -294,7 +295,7 @@ public class BoardDetailColumnFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Unable to save", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(getActivity(), "Unable to save", Toast.LENGTH_LONG);
                     loadingDialog.dismiss();
                     dialog.dismiss();
                 }
@@ -319,7 +320,7 @@ public class BoardDetailColumnFragment extends Fragment {
             String newContent = binding.etTextItem.getText().toString();
             for (int i = 0; i < itemModel.getContents().size(); i++) {
                 if (itemModel.getContents().get(i).equals(newContent)) {
-                    Toast.makeText(getActivity(), "Already existed", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(getActivity(), "Already existed", Toast.LENGTH_LONG);
                     return;
                 }
             }
@@ -389,7 +390,7 @@ public class BoardDetailColumnFragment extends Fragment {
                     if (response.isSuccessful()) {
                         adapter.notifyItemChanged(columnPos);
                     } else {
-                        Toast.makeText(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG).show();
+                        ToastUtils.showToastError(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG);
                     }
 
                     loadingDialog.dismiss();
@@ -398,7 +399,7 @@ public class BoardDetailColumnFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG);
                     loadingDialog.dismiss();
                     dialog.dismiss();
                 }
@@ -472,7 +473,7 @@ public class BoardDetailColumnFragment extends Fragment {
                 if (response.isSuccessful()) {
                     adapter.notifyItemChanged(columnPosition);
                 } else {
-                    Toast.makeText(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG);
                 }
 
                 loadingDialog.dismiss();
@@ -480,7 +481,7 @@ public class BoardDetailColumnFragment extends Fragment {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG).show();
+                ToastUtils.showToastError(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG);
                 loadingDialog.dismiss();
             }
         });
@@ -542,7 +543,7 @@ public class BoardDetailColumnFragment extends Fragment {
                     if (response.isSuccessful()) {
                         adapter.notifyItemChanged(columnPos);
                     } else {
-                        Toast.makeText(getActivity(), "Unable to save the cell", Toast.LENGTH_LONG).show();
+                        ToastUtils.showToastError(getActivity(), "Unable to save the cell", Toast.LENGTH_LONG);
                     }
                     loadingDialog.dismiss();
                     dialog.dismiss();
@@ -550,7 +551,7 @@ public class BoardDetailColumnFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Unable to save the cell", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(getActivity(), "Unable to save the cell", Toast.LENGTH_LONG);
                     loadingDialog.dismiss();
                     dialog.dismiss();
                 }
@@ -658,7 +659,7 @@ public class BoardDetailColumnFragment extends Fragment {
                     if (response.isSuccessful()) {
                         adapter.notifyItemChanged(columnPos);
                     } else {
-                        Toast.makeText(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG).show();
+                        ToastUtils.showToastError(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG);
                     }
 
                     loadingDialog.dismiss();
@@ -667,7 +668,7 @@ public class BoardDetailColumnFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(getActivity(), "Unable to update the cell", Toast.LENGTH_LONG);
                     loadingDialog.dismiss();
                     dialog.dismiss();
                 }

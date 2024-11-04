@@ -36,6 +36,7 @@ import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.MainActivityViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
@@ -67,7 +68,7 @@ public class HomeFragment extends Fragment {
             }
             @Override
             public void onFailure(String message) {
-                Toast.makeText(getContext(), "Unable to get your projects, please try again", Toast.LENGTH_LONG).show();
+                ToastUtils.showToastError(getContext(), message, Toast.LENGTH_LONG);
                 loadingDialog.dismiss();
             }
         });
@@ -169,7 +170,7 @@ public class HomeFragment extends Fragment {
 
             if(!friendViewModel.IsValidEmail(receiverEmail))
             {
-                Toast.makeText(getContext(), "Invalid email", Toast.LENGTH_SHORT).show();
+                ToastUtils.showToastError(getContext(), "Invalid email", Toast.LENGTH_SHORT);
                 return;
             }
 
@@ -179,25 +180,19 @@ public class HomeFragment extends Fragment {
                     friendViewModel.createRequest(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), user.getId(), new FriendViewModel.FriendRequestCallback() {
                         @Override
                         public void onSuccess() {
-                            Toast t = Toast.makeText(getContext(), "Request was sent to " + receiverEmail + "!!", Toast.LENGTH_SHORT);
-                            t.setGravity(Gravity.TOP, 0, 0);
-                            t.show();
+                            ToastUtils.showToastSuccess(getContext(), "Request was sent to " + receiverEmail + "!!", Toast.LENGTH_SHORT);
                         }
 
                         @Override
                         public void onFailure(String message) {
-                            Toast t = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
-                            t.setGravity(Gravity.TOP, 0, 0);
-                            t.show();
+                            ToastUtils.showToastError(getContext(), message, Toast.LENGTH_SHORT);
                         }
                     });
                 }
 
                 @Override
                 public void onFailure(String message) {
-                    Toast t = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
-                    t.setGravity(Gravity.TOP, 0, 0);
-                    t.show();
+                    ToastUtils.showToastError(getContext(), message, Toast.LENGTH_SHORT);
                 }
             });
         });

@@ -16,6 +16,7 @@ import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
 public class OpenProfileActivity extends AppCompatActivity {
@@ -89,7 +90,7 @@ public class OpenProfileActivity extends AppCompatActivity {
                     }
                     catch (Exception e)
                     {
-                        Toast.makeText(OpenProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToastError(OpenProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT);
                     }
                 }
                 else
@@ -134,9 +135,7 @@ public class OpenProfileActivity extends AppCompatActivity {
             @Override
             public void onFailure(String message) {
                 loadingDialog.dismiss();
-                Toast t = Toast.makeText(OpenProfileActivity.this, message, Toast.LENGTH_SHORT);
-                t.setGravity(Gravity.TOP, 0, 0);
-                t.show();
+                ToastUtils.showToastError(OpenProfileActivity.this, message, Toast.LENGTH_SHORT);
             }
         });
     }

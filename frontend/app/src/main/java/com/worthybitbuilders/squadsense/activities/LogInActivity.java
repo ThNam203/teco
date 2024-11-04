@@ -24,6 +24,7 @@ import com.worthybitbuilders.squadsense.databinding.PageLoginBinding;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.SocketClient;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.LoginViewModel;
 
 import java.util.Objects;
@@ -91,7 +92,7 @@ public class LogInActivity extends AppCompatActivity {
             String inputPassword = binding.loginPassword.getText().toString();
             if(!loginViewModel.isValidEmail(inputEmail))
             {
-                Toast.makeText(LogInActivity.this, "Invalid email", Toast.LENGTH_SHORT).show();
+                ToastUtils.showToastError(LogInActivity.this, "Invalid email", Toast.LENGTH_SHORT);
                 return;
             }
 
@@ -109,7 +110,7 @@ public class LogInActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(String message) {
                     stopLoadingIndicator();
-                    Toast.makeText(LogInActivity.this, message, Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(LogInActivity.this, message, Toast.LENGTH_LONG);
                 }
             });
         });
@@ -141,12 +142,12 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Toast.makeText(this, account.getEmail(), Toast.LENGTH_LONG).show();
-        } catch (ApiException e) {
-            Toast.makeText(this, "Login with Google failed", Toast.LENGTH_LONG).show();
-        }
+//        try {
+            // TODO: GOOGLE SIGN IN
+//            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+//        } catch (ApiException e) {
+//            ToastUtils.showToastError(this, "Login with Google failed", Toast.LENGTH_LONG);
+//        }
     }
 
     @Override

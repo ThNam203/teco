@@ -23,6 +23,7 @@ import com.worthybitbuilders.squadsense.models.ChatRoom;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.ChatRoomViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 
@@ -89,7 +90,7 @@ public class InboxActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Toast.makeText(InboxActivity.this, message, Toast.LENGTH_SHORT).show();
+                ToastUtils.showToastError(InboxActivity.this, message, Toast.LENGTH_SHORT);
                 loadingDialog.dismiss();
             }
         });
@@ -112,7 +113,7 @@ public class InboxActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Toast.makeText(InboxActivity.this, message, Toast.LENGTH_SHORT).show();
+                ToastUtils.showToastError(InboxActivity.this, message, Toast.LENGTH_SHORT);
                 updateFriendUI(popupBinding);
                 loadingDialog.dismiss();
             }
@@ -152,7 +153,7 @@ public class InboxActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(String message) {
-                    Toast.makeText(InboxActivity.this, "Unable to create the chat room, please try again", Toast.LENGTH_SHORT).show();
+                    ToastUtils.showToastError(InboxActivity.this, message, Toast.LENGTH_SHORT);
                 }
             });
         });

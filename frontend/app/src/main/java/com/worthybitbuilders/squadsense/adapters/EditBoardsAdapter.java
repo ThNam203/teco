@@ -23,6 +23,7 @@ import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.databinding.BoardEditBoardsOptionMoreBinding;
 import com.worthybitbuilders.squadsense.databinding.ConfirmDeleteViewBinding;
 import com.worthybitbuilders.squadsense.models.board_models.ProjectModel;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
 
 import org.json.JSONException;
@@ -103,11 +104,11 @@ public class EditBoardsAdapter extends RecyclerView.Adapter<EditBoardsAdapter.Ed
 
                         @Override
                         public void onFailure(String message) {
-                            if (context != null) Toast.makeText(context, "Unable to rename board, please try again", Toast.LENGTH_SHORT).show();
+                            if (context != null) ToastUtils.showToastError(context, message, Toast.LENGTH_SHORT);
                         }
                     });
                 } catch (JSONException e) {
-                    if (context != null) Toast.makeText(context, "Unable to rename board, please try again", Toast.LENGTH_SHORT).show();
+                    if (context != null) ToastUtils.showToastError(context, "Unable to rename board, please try again", Toast.LENGTH_SHORT);
                 }
             });
         }
@@ -156,7 +157,7 @@ public class EditBoardsAdapter extends RecyclerView.Adapter<EditBoardsAdapter.Ed
 
                     @Override
                     public void onFailure(String message) {
-                        if (context != null) Toast.makeText(context, "Unable to remove board, please try again", Toast.LENGTH_SHORT).show();
+                        if (context != null) ToastUtils.showToastError(context, message, Toast.LENGTH_SHORT);
                     }
                 });
             });

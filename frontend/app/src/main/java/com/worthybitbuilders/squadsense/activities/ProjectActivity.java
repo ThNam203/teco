@@ -60,6 +60,7 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
 import com.worthybitbuilders.squadsense.utils.CustomUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.BoardViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
 
@@ -165,7 +166,7 @@ public class ProjectActivity extends AppCompatActivity {
 
             @Override
             public void onUserItemClick(BoardUserItemModel userItemModel) {
-                Toast.makeText(ProjectActivity.this, "User click item handler", Toast.LENGTH_LONG).show();
+
             }
 
             @Override
@@ -196,6 +197,8 @@ public class ProjectActivity extends AppCompatActivity {
     private void showColumnHeaderOptions(BoardColumnHeaderModel headerModel, int columnPosition, View anchor) {
         ColumnMoreOptionsBinding binding = ColumnMoreOptionsBinding.inflate(getLayoutInflater());
         PopupWindow popupWindow = new PopupWindow(binding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
+        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(this, R.color.primary_color));
+        popupWindow.setElevation(50);
 
         if (headerModel.getColumnType() == BoardColumnHeaderModel.ColumnType.Update) {
             binding.btnSortAsc.setVisibility(View.GONE);
@@ -256,7 +259,7 @@ public class ProjectActivity extends AppCompatActivity {
             loadingDialog.show();
             String newName = binding.etDescription.getText().toString();
             if (newName.isEmpty()) {
-                Toast.makeText(ProjectActivity.this, "Unable to save empty name", Toast.LENGTH_SHORT).show();
+                ToastUtils.showToastError(ProjectActivity.this, "Unable to save empty name", Toast.LENGTH_SHORT);
                 return;
             }
             try {
@@ -269,12 +272,12 @@ public class ProjectActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(String message) {
-                        Toast.makeText(ProjectActivity.this, "Unable to save new name, please try again", Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToastError(ProjectActivity.this, "Unable to save new name, please try again", Toast.LENGTH_SHORT);
                         loadingDialog.dismiss();
                     }
                 });
             } catch (JSONException e) {
-                Toast.makeText(ProjectActivity.this, "Unable to save new name, please try again", Toast.LENGTH_SHORT).show();
+                ToastUtils.showToastError(ProjectActivity.this, "Unable to save new name, please try again", Toast.LENGTH_SHORT);
                 loadingDialog.dismiss();
             }
         });
@@ -321,12 +324,12 @@ public class ProjectActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(String message) {
-                            Toast.makeText(ProjectActivity.this, "Unable to save the description, please try again", Toast.LENGTH_SHORT).show();
+                            ToastUtils.showToastError(ProjectActivity.this, "Unable to save the description, please try again", Toast.LENGTH_SHORT);
                             loadingDialog.dismiss();
                         }
                     });
                 } catch (JSONException e) {
-                    Toast.makeText(ProjectActivity.this, "Unable to save the description, please try again", Toast.LENGTH_SHORT).show();
+                    ToastUtils.showToastError(ProjectActivity.this, "Unable to save the description, please try again", Toast.LENGTH_SHORT);
                     loadingDialog.dismiss();
                 }
             });
@@ -357,7 +360,7 @@ public class ProjectActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(String message) {
-                    Toast.makeText(ProjectActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    ToastUtils.showToastError(ProjectActivity.this, "Something went wrong", Toast.LENGTH_SHORT);
                 }
             });
         });
@@ -379,7 +382,7 @@ public class ProjectActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     boardAdapter.changeCellItem(columnPos, rowPos, itemModel);
                 } else {
-                    Toast.makeText(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG);
                 }
 
                 loadingDialog.dismiss();
@@ -387,7 +390,7 @@ public class ProjectActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                Toast.makeText(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG).show();
+                ToastUtils.showToastError(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG);
                 loadingDialog.dismiss();
             }
         });
@@ -423,7 +426,7 @@ public class ProjectActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(String message) {
-                    Toast.makeText(ProjectActivity.this, "Failed to create new project, please try again", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(ProjectActivity.this, "Failed to create new project, please try again", Toast.LENGTH_LONG);
                     loadingDialog.dismiss();
                     finish();
                 }
@@ -439,7 +442,7 @@ public class ProjectActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(String message) {
                     loadingDialog.dismiss();
-                    Toast.makeText(ProjectActivity.this, message, Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(ProjectActivity.this, message, Toast.LENGTH_LONG);
                     finish();
                 }
             });
@@ -498,7 +501,7 @@ public class ProjectActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(String message) {
-                    Toast.makeText(ProjectActivity.this, "Unable to add new board, please try again", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(ProjectActivity.this, "Unable to add new board, please try again", Toast.LENGTH_LONG);
                     loadingDialog.dismiss();
                 }
             });
@@ -550,7 +553,7 @@ public class ProjectActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         boardAdapter.changeCellItem(columnPos, rowPos, itemModel);
                     } else {
-                        Toast.makeText(ProjectActivity.this, "Unable to save the cell", Toast.LENGTH_LONG).show();
+                        ToastUtils.showToastError(ProjectActivity.this, "Unable to save the cell", Toast.LENGTH_LONG);
                     }
 
                     loadingDialog.dismiss();
@@ -559,7 +562,7 @@ public class ProjectActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                    Toast.makeText(ProjectActivity.this, "Unable to save the cell", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(ProjectActivity.this, "Unable to save the cell", Toast.LENGTH_LONG);
                     loadingDialog.dismiss();
                     dialog.dismiss();
                 }
@@ -634,7 +637,7 @@ public class ProjectActivity extends AppCompatActivity {
                         boardAdapter.changeCellItem(columnPos, rowPos, statusItemModel);
                         statusContentsAdapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(ProjectActivity.this, "Unable to save", Toast.LENGTH_LONG).show();
+                        ToastUtils.showToastError(ProjectActivity.this, "Unable to save", Toast.LENGTH_LONG);
                     }
 
                     loadingDialog.dismiss();
@@ -643,7 +646,7 @@ public class ProjectActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                    Toast.makeText(ProjectActivity.this, "Unable to save", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(ProjectActivity.this, "Unable to save", Toast.LENGTH_LONG);
                     loadingDialog.dismiss();
                     dialog.dismiss();
                 }
@@ -668,7 +671,7 @@ public class ProjectActivity extends AppCompatActivity {
             String newContent = binding.etTextItem.getText().toString();
             for (int i = 0; i < itemModel.getContents().size(); i++) {
                 if (itemModel.getContents().get(i).equals(newContent)) {
-                    Toast.makeText(ProjectActivity.this, "Already existed", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(ProjectActivity.this, "Content already existed", Toast.LENGTH_LONG);
                     return;
                 }
             }
@@ -706,7 +709,7 @@ public class ProjectActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         boardAdapter.changeCellItem(columnPos, rowPos, itemModel);
                     } else {
-                        Toast.makeText(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG).show();
+                        ToastUtils.showToastError(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG);
                     }
 
                     loadingDialog.dismiss();
@@ -715,7 +718,7 @@ public class ProjectActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                    Toast.makeText(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG);
                     loadingDialog.dismiss();
                     dialog.dismiss();
                 }
@@ -752,7 +755,7 @@ public class ProjectActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         boardAdapter.changeCellItem(columnPos, rowPos, itemModel);
                     } else {
-                        Toast.makeText(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG).show();
+                        ToastUtils.showToastError(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG);
                     }
 
                     loadingDialog.dismiss();
@@ -761,7 +764,7 @@ public class ProjectActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                    Toast.makeText(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG);
                     loadingDialog.dismiss();
                     dialog.dismiss();
                 }
@@ -834,7 +837,7 @@ public class ProjectActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         boardAdapter.changeCellItem(columnPos, rowPos, itemModel);
                     } else {
-                        Toast.makeText(ProjectActivity.this, "Unable to save the cell", Toast.LENGTH_LONG).show();
+                        ToastUtils.showToastError(ProjectActivity.this, "Unable to save the cell", Toast.LENGTH_LONG);
                     }
                     loadingDialog.dismiss();
                     dialog.dismiss();
@@ -842,7 +845,7 @@ public class ProjectActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                    Toast.makeText(ProjectActivity.this, "Unable to save the cell", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(ProjectActivity.this, "Unable to save the cell", Toast.LENGTH_LONG);
                     loadingDialog.dismiss();
                     dialog.dismiss();
                 }
@@ -983,7 +986,7 @@ public class ProjectActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         boardAdapter.changeCellItem(columnPos, rowPos, itemModel);
                     } else {
-                        Toast.makeText(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG).show();
+                        ToastUtils.showToastError(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG);
                     }
 
                     loadingDialog.dismiss();
@@ -992,7 +995,7 @@ public class ProjectActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                    Toast.makeText(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG).show();
+                    ToastUtils.showToastError(ProjectActivity.this, "Unable to update the cell", Toast.LENGTH_LONG);
                     loadingDialog.dismiss();
                     dialog.dismiss();
                 }

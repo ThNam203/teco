@@ -33,6 +33,7 @@ import com.worthybitbuilders.squadsense.services.ProjectService;
 import com.worthybitbuilders.squadsense.services.RetrofitServices;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -81,7 +82,7 @@ public class NewUpdateTaskActivity extends AppCompatActivity {
                         fileUris.add(fileUri);
                         newUpdateTaskFileAdapter.notifyItemInserted(fileUris.size() - 1);
                     } else {
-                        Toast.makeText(this, "File is already selected", Toast.LENGTH_LONG).show();
+                        ToastUtils.showToastError(this, "File is already selected", Toast.LENGTH_SHORT);
                     }
                 }
             }
@@ -119,7 +120,7 @@ public class NewUpdateTaskActivity extends AppCompatActivity {
                         fileUris.add(fileUri);
                         newUpdateTaskFileAdapter.notifyItemInserted(fileUris.size() - 1);
                     } else {
-                        Toast.makeText(this, "File is already selected", Toast.LENGTH_LONG).show();
+                        ToastUtils.showToastError(this, "File is already selected", Toast.LENGTH_SHORT);
                     }
                 }
             }
@@ -189,7 +190,7 @@ public class NewUpdateTaskActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getPhotoFromCamera();
             } else {
-                Toast.makeText(this, "Permission not granted, operation failed", Toast.LENGTH_LONG).show();
+                ToastUtils.showToastError(this, "Permission not granted, operation failed", Toast.LENGTH_LONG);
             }
         }
     }
@@ -203,7 +204,7 @@ public class NewUpdateTaskActivity extends AppCompatActivity {
             try {
                 photoFile = createTempImageFile();
             } catch (IOException ex) {
-                Toast.makeText(this, "Unable to take picture, please try again", Toast.LENGTH_LONG).show();
+                ToastUtils.showToastError(this, "Unable to take picture, please try again", Toast.LENGTH_LONG);
             }
 
             if (photoFile != null) {
@@ -215,8 +216,8 @@ public class NewUpdateTaskActivity extends AppCompatActivity {
                 takePhotoResultLauncher.launch(takePictureIntent);
             }
         } catch (Exception e) {
-//            Toast.makeText(this, "No usable camera, operation failed", Toast.LENGTH_LONG).show();
-            Toast.makeText(this, "Something wrong with camera", Toast.LENGTH_LONG).show();
+//            ToastUtils.showToastError(this, "No usable camera, operation failed", Toast.LENGTH_LONG);
+            ToastUtils.showToastError(this, "Something wrong with camera", Toast.LENGTH_LONG);
         }
     }
 
@@ -259,13 +260,13 @@ public class NewUpdateTaskActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     finish();
-                } else Toast.makeText(NewUpdateTaskActivity.this, "Something went wrong, please try again", Toast.LENGTH_LONG).show();
+                } else ToastUtils.showToastError(NewUpdateTaskActivity.this, "Something went wrong, please try again", Toast.LENGTH_LONG);
                 loadingDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(NewUpdateTaskActivity.this, "Something went wrong, please try again", Toast.LENGTH_LONG).show();
+                ToastUtils.showToastError(NewUpdateTaskActivity.this, "Something went wrong, please try again", Toast.LENGTH_LONG);
                 loadingDialog.dismiss();
             }
         });

@@ -12,7 +12,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:src="@drawable/ic_chat_room_default_icon"
-        app:shapeAppearanceOverlay="@style/roundedImageView"/>
+        app:shapeAppearanceOverlay="@style/RoundedImageView"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,15 +28,31 @@
             android:textColor="@color/primary_word_color"
             tools:text="Dat"
             android:textSize="18sp"/>
-        <TextView
-            android:id="@+id/tvChatRoomLastMessage"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:singleLine="true"
-            android:gravity="center_vertical"
-            android:layout_weight="1"
-            android:textSize="16sp"
-            android:textColor="@color/grey"
-            tools:text="Hello fen"/>
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tvChatRoomLastMessage"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:textColor="@color/grey"
+                tools:text="Hello fen"
+                tools:ignore="NestedWeights" />
+            <TextView
+                android:id="@+id/tvChatRoomLastMessageTime"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:singleLine="true"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                android:textColor="@color/grey"
+                android:layout_marginHorizontal="16dp"
+                tools:text="Hello fen"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

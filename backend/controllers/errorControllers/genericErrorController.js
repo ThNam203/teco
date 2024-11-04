@@ -25,6 +25,7 @@ exports.globalErrorHandler = (err, req, res, next) => {
     //     sendErrorInDevelopmentEnv(err, res)
     // else
     console.log(err)
+    console.log(`requested url ${req.url}`)
     sendErrorInProductionEnv(err, res)
 }
 

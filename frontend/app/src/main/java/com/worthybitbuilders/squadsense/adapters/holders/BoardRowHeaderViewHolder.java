@@ -5,13 +5,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.models.board_models.BoardRowHeaderModel;
 
 public class BoardRowHeaderViewHolder extends AbstractViewHolder {
-    public LinearLayout container;
+    public ConstraintLayout container;
     public TextView headerTitle;
 
     public BoardRowHeaderViewHolder(@NonNull View itemView) {
