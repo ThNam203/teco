@@ -26,6 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitServices {
     private static UserService userService = null;
     private static FriendService friendService = null;
+    private static ChatRoomService chatRoomService = null;
     private static NotificationService notificationService = null;
     private static ProjectService projectService = null;
     private final static String BASE_URL = "http://192.168.1.4:3000/";

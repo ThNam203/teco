@@ -56,7 +56,7 @@ public class FriendActivity extends AppCompatActivity {
         loadingDialog = DialogUtils.GetLoadingDialog(this);
 
         binding.rvFriends.setLayoutManager(new LinearLayoutManager(this));
-        friendItemAdapter = new FriendItemAdapter(this, listFriend);
+        friendItemAdapter = new FriendItemAdapter(listFriend);
 
         LoadlistFriend();
 
