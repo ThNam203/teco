@@ -45,6 +45,16 @@ exports.getAllChatroomsOfUser = asyncCatch(async (req, res, next) => {
     res.status(200).json(user.chatRooms)
 })
 
+exports.getAChatRoom = asyncCatch(async (req, res, next) => {
+    const { userId, chatRoomId } = req.params
+    const chatRoom = await ChatRoom.findById(chatRoomId).populate(
+        'members',
+        '_id name profileImagePath'
+    )
+
+    res.status(200).json(chatRoom)
+})
+
 //TODO: check(verify) if user is in the chat room by userId from params
 exports.getAllMessage = asyncCatch(async (req, res, next) => {
     const { chatRoomId } = req.params

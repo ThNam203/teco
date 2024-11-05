@@ -3,7 +3,6 @@ package com.worthybitbuilders.squadsense.activities;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
@@ -13,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.adapters.ChatRoomAdapter;
 import com.worthybitbuilders.squadsense.adapters.FriendItemAdapter;
@@ -21,16 +19,14 @@ import com.worthybitbuilders.squadsense.databinding.ActivityInboxBinding;
 import com.worthybitbuilders.squadsense.databinding.AddNewChatRoomPopupBinding;
 import com.worthybitbuilders.squadsense.models.ChatRoom;
 import com.worthybitbuilders.squadsense.models.UserModel;
-import com.worthybitbuilders.squadsense.utils.DialogUtils;
+import com.worthybitbuilders.squadsense.utils.DialogUtil;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.ChatRoomViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -49,7 +45,7 @@ public class InboxActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         binding = ActivityInboxBinding.inflate(getLayoutInflater());
-        loadingDialog = DialogUtils.GetLoadingDialog(this);
+        loadingDialog = DialogUtil.GetLoadingDialog(this);
         setContentView(binding.getRoot());
 
         friendViewModel = new ViewModelProvider(this).get(FriendViewModel.class);

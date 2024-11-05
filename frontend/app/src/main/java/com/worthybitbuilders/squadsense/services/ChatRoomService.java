@@ -18,6 +18,9 @@ public interface ChatRoomService {
     Call<List<ChatRoom>> getAllChatRoom(@Path("userId") String userId);
 
     @GET("{userId}/chatroom/{chatRoomId}")
+    Call<ChatRoom> getAChatRoom(@Path("userId") String userId, @Path("chatRoomId") String chatRoomId);
+
+    @GET("{userId}/chatroom/{chatRoomId}/message")
     Call<List<ChatMessage>> getAllMessageInChatRoom(@Path("userId") String userId, @Path("chatRoomId") String chatRoomId);
 
     @POST("{userId}/chatroom")

@@ -10,10 +10,12 @@ import com.worthybitbuilders.squadsense.activities.CallVideoActivity;
 import com.worthybitbuilders.squadsense.models.ChatMessage;
 import com.worthybitbuilders.squadsense.models.IceCandidateModel;
 import com.worthybitbuilders.squadsense.models.SdpOfferModel;
+import com.worthybitbuilders.squadsense.viewmodels.MessageActivityViewModel;
 
 import org.webrtc.IceCandidate;
 
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -41,12 +43,13 @@ public class SocketClient {
         options.reconnectionDelay = 2000;
         options.reconnectionDelayMax = 5000;
         try {
-            mSocket = IO.socket("http://10.0.140.194:3000/", options);
+            mSocket = IO.socket("http://192.168.1.7:3000/", options);
             mSocket.connect();
             mSocket.on(Socket.EVENT_CONNECT, onConnect);
             mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
             mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
             mSocket.on("offerVideoCall", onReceiveOfferVideoCall);
+            mSocket.on("newMessageNotify", onReceiveNewMessageNotify);
             if(!mSocket.connected()) {
                 mSocket.connect();
             }
@@ -54,6 +57,15 @@ public class SocketClient {
             throw new RuntimeException(e);
         }
     }
+
+    private static final Emitter.Listener onReceiveNewMessageNotify = args -> {
+        ChatMessage newMessage = new Gson().fromJson(args[0].toString(), ChatMessage.class);
+        // if the notification coming is the same as the one user is chatting then we don't need to notify it
+        if (!Objects.equals(MessageActivityViewModel.currentChatRoomId, newMessage.getChatRoomId())) {
+            NotificationUtil.createNewMessageNotification(application, newMessage.getSender().name, newMessage.getMessage(), newMessage.getChatRoomId());
+        }
+    };
+
     public static Emitter.Listener onConnect = args -> Log.d("SOCKETIO", "Socket Connected!");
     private static final Emitter.Listener onConnectError = args -> Log.d("SOCKETIO", "onConnectError");
     private static final Emitter.Listener onDisconnect = args -> Log.d("SOCKETIO", "onDisconnect");

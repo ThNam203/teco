@@ -58,7 +58,7 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardTimelineItemMod
 import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
 import com.worthybitbuilders.squadsense.utils.CustomUtils;
-import com.worthybitbuilders.squadsense.utils.DialogUtils;
+import com.worthybitbuilders.squadsense.utils.DialogUtil;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.BoardViewModel;
@@ -255,7 +255,7 @@ public class ProjectActivity extends AppCompatActivity {
         binding.etDescription.setText(itemModel.getTitle());
         binding.btnClearDescription.setOnClickListener((view) -> binding.etDescription.setText(""));
         binding.btnSaveTextItem.setOnClickListener(view -> {
-            Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
+            Dialog loadingDialog = DialogUtil.GetLoadingDialog(ProjectActivity.this);
             loadingDialog.show();
             String newName = binding.etDescription.getText().toString();
             if (newName.isEmpty()) {
@@ -311,7 +311,7 @@ public class ProjectActivity extends AppCompatActivity {
             binding.btnClearDescription.setOnClickListener((view) -> binding.etDescription.setText(""));
 
             binding.btnSaveTextItem.setOnClickListener(view -> {
-                Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
+                Dialog loadingDialog = DialogUtil.GetLoadingDialog(ProjectActivity.this);
                 loadingDialog.show();
                 String newDescription = binding.etDescription.getText().toString();
                 try {
@@ -373,7 +373,7 @@ public class ProjectActivity extends AppCompatActivity {
     }
 
     private void onCheckboxItemClicked(BoardCheckboxItemModel itemModel, int columnPos, int rowPos) {
-        Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
+        Dialog loadingDialog = DialogUtil.GetLoadingDialog(ProjectActivity.this);
         loadingDialog.show();
         itemModel.setChecked(!itemModel.getChecked());
         boardViewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
@@ -402,7 +402,9 @@ public class ProjectActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        getDataForActivity();
+//        getDataForActivity();
+        createOrGetExistedProject(); // onCreate
+        updateProject() // onStart
     }
 
     /**
@@ -415,7 +417,7 @@ public class ProjectActivity extends AppCompatActivity {
     private void getDataForActivity() {
         Intent intent = getIntent();
         String whatToDo = intent.getStringExtra("whatToDo");
-        Dialog loadingDialog = DialogUtils.GetLoadingDialog(this);
+        Dialog loadingDialog = DialogUtil.GetLoadingDialog(this);
         loadingDialog.show();
         if (whatToDo.equals("createNew")) {
             projectActivityViewModel.saveNewProjectToRemote(new ProjectActivityViewModel.ApiCallHandlers() {
@@ -490,7 +492,7 @@ public class ProjectActivity extends AppCompatActivity {
 
         binding.btnClose.setOnClickListener(view -> dialog.dismiss());
         binding.btnNewBoard.setOnClickListener(view -> {
-            Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
+            Dialog loadingDialog = DialogUtil.GetLoadingDialog(ProjectActivity.this);
             loadingDialog.show();
             projectActivityViewModel.addNewBoardToProject(new ProjectActivityViewModel.ApiCallHandlers() {
                 @Override
@@ -545,7 +547,7 @@ public class ProjectActivity extends AppCompatActivity {
         StatusContentsAdapter statusContentsAdapter = new StatusContentsAdapter(statusItemModel);
         statusContentsAdapter.setHandlers((itemModel, newContent) -> {
             itemModel.setContent(newContent);
-            Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
+            Dialog loadingDialog = DialogUtil.GetLoadingDialog(ProjectActivity.this);
             loadingDialog.show();
             boardViewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
                 @Override
@@ -628,7 +630,7 @@ public class ProjectActivity extends AppCompatActivity {
         binding.btnSave.setOnClickListener(view -> {
             statusItemModel.copyDataFromAnotherInstance(clonedItemModel);
 
-            Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
+            Dialog loadingDialog = DialogUtil.GetLoadingDialog(ProjectActivity.this);
             loadingDialog.show();
             boardViewModel.updateACell(statusItemModel).enqueue(new Callback<Void>() {
                 @Override
@@ -701,7 +703,7 @@ public class ProjectActivity extends AppCompatActivity {
             String newContent = String.valueOf(binding.etTextItem.getText());
             itemModel.setContent(newContent);
 
-            Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
+            Dialog loadingDialog = DialogUtil.GetLoadingDialog(ProjectActivity.this);
             loadingDialog.show();
             boardViewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
                 @Override
@@ -747,7 +749,7 @@ public class ProjectActivity extends AppCompatActivity {
             String newContent = String.valueOf(binding.etNumberItem.getText());
             itemModel.setContent(newContent);
 
-            Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
+            Dialog loadingDialog = DialogUtil.GetLoadingDialog(ProjectActivity.this);
             loadingDialog.show();
             boardViewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
                 @Override
@@ -820,7 +822,7 @@ public class ProjectActivity extends AppCompatActivity {
         binding.btnClosePopup.setOnClickListener((view) -> dialog.dismiss());
 
         binding.btnSaveTimelineItem.setOnClickListener(view -> {
-            Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
+            Dialog loadingDialog = DialogUtil.GetLoadingDialog(ProjectActivity.this);
             loadingDialog.show();
 
             // TODO: The function expects no problems or exceptions, should not update the item if the call failed
@@ -977,7 +979,7 @@ public class ProjectActivity extends AppCompatActivity {
             itemModel.setHour(dialogHour.get());
             itemModel.setMinute(dialogMinute.get());
 
-            Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
+            Dialog loadingDialog = DialogUtil.GetLoadingDialog(ProjectActivity.this);
             loadingDialog.show();
             Call<Void> cellUpdateCall = boardViewModel.updateACell(itemModel);
             cellUpdateCall.enqueue(new Callback<Void>() {

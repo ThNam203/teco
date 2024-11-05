@@ -10,6 +10,8 @@ router
     .get(chatRoomController.getAllChatroomsOfUser)
     .post(chatRoomController.createNewChatRoom)
 
-router.route('/:chatRoomId').get(chatRoomController.getAllMessage)
+router.route('/:chatRoomId').get(chatRoomController.getAChatRoom)
+
+router.route('/:chatRoomId/message').get(chatRoomController.getAllMessage)
 
 module.exports = router

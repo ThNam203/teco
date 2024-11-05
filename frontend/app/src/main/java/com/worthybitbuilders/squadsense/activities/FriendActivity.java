@@ -18,14 +18,11 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.adapters.FriendRequestAdapter;
 import com.worthybitbuilders.squadsense.adapters.FriendItemAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityFriendBinding;
-import com.worthybitbuilders.squadsense.models.FriendRequest;
-import com.worthybitbuilders.squadsense.models.Notification;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
-import com.worthybitbuilders.squadsense.utils.DialogUtils;
+import com.worthybitbuilders.squadsense.utils.DialogUtil;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
@@ -54,7 +51,7 @@ public class FriendActivity extends AppCompatActivity {
         notificationViewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
         friendViewModel = new ViewModelProvider(this).get(FriendViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        loadingDialog = DialogUtils.GetLoadingDialog(this);
+        loadingDialog = DialogUtil.GetLoadingDialog(this);
 
         binding.rvFriends.setLayoutManager(new LinearLayoutManager(this));
         friendItemAdapter = new FriendItemAdapter(listFriend);

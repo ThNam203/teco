@@ -1,7 +1,9 @@
 package com.worthybitbuilders.squadsense.activities;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,7 +18,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.worthybitbuilders.squadsense.MainActivity;
 import com.worthybitbuilders.squadsense.R;
@@ -28,6 +29,8 @@ import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.LoginViewModel;
 
 import java.util.Objects;
+
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class LogInActivity extends AppCompatActivity {
     private PageLoginBinding binding;
@@ -103,6 +106,7 @@ public class LogInActivity extends AppCompatActivity {
                         stopLoadingIndicator();
                         SocketClient.InitializeIO(getApplication(), userId);
                         SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.USER_EMAIL, inputEmail);
+                        ToastUtils.showToastSuccess(LogInActivity.this, "Welcome back!", Toast.LENGTH_SHORT);
                         ActivityUtils.switchToActivity(LogInActivity.this, MainActivity.class);
                         finish();
                     }
@@ -114,6 +118,11 @@ public class LogInActivity extends AppCompatActivity {
                 }
             });
         });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            String[] permissions = {Manifest.permission.POST_NOTIFICATIONS};
+            EasyPermissions.requestPermissions(this, "", 0, permissions);
+        }
     }
 
     private void startLoadingIndicator() {

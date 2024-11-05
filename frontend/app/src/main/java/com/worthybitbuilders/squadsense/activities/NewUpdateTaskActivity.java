@@ -31,7 +31,7 @@ import com.worthybitbuilders.squadsense.databinding.ActivityNewUpdateTaskBinding
 import com.worthybitbuilders.squadsense.models.UpdateTask;
 import com.worthybitbuilders.squadsense.services.ProjectService;
 import com.worthybitbuilders.squadsense.services.RetrofitServices;
-import com.worthybitbuilders.squadsense.utils.DialogUtils;
+import com.worthybitbuilders.squadsense.utils.DialogUtil;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 
@@ -253,7 +253,7 @@ public class NewUpdateTaskActivity extends AppCompatActivity {
                 new UpdateTask(userId, content)
         );
 
-        Dialog loadingDialog = DialogUtils.GetLoadingDialog(this);
+        Dialog loadingDialog = DialogUtil.GetLoadingDialog(this);
         loadingDialog.show();
         call.enqueue(new Callback<Void>() {
             @Override

@@ -82,7 +82,6 @@ public class SignUpActivity extends AppCompatActivity {
             viewModel.signUp(newUser, new SignUpViewModel.SignUpCallback() {
                 @Override
                 public void onSuccess() {
-                    ToastUtils.showToastSuccess(SignUpActivity.this, "Welcome back!", Toast.LENGTH_SHORT);
                     ActivityUtils.switchToActivity(SignUpActivity.this, LogInActivity.class);
                     finish();
                 }

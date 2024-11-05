@@ -12,7 +12,7 @@ import android.view.Window;
 
 import com.worthybitbuilders.squadsense.R;
 
-public class DialogUtils {
+public class DialogUtil {
     public static Dialog GetLoadingDialog(Context context) {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -27,7 +27,7 @@ import com.worthybitbuilders.squadsense.activities.OpenProfileActivity;
 import com.worthybitbuilders.squadsense.databinding.FragmentMoreBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
-import com.worthybitbuilders.squadsense.utils.DialogUtils;
+import com.worthybitbuilders.squadsense.utils.DialogUtil;
 import com.worthybitbuilders.squadsense.utils.EventChecker;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.SocketClient;
@@ -53,7 +53,7 @@ public class MoreFragment extends Fragment {
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         friendViewModel = new ViewModelProvider(this).get(FriendViewModel.class);
         eventChecker = new EventChecker();
-        loadingDialog = DialogUtils.GetLoadingDialog(getContext());
+        loadingDialog = DialogUtil.GetLoadingDialog(getContext());
 
         LoadData();
 

@@ -34,7 +34,7 @@ import com.worthybitbuilders.squadsense.adapters.ProjectAdapter;
 import com.worthybitbuilders.squadsense.databinding.FragmentHomeBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
-import com.worthybitbuilders.squadsense.utils.DialogUtils;
+import com.worthybitbuilders.squadsense.utils.DialogUtil;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
@@ -59,7 +59,7 @@ public class HomeFragment extends Fragment {
         userViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
 
         // THERE IS ONLY "ONFAILURE" method
-        Dialog loadingDialog = DialogUtils.GetLoadingDialog(getContext());
+        Dialog loadingDialog = DialogUtil.GetLoadingDialog(getContext());
         loadingDialog.show();
         viewModel.getAllProjects(new MainActivityViewModel.GetProjectsFromRemoteHandlers() {
             @Override

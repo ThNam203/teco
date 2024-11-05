@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.google.gson.Gson;
 import com.worthybitbuilders.squadsense.models.ChatMessage;
 import com.worthybitbuilders.squadsense.models.ChatMessageRequest;
+import com.worthybitbuilders.squadsense.models.ChatRoom;
 import com.worthybitbuilders.squadsense.services.ChatRoomService;
 import com.worthybitbuilders.squadsense.services.RetrofitServices;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
@@ -22,8 +23,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MessageActivityViewModel extends ViewModel {
+    // see more in SocketClient.java to know about its utility
+    // basically remove the new message notification if the message is in this room
+    public static String currentChatRoomId = "";
     private final ArrayList<ChatMessage> mMessageList = new ArrayList<>();
-
     // the purpose is only to notify about the update
     private final MutableLiveData<String> newMessageLiveData = new MutableLiveData<>(null);
     private final String chatRoomId;
@@ -40,16 +43,16 @@ public class MessageActivityViewModel extends ViewModel {
 
     public MessageActivityViewModel(String chatRoomId) {
         this.chatRoomId = chatRoomId;
-
-        // this makes sure user to join a room, because user can create a new chatroom
-        socket.emit("joinMessageRoom", chatRoomId);
-        socket.on("newMessage", onNewMessage);
     }
 
     public void sendNewMessage(String messageContent) {
         ChatMessageRequest newMessage = new ChatMessageRequest(chatRoomId, messageContent, userId);
         String jsonData = new Gson().toJson(newMessage);
         socket.emit("newMessage", jsonData);
+    }
+
+    public Call<ChatRoom> getChatRoomInfor() {
+        return chatRoomService.getAChatRoom(userId, chatRoomId);
     }
 
     public void getAllMessage(ApiCallHandler handler) {
@@ -73,9 +76,16 @@ public class MessageActivityViewModel extends ViewModel {
         return mMessageList;
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
+    public void changeSocketEventsOnEnter() {
+        // this makes sure user to join a room, because user can create a new chatroom
+        currentChatRoomId = chatRoomId;
+        socket.emit("joinChatRoom", chatRoomId);
+        socket.on("newMessage", onNewMessage);
+    }
+
+    public void changeSocketEventsOnLeave() {
+        currentChatRoomId = "";
+        socket.emit("leaveChatRoom");
         socket.off("newMessage");
     }
 
