@@ -19,7 +19,7 @@ import com.worthybitbuilders.squadsense.databinding.ActivityInboxBinding;
 import com.worthybitbuilders.squadsense.databinding.AddNewChatRoomPopupBinding;
 import com.worthybitbuilders.squadsense.models.ChatRoom;
 import com.worthybitbuilders.squadsense.models.UserModel;
-import com.worthybitbuilders.squadsense.utils.DialogUtil;
+import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.ChatRoomViewModel;
@@ -45,7 +45,7 @@ public class InboxActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         binding = ActivityInboxBinding.inflate(getLayoutInflater());
-        loadingDialog = DialogUtil.GetLoadingDialog(this);
+        loadingDialog = DialogUtils.GetLoadingDialog(this);
         setContentView(binding.getRoot());
 
         friendViewModel = new ViewModelProvider(this).get(FriendViewModel.class);

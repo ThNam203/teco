@@ -30,7 +30,7 @@ import com.worthybitbuilders.squadsense.fragments.BoardDetailColumnFragment;
 import com.worthybitbuilders.squadsense.fragments.BoardDetailUpdateFragment;
 import com.worthybitbuilders.squadsense.models.BoardDetailItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
-import com.worthybitbuilders.squadsense.utils.DialogUtil;
+import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.BoardDetailItemViewModel;
 
@@ -83,7 +83,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
             finish();
         }
 
-        Dialog loadingDialog = DialogUtil.GetLoadingDialog(this);
+        Dialog loadingDialog = DialogUtils.GetLoadingDialog(this);
         loadingDialog.show();
 
         viewModel.getDataFromRemote(new BoardDetailItemViewModel.ApiCallHandler() {

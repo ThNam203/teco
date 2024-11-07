@@ -20,7 +20,7 @@ import com.worthybitbuilders.squadsense.adapters.MessageAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityMessagingBinding;
 import com.worthybitbuilders.squadsense.factory.MessageActivityViewModelFactory;
 import com.worthybitbuilders.squadsense.models.ChatRoom;
-import com.worthybitbuilders.squadsense.utils.DialogUtil;
+import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.MessageActivityViewModel;
@@ -66,7 +66,7 @@ public class MessagingActivity extends AppCompatActivity {
 
         listenForNewMessage();
 
-        Dialog loadingDialog = DialogUtil.GetLoadingDialog(this);
+        Dialog loadingDialog = DialogUtils.GetLoadingDialog(this);
         loadingDialog.show();
         messageViewModel.getAllMessage(new MessageActivityViewModel.ApiCallHandler() {
             @SuppressLint("NotifyDataSetChanged")

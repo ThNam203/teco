@@ -1,7 +1,6 @@
 package com.worthybitbuilders.squadsense.activities;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -31,7 +30,7 @@ import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.databinding.ActivityEditProfileBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
-import com.worthybitbuilders.squadsense.utils.DialogUtil;
+import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.EventChecker;
 import com.worthybitbuilders.squadsense.utils.ImageUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
@@ -71,7 +70,7 @@ public class EditProfileActivity extends AppCompatActivity {
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         eventChecker = new EventChecker();
-        loadingDialog = DialogUtil.GetLoadingDialog(this);
+        loadingDialog = DialogUtils.GetLoadingDialog(this);
         loadingDialog.show();
         userViewModel.getUserById(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), new UserViewModel.UserCallback() {
             @Override

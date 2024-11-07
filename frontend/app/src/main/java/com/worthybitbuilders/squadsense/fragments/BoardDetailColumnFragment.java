@@ -47,7 +47,7 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardTimelineItemMod
 import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
 import com.worthybitbuilders.squadsense.utils.CustomUtils;
-import com.worthybitbuilders.squadsense.utils.DialogUtil;
+import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.BoardDetailItemViewModel;
 
@@ -151,7 +151,7 @@ public class BoardDetailColumnFragment extends Fragment {
             String newContent = String.valueOf(binding.etTextItem.getText());
             itemModel.setContent(newContent);
 
-            Dialog loadingDialog = DialogUtil.GetLoadingDialog(getActivity());
+            Dialog loadingDialog = DialogUtils.GetLoadingDialog(getActivity());
             loadingDialog.show();
             viewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
                 @Override
@@ -194,7 +194,7 @@ public class BoardDetailColumnFragment extends Fragment {
         StatusContentsAdapter statusContentsAdapter = new StatusContentsAdapter(statusItemModel);
         statusContentsAdapter.setHandlers((itemModel, newContent) -> {
             itemModel.setContent(newContent);
-            Dialog loadingDialog = DialogUtil.GetLoadingDialog(getActivity());
+            Dialog loadingDialog = DialogUtils.GetLoadingDialog(getActivity());
             loadingDialog.show();
             viewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
                 @Override
@@ -277,7 +277,7 @@ public class BoardDetailColumnFragment extends Fragment {
         binding.btnSave.setOnClickListener(view -> {
             statusItemModel.copyDataFromAnotherInstance(clonedItemModel);
 
-            Dialog loadingDialog = DialogUtil.GetLoadingDialog(getActivity());
+            Dialog loadingDialog = DialogUtils.GetLoadingDialog(getActivity());
             loadingDialog.show();
             viewModel.updateACell(statusItemModel).enqueue(new Callback<Void>() {
                 @Override
@@ -381,7 +381,7 @@ public class BoardDetailColumnFragment extends Fragment {
             itemModel.setHour(dialogHour.get());
             itemModel.setMinute(dialogMinute.get());
 
-            Dialog loadingDialog = DialogUtil.GetLoadingDialog(getActivity());
+            Dialog loadingDialog = DialogUtils.GetLoadingDialog(getActivity());
             loadingDialog.show();
             Call<Void> cellUpdateCall = viewModel.updateACell(itemModel);
             cellUpdateCall.enqueue(new Callback<Void>() {
@@ -464,7 +464,7 @@ public class BoardDetailColumnFragment extends Fragment {
     }
 
     private void onCheckboxItemClicked(BoardCheckboxItemModel itemModel, int columnPosition) {
-        Dialog loadingDialog = DialogUtil.GetLoadingDialog(getActivity());
+        Dialog loadingDialog = DialogUtils.GetLoadingDialog(getActivity());
         loadingDialog.show();
         itemModel.setChecked(!itemModel.getChecked());
         viewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
@@ -526,7 +526,7 @@ public class BoardDetailColumnFragment extends Fragment {
         binding.btnClosePopup.setOnClickListener((view) -> dialog.dismiss());
 
         binding.btnSaveTimelineItem.setOnClickListener(view -> {
-            Dialog loadingDialog = DialogUtil.GetLoadingDialog(getActivity());
+            Dialog loadingDialog = DialogUtils.GetLoadingDialog(getActivity());
             loadingDialog.show();
 
             // TODO: The function expects no problems or exceptions, should not update the item if the call failed
@@ -651,7 +651,7 @@ public class BoardDetailColumnFragment extends Fragment {
             String newContent = String.valueOf(binding.etNumberItem.getText());
             itemModel.setContent(newContent);
 
-            Dialog loadingDialog = DialogUtil.GetLoadingDialog(getActivity());
+            Dialog loadingDialog = DialogUtils.GetLoadingDialog(getActivity());
             loadingDialog.show();
             viewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
                 @Override

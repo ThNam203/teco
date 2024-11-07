@@ -13,7 +13,7 @@ import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.databinding.ActivityOpenProfileBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
-import com.worthybitbuilders.squadsense.utils.DialogUtil;
+import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
@@ -30,7 +30,7 @@ public class OpenProfileActivity extends AppCompatActivity {
         binding = ActivityOpenProfileBinding.inflate(getLayoutInflater());
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-        loadingDialog = DialogUtil.GetLoadingDialog(this);
+        loadingDialog = DialogUtils.GetLoadingDialog(this);
         LoadData();
 
         //set onclick buttons here
