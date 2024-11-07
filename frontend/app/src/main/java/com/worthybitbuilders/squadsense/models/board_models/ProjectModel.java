@@ -9,6 +9,7 @@ public class ProjectModel {
     private String _id;
     private String creatorId;
     private List<String> memberIds;
+    private List<String> adminIds;
     private transient int chosenPosition = 0;
     private String title;
     private List<BoardContentModel> boards;
@@ -22,9 +23,10 @@ public class ProjectModel {
         this.title = "Start from scratch";
         this.creatorId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
 
-        List<String> memberIds = new ArrayList<>();
+        memberIds = new ArrayList<>();
+        adminIds = new ArrayList<>();
         memberIds.add(creatorId);
-        this.memberIds = memberIds;
+        adminIds.add(creatorId);
 
         this.chosenPosition = chosenPosition;
         this.boards = boards;
@@ -105,5 +107,13 @@ public class ProjectModel {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<String> getAdminIds() {
+        return adminIds;
+    }
+
+    public void setAdminIds(List<String> adminIds) {
+        this.adminIds = adminIds;
     }
 }

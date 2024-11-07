@@ -12,8 +12,10 @@ import android.widget.Toast;
 
 import com.worthybitbuilders.squadsense.R;
 
+import java.time.Duration;
+
 public class ToastUtils {
-    public static void showToastSuccess(Context context, String message, int gravity) {
+    public static void showToastSuccess(Context context, String message, int duration) {
         // Inflate the custom layout
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.custom_toast_success, null);
@@ -24,12 +26,12 @@ public class ToastUtils {
 
         // Create and show the toast
         Toast toast = new Toast(context);
-        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setDuration(duration);
         toast.setView(view);
-        toast.setGravity(gravity, 0, 50);
+        toast.setGravity(Gravity.TOP, 0, 50);
         toast.show();
     }
-    public static void showToastError(Context context, String message, int gravity) {
+    public static void showToastError(Context context, String message, int duration) {
         // Inflate the custom layout
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.custom_toast_error, null);
@@ -40,9 +42,9 @@ public class ToastUtils {
 
         // Create and show the toast
         Toast toast = new Toast(context);
-        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setDuration(duration);
         toast.setView(view);
-        toast.setGravity(gravity, 0, 50);
+        toast.setGravity(Gravity.TOP, 0, 50);
         toast.show();
     }
 }

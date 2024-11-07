@@ -45,17 +45,21 @@ public class SignUpActivity extends AppCompatActivity {
                 if(viewModel.IsValidEmail(inputEmail))
                 {
                     int color = ResourcesCompat.getColor(getResources(), R.color.btn_enabled_color, null);
+                    int textColor = ResourcesCompat.getColor(getResources(), R.color.white, null);
                     Drawable drawable = binding.btnNext.getBackground();
                     drawable.setTint(color);
                     binding.btnNext.setBackground(drawable);
+                    binding.btnNext.setTextColor(textColor);
                     binding.btnNext.setEnabled(true);
                 }
                 else
                 {
                     int color = ResourcesCompat.getColor(getResources(), R.color.btn_disabled_color, null);
+                    int textColor = ResourcesCompat.getColor(getResources(), R.color.white, null);
                     Drawable drawable = binding.btnNext.getBackground();
                     drawable.setTint(color);
                     binding.btnNext.setBackground(drawable);
+                    binding.btnNext.setTextColor(textColor);
                     binding.btnNext.setEnabled(false);
                 }
             }

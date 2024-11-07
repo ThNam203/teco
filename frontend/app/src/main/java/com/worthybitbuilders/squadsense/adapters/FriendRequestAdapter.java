@@ -17,7 +17,6 @@ import java.util.List;
 
 public class FriendRequestAdapter extends RecyclerView.Adapter{
     private static final int VIEW_TYPE_FRIEND_REQUEST = 0;
-    private Context context;
     private List<Notification> inboxFriendRequestList;
     private FriendRequestAdapter.OnActionCallback callback;
 
@@ -26,8 +25,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter{
         void OnDeny(int position);
     }
 
-    public FriendRequestAdapter(Context context, List<Notification> inboxFriendRequestList) {
-        this.context = context;
+    public FriendRequestAdapter(List<Notification> inboxFriendRequestList) {
         this.inboxFriendRequestList = inboxFriendRequestList;
     }
 

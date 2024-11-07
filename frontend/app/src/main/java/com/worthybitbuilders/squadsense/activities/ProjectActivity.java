@@ -46,7 +46,8 @@ import com.worthybitbuilders.squadsense.databinding.BoardStatusItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardTextItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardTimelineItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.ColumnMoreOptionsBinding;
-import com.worthybitbuilders.squadsense.databinding.ConfirmDeleteSecondaryBinding;
+import com.worthybitbuilders.squadsense.databinding.PopupRenameBinding;
+import com.worthybitbuilders.squadsense.databinding.ProjectMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardColumnHeaderModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardContentModel;
@@ -57,6 +58,8 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardTextItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardTimelineItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
+import com.worthybitbuilders.squadsense.models.board_models.ProjectModel;
+import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.CustomUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtil;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
@@ -70,6 +73,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -178,6 +182,8 @@ public class ProjectActivity extends AppCompatActivity {
 
         projectActivityViewModel.getProjectModelLiveData().observe(this, projectModel -> {
             if (projectModel == null) return;
+            SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID, projectModel.get_id());
+            SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_TITLE, projectModel.getTitle());
             // set cells content, pass the adapter to let them call the set item
             BoardContentModel content = projectModel.getBoards().get(projectModel.getChosenPosition());
             boardViewModel.setBoardContent(content, projectModel.get_id(), boardAdapter);
@@ -190,6 +196,13 @@ public class ProjectActivity extends AppCompatActivity {
             activityBinding.tvProjectTitle.setText(projectModel.getTitle());
         });
 
+        activityBinding.btnMoreOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showProjectOptions(view);
+            }
+        });
+
         activityBinding.btnBack.setOnClickListener((view) -> onBackPressed());
         setContentView(activityBinding.getRoot());
     }
@@ -197,7 +210,7 @@ public class ProjectActivity extends AppCompatActivity {
     private void showColumnHeaderOptions(BoardColumnHeaderModel headerModel, int columnPosition, View anchor) {
         ColumnMoreOptionsBinding binding = ColumnMoreOptionsBinding.inflate(getLayoutInflater());
         PopupWindow popupWindow = new PopupWindow(binding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
-        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(this, R.color.primary_color));
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popupWindow.setElevation(50);
 
         if (headerModel.getColumnType() == BoardColumnHeaderModel.ColumnType.Update) {
@@ -289,6 +302,169 @@ public class ProjectActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private void showProjectOptions(View anchor) {
+        ProjectMoreOptionsBinding binding = ProjectMoreOptionsBinding.inflate(getLayoutInflater());
+        PopupWindow popupWindow = new PopupWindow(binding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popupWindow.setElevation(50);
+
+        //change view for different roles in project like view for user, admin, creator
+        String creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
+        List<String> adminIds = projectActivityViewModel.getProjectModel().getAdminIds();
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        if(creatorId.equals(userId))
+            showProjectOptionFor(Role.CREATOR, binding);
+        else if(adminIds.contains(userId))
+            showProjectOptionFor(Role.ADMIN, binding);
+        else
+            showProjectOptionFor(Role.MEMBER, binding);
+
+
+        binding.btnShowMember.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityUtils.switchToActivity(ProjectActivity.this, MemberActivity.class);
+            }
+        });
+
+        binding.btnRenameProject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showRenamePopup();
+            }
+        });
+
+        binding.btnRequestAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String projectId = projectActivityViewModel.getProjectId();
+                projectActivityViewModel.requestAdmin(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
+                    @Override
+                    public void onSuccess() {
+                        ToastUtils.showToastSuccess(ProjectActivity.this, "Your request was sent to admins of this project", Toast.LENGTH_SHORT);
+                        popupWindow.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        ToastUtils.showToastError(ProjectActivity.this, message, Toast.LENGTH_SHORT);
+                    }
+                });
+            }
+        });
+
+        binding.btnDeleteProject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String titleConfirmDialog = "Delete";
+                String contentConfirmDialog = "Do you want to delete this project ?";
+                DialogUtils.showConfirmDialog(ProjectActivity.this, titleConfirmDialog, contentConfirmDialog, new DialogUtils.ConfirmAction() {
+                    @Override
+                    public void onAcceptToDo(Dialog thisDialog) {
+                        thisDialog.dismiss();
+                        Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
+                        loadingDialog.show();
+                        projectActivityViewModel.removeProject(projectActivityViewModel.getProjectModel(), new ProjectActivityViewModel.ApiCallHandlers() {
+                            @Override
+                            public void onSuccess() {
+                                ToastUtils.showToastSuccess(ProjectActivity.this, "Project deleted", Toast.LENGTH_SHORT);
+                                loadingDialog.dismiss();
+                                ProjectActivity.this.onBackPressed();
+                            }
+
+                            @Override
+                            public void onFailure(String message) {
+                                ToastUtils.showToastError(ProjectActivity.this, "You are not allowed to delete this project", Toast.LENGTH_SHORT);
+                                loadingDialog.dismiss();
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onCancel(Dialog thisDialog) {
+                        thisDialog.dismiss();
+                    }
+                });
+            }
+        });
+
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.showAsDropDown(anchor, 0, 0);
+    }
+
+    private enum Role{MEMBER, CREATOR, ADMIN}
+    private void showProjectOptionFor(Role role, ProjectMoreOptionsBinding projectMoreOptionsBinding)
+    {
+        projectMoreOptionsBinding.btnRequestAdmin.setVisibility(View.VISIBLE);
+        projectMoreOptionsBinding.btnLeaveProject.setVisibility(View.VISIBLE);
+        projectMoreOptionsBinding.btnDeleteProject.setVisibility(View.VISIBLE);
+        projectMoreOptionsBinding.btnRenameProject.setVisibility(View.VISIBLE);
+        projectMoreOptionsBinding.btnShowMember.setVisibility(View.VISIBLE);
+        projectMoreOptionsBinding.btnActivityLog.setVisibility(View.VISIBLE);
+        switch (role)
+        {
+            case CREATOR:
+                projectMoreOptionsBinding.btnLeaveProject.setVisibility(View.GONE);
+                projectMoreOptionsBinding.btnRequestAdmin.setVisibility(View.GONE);
+                break;
+            case ADMIN:
+                projectMoreOptionsBinding.btnRequestAdmin.setVisibility(View.GONE);
+                projectMoreOptionsBinding.btnDeleteProject.setVisibility(View.GONE);
+                break;
+            case MEMBER:
+                projectMoreOptionsBinding.btnDeleteProject.setVisibility(View.GONE);
+                projectMoreOptionsBinding.btnRenameProject.setVisibility(View.GONE);
+                break;
+        }
+    }
+
+    private void showRenamePopup()
+    {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        PopupRenameBinding popupRenameBinding = PopupRenameBinding.inflate(getLayoutInflater());
+        dialog.setContentView(popupRenameBinding.getRoot());
+
+        popupRenameBinding.input.setText(projectActivityViewModel.getProjectModel().getTitle());
+        popupRenameBinding.input.requestFocus();
+
+        popupRenameBinding.btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProjectModel projectToUpdate = projectActivityViewModel.getProjectModel();
+                projectToUpdate.setTitle(popupRenameBinding.input.getText().toString());
+                projectActivityViewModel.updateProject(projectToUpdate, new ProjectActivityViewModel.ApiCallHandlers() {
+                    @Override
+                    public void onSuccess() {
+                        activityBinding.tvProjectTitle.setText(popupRenameBinding.input.getText().toString());
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        ToastUtils.showToastError(ProjectActivity.this, message, Toast.LENGTH_SHORT);
+                    }
+                });
+            }
+        });
+
+        popupRenameBinding.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.show();
+    }
+
     private void showColumnDescription(BoardColumnHeaderModel itemModel, int columnPos) {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -343,33 +519,29 @@ public class ProjectActivity extends AppCompatActivity {
     }
 
     private void showConfirmDeleteColumn(BoardColumnHeaderModel headerModel, int columnPosition) {
-        final Dialog confirmDialog = new Dialog(this);
-        confirmDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        ConfirmDeleteSecondaryBinding binding = ConfirmDeleteSecondaryBinding.inflate(getLayoutInflater());
-        confirmDialog.setContentView(binding.getRoot());
+        String titleConfirmDialog = String.format(Locale.US, "Delete column \"%s\"?", headerModel.getTitle());
+        String contentConfirmDialog = "This column will be removed from the board";
+        DialogUtils.showConfirmDialog(this, titleConfirmDialog, contentConfirmDialog, new DialogUtils.ConfirmAction() {
+            @Override
+            public void onAcceptToDo(Dialog thisDialog) {
+                boardViewModel.deleteColumn(columnPosition, new BoardViewModel.ApiCallHandler() {
+                    @Override
+                    public void onSuccess() {
+                        thisDialog.dismiss();
+                    }
 
-        binding.tvTitle.setText(String.format(Locale.US, "Delete column \"%s\"?", headerModel.getTitle()));
-        binding.tvAdditionalContent.setText("This column will be removed from the board");
-        binding.btnCancel.setOnClickListener(view -> confirmDialog.dismiss());
-        binding.btnConfirm.setOnClickListener(view -> {
-            boardViewModel.deleteColumn(columnPosition, new BoardViewModel.ApiCallHandler() {
-                @Override
-                public void onSuccess() {
-                    confirmDialog.dismiss();
-                }
+                    @Override
+                    public void onFailure(String message) {
+                        ToastUtils.showToastError(ProjectActivity.this, "Something went wrong", Toast.LENGTH_SHORT);
+                    }
+                });
+            }
 
-                @Override
-                public void onFailure(String message) {
-                    ToastUtils.showToastError(ProjectActivity.this, "Something went wrong", Toast.LENGTH_SHORT);
-                }
-            });
+            @Override
+            public void onCancel(Dialog thisDialog) {
+                thisDialog.dismiss();
+            }
         });
-
-        confirmDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        confirmDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        confirmDialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
-        confirmDialog.getWindow().setGravity(Gravity.CENTER);
-        confirmDialog.show();
     }
 
     private void onCheckboxItemClicked(BoardCheckboxItemModel itemModel, int columnPos, int rowPos) {

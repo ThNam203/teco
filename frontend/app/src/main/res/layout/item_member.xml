@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -16,13 +15,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <androidx.cardview.widget.CardView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:layout_gravity="center"
                 app:cardCornerRadius="250dp">
                 <ImageView
-                    android:id="@+id/user_image"
+                    android:id="@+id/member_avatar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -30,27 +29,24 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Title"
-                android:textColor="@color/primary_word_color"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:layout_marginRight="10dp"/>
-            <TextView
-                android:id="@+id/timestamps"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:id="@+id/member_name"
                 android:layout_weight="1"
-                android:text="1/1/2000"
-                android:textColor="@color/primary_word_second_color"
-                android:textSize="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Name"
+                android:textColor="@color/primary_word_color"
+                android:textSize="24dp"
                 android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/icon_admin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/transparent"
+                android:minHeight="48dp"
+                android:src="@drawable/ic_admin"
+                app:tint="@color/primary_icon_color" />
             <ImageButton
                 android:id="@+id/btn_more"
                 android:layout_width="wrap_content"
@@ -61,25 +57,8 @@
                 android:minHeight="48dp"
                 android:src="@drawable/ic_more_setting"
                 app:tint="@color/primary_icon_color" />
-
         </LinearLayout>
 
-        <LinearLayout
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_weight="1"
-                android:id="@+id/content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:textColor="@color/primary_word_color"
-                android:ellipsize="end"
-                android:maxLines="2"
-                tools:text="Hihi"/>
-        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

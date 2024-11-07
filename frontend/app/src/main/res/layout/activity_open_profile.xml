@@ -49,7 +49,7 @@
             android:layout_centerHorizontal="true"
             android:text="N"
             android:textAllCaps="true"
-            android:textColor="@color/primary_word_color"
+            android:textColor="@color/white"
             android:textSize="48dp" />
         <LinearLayout
             android:layout_width="match_parent"
@@ -101,6 +101,7 @@
                 android:layout_height="1dp"
                 android:background="@color/primary_splitter_color" />
             <LinearLayout
+                android:id="@+id/btn_intro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -191,6 +192,7 @@
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/btn_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -236,6 +238,7 @@
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/btn_birthday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"

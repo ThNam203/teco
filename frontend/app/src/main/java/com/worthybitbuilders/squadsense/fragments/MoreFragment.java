@@ -62,6 +62,12 @@ public class MoreFragment extends Fragment {
         binding.btnTheme.setOnClickListener(view -> btnTheme_showPopup());
         binding.btnInbox.setOnClickListener(view -> btnInbox_showActivity());
         binding.profile.setOnClickListener(view -> btnProfile_showActivity());
+        binding.btnFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnFriend_showActivity();
+            }
+        });
         binding.btnLogout.setOnClickListener(view -> {
             ActivityUtils.switchToActivity(getContext(), LogInActivity.class);
             SharedPreferencesManager.clearData();

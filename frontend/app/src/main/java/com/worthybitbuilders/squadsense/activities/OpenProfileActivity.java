@@ -43,7 +43,39 @@ public class OpenProfileActivity extends AppCompatActivity {
         binding.btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnEdit_showActivity();
+                showEditActivity();
+            }
+        });
+
+        binding.btnIntro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showEditActivity();
+            }
+        });
+
+        binding.btnPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showEditActivity();
+            }
+        });
+        binding.btnBirthday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showEditActivity();
+            }
+        });
+        binding.defaultImageProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showEditActivity();
+            }
+        });
+        binding.imageProfileBorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showEditActivity();
             }
         });
 
@@ -56,7 +88,7 @@ public class OpenProfileActivity extends AppCompatActivity {
         LoadData();
     }
 
-    private void btnEdit_showActivity() {
+    private void showEditActivity() {
         ActivityUtils.switchToActivity(getWindow().getContext(), EditProfileActivity.class);
     }
 

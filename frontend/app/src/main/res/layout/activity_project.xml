@@ -35,6 +35,8 @@
                 android:textColor="@color/primary_word_color"
                 android:textSize="28sp"
                 android:textStyle="bold"
+                android:ellipsize="end"
+                android:singleLine="true"
                 tools:text="Start from scratch"/>
             <ImageButton
                 android:id="@+id/btnMoreOptions"

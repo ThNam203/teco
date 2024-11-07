@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/curved_small_background"
+    android:backgroundTint="@color/primary_second_color"
+    android:layout_marginEnd="16dp">
+    <Button
+        android:id="@+id/btnMakeAdmin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_admin"
+        app:iconTint="@color/primary_icon_second_color"
+        android:text="Make admin"
+        android:textColor="@color/primary_word_second_color"
+        android:textAllCaps="false"
+        android:textStyle="normal"
+        android:background="@color/transparent"/>
+    <Button
+        android:id="@+id/btnMemberInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_info"
+        app:iconTint="@color/primary_icon_second_color"
+        android:text="Member info"
+        android:textColor="@color/primary_word_second_color"
+        android:textAllCaps="false"
+        android:textStyle="normal"
+        android:background="@color/transparent"
+        android:backgroundTint="@color/transparent"/>
+    <Button
+        android:id="@+id/btnDeleteMember"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_remove_person"
+        app:iconTint="@color/red"
+        android:text="Delete member"
+        android:textColor="@color/red"
+        android:textAllCaps="false"
+        android:textStyle="normal"
+        android:background="@color/transparent"/>
+</LinearLayout>

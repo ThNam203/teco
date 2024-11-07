@@ -14,6 +14,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
@@ -24,9 +26,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.activities.FriendRequestActivity;
 import com.worthybitbuilders.squadsense.activities.InboxActivity;
+import com.worthybitbuilders.squadsense.activities.MemberActivity;
 import com.worthybitbuilders.squadsense.activities.NotificationSettingActivity;
 import com.worthybitbuilders.squadsense.adapters.NotificationAdapter;
 import com.worthybitbuilders.squadsense.databinding.FragmentNotificationBinding;
+import com.worthybitbuilders.squadsense.databinding.MemberMoreOptionsBinding;
+import com.worthybitbuilders.squadsense.databinding.NotificationMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.models.Notification;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
@@ -35,6 +40,7 @@ import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.NotificationViewModel;
+import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
 import java.util.ArrayList;
@@ -47,6 +53,7 @@ public class NotificationFragment extends Fragment {
     private FragmentNotificationBinding binding;
     private NotificationViewModel notificationViewModel;
     private FriendViewModel friendViewModel;
+    private ProjectActivityViewModel projectActivityViewModel;
     private NotificationAdapter notificationAdapter;
     private UserViewModel userViewModel;
     private List<Notification> listNotification = new ArrayList<>(); //work as data to put in recyclerview
@@ -59,32 +66,31 @@ public class NotificationFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentNotificationBinding.inflate(getLayoutInflater());
         friendViewModel = new ViewModelProvider(this).get(FriendViewModel.class);
+        projectActivityViewModel = new ViewModelProvider(this).get(ProjectActivityViewModel.class);
         notificationViewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         binding.recyclerviewNotification.setLayoutManager(new LinearLayoutManager(getContext()));
-        notificationAdapter = new NotificationAdapter(getContext(), listNotification);
+        notificationAdapter = new NotificationAdapter(listNotification);
 
         setupBtnList();
 
         notificationViewModel.getNotification(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), new NotificationViewModel.getNotificationCallback() {
             @Override
             public void onSuccess(List<Notification> notificationsData) {
-                for (Notification item : notificationsData) {
-                    listNotification.add(item);
-                    tempListNotification.add(item);
-                }
+                listNotification.addAll(notificationsData);
+                tempListNotification.addAll(notificationsData);
                 binding.recyclerviewNotification.setAdapter(notificationAdapter);
                 ReloadNotificationView();
             }
 
             @Override
             public void onFailure(String message) {
-                ToastUtils.showToastError(getContext(), message, Gravity.TOP);
+                ToastUtils.showToastError(getContext(), message, Toast.LENGTH_SHORT);
             }
         });
 
-        notificationAdapter.setOnReplyListener(new NotificationAdapter.OnActionCallback() {
+        notificationAdapter.setOnActionListener(new NotificationAdapter.OnActionCallback() {
             @Override
             public void OnClick(int position) {
                 ActivityUtils.switchToActivity(getContext(), FriendRequestActivity.class);
@@ -92,10 +98,98 @@ public class NotificationFragment extends Fragment {
 
             @Override
             public void OnShowingOption(int position) {
-                View notification = binding.recyclerviewNotification.getChildAt(position);
-                registerForContextMenu(notification);
-                getActivity().openContextMenu(notification);
+                View anchor = binding.recyclerviewNotification.getChildAt(position);
+                showNotificationMoreOptions(anchor);
                 selectedNotification = listNotification.get(position);
+            }
+        });
+
+        notificationAdapter.setOnReplyListener(new NotificationAdapter.OnReplyCallback() {
+            @Override
+            public void OnAccept(int position, String NOTIFICATION_TYPE) {
+                String projectId = listNotification.get(position).getLink();
+                String senderId = listNotification.get(position).getSenderId();
+                String senderName = listNotification.get(position).getTitle();
+                switch (NOTIFICATION_TYPE){
+                    case "MemberRequest":
+                        projectActivityViewModel.replyToJoinProject(projectId, senderId, "Accept", new ProjectActivityViewModel.ApiCallHandlers() {
+                            @Override
+                            public void onSuccess() {
+                                String projectTitle = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_TITLE);
+                                ToastUtils.showToastSuccess(getContext(), "You are added to project " + projectTitle + ", check it now!", Toast.LENGTH_SHORT);
+                                listNotification.remove(position);
+                                tempListNotification.remove(position);
+                                binding.recyclerviewNotification.setAdapter(notificationAdapter);
+                                ReloadNotificationView();
+                            }
+
+                            @Override
+                            public void onFailure(String message) {
+                                ToastUtils.showToastError(getContext(), message, Toast.LENGTH_SHORT);
+                            }
+                        });
+                        break;
+                    case "AdminRequest":
+                        projectActivityViewModel.replyToAdminRequest(projectId, senderId, "Accept", new ProjectActivityViewModel.ApiCallHandlers() {
+                            @Override
+                            public void onSuccess() {
+                                ToastUtils.showToastSuccess(getContext(), "Request of " + senderName + " was accepted", Toast.LENGTH_SHORT);
+                                listNotification.remove(position);
+                                tempListNotification.remove(position);
+                                binding.recyclerviewNotification.setAdapter(notificationAdapter);
+                                ReloadNotificationView();
+                            }
+
+                            @Override
+                            public void onFailure(String message) {
+                                ToastUtils.showToastError(getContext(), message, Toast.LENGTH_SHORT);
+                            }
+                        });
+                        break;
+                }
+
+            }
+
+            @Override
+            public void OnDeny(int position, String NOTIFICATION_TYPE) {
+                String projectId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID);
+                String senderId = listNotification.get(position).getSenderId();
+                switch (NOTIFICATION_TYPE)
+                {
+                    case "MemberRequest":
+
+                        projectActivityViewModel.replyToJoinProject(projectId, senderId, "Deny", new ProjectActivityViewModel.ApiCallHandlers() {
+                            @Override
+                            public void onSuccess() {
+                                listNotification.remove(position);
+                                tempListNotification.remove(position);
+                                binding.recyclerviewNotification.setAdapter(notificationAdapter);
+                                ReloadNotificationView();
+                            }
+
+                            @Override
+                            public void onFailure(String message) {
+                                ToastUtils.showToastError(getContext(), message, Toast.LENGTH_SHORT);
+                            }
+                        });
+                        break;
+                    case "AdminRequest":
+                        projectActivityViewModel.replyToAdminRequest(projectId, senderId, "Deny", new ProjectActivityViewModel.ApiCallHandlers() {
+                            @Override
+                            public void onSuccess() {
+                                listNotification.remove(position);
+                                tempListNotification.remove(position);
+                                binding.recyclerviewNotification.setAdapter(notificationAdapter);
+                                ReloadNotificationView();
+                            }
+
+                            @Override
+                            public void onFailure(String message) {
+                                ToastUtils.showToastError(getContext(), message, Toast.LENGTH_SHORT);
+                            }
+                        });
+                        break;
+                }
             }
         });
 
@@ -103,12 +197,7 @@ public class NotificationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 listNotification.clear();
-
-                //get all notification
-                for (Notification item : tempListNotification)
-                {
-                    listNotification.add(item);
-                }
+                listNotification.addAll(tempListNotification);
 
                 //reload view of list
                 binding.recyclerviewNotification.setAdapter(notificationAdapter);
@@ -154,39 +243,7 @@ public class NotificationFragment extends Fragment {
             }
         });
 
-        //set onclick buttons here
-        binding.btnInviteMember.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btn_invite_showDialog();
-            }
-        });
-
         return binding.getRoot();
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getActivity().getMenuInflater().inflate(R.menu.notification_context_menu, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.option_setting:
-                ActivityUtils.switchToActivity(getContext(), NotificationSettingActivity.class);
-                return true;
-            case R.id.option_delete:
-                DeleteNotification(selectedNotification);
-                listNotification.remove(selectedNotification);
-                tempListNotification.remove(selectedNotification);
-                binding.recyclerviewNotification.setAdapter(notificationAdapter);
-                ReloadNotificationView();
-                return true;
-            default:
-                return super.onContextItemSelected(item);
-        }
     }
 
     private void setSelectedBtnInScrollView(Button selectedButton, List<Button> listBtn)
@@ -205,6 +262,33 @@ public class NotificationFragment extends Fragment {
         selectedButton.setTextColor(color);
     }
 
+
+    private void showNotificationMoreOptions(View anchor)
+    {
+        NotificationMoreOptionsBinding notificationMoreOptionsBinding = NotificationMoreOptionsBinding.inflate(getLayoutInflater());
+        PopupWindow popupWindow = new PopupWindow(notificationMoreOptionsBinding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popupWindow.setElevation(50);
+
+        notificationMoreOptionsBinding.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DeleteNotification(selectedNotification);
+                listNotification.remove(selectedNotification);
+                tempListNotification.remove(selectedNotification);
+                binding.recyclerviewNotification.setAdapter(notificationAdapter);
+                ReloadNotificationView();
+                ToastUtils.showToastSuccess(getContext(), "Notification deleted", Toast.LENGTH_SHORT);
+                popupWindow.dismiss();
+            }
+        });
+
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        int xOffset = anchor.getWidth(); // Offset from the right edge of the anchor view
+        int yOffset = - anchor.getHeight() / 2;
+        popupWindow.showAsDropDown(anchor, xOffset, yOffset);
+    }
 
     private void ReloadNotificationView()
     {
@@ -227,74 +311,12 @@ public class NotificationFragment extends Fragment {
         notificationViewModel.deleteNotification(notification.getId(), new NotificationViewModel.deleteNotificationCallback() {
             @Override
             public void onSuccess() {
-                ToastUtils.showToastSuccess(getContext(), "notification deleted", Gravity.TOP);
+                ToastUtils.showToastSuccess(getContext(), "notification deleted", Toast.LENGTH_SHORT);
             }
 
             @Override
             public void onFailure(String message) {
-                ToastUtils.showToastError(getContext(), message, Gravity.TOP);
-            }
-        });
-    }
-
-    //define function here
-    private void btn_invite_showDialog() {
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.popup_btn_invite_by_email);
-
-        //Set activity of button in dialog here
-        EditText inputEmail = (EditText) dialog.findViewById(R.id.input_email);
-        inputEmail.requestFocus();
-        AppCompatButton btnInvite = (AppCompatButton) dialog.findViewById(R.id.btn_invite);
-
-        btnInvite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String receiverEmail = inputEmail.getText().toString();
-
-                if(!friendViewModel.IsValidEmail(receiverEmail))
-                {
-                    ToastUtils.showToastError(getContext(), "Invalid email", Gravity.TOP);
-                    return;
-                }
-
-                userViewModel.getUserByEmail(receiverEmail, new UserViewModel.UserCallback() {
-                    @Override
-                    public void onSuccess(UserModel user) {
-                        friendViewModel.createRequest(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), user.getId(), new FriendViewModel.FriendRequestCallback() {
-                            @Override
-                            public void onSuccess() {
-                                ToastUtils.showToastSuccess(getContext(), "request was sent to " + receiverEmail + "!!", Gravity.TOP);
-                            }
-
-                            @Override
-                            public void onFailure(String message) {
-                                ToastUtils.showToastError(getContext(), message, Gravity.TOP);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onFailure(String message) {
-                        ToastUtils.showToastError(getContext(), message, Gravity.TOP);
-                    }
-                });
-            }
-        });
-        //
-
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
-        dialog.show();
-
-        ImageButton btnClosePopupBtnInvite = (ImageButton) dialog.findViewById(R.id.btn_close_popup);
-        btnClosePopupBtnInvite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
+                ToastUtils.showToastError(getContext(), message, Toast.LENGTH_SHORT);
             }
         });
     }
@@ -317,12 +339,12 @@ public class NotificationFragment extends Fragment {
         friendViewModel.reply(replierId, requestSender, "Deny", new FriendViewModel.FriendRequestCallback() {
             @Override
             public void onSuccess() {
-                ToastUtils.showToastSuccess(getContext(), "you have just denied the request!!", Gravity.TOP);
+                ToastUtils.showToastSuccess(getContext(), "you have just denied the request!!", Toast.LENGTH_SHORT);
             }
 
             @Override
             public void onFailure(String message) {
-                ToastUtils.showToastError(getContext(), message, Gravity.TOP);
+                ToastUtils.showToastError(getContext(), message, Toast.LENGTH_SHORT);
             }
         });
     }

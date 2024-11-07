@@ -58,37 +58,7 @@ public class HomeFragment extends Fragment {
         friendViewModel = new ViewModelProvider(getActivity()).get(FriendViewModel.class);
         userViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
 
-        // THERE IS ONLY "ONFAILURE" method
-        Dialog loadingDialog = DialogUtil.GetLoadingDialog(getContext());
-        loadingDialog.show();
-        viewModel.getAllProjects(new MainActivityViewModel.GetProjectsFromRemoteHandlers() {
-            @Override
-            public void onSuccess() {
-                loadingDialog.dismiss();
-            }
-            @Override
-            public void onFailure(String message) {
-                ToastUtils.showToastError(getContext(), message, Toast.LENGTH_LONG);
-                loadingDialog.dismiss();
-            }
-        });
-
-        viewModel.getProjectsLiveData().observe(getViewLifecycleOwner(), minimizedProjectModels -> {
-            if (minimizedProjectModels == null || minimizedProjectModels.size() == 0)
-                binding.emptyProjectsContainer.setVisibility(View.VISIBLE);
-            else binding.emptyProjectsContainer.setVisibility(View.GONE);
-            projectAdapter.setData(minimizedProjectModels);
-        });
-
-        projectAdapter = new ProjectAdapter(null, _id -> {
-            Intent intent = new Intent(getContext(), ProjectActivity.class);
-            intent.putExtra("whatToDo", "fetch");
-            intent.putExtra("projectId", _id);
-            startActivity(intent);
-        });
-        binding.rvProjects.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.rvProjects.setHasFixedSize(true);
-        binding.rvProjects.setAdapter(projectAdapter);
+        LoadData();
 
         binding.btnMyfavorites.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,6 +93,48 @@ public class HomeFragment extends Fragment {
     }
 
     //define function here
+
+    private void LoadData()
+    {
+        // THERE IS ONLY "ONFAILURE" method
+        Dialog loadingDialog = DialogUtils.GetLoadingDialog(getContext());
+        loadingDialog.show();
+        viewModel.getAllProjects(new MainActivityViewModel.GetProjectsFromRemoteHandlers() {
+            @Override
+            public void onSuccess() {
+                loadingDialog.dismiss();
+            }
+            @Override
+            public void onFailure(String message) {
+                ToastUtils.showToastError(getContext(), message, Toast.LENGTH_LONG);
+                loadingDialog.dismiss();
+            }
+        });
+
+        viewModel.getProjectsLiveData().observe(getViewLifecycleOwner(), minimizedProjectModels -> {
+            if (minimizedProjectModels == null || minimizedProjectModels.size() == 0)
+                binding.emptyProjectsContainer.setVisibility(View.VISIBLE);
+            else binding.emptyProjectsContainer.setVisibility(View.GONE);
+            projectAdapter.setData(minimizedProjectModels);
+        });
+
+        projectAdapter = new ProjectAdapter(null, _id -> {
+            Intent intent = new Intent(getContext(), ProjectActivity.class);
+            intent.putExtra("whatToDo", "fetch");
+            intent.putExtra("projectId", _id);
+            startActivity(intent);
+        });
+        binding.rvProjects.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvProjects.setHasFixedSize(true);
+        binding.rvProjects.setAdapter(projectAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LoadData();
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private void btnAdd_showPopup() {
         View popupView = getLayoutInflater().inflate(R.layout.popup_btn_add, null);
@@ -157,7 +169,7 @@ public class HomeFragment extends Fragment {
     private void btn_addperson_showPopup() {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.popup_btn_invite_by_email);
+        dialog.setContentView(R.layout.popup_invite_by_email);
 
         //Set activity of button in dialog here
         ImageButton btnClosePopup = (ImageButton) dialog.findViewById(R.id.btn_close_popup);
@@ -239,7 +251,7 @@ public class HomeFragment extends Fragment {
     private void btn_myfavorities_showPopup() {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.popup_btn_myfavorite);
+        dialog.setContentView(R.layout.popup_favorite_project);
 
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

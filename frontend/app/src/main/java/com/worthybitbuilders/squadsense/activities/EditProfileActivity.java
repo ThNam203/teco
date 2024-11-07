@@ -1,6 +1,7 @@
 package com.worthybitbuilders.squadsense.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -56,6 +57,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 2;
 
     Dialog loadingDialog;
+
+    Dialog dialog; //current dialog
 
     EventChecker eventChecker;
 
@@ -218,7 +221,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     //define function here
     private void btnCamera_showPopup() {
-        final Dialog dialog = new Dialog(getWindow().getContext());
+        dialog = new Dialog(getWindow().getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.popup_of_camera);
         //Set activity of button in dialog here
@@ -262,6 +265,8 @@ public class EditProfileActivity extends AppCompatActivity {
                     avatarUri = data.getData();
                     binding.imageProfile.setImageURI(avatarUri);
                     loadAvatarView(true);
+                    if(dialog != null)
+                        dialog.dismiss();
                     return;
                 }
             case CAMERA_PERMISSION_REQUEST_CODE:
@@ -271,6 +276,8 @@ public class EditProfileActivity extends AppCompatActivity {
                         // Ảnh đã chụp thành công, sử dụng URI để hiển thị ảnh
                         binding.imageProfile.setImageURI(avatarUri);
                         loadAvatarView(true);
+                        if(dialog != null)
+                            dialog.dismiss();
                     } else {
                         ToastUtils.showToastError(this, "Capture image failed, please try again", Toast.LENGTH_SHORT);
                     }
@@ -353,5 +360,4 @@ public class EditProfileActivity extends AppCompatActivity {
             ToastUtils.showToastError(this, "No usable camera, operation failed", Toast.LENGTH_LONG);
         }
     }
-
 }

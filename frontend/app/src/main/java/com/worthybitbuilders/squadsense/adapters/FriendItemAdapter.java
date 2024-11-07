@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,7 +22,7 @@ public class FriendItemAdapter extends RecyclerView.Adapter {
     private OnActionCallback callback;
 
     public interface OnActionCallback {
-        void OnClick(int position);
+        void OnMoreOptionsClick(int position);
     }
 
     public FriendItemAdapter(List<UserModel> friendList) {
@@ -56,10 +57,13 @@ public class FriendItemAdapter extends RecyclerView.Adapter {
     private class FriendItemHolder extends RecyclerView.ViewHolder {
         TextView tvFriendName;
         ImageView friendAvatar;
+
+        ImageButton btnMore;
         FriendItemHolder(View itemView) {
             super(itemView);
             tvFriendName = itemView.findViewById(R.id.friend_name);
             friendAvatar = itemView.findViewById(R.id.friend_avatar);
+            btnMore = itemView.findViewById(R.id.btn_more);
         }
 
         void bind(UserModel friend, int position) {
@@ -70,7 +74,7 @@ public class FriendItemAdapter extends RecyclerView.Adapter {
                     .placeholder(R.drawable.ic_user)
                     .into(friendAvatar);
 
-            itemView.setOnClickListener(view -> callback.OnClick(position));
+            btnMore.setOnClickListener(view -> callback.OnMoreOptionsClick(position));
         }
     }
 }

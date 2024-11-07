@@ -1,18 +1,25 @@
 package com.worthybitbuilders.squadsense.viewmodels;
 
+import android.widget.Toast;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.gson.Gson;
+import com.worthybitbuilders.squadsense.models.ErrorResponse;
+import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardContentModel;
 import com.worthybitbuilders.squadsense.models.board_models.ProjectModel;
 import com.worthybitbuilders.squadsense.services.ProjectService;
 import com.worthybitbuilders.squadsense.services.RetrofitServices;
 import com.worthybitbuilders.squadsense.utils.ProjectTemplates;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,6 +151,215 @@ public class ProjectActivityViewModel extends ViewModel {
         });
     }
 
+    public void removeProject(ProjectModel project, ApiCallHandlers handlers) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<Void> call = projectService.removeProject(userId, project.get_id());
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    handlers.onSuccess();
+                } else {
+                    ErrorResponse err = null;
+                    try {
+                        err = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                    } catch (IOException e) {
+                        handlers.onFailure("Something has gone wrong!");
+                    }
+                    handlers.onFailure(err.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                handlers.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public void getMember(String projectId, ApiCallMemberHandlers handlers) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<List<UserModel>> call = projectService.getMember(userId, projectId);
+        call.enqueue(new Callback<List<UserModel>>() {
+            @Override
+            public void onResponse(Call<List<UserModel>> call, Response<List<UserModel>> response) {
+                if (response.isSuccessful()) {
+                    List<UserModel> listMember = response.body();
+                    handlers.onSuccess(listMember);
+                } else {
+                    ErrorResponse err = null;
+                    try {
+                        err = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                    } catch (IOException e) {
+                        handlers.onFailure("Something has gone wrong!");
+                    }
+                    handlers.onFailure(err.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UserModel>> call, Throwable t) {
+                handlers.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public void requestMemberToJoinProject(String projectId, String receiverId, ApiCallHandlers handlers) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<Void> call = projectService.requestMemberToJoinProject(userId, projectId, receiverId);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    handlers.onSuccess();
+                } else {
+                    ErrorResponse err = null;
+                    try {
+                        err = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                    } catch (IOException e) {
+                        handlers.onFailure("Something has gone wrong!");
+                    }
+                    handlers.onFailure(err.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                handlers.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public void replyToJoinProject(String projectId, String receiverId, String response, ApiCallHandlers handlers) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<String> call = projectService.replyToJoinProject(userId, projectId, receiverId, response);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    handlers.onSuccess();
+                } else {
+                    ErrorResponse err = null;
+                    try {
+                        err = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                    } catch (IOException e) {
+                        handlers.onFailure("Something has gone wrong!");
+                    }
+                    handlers.onFailure(err.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                handlers.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public void updateProject(ProjectModel project, ApiCallHandlers handlers) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<Void> call = projectService.updateProject(userId, project.get_id() ,project);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    handlers.onSuccess();
+                } else {
+                    ErrorResponse err = null;
+                    try {
+                        err = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                    } catch (IOException e) {
+                        handlers.onFailure("Something has gone wrong!");
+                    }
+                    handlers.onFailure(err.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                handlers.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public void deleteMember(String projectId, String memberId, ApiCallHandlers handlers) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<Void> call = projectService.deleteMember(userId, projectId, memberId);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    handlers.onSuccess();
+                } else {
+                    ErrorResponse err = null;
+                    try {
+                        err = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                    } catch (IOException e) {
+                        handlers.onFailure("Something has gone wrong!");
+                    }
+                    handlers.onFailure(err.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                handlers.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public void requestAdmin(String projectId, ApiCallHandlers handlers) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<Void> call = projectService.requestAdmin(userId, projectId);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    handlers.onSuccess();
+                } else {
+                    ErrorResponse err = null;
+                    try {
+                        err = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                    } catch (IOException e) {
+                        handlers.onFailure("Something has gone wrong!");
+                    }
+                    handlers.onFailure(err.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                handlers.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public void replyToAdminRequest(String projectId, String memberId, String response, ApiCallHandlers handlers) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<Void> call = projectService.replyToAdminRequest(userId, projectId, memberId, response);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    handlers.onSuccess();
+                } else {
+                    ErrorResponse err = null;
+                    try {
+                        err = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                    } catch (IOException e) {
+                        handlers.onFailure("Something has gone wrong!");
+                    }
+                    handlers.onFailure(err.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                handlers.onFailure(t.getMessage());
+            }
+        });
+    }
+
     public ProjectModel getProjectModel() {
         return projectModelLiveData.getValue();
     }
@@ -154,6 +370,11 @@ public class ProjectActivityViewModel extends ViewModel {
 
     public interface ApiCallHandlers {
         void onSuccess();
+        void onFailure(String message);
+    }
+
+    public interface ApiCallMemberHandlers {
+        void onSuccess(List<UserModel> listMemberData);
         void onFailure(String message);
     }
 }

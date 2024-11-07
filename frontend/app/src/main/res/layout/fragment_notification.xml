@@ -143,18 +143,6 @@
             android:background="@color/transparent"
             android:textColor="@color/primary_word_color"
             android:textSize="24dp" />
-        <Button
-            android:id="@+id/btn_invite_member"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/primary_btn_color"
-            android:text="Invite team members"
-            android:textAllCaps="false"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:layout_marginTop="10dp"/>
     </LinearLayout>
 
 
