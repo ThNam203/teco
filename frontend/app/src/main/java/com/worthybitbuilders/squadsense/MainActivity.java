@@ -14,6 +14,10 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
 
+    public enum OptionViewProject {ALLPROJECT, RECENT, MYPROJECT}
+
+    private static OptionViewProject homeFragmentOptionViewProject = OptionViewProject.ALLPROJECT;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,4 +55,15 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
     }
+
+    public static OptionViewProject getHomeFragmentOptionViewProject()
+    {
+        return homeFragmentOptionViewProject;
+    }
+
+    public static void setHomeFragmentOptionViewProject(OptionViewProject optionViewProject)
+    {
+        homeFragmentOptionViewProject = optionViewProject;
+    }
+
 }

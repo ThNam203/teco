@@ -132,6 +132,7 @@ const saveAccess = async (userId, projectId, timeAccessed) => {
 }
 
 exports.saveRecentProjectId = asyncCatch(async (req, res, next) => {
+    console.log('saveRecentProjectId---------------------------------------')
     const { userId, projectId } = req.params
     const user = User.findById(userId)
     if (!user) return next(new AppError('No user found!', 400))
@@ -146,6 +147,7 @@ exports.saveRecentProjectId = asyncCatch(async (req, res, next) => {
 })
 
 exports.getRecentProjectId = asyncCatch(async (req, res, next) => {
+    console.log('getRecentProjectId---------------------------------------')
     const { userId } = req.params
     const user = User.findById(userId)
     if (!user) return next(new AppError('No user found!', 400))
@@ -160,11 +162,9 @@ exports.getRecentProjectId = asyncCatch(async (req, res, next) => {
         if (!project) {
             recentAccess.recentProjectIds.pull(projectId)
             recentAccess.timeAccessed.splice(index, 1)
-            await recentAccess.save()
         } else if (!project.memberIds.includes(userId)) {
             recentAccess.recentProjectIds.pull(projectId)
             recentAccess.timeAccessed.splice(index, 1)
-            await user.save()
         } else {
             //filter project that have timeAccessed more than 1 week
             const timeAccessed = recentAccess.timeAccessed[index]
@@ -174,10 +174,10 @@ exports.getRecentProjectId = asyncCatch(async (req, res, next) => {
             if (date - timeAccessed > AWeekTime) {
                 recentAccess.recentProjectIds.pull(projectId)
                 recentAccess.timeAccessed.splice(index, 1)
-                await recentAccess.save()
             }
         }
     })
+    await recentAccess.save()
 
     if (recentAccess.recentProjectIds.length === 0) res.status(200).json([])
     else res.status(200).json(recentAccess.recentProjectIds)

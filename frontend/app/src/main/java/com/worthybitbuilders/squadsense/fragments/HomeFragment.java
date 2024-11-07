@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.worthybitbuilders.squadsense.MainActivity;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.activities.AddBoardActivity;
 import com.worthybitbuilders.squadsense.activities.ProjectActivity;
@@ -63,8 +64,8 @@ public class HomeFragment extends Fragment {
     private UserViewModel userViewModel;
     private List<AppCompatButton> listOption = new ArrayList<>();
     private List<MinimizedProjectModel> listMinimizeProject = new ArrayList<>();
-    private enum OptionViewProject {ALLPROJECT, RECENT, MYPROJECT}
-    private OptionViewProject optionViewProject = OptionViewProject.ALLPROJECT;
+
+    private MainActivity.OptionViewProject optionViewProject;
     private EventChecker eventChecker = new EventChecker();
 
     @SuppressLint({"ClickableViewAccessibility", "NotifyDataSetChanged"})
@@ -78,6 +79,8 @@ public class HomeFragment extends Fragment {
         binding.rvProjects.setLayoutManager(new LinearLayoutManager(getContext()));
 
         projectAdapter = new ProjectAdapter(listMinimizeProject, _id -> {
+            SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID, _id);
+            saveRecentAccessProject(_id);
             Intent intent = new Intent(getContext(), ProjectActivity.class);
             intent.putExtra("whatToDo", "fetch");
             intent.putExtra("projectId", _id);
@@ -128,6 +131,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        optionViewProject = MainActivity.getHomeFragmentOptionViewProject();
         int GET_ALL_PROJECT_CODE = eventChecker.addEventStatusAndGetCode();
         viewModel.getAllProjects(new MainActivityViewModel.GetProjectsFromRemoteHandlers() {
             @Override
@@ -294,7 +298,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 setSelectedOption(popupOptionViewProjectBinding.optionRecent);
-                optionViewProject = OptionViewProject.RECENT;
+                optionViewProject = MainActivity.OptionViewProject.RECENT;
+                MainActivity.setHomeFragmentOptionViewProject(optionViewProject);
                 LoadData();
                 dialog.dismiss();
             }
@@ -304,7 +309,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 setSelectedOption(popupOptionViewProjectBinding.optionAllPorject);
-                optionViewProject = OptionViewProject.ALLPROJECT;
+                optionViewProject = MainActivity.OptionViewProject.ALLPROJECT;
+                MainActivity.setHomeFragmentOptionViewProject(optionViewProject);
                 LoadData();
                 dialog.dismiss();
             }
@@ -314,7 +320,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 setSelectedOption(popupOptionViewProjectBinding.optionMyPorject);
-                optionViewProject = OptionViewProject.MYPROJECT;
+                optionViewProject = MainActivity.OptionViewProject.MYPROJECT;
+                MainActivity.setHomeFragmentOptionViewProject(optionViewProject);
                 LoadData();
                 dialog.dismiss();
             }
@@ -328,11 +335,11 @@ public class HomeFragment extends Fragment {
         listOption.add(popupOptionViewProjectBinding.optionAllPorject);
         listOption.add(popupOptionViewProjectBinding.optionMyPorject);
 
-        if(optionViewProject == OptionViewProject.ALLPROJECT)
+        if(optionViewProject == MainActivity.OptionViewProject.ALLPROJECT)
             setSelectedOption(popupOptionViewProjectBinding.optionAllPorject);
-        else if (optionViewProject == OptionViewProject.RECENT)
+        else if (optionViewProject == MainActivity.OptionViewProject.RECENT)
             setSelectedOption(popupOptionViewProjectBinding.optionRecent);
-        else if (optionViewProject == OptionViewProject.MYPROJECT)
+        else if (optionViewProject == MainActivity.OptionViewProject.MYPROJECT)
             setSelectedOption(popupOptionViewProjectBinding.optionMyPorject);
     }
 
@@ -372,10 +379,13 @@ public class HomeFragment extends Fragment {
 
     private void setListMinimizeProjectOnOptionView()
     {
-        if(optionViewProject == OptionViewProject.ALLPROJECT) {
+        PopupOptionViewProjectBinding popupOptionViewProjectBinding = PopupOptionViewProjectBinding.inflate(getLayoutInflater());
+        if(optionViewProject == MainActivity.OptionViewProject.ALLPROJECT) {
+            binding.titleOptionView.setText(popupOptionViewProjectBinding.optionAllPorject.getText().toString());
             LoadListMinimizeProjectView();
         }
-        else if (optionViewProject == OptionViewProject.RECENT) {
+        else if (optionViewProject == MainActivity.OptionViewProject.RECENT) {
+            binding.titleOptionView.setText(popupOptionViewProjectBinding.optionRecent.getText().toString());
             int GET_RECENT_PROJECT_ID_CODE = eventChecker.addEventStatusAndGetCode();
             userViewModel.getRecentProjectId(new UserViewModel.RecentProjectIdsCallback() {
                 @Override
@@ -400,8 +410,9 @@ public class HomeFragment extends Fragment {
                 }
             });
         }
-        else if(optionViewProject == OptionViewProject.MYPROJECT)
+        else if(optionViewProject == MainActivity.OptionViewProject.MYPROJECT)
         {
+            binding.titleOptionView.setText(popupOptionViewProjectBinding.optionMyPorject.getText().toString());
             int GET_MY_OWN_PROJECT_CODE = eventChecker.addEventStatusAndGetCode();
             userViewModel.getMyOwnProject(new UserViewModel.ApiCallMyOwnProjectsHandlers() {
                 @Override
@@ -430,5 +441,21 @@ public class HomeFragment extends Fragment {
 
     private void labelSearch_showActivity() {
         ActivityUtils.switchToActivity(getContext(), SearchActivity.class);
+    }
+
+    private void saveRecentAccessProject(String projectId)
+    {
+        if(projectId == null) return;
+        userViewModel.saveRecentProjectId(projectId, new UserViewModel.DefaultCallback() {
+            @Override
+            public void onSuccess() {
+                //just save recent access and do no thing when success
+            }
+
+            @Override
+            public void onFailure(String message) {
+                ToastUtils.showToastError(getContext(), message, Toast.LENGTH_SHORT);
+            }
+        });
     }
 }

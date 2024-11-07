@@ -66,8 +66,6 @@ public class MemberActivity extends AppCompatActivity {
         binding.rvMembers.setLayoutManager(new LinearLayoutManager(this));
         memberAdapter = new MemberAdapter(listMember, listAdminId);
 
-        LoadData();
-
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,6 +82,12 @@ public class MemberActivity extends AppCompatActivity {
 
 
         setContentView(binding.getRoot());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LoadData();
     }
 
     private void LoadMemberData()
@@ -198,7 +202,7 @@ public class MemberActivity extends AppCompatActivity {
         memberMoreOptionsBinding.btnDeleteMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String projectId = projectActivityViewModel.getProjectId();
+                String projectId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID);
                 String memberId = seletedMember.getId();
                 projectActivityViewModel.deleteMember(projectId, memberId, new ProjectActivityViewModel.ApiCallHandlers() {
                     @Override
@@ -225,7 +229,7 @@ public class MemberActivity extends AppCompatActivity {
                 DialogUtils.showConfirmDialogYesNo(MemberActivity.this, titleComfirmDialog, contentComfirmDialog, new DialogUtils.ConfirmAction() {
                     @Override
                     public void onAcceptToDo(Dialog thisDialog) {
-                        String projectId = projectActivityViewModel.getProjectId();
+                        String projectId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID);
                         String memberId = seletedMember.getId();
                         projectActivityViewModel.makeAdmin(projectId, memberId, new ProjectActivityViewModel.ApiCallHandlers() {
                             @Override
@@ -260,8 +264,7 @@ public class MemberActivity extends AppCompatActivity {
                     @Override
                     public void onAcceptToDo(Dialog thisDialog) {
                         thisDialog.dismiss();
-
-                        String projectId = projectActivityViewModel.getProjectId();
+                        String projectId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID);
                         String adminId = seletedMember.getId();
                         projectActivityViewModel.changeAdminToMember(projectId, adminId, new ProjectActivityViewModel.ApiCallHandlers() {
                             @Override

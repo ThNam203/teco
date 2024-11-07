@@ -190,19 +190,6 @@ public class ProjectActivity extends AppCompatActivity {
 
         projectActivityViewModel.getProjectModelLiveData().observe(this, projectModel -> {
             if (projectModel == null) return;
-            SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID, projectModel.get_id());
-            userViewModel.saveRecentProjectId(projectModel.get_id(), new UserViewModel.DefaultCallback() {
-                @Override
-                public void onSuccess() {
-                    //just save recent access and do no thing when success
-                }
-
-                @Override
-                public void onFailure(String message) {
-                    ToastUtils.showToastError(ProjectActivity.this, message, Toast.LENGTH_SHORT);
-                }
-            });
-            ToastUtils.showToastError(ProjectActivity.this, "con cac", Toast.LENGTH_SHORT);
             // set cells content, pass the adapter to let them call the set item
             BoardContentModel content = projectModel.getBoards().get(projectModel.getChosenPosition());
             boardViewModel.setBoardContent(content, projectModel.get_id(), boardAdapter);
@@ -223,7 +210,6 @@ public class ProjectActivity extends AppCompatActivity {
         });
 
         activityBinding.btnBack.setOnClickListener((view) -> onBackPressed());
-
         createNewProjectIfRequest();
     }
 
