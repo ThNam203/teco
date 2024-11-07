@@ -12,6 +12,8 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.databinding.ConfirmDialogDeleteBinding;
+import com.worthybitbuilders.squadsense.databinding.ConfirmDialogYesNoBinding;
 
 public class DialogUtils {
     public static Dialog GetLoadingDialog(Context context) {
@@ -26,25 +28,39 @@ public class DialogUtils {
         return dialog;
     }
 
-    public static Dialog showConfirmDialog(Context context,String title, String content, ConfirmAction action) {
+    public static Dialog showConfirmDialogDelete(Context context,String title, String content, ConfirmAction action) {
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        View dialogView = LayoutInflater.from(context).inflate(R.layout.confirm_dialog, null, false);
-        dialog.setContentView(dialogView);
+        ConfirmDialogDeleteBinding binding = ConfirmDialogDeleteBinding.inflate(LayoutInflater.from(context), null, false);
+        dialog.setContentView(binding.getRoot());
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().setGravity(Gravity.CENTER);
 
-        TextView btnConfirm = (TextView) dialog.findViewById(R.id.btnConfirm);
-        TextView btnCancel = (TextView) dialog.findViewById(R.id.btnCancel);
-        TextView tvTitle = (TextView) dialog.findViewById(R.id.tvTitle);
-        TextView tvContent = (TextView) dialog.findViewById(R.id.tvAdditionalContent);
+        binding.tvTitle.setText(title);
+        binding.tvAdditionalContent.setText(content);
 
-        tvTitle.setText(title);
-        tvContent.setText(content);
+        binding.btnConfirm.setOnClickListener(view -> action.onAcceptToDo(dialog));
+        binding.btnCancel.setOnClickListener(view -> action.onCancel(dialog));
 
-        btnConfirm.setOnClickListener(view -> action.onAcceptToDo(dialog));
-        btnCancel.setOnClickListener(view -> action.onCancel(dialog));
+        dialog.show();
+        return dialog;
+    }
+
+    public static Dialog showConfirmDialogYesNo(Context context,String title, String content, ConfirmAction action) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        ConfirmDialogYesNoBinding binding = ConfirmDialogYesNoBinding.inflate(LayoutInflater.from(context), null, false);
+        dialog.setContentView(binding.getRoot());
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setGravity(Gravity.CENTER);
+
+        binding.tvTitle.setText(title);
+        binding.tvAdditionalContent.setText(content);
+
+        binding.btnYes.setOnClickListener(view -> action.onAcceptToDo(dialog));
+        binding.btnNo.setOnClickListener(view -> action.onCancel(dialog));
 
         dialog.show();
         return dialog;

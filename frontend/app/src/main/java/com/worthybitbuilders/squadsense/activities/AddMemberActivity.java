@@ -176,6 +176,7 @@ public class AddMemberActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess() {
                                 ToastUtils.showToastSuccess(AddMemberActivity.this, "Request was sent!", Toast.LENGTH_SHORT);
+                                popupWindow.dismiss();
                             }
 
                             @Override

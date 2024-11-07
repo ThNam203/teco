@@ -13,13 +13,19 @@ router
 
 router.route('/:projectId').get(projectController.getProjectById)
 router.route('/get-member/:projectId').get(projectController.getMemberOfProject)
-
 router.route('/:projectId/board').post(projectController.createAndGetNewBoard)
 router
     .route('/request-member/:projectId/:receiverId')
     .post(projectController.requestMemberToJoinProject)
 
 router.route('/request-admin/:projectId').post(projectController.requestAdmin)
+router
+    .route('/make-admin/:projectId/:memberId')
+    .post(projectController.makeAdmin)
+
+router
+    .route('/change-admin-to-member/:projectId/:adminId')
+    .post(projectController.changeAdminToMember)
 router
     .route('/reply-to-admin-request/:projectId/:memberId/:response')
     .post(projectController.replyToAdminRequest)

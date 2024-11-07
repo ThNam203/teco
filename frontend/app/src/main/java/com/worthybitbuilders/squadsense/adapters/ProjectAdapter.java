@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.models.MinimizedProjectModel;
+import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.CustomUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectItemViewHolder> {
+public class ProjectAdapter extends RecyclerView.Adapter {
     private List<MinimizedProjectModel> data;
     private ProjectItemViewHolder.ClickHandler handler;
 
@@ -24,20 +26,20 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectI
     }
 
     public void setData(List<MinimizedProjectModel> data) {
-        this.data = data;
-        notifyDataSetChanged();
+        this.data.addAll(data);
     }
 
     @NonNull
     @Override
-    public ProjectItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_project_item_view, parent, false);
         return new ProjectItemViewHolder(layout, this.handler);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProjectItemViewHolder holder, int position) {
-        holder.bind(data.get(position));
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        MinimizedProjectModel minimizedProjectModel = (MinimizedProjectModel) data.get(position);
+        ((ProjectAdapter.ProjectItemViewHolder) holder).bind(minimizedProjectModel);
     }
 
     @Override

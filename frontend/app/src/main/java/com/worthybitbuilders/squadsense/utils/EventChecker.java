@@ -1,21 +1,24 @@
 package com.worthybitbuilders.squadsense.utils;
 
+import android.content.Context;
+import android.widget.Toast;
+
+import org.webrtc.EglBase;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class EventChecker {
     private List<Boolean> eventStatusList;
-
-    private CompleteCallback callback;
+    private CompleteCallback completeCallback;
     public EventChecker() {
         eventStatusList = new ArrayList<>();
     }
 
     public void setActionWhenComplete(CompleteCallback callback)
     {
-        this.callback = callback;
+        this.completeCallback = callback;
     }
-
     public int addEventStatusAndGetCode() {
         eventStatusList.add(false);
         return eventStatusList.size() - 1;
@@ -30,7 +33,7 @@ public class EventChecker {
                 return;
             }
         }
-        this.callback.Action();
+        this.completeCallback.Action();
     }
     public interface CompleteCallback{
         void Action();

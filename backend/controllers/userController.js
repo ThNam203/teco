@@ -4,6 +4,8 @@ const multerS3 = require('multer-s3')
 const multer = require('multer')
 
 const User = require('../models/User')
+const Project = require('../models/Project')
+const RecentAccess = require('../models/RecentAccess')
 const asyncCatch = require('../utils/asyncCatch')
 const AppError = require('../utils/AppError')
 
@@ -105,4 +107,89 @@ exports.addNewUser = asyncCatch(async (req, res, next) => {
     if (!savedUser) return next(new AppError('Save new user ERROR!', 400))
 
     res.status(200).json(savedUser)
+})
+
+const saveAccess = async (userId, projectId, timeAccessed) => {
+    const recentAccess = await RecentAccess.findOne({ userId: userId })
+    if (recentAccess) {
+        const index = recentAccess.recentProjectIds.indexOf(projectId)
+
+        if (index > -1) {
+            recentAccess.timeAccessed[index] = timeAccessed
+            await recentAccess.save()
+        } else {
+            recentAccess.recentProjectIds.push(projectId)
+            recentAccess.timeAccessed.push(timeAccessed)
+            await recentAccess.save()
+        }
+    } else {
+        await RecentAccess.create({
+            userId: userId,
+            recentProjectIds: [projectId],
+            timeAccessed: [timeAccessed],
+        })
+    }
+}
+
+exports.saveRecentProjectId = asyncCatch(async (req, res, next) => {
+    const { userId, projectId } = req.params
+    const user = User.findById(userId)
+    if (!user) return next(new AppError('No user found!', 400))
+
+    const project = Project.findById(projectId)
+    if (!project) return next(new AppError('No project found!', 400))
+
+    const date = new Date()
+    saveAccess(userId, projectId, date)
+
+    res.status(200).end()
+})
+
+exports.getRecentProjectId = asyncCatch(async (req, res, next) => {
+    const { userId } = req.params
+    const user = User.findById(userId)
+    if (!user) return next(new AppError('No user found!', 400))
+
+    const recentAccess = await RecentAccess.findOne({ userId: userId })
+    if (!recentAccess) res.status(200).json([])
+
+    //filter out projects that no longer exist or user is no longer a member of the project
+    recentAccess.recentProjectIds.forEach(async (projectId) => {
+        const project = await Project.findById(projectId)
+        const index = recentAccess.recentProjectIds.indexOf(projectId)
+        if (!project) {
+            recentAccess.recentProjectIds.pull(projectId)
+            recentAccess.timeAccessed.splice(index, 1)
+            await recentAccess.save()
+        } else if (!project.memberIds.includes(userId)) {
+            recentAccess.recentProjectIds.pull(projectId)
+            recentAccess.timeAccessed.splice(index, 1)
+            await user.save()
+        } else {
+            //filter project that have timeAccessed more than 1 week
+            const timeAccessed = recentAccess.timeAccessed[index]
+            const date = new Date()
+            //total time of a week in milliseconds
+            const AWeekTime = new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000)
+            if (date - timeAccessed > AWeekTime) {
+                recentAccess.recentProjectIds.pull(projectId)
+                recentAccess.timeAccessed.splice(index, 1)
+                await recentAccess.save()
+            }
+        }
+    })
+
+    if (recentAccess.recentProjectIds.length === 0) res.status(200).json([])
+    else res.status(200).json(recentAccess.recentProjectIds)
+})
+
+exports.getMyOwnProjectIds = asyncCatch(async (req, res, next) => {
+    const { userId } = req.params
+    const projects = await Project.find({ creatorId: userId })
+
+    const projectIds = []
+    projects.forEach((project) => {
+        projectIds.push(project._id.toString())
+    })
+    res.status(200).json(projectIds)
 })

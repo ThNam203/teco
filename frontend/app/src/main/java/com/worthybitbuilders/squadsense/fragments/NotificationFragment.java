@@ -115,8 +115,7 @@ public class NotificationFragment extends Fragment {
                         projectActivityViewModel.replyToJoinProject(projectId, senderId, "Accept", new ProjectActivityViewModel.ApiCallHandlers() {
                             @Override
                             public void onSuccess() {
-                                String projectTitle = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_TITLE);
-                                ToastUtils.showToastSuccess(getContext(), "You are added to project " + projectTitle + ", check it now!", Toast.LENGTH_SHORT);
+                                ToastUtils.showToastSuccess(getContext(), "You are added to this project, check it now!", Toast.LENGTH_SHORT);
                                 listNotification.remove(position);
                                 tempListNotification.remove(position);
                                 binding.recyclerviewNotification.setAdapter(notificationAdapter);

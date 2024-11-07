@@ -67,6 +67,7 @@ import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.BoardViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
+import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
 import org.json.JSONException;
 
@@ -89,6 +90,7 @@ public class ProjectActivity extends AppCompatActivity {
     // This differs from "projectActivityViewModel", this holds logic for only TableView
     private BoardViewModel boardViewModel;
     private ActivityProjectBinding activityBinding;
+    private UserViewModel userViewModel;
     private boolean isNewProjectCreateRequest = false;
 
     @Override
@@ -102,6 +104,7 @@ public class ProjectActivity extends AppCompatActivity {
         Intent intent = getIntent();
         ProjectActivityViewModelFactory factory = new ProjectActivityViewModelFactory(intent.getStringExtra("projectId"));
         projectActivityViewModel = new ViewModelProvider(this, factory).get(ProjectActivityViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         boardViewModel = new ViewModelProvider(this).get(BoardViewModel.class);
 
         boardAdapter = new TableViewAdapter(this, boardViewModel, new TableViewAdapter.OnClickHandlers() {
@@ -188,7 +191,17 @@ public class ProjectActivity extends AppCompatActivity {
         projectActivityViewModel.getProjectModelLiveData().observe(this, projectModel -> {
             if (projectModel == null) return;
             SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID, projectModel.get_id());
-            SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_TITLE, projectModel.getTitle());
+            userViewModel.saveRecentProjectId(projectModel.get_id(), new UserViewModel.DefaultCallback() {
+                @Override
+                public void onSuccess() {
+                    //just save recent access and do no thing when success
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    ToastUtils.showToastError(ProjectActivity.this, message, Toast.LENGTH_SHORT);
+                }
+            });
             // set cells content, pass the adapter to let them call the set item
             BoardContentModel content = projectModel.getBoards().get(projectModel.getChosenPosition());
             boardViewModel.setBoardContent(content, projectModel.get_id(), boardAdapter);
@@ -364,7 +377,7 @@ public class ProjectActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String titleConfirmDialog = "Delete";
                 String contentConfirmDialog = "Do you want to delete this project ?";
-                DialogUtils.showConfirmDialog(ProjectActivity.this, titleConfirmDialog, contentConfirmDialog, new DialogUtils.ConfirmAction() {
+                DialogUtils.showConfirmDialogDelete(ProjectActivity.this, titleConfirmDialog, contentConfirmDialog, new DialogUtils.ConfirmAction() {
                     @Override
                     public void onAcceptToDo(Dialog thisDialog) {
                         thisDialog.dismiss();
@@ -418,6 +431,7 @@ public class ProjectActivity extends AppCompatActivity {
             case ADMIN:
                 projectMoreOptionsBinding.btnRequestAdmin.setVisibility(View.GONE);
                 projectMoreOptionsBinding.btnDeleteProject.setVisibility(View.GONE);
+                projectMoreOptionsBinding.btnRenameProject.setVisibility(View.GONE);
                 break;
             case MEMBER:
                 projectMoreOptionsBinding.btnDeleteProject.setVisibility(View.GONE);
@@ -527,7 +541,7 @@ public class ProjectActivity extends AppCompatActivity {
     private void showConfirmDeleteColumn(BoardColumnHeaderModel headerModel, int columnPosition) {
         String titleConfirmDialog = String.format(Locale.US, "Delete column \"%s\"?", headerModel.getTitle());
         String contentConfirmDialog = "This column will be removed from the board";
-        DialogUtils.showConfirmDialog(this, titleConfirmDialog, contentConfirmDialog, new DialogUtils.ConfirmAction() {
+        DialogUtils.showConfirmDialogDelete(this, titleConfirmDialog, contentConfirmDialog, new DialogUtils.ConfirmAction() {
             @Override
             public void onAcceptToDo(Dialog thisDialog) {
                 boardViewModel.deleteColumn(columnPosition, new BoardViewModel.ApiCallHandler() {

@@ -179,7 +179,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), avatarFile);
                     MultipartBody.Part avatarFilePart = MultipartBody.Part.createFormData("avatar-file", avatarFile.getName(), requestBody);
                     String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
-                    userViewModel.uploadAvatar(userId, avatarFilePart, new UserViewModel.UploadAvatarCallback() {
+                    userViewModel.uploadAvatar(userId, avatarFilePart, new UserViewModel.DefaultCallback() {
                         @Override
                         public void onSuccess() {
                             eventChecker.markEventAsCompleteAndDoActionIfNeeded(SAVE_AVATAR_INDEX);

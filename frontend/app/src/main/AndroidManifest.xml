@@ -34,6 +34,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="s">
         <activity
+            android:name=".activities.MemberInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.AddMemberActivity"
             android:exported="false" />
         <activity

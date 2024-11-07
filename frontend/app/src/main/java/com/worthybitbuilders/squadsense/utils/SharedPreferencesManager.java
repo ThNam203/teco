@@ -9,8 +9,7 @@ public class SharedPreferencesManager {
         USER_ID("userid"),
         JWT("jwt"),
         USER_EMAIL("useremail"),
-        CURRENT_PROJECT_ID("current_project_id"),
-        CURRENT_PROJECT_TITLE("current_project_title");
+        CURRENT_PROJECT_ID("current_project_id");
         private final String key;
 
         KEYS(String key) {

@@ -1,5 +1,7 @@
 package com.worthybitbuilders.squadsense.models;
 
+import java.util.List;
+
 public class UserModel {
     private String _id;
     private String name;
@@ -10,6 +12,8 @@ public class UserModel {
     private String location;
     private String introduction;
     private String birthday;
+
+    private List<String> recentProjectIds;
 
     public UserModel(String name, String email, String password) {
         this.name = name;
@@ -87,5 +91,13 @@ public class UserModel {
 
     public void setBirthday(String birthday) {
         this.birthday = birthday;
+    }
+
+    public List<String> getRecentProjectIds() {
+        return recentProjectIds;
+    }
+
+    public void setRecentProjectIds(List<String> recentProjectIds) {
+        this.recentProjectIds = recentProjectIds;
     }
 }

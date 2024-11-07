@@ -44,6 +44,7 @@ public class InboxActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
         binding = ActivityInboxBinding.inflate(getLayoutInflater());
         loadingDialog = DialogUtils.GetLoadingDialog(this);
         setContentView(binding.getRoot());

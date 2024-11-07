@@ -3,6 +3,7 @@ package com.worthybitbuilders.squadsense.services;
 import com.worthybitbuilders.squadsense.models.ChatRoom;
 import com.worthybitbuilders.squadsense.models.LoginRequest;
 import com.worthybitbuilders.squadsense.models.UserModel;
+import com.worthybitbuilders.squadsense.models.board_models.ProjectModel;
 
 import java.util.List;
 
@@ -17,14 +18,21 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface UserService {
-    @GET("user-id/{userId}")
+    @GET("{userId}/get-user-by-id")
     Call<UserModel> getUserById(@Path("userId") String userId);
 
-    @GET("user-email/{email}")
-    Call<UserModel> getUserByEmail(@Path("email") String email);
+    @GET("{userId}/get-user-by-email/{email}")
+    Call<UserModel> getUserByEmail(@Path("userId") String userId, @Path("email") String email);
 
+    @POST("{userId}/save-recent-project-id/{projectId}")
+    Call<Void> saveRecentProjectIds(@Path("userId") String userId, @Path("projectId") String projectId);
+
+    @GET("{userId}/get-recent-project-id")
+    Call<List<String>> getRecentProjectIds(@Path("userId") String userId);
+    @GET("{userId}/get-my-own-project-id")
+    Call<List<String>> getMyOwnProjectIds(@Path("userId") String userId);
     @Multipart
-    @POST("/upload-avatar/{userId}")
+    @POST("{userId}/upload-avatar")
     Call<ResponseBody> uploadAvatarFile(@Path("userId") String userId, @Part MultipartBody.Part avatarFile);
 
     @POST("update-user")

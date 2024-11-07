@@ -57,6 +57,12 @@ public interface ProjectService {
     @POST("{userId}/project/request-admin/{projectId}")
     Call<Void> requestAdmin(@Path("userId") String userId, @Path("projectId") String projectId);
 
+    @POST("{userId}/project/make-admin/{projectId}/{memberId}")
+    Call<Void> makeAdmin(@Path("userId") String userId, @Path("projectId") String projectId, @Path("memberId") String memberId);
+
+    @POST("{userId}/project/change-admin-to-member/{projectId}/{adminId}")
+    Call<Void> changeAdminToMember(@Path("userId") String userId, @Path("projectId") String projectId, @Path("adminId") String adminId);
+
     @POST("{userId}/project/reply-to-admin-request/{projectId}/{memberId}/{response}")
     Call<Void> replyToAdminRequest(@Path("userId") String userId, @Path("projectId") String projectId, @Path("memberId") String memberId, @Path("response") String response);
 

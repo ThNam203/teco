@@ -4,21 +4,30 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStore;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.models.Notification;
+import com.worthybitbuilders.squadsense.models.UserModel;
+import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
 import java.util.List;
 
 public class FriendRequestAdapter extends RecyclerView.Adapter{
     private static final int VIEW_TYPE_FRIEND_REQUEST = 0;
     private List<Notification> inboxFriendRequestList;
-    private FriendRequestAdapter.OnActionCallback callback;
+    private OnActionCallback callback;
+
+    private UserViewModel userViewModel;
 
     public interface OnActionCallback {
         void OnAccept(int position);
@@ -27,6 +36,13 @@ public class FriendRequestAdapter extends RecyclerView.Adapter{
 
     public FriendRequestAdapter(List<Notification> inboxFriendRequestList) {
         this.inboxFriendRequestList = inboxFriendRequestList;
+        userViewModel = new ViewModelProvider(new ViewModelStoreOwner() {
+            @NonNull
+            @Override
+            public ViewModelStore getViewModelStore() {
+                return new ViewModelStore();
+            }
+        }).get(UserViewModel.class);
     }
 
     public void setOnReplyListener(FriendRequestAdapter.OnActionCallback callback)
@@ -76,12 +92,14 @@ public class FriendRequestAdapter extends RecyclerView.Adapter{
     private class FriendRequestInboxHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvContent, tvTimestamps;
         AppCompatButton btnAccept, btnDeny;
+        ImageView userImage;
 
         FriendRequestInboxHolder(View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.title);
             tvContent = (TextView) itemView.findViewById(R.id.content);
             tvTimestamps = (TextView) itemView.findViewById(R.id.timestamps);
+            userImage = (ImageView) itemView.findViewById(R.id.user_image);
             btnAccept = (AppCompatButton) itemView.findViewById(R.id.btn_accept);
             btnDeny = (AppCompatButton) itemView.findViewById(R.id.btn_deny);
         }
@@ -90,6 +108,24 @@ public class FriendRequestAdapter extends RecyclerView.Adapter{
             tvTitle.setText(notification.getTitle());
             tvContent.setText(notification.getContent());
             tvTimestamps.setText(notification.getTimeCreated());
+
+            userViewModel.getUserById(notification.getSenderId(), new UserViewModel.UserCallback() {
+                @Override
+                public void onSuccess(UserModel user) {
+                    String imagePath = user.getProfileImagePath();
+                    if(imagePath != null && !imagePath.isEmpty()){
+                        Glide.with(itemView.getContext())
+                                .load(imagePath)
+                                .placeholder(R.drawable.ic_user)
+                                .into(userImage);
+                    }
+                }
+
+                @Override
+                public void onFailure(String message) {
+
+                }
+            });
 
             btnAccept.setOnClickListener(new View.OnClickListener() {
                 @Override

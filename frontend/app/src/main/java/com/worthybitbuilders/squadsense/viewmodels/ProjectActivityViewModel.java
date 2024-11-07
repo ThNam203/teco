@@ -363,6 +363,58 @@ public class ProjectActivityViewModel extends ViewModel {
         });
     }
 
+    public void makeAdmin(String projectId, String memberId, ApiCallHandlers handlers) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<Void> call = projectService.makeAdmin(userId, projectId, memberId);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    handlers.onSuccess();
+                } else {
+                    ErrorResponse err = null;
+                    try {
+                        err = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                    } catch (IOException e) {
+                        handlers.onFailure("Something has gone wrong!");
+                    }
+                    handlers.onFailure(err.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                handlers.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public void changeAdminToMember(String projectId, String adminId, ApiCallHandlers handlers) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<Void> call = projectService.changeAdminToMember(userId, projectId, adminId);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    handlers.onSuccess();
+                } else {
+                    ErrorResponse err = null;
+                    try {
+                        err = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                    } catch (IOException e) {
+                        handlers.onFailure("Something has gone wrong!");
+                    }
+                    handlers.onFailure(err.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                handlers.onFailure(t.getMessage());
+            }
+        });
+    }
+
     public ProjectModel getProjectModel() {
         return projectModelLiveData.getValue();
     }

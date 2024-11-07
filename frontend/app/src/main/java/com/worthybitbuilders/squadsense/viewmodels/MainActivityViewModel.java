@@ -17,7 +17,6 @@ import retrofit2.Response;
 public class MainActivityViewModel extends ViewModel {
     ProjectService projectService = RetrofitServices.getProjectService();
     private List<MinimizedProjectModel> minimizedProject;
-    private MutableLiveData<List<MinimizedProjectModel>> minimizedProjectsMutableLiveData = new MutableLiveData<>(null);
 
     public MainActivityViewModel() {}
 
@@ -29,8 +28,7 @@ public class MainActivityViewModel extends ViewModel {
             public void onResponse(Call<List<MinimizedProjectModel>> call, Response<List<MinimizedProjectModel>> response) {
                 if (response.isSuccessful()) {
                     minimizedProject = response.body();
-                    minimizedProjectsMutableLiveData.setValue(minimizedProject);
-                    handlers.onSuccess();
+                    handlers.onSuccess(minimizedProject);
                 } else {
                     handlers.onFailure(response.message());
                 }
@@ -43,12 +41,9 @@ public class MainActivityViewModel extends ViewModel {
         });
     }
 
-    public MutableLiveData<List<MinimizedProjectModel>> getProjectsLiveData() {
-        return minimizedProjectsMutableLiveData;
-    }
 
     public interface GetProjectsFromRemoteHandlers {
-        void onSuccess();
+        void onSuccess(List<MinimizedProjectModel> dataMinimizeProjects);
         void onFailure(String message);
     }
 }

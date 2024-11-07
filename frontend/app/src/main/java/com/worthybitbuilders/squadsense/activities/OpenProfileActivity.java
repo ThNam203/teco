@@ -21,7 +21,6 @@ import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 public class OpenProfileActivity extends AppCompatActivity {
     private ActivityOpenProfileBinding binding;
     private UserViewModel userViewModel;
-    Dialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,6 @@ public class OpenProfileActivity extends AppCompatActivity {
         binding = ActivityOpenProfileBinding.inflate(getLayoutInflater());
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-        loadingDialog = DialogUtils.GetLoadingDialog(this);
         LoadData();
 
         //set onclick buttons here
@@ -94,6 +92,7 @@ public class OpenProfileActivity extends AppCompatActivity {
 
     private void LoadData()
     {
+        Dialog loadingDialog = DialogUtils.GetLoadingDialog(this);
         loadingDialog.show();
         userViewModel.getUserById(SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID), new UserViewModel.UserCallback() {
             @Override
