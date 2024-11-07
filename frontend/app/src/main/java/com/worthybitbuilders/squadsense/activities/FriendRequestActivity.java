@@ -51,7 +51,7 @@ public class FriendRequestActivity extends AppCompatActivity {
         notificationViewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
         friendViewModel = new ViewModelProvider(this).get(FriendViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        loadingDialog = DialogUtil.GetLoadingDialog(this);
+        loadingDialog = DialogUtils.GetLoadingDialog(this);
 
         binding.rvFriendRequest.setLayoutManager(new LinearLayoutManager(this));
         friendRequestAdapter = new FriendRequestAdapter(listFriendRequest);

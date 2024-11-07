@@ -31,10 +31,12 @@ public class ProjectActivityViewModel extends ViewModel {
     ProjectService projectService = RetrofitServices.getProjectService();
     private ProjectModel projectModel = null;
     private final MutableLiveData<ProjectModel> projectModelLiveData = new MutableLiveData<>();
+    private String projectId;
+    public ProjectActivityViewModel(String projectId) {
+        this.projectId = projectId;
+    }
 
-    public ProjectActivityViewModel() {}
-
-    public void getProjectById(String projectId, ApiCallHandlers handler) {
+    public void getProjectById(ApiCallHandlers handler) {
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         Call<ProjectModel> project = projectService.getProjectById(userId, projectId);
         project.enqueue(new Callback<ProjectModel>() {
@@ -57,7 +59,7 @@ public class ProjectActivityViewModel extends ViewModel {
     }
 
     public String getProjectId() {
-        return projectModel.get_id();
+        return projectId;
     }
 
     /**
@@ -78,6 +80,7 @@ public class ProjectActivityViewModel extends ViewModel {
                 if (response.isSuccessful()) {
                     projectModel = response.body();
                     projectModelLiveData.setValue(projectModel);
+                    projectId = projectModel.get_id();
                     handlers.onSuccess();
                 } else {
                     handlers.onFailure(response.message());
@@ -151,9 +154,9 @@ public class ProjectActivityViewModel extends ViewModel {
         });
     }
 
-    public void removeProject(ProjectModel project, ApiCallHandlers handlers) {
+    public void removeProject(ApiCallHandlers handlers) {
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
-        Call<Void> call = projectService.removeProject(userId, project.get_id());
+        Call<Void> call = projectService.removeProject(userId, projectModel.get_id());
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

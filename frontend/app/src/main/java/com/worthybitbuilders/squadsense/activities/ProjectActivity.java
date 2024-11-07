@@ -48,6 +48,7 @@ import com.worthybitbuilders.squadsense.databinding.BoardTimelineItemPopupBindin
 import com.worthybitbuilders.squadsense.databinding.ColumnMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.databinding.PopupRenameBinding;
 import com.worthybitbuilders.squadsense.databinding.ProjectMoreOptionsBinding;
+import com.worthybitbuilders.squadsense.factory.ProjectActivityViewModelFactory;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardColumnHeaderModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardContentModel;
@@ -88,7 +89,6 @@ public class ProjectActivity extends AppCompatActivity {
     // This differs from "projectActivityViewModel", this holds logic for only TableView
     private BoardViewModel boardViewModel;
     private ActivityProjectBinding activityBinding;
-
     private boolean isNewProjectCreateRequest = false;
 
     @Override
@@ -99,7 +99,9 @@ public class ProjectActivity extends AppCompatActivity {
         setContentView(activityBinding.getRoot());
         activityBinding.btnShowTables.setOnClickListener(view -> showTables());
 
-        projectActivityViewModel = new ViewModelProvider(this).get(ProjectActivityViewModel.class);
+        Intent intent = getIntent();
+        ProjectActivityViewModelFactory factory = new ProjectActivityViewModelFactory(intent.getStringExtra("projectId"));
+        projectActivityViewModel = new ViewModelProvider(this, factory).get(ProjectActivityViewModel.class);
         boardViewModel = new ViewModelProvider(this).get(BoardViewModel.class);
 
         boardAdapter = new TableViewAdapter(this, boardViewModel, new TableViewAdapter.OnClickHandlers() {
@@ -368,7 +370,7 @@ public class ProjectActivity extends AppCompatActivity {
                         thisDialog.dismiss();
                         Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
                         loadingDialog.show();
-                        projectActivityViewModel.removeProject(projectActivityViewModel.getProjectModel(), new ProjectActivityViewModel.ApiCallHandlers() {
+                        projectActivityViewModel.removeProject(new ProjectActivityViewModel.ApiCallHandlers() {
                             @Override
                             public void onSuccess() {
                                 ToastUtils.showToastSuccess(ProjectActivity.this, "Project deleted", Toast.LENGTH_SHORT);
@@ -614,11 +616,9 @@ public class ProjectActivity extends AppCompatActivity {
     }
 
     private void updateProject() {
-        Intent intent = getIntent();
         Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
-        String projectId = intent.getStringExtra("projectId");
         loadingDialog.show();
-        projectActivityViewModel.getProjectById(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
+        projectActivityViewModel.getProjectById(new ProjectActivityViewModel.ApiCallHandlers() {
             @Override
             public void onSuccess() {
                 loadingDialog.dismiss();

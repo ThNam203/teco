@@ -39,8 +39,9 @@ public class NotificationUtil {
         ) return;
 
         Intent intent = new Intent(context, MessagingActivity.class);
+        intent.putExtra("chatRoomId", chatRoomId);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new NotificationCompat.Builder(context, MESSAGE_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)

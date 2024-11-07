@@ -5,6 +5,8 @@ const ChatRoom = require('../models/ChatRoom')
 const io = socketIO.getIO()
 
 io.on('connection', (socket) => {
+    socket.join(socket.handshake.query.userId)
+
     socket.on('joinChatRoom', (data) => {
         const chatRoomId = data
         socket.join(chatRoomId)
@@ -43,9 +45,9 @@ io.on('connection', (socket) => {
         // newMessage is used for updating the chat room list if other user is
         // not in the chat room but in an activity that show list of chat rooms
         // (and then update the order of chatroom base on date)
-        chatRoom.members.forEach((memberId) =>
-            io.in(memberId).emit('newMessageNotify', newChatMessage)
-        )
+        chatRoom.members.forEach((memberId) => {
+            io.in(memberId.toString()).emit('newMessageNotify', newChatMessage)
+        })
     })
 
     socket.on('offerVideoCall', (data) => {
