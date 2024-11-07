@@ -36,6 +36,8 @@ public class ProjectActivityViewModel extends ViewModel {
         this.projectId = projectId;
     }
 
+    public ProjectActivityViewModel() {}
+
     public void getProjectById(ApiCallHandlers handler) {
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         Call<ProjectModel> project = projectService.getProjectById(userId, projectId);

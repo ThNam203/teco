@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:background="@drawable/curved_big_background"
-                android:backgroundTint="@color/primary_second_color"
+                android:backgroundTint="@color/primary_splitter_color"
                 android:padding="16dp"
                 android:layout_marginHorizontal="16dp">
                 <ImageView

@@ -50,23 +50,44 @@ io.on('connection', (socket) => {
         })
     })
 
-    socket.on('offerVideoCall', (data) => {
-        const { sdp, chatRoomId } = data
+    socket.on('offerVideoCall', async (data) => {
+        const { sdp, chatRoomId, callerId } = data
         const offer = JSON.stringify({
             chatRoomId: chatRoomId,
             sdp: sdp,
         })
 
-        socket.to(chatRoomId).emit('offerVideoCall', offer)
+        const chatRoom = await ChatRoom.findById(chatRoomId)
+        chatRoom.members.forEach((memberId) => {
+            if (memberId.toString() !== callerId)
+                io.in(memberId.toString()).emit('offerVideoCall', offer)
+        })
+
+        // socket.to(chatRoomId).emit('offerVideoCall', offer)
     })
 
-    socket.on('answerOfferVideoCall', (data) => {
+    socket.on('answerOfferVideoCall', async (data) => {
         const { sdp, chatRoomId } = data
-        socket.to(chatRoomId).emit('answerOfferVideoCall', sdp)
+        const chatRoom = await ChatRoom.findById(chatRoomId)
+        chatRoom.members.forEach((memberId) => {
+            io.in(memberId.toString()).emit('answerOfferVideoCall', sdp)
+        })
+        // socket.to(chatRoomId).emit('answerOfferVideoCall', sdp)
     })
 
-    socket.on('iceCandidate', (data) => {
-        socket.to(data.chatRoomId).emit('iceCandidate', data)
+    socket.on('iceCandidate', async (data) => {
+        const chatRoom = await ChatRoom.findById(data.chatRoomId)
+        chatRoom.members.forEach((memberId) => {
+            io.in(memberId.toString()).emit('iceCandidate', data)
+        })
+        // socket.to(data.chatRoomId).emit('iceCandidate', data)
+    })
+
+    socket.on('endCall', async (data) => {
+        const chatRoom = await ChatRoom.findById(data.chatRoomId)
+        chatRoom.members.forEach((memberId) => {
+            io.in(memberId.toString()).emit('iceCandidate', data)
+        })
     })
 
     socket.on('disconnect', () => {})

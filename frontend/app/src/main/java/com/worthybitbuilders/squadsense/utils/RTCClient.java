@@ -180,6 +180,8 @@ public class RTCClient {
                     public void onSetSuccess() {
                         JSONObject offer = new JSONObject();
                         try {
+                            String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+                            offer.put("callerId", userId);
                             offer.put("chatRoomId", chatRoomId);
                             offer.put("sdp", sessionDescription.description);
                             offer.put("type", sessionDescription.type.canonicalForm());

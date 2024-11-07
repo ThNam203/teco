@@ -202,6 +202,7 @@ public class ProjectActivity extends AppCompatActivity {
                     ToastUtils.showToastError(ProjectActivity.this, message, Toast.LENGTH_SHORT);
                 }
             });
+            ToastUtils.showToastError(ProjectActivity.this, "con cac", Toast.LENGTH_SHORT);
             // set cells content, pass the adapter to let them call the set item
             BoardContentModel content = projectModel.getBoards().get(projectModel.getChosenPosition());
             boardViewModel.setBoardContent(content, projectModel.get_id(), boardAdapter);

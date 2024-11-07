@@ -9,6 +9,7 @@ const AppError = require('../utils/AppError')
 const asyncCatch = require('../utils/asyncCatch')
 const s3Controller = require('./awsS3Controllers')
 const MemberRequest = require('../models/MemberRequest')
+const ActivityLog = require('../models/ActivityLog')
 
 const removeUpdateTaskFunc = async (updateTaskId) => {
     const deletedUpdateTask = await UpdateTask.findByIdAndDelete(updateTaskId)
@@ -175,6 +176,22 @@ const deleteABoard = async (board) => {
         )
     )
     await Board.findByIdAndDelete(board._id)
+}
+
+const createActivityLog = async (
+    userId,
+    projectId,
+    boardId,
+    cellId,
+    description
+) => {
+    ActivityLog.create({
+        creator: userId,
+        description: description,
+        projectId: projectId,
+        boardId: boardId,
+        cellId: cellId,
+    })
 }
 
 exports.updateACell = asyncCatch(async (req, res, next) => {
