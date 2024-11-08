@@ -99,7 +99,9 @@ public class ProjectActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         activityBinding = ActivityProjectBinding.inflate(getLayoutInflater());
         setContentView(activityBinding.getRoot());
+        activityBinding.tableView.setShowCornerView(true);
         activityBinding.btnShowTables.setOnClickListener(view -> showTables());
+        activityBinding.btnNewBoardOnEmpty.setOnClickListener(view -> showTables());
 
         Intent intent = getIntent();
         ProjectActivityViewModelFactory factory = new ProjectActivityViewModelFactory(intent.getStringExtra("projectId"));
@@ -191,6 +193,16 @@ public class ProjectActivity extends AppCompatActivity {
         projectActivityViewModel.getProjectModelLiveData().observe(this, projectModel -> {
             if (projectModel == null) return;
             // set cells content, pass the adapter to let them call the set item
+
+            activityBinding.tvProjectTitle.setText(projectModel.getTitle());
+            if (projectModel.getBoards().size() == 0) {
+                activityBinding.emptyBoardNotification.setVisibility(View.VISIBLE);
+                return;
+            } else activityBinding.emptyBoardNotification.setVisibility(View.GONE);
+
+            // the case is if user remove all board and add one, but the chosenPosition is bigger than 1
+            if (projectModel.getChosenPosition() >= projectModel.getBoards().size()) projectModel.setChosenPosition(0);
+
             BoardContentModel content = projectModel.getBoards().get(projectModel.getChosenPosition());
             boardViewModel.setBoardContent(content, projectModel.get_id(), boardAdapter);
             // set board title for "more table" drop down
@@ -198,17 +210,9 @@ public class ProjectActivity extends AppCompatActivity {
                     projectModel.getBoards()
                             .get(projectModel.getChosenPosition())
                             .getBoardTitle());
-
-            activityBinding.tvProjectTitle.setText(projectModel.getTitle());
         });
 
-        activityBinding.btnMoreOptions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showProjectOptions(view);
-            }
-        });
-
+        activityBinding.btnMoreOptions.setOnClickListener(this::showProjectOptions);
         activityBinding.btnBack.setOnClickListener((view) -> onBackPressed());
         createNewProjectIfRequest();
     }
@@ -663,17 +667,25 @@ public class ProjectActivity extends AppCompatActivity {
                     dialog.dismiss();
                     return;
                 }
+
                 projectActivityViewModel.getProjectModel().setChosenPosition(position);
                 BoardContentModel newContent = projectActivityViewModel.getProjectModel().getBoards().get(position);
                 boardViewModel.setBoardContent(newContent, projectActivityViewModel.getProjectModel().get_id(), boardAdapter);
                 activityBinding.btnShowTables.setText(newContent.getBoardTitle());
                 dialog.dismiss();
             }
+
+
         });
         binding.rvBoards.setLayoutManager(new LinearLayoutManager(this));
         binding.rvBoards.setAdapter(editBoardsAdapter);
 
-        binding.btnClose.setOnClickListener(view -> dialog.dismiss());
+        binding.btnClose.setOnClickListener(view -> {
+            if (projectActivityViewModel.getProjectModel().getBoards().size() == 0) {
+                activityBinding.emptyBoardNotification.setVisibility(View.VISIBLE);
+            }
+            dialog.dismiss();
+        });
         binding.btnNewBoard.setOnClickListener(view -> {
             Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
             loadingDialog.show();
