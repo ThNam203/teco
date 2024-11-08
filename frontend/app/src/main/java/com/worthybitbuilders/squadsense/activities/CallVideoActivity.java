@@ -5,16 +5,26 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.databinding.ActivityCallVideoBinding;
 import com.worthybitbuilders.squadsense.models.IceCandidateModel;
 import com.worthybitbuilders.squadsense.utils.RTCClient;
+import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.SocketClient;
+import com.worthybitbuilders.squadsense.utils.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +35,7 @@ import org.webrtc.PeerConnection;
 import org.webrtc.RtpReceiver;
 import org.webrtc.SessionDescription;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,12 +58,21 @@ public class CallVideoActivity extends AppCompatActivity {
     private boolean isMute = false;
     private boolean isCameraOn = true;
     private boolean isCaller;
-
-    // store the candidates until the remote description has set
-    private final List<IceCandidate> unprocessedCandidates = new ArrayList<>();
-    // specify if the candidate can be process
-    private boolean canProcessICECandidates = false;
     private boolean isAudioOn = true;
+    private MediaPlayer mediaPlayer;
+
+
+    // Prepare the MediaPlayer with the media file
+    private void prepareMediaPlayer() {
+        mediaPlayer = new MediaPlayer();
+        try {
+            Uri ringtoneUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.ringtone);
+            mediaPlayer.setDataSource(CallVideoActivity.this, ringtoneUri);
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +80,6 @@ public class CallVideoActivity extends AppCompatActivity {
         binding = ActivityCallVideoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Objects.requireNonNull(getSupportActionBar()).hide();
-
         Intent getIntent = getIntent();
         this.chatRoomId = getIntent.getStringExtra("chatRoomId");
         // determine if this user init the call
@@ -68,9 +87,20 @@ public class CallVideoActivity extends AppCompatActivity {
         if (isCaller) {
             setIncomingCallLayoutGone();
             setCallLayoutVisible();
+            socket.on("callDeny", args -> {
+                runOnUiThread(() -> {
+                    ToastUtils.showToastError(CallVideoActivity.this, "Call denied", Toast.LENGTH_LONG);
+                });
+                rtcClient.endCall();
+                finish();
+            });
         } else {
             // if user is called, we get the call offer (sdp)
             String callOffer = getIntent.getStringExtra("callOffer");
+            setIncomingCallUserInfo(getIntent);
+            prepareMediaPlayer();
+            mediaPlayer.start();
+
             binding.incomingCallAcceptBtn.setOnClickListener(view -> {
                 SessionDescription session = new SessionDescription(
                         SessionDescription.Type.OFFER,
@@ -84,10 +114,20 @@ public class CallVideoActivity extends AppCompatActivity {
                     setCallLayoutVisible();
                     binding.remoteViewLoading.setVisibility(View.GONE);
                 });
+
+                mediaPlayer.stop();
+                mediaPlayer.release();
+                mediaPlayer = null;
             });
 
             binding.incomingCallDenyBtn.setOnClickListener(view -> {
-                // TODO: call deny
+                mediaPlayer.stop();
+                mediaPlayer.release();
+                mediaPlayer = null;
+
+                String callerId = getIntent.getStringExtra("callerId");
+                socket.emit("callDeny", callerId);
+                finish();
             });
         }
 
@@ -177,6 +217,17 @@ public class CallVideoActivity extends AppCompatActivity {
         binding.callLayout.setVisibility(View.VISIBLE);
     }
 
+    private void setIncomingCallUserInfo(Intent getIntent) {
+        String callerName = getIntent.getStringExtra("callerName");
+        String callerImagePath = getIntent.getStringExtra("callerImagePath");
+        binding.incomingCallUserName.setText(callerName);
+        Glide
+                .with(CallVideoActivity.this)
+                .load(callerImagePath)
+                .placeholder(R.drawable.ic_user)
+                .into(binding.incomingUserCallAvatar);
+    }
+
     private PeerConnection.Observer peerConnectionObserver = new PeerConnection.Observer() {
         @Override
         public void onConnectionChange(PeerConnection.PeerConnectionState newState) {
@@ -191,6 +242,7 @@ public class CallVideoActivity extends AppCompatActivity {
         @Override
         public void onIceConnectionChange(PeerConnection.IceConnectionState iceConnectionState) {
             Log.d("CallVideoActivity", "onIceConnectionChange" + iceConnectionState.toString());
+            if (iceConnectionState == PeerConnection.IceConnectionState.DISCONNECTED) finish();
         }
 
         @Override

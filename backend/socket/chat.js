@@ -1,6 +1,7 @@
 const Message = require('../models/Message')
 const socketIO = require('./socket')
 const ChatRoom = require('../models/ChatRoom')
+const User = require('../models/User')
 
 const io = socketIO.getIO()
 
@@ -52,9 +53,13 @@ io.on('connection', (socket) => {
 
     socket.on('offerVideoCall', async (data) => {
         const { sdp, chatRoomId, callerId } = data
+        const user = await User.findById(callerId)
         const offer = JSON.stringify({
             chatRoomId: chatRoomId,
             sdp: sdp,
+            callerName: user.name,
+            callerImagePath: user.profileImagePath,
+            callerId: callerId,
         })
 
         const chatRoom = await ChatRoom.findById(chatRoomId)
@@ -83,11 +88,9 @@ io.on('connection', (socket) => {
         // socket.to(data.chatRoomId).emit('iceCandidate', data)
     })
 
-    socket.on('endCall', async (data) => {
-        const chatRoom = await ChatRoom.findById(data.chatRoomId)
-        chatRoom.members.forEach((memberId) => {
-            io.in(memberId.toString()).emit('iceCandidate', data)
-        })
+    socket.on('callDeny', async (data) => {
+        // data is userId, which is the user who is denied :D
+        io.in(data).emit('callDeny')
     })
 
     socket.on('disconnect', () => {})

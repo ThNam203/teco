@@ -75,6 +75,9 @@ public class SocketClient {
         callVideoIntent.putExtra("isCaller", false);
         callVideoIntent.putExtra("callOffer", sdpOfferModel.getSdp());
         callVideoIntent.putExtra("chatRoomId", sdpOfferModel.getChatRoomId());
+        callVideoIntent.putExtra("callerId", sdpOfferModel.getCallerId());
+        callVideoIntent.putExtra("callerName", sdpOfferModel.getCallerName());
+        callVideoIntent.putExtra("callerImagePath", sdpOfferModel.getCallerImagePath());
         callVideoIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         application.startActivity(callVideoIntent);
     };

@@ -35,7 +35,6 @@ public class ProjectActivityViewModel extends ViewModel {
     public ProjectActivityViewModel(String projectId) {
         this.projectId = projectId;
     }
-    public ProjectActivityViewModel() {}
 
     public ProjectActivityViewModel() {}
 
