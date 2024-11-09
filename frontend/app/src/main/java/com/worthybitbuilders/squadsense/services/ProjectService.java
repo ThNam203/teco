@@ -1,5 +1,6 @@
 package com.worthybitbuilders.squadsense.services;
 
+import com.worthybitbuilders.squadsense.models.ActivityLog;
 import com.worthybitbuilders.squadsense.models.BoardDetailItemModel;
 import com.worthybitbuilders.squadsense.models.MinimizedProjectModel;
 import com.worthybitbuilders.squadsense.models.NewColumnRequestModel;
@@ -48,7 +49,7 @@ public interface ProjectService {
     @POST("{userId}/project")
     Call<ProjectModel> saveProject(@Path("userId") String userId, @Body ProjectModel projectModel);
 
-    @POST("{userId}/project/update-project/{projectId}")
+    @POST("{userId}/project/{projectId}")
     Call<Void> updateProject(@Path("userId") String userId, @Path("projectId") String projectId, @Body ProjectModel projectModel);
 
     @POST("{userId}/project/request-member/{projectId}/{receiverId}")
@@ -78,7 +79,7 @@ public interface ProjectService {
     @DELETE("{userId}/project/{projectId}/board/{boardId}")
     Call<Void> removeBoard(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId);
 
-    @DELETE("{userId}/project/delete/{projectId}")
+    @DELETE("{userId}/project/{projectId}")
     Call<Void> removeProject(@Path("userId") String userId, @Path("projectId") String projectId);
 
     /** The List<String> is the cell ids that are returned from server */
@@ -116,6 +117,9 @@ public interface ProjectService {
 
     @DELETE("{userId}/project/{projectId}/board/{boardId}/cell-update/{cellId}/{updateTaskId}")
     Call<Void> deleteUpdateTask(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Path("updateTaskId") String updateTaskId);
+
+    @GET("{userId}/project/{projectId}/activity-log")
+    Call<List<ActivityLog>> getActivityLogs(@Path("userId") String userId, @Path("projectId") String projectId);
 
     // CELL UPDATES
     @PUT("{userId}/project/{projectId}/board/{boardId}/cell/{cellId}")

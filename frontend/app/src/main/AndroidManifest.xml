@@ -34,6 +34,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="s">
         <activity
+            android:name=".activities.ProjectActivityLogActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.login.ProjectActivityLogActivity"
+            android:exported="false"
+            android:label="@string/title_activity_project_log" />
+        <activity
             android:name=".activities.MemberInfoActivity"
             android:exported="false" />
         <activity

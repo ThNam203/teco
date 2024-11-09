@@ -363,6 +363,12 @@ public class ProjectActivity extends AppCompatActivity {
             }
         });
 
+        binding.btnActivityLog.setOnClickListener(view -> {
+            Intent activityLogIntent = new Intent(ProjectActivity.this, ProjectActivityLogActivity.class);
+            activityLogIntent.putExtra("projectId", projectActivityViewModel.getProjectId());
+            startActivity(activityLogIntent);
+        });
+
         binding.btnDeleteProject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -413,6 +419,7 @@ public class ProjectActivity extends AppCompatActivity {
         projectMoreOptionsBinding.btnRenameProject.setVisibility(View.VISIBLE);
         projectMoreOptionsBinding.btnShowMember.setVisibility(View.VISIBLE);
         projectMoreOptionsBinding.btnActivityLog.setVisibility(View.VISIBLE);
+
         switch (role)
         {
             case CREATOR:

@@ -7,21 +7,26 @@ const activityLogModel = new mongoose.Schema(
             ref: 'User',
             required: true,
         },
-        projectId: {
+        project: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Project',
         },
-        boardId: {
+        board: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Board',
         },
-        cellId: {
+        cell: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Cell',
         },
         description: {
             type: String,
             required: true,
+        },
+        type: {
+            type: String,
+            required: true,
+            enum: ['Update', 'Change', 'Remove', 'New'],
         },
     },
     { timestamps: true }

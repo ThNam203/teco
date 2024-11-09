@@ -178,23 +178,32 @@ const deleteABoard = async (board) => {
     await Board.findByIdAndDelete(board._id)
 }
 
+const ACTIVITY_LOG_TYPES = {
+    UPDATE: 'Update',
+    CHANGE: 'Change',
+    REMOVE: 'Remove',
+    NEW: 'New',
+}
 const createActivityLog = async (
     userId,
     projectId,
     boardId,
     cellId,
-    description
+    description,
+    type
 ) => {
     ActivityLog.create({
         creator: userId,
         description: description,
-        projectId: projectId,
-        boardId: boardId,
-        cellId: cellId,
+        project: projectId,
+        board: boardId,
+        cell: cellId,
+        type: type,
     })
 }
 
 exports.updateACell = asyncCatch(async (req, res, next) => {
+    const { userId, projectId, boardId, cellId } = req.params
     const cell = req.body
 
     const updatedCell = await updateACell(cell)
@@ -202,17 +211,48 @@ exports.updateACell = asyncCatch(async (req, res, next) => {
     if (!updatedCell)
         return next(new AppError('Unable to update the cell', 500))
 
+    // create activity log
+    Board.findById(boardId).then((board) => {
+        board.cells.forEach((cellsRow, rowIdx) => {
+            cellsRow.forEach((aCell, columnIdx) => {
+                if (aCell._id.toString() === cellId) {
+                    User.findById(userId).then((user) => {
+                        createActivityLog(
+                            user._id,
+                            projectId,
+                            boardId,
+                            cellId,
+                            `${user.name} has updated a cell in column ${columnIdx}, row ${rowIdx}`,
+                            ACTIVITY_LOG_TYPES.UPDATE
+                        )
+                    })
+                }
+            })
+        })
+    })
+
     res.status(204).end()
 })
 
 exports.createAndGetNewBoard = asyncCatch(async (req, res, next) => {
-    const { projectId } = req.params
+    const { userId, projectId } = req.params
     const project = await Project.findById(projectId)
     const newBoard = await Board.create({
         boardTitle: 'New board',
         rowCells: [],
         columnCells: [],
         cells: [],
+    })
+
+    User.findById(userId).then((user) => {
+        createActivityLog(
+            user._id,
+            projectId,
+            null,
+            null,
+            `${user.name} created new board`,
+            ACTIVITY_LOG_TYPES.NEW
+        )
     })
 
     project.boards.push(newBoard._id)
@@ -222,18 +262,29 @@ exports.createAndGetNewBoard = asyncCatch(async (req, res, next) => {
 })
 
 exports.updateBoard = asyncCatch(async (req, res, next) => {
-    const { boardId } = req.params
+    const { userId, projectId, boardId } = req.params
     const { boardTitle } = req.body.nameValuePairs
 
-    await Board.findByIdAndUpdate(boardId, {
+    const board = await Board.findByIdAndUpdate(boardId, {
         boardTitle: boardTitle,
+    })
+
+    User.findById(userId).then((user) => {
+        createActivityLog(
+            user._id,
+            projectId,
+            boardId,
+            null,
+            `${user.name} has renamed "${board.boardTitle}" board to "${boardTitle}"`,
+            ACTIVITY_LOG_TYPES.CHANGE
+        )
     })
 
     res.status(204).end()
 })
 
 exports.removeBoard = asyncCatch(async (req, res, next) => {
-    const { projectId, boardId } = req.params
+    const { userId, projectId, boardId } = req.params
 
     const project = await Project.findById(projectId)
     const deletedBoard = await Board.findById(boardId)
@@ -243,6 +294,17 @@ exports.removeBoard = asyncCatch(async (req, res, next) => {
     project.boards.splice(idx, 1)
     project.markModified('boards')
     await project.save()
+
+    User.findById(userId).then((user) => {
+        createActivityLog(
+            user._id,
+            projectId,
+            boardId,
+            null,
+            `${user.name} has removed "${deletedBoard.boardTitle}" board`,
+            ACTIVITY_LOG_TYPES.REMOVE
+        )
+    })
 
     res.status(204).end()
 })
@@ -279,7 +341,7 @@ exports.deleteColumn = asyncCatch(async (req, res, next) => {
 
 exports.addNewUpdateTask = asyncCatch(async (req, res, next) => {
     const { taskContent } = req.body
-    const { cellId } = req.params
+    const { userId, projectId, boardId, cellId } = req.params
 
     const fileLocations = []
     if (req.files) {
@@ -310,6 +372,18 @@ exports.addNewUpdateTask = asyncCatch(async (req, res, next) => {
     })
 
     if (!newTask) return next(new AppError('Unable to send update', 500))
+
+    User.findById(userId).then((user) => {
+        createActivityLog(
+            user._id,
+            projectId,
+            boardId,
+            null,
+            // todo:get the row's title and add it to the description below
+            `${user.name} has added a new update task`,
+            ACTIVITY_LOG_TYPES.NEW
+        )
+    })
 
     res.status(204).end()
 })
@@ -346,14 +420,25 @@ exports.getAllUpdateTasksOfACell = asyncCatch(async (req, res, next) => {
 })
 
 exports.removeUpdateTask = asyncCatch(async (req, res, next) => {
-    const { updateTaskId } = req.params
+    const { userId, projectId, boardId, cellId, updateTaskId } = req.params
     removeUpdateTaskFunc(updateTaskId)
+
+    User.findById(userId).then((user) => {
+        createActivityLog(
+            user._id,
+            projectId,
+            boardId,
+            cellId,
+            `${user.name} has removed an update task`,
+            ACTIVITY_LOG_TYPES.REMOVE
+        )
+    })
     res.status(204).end()
 })
 
 exports.addNewRow = asyncCatch(async (req, res, next) => {
     const { rowHeaderModel, cells } = req.body
-    const { projectId, boardId } = req.params
+    const { userId, projectId, boardId } = req.params
 
     // update the updatedAt in project
     Project.findById(projectId).then((project) => {
@@ -373,11 +458,23 @@ exports.addNewRow = asyncCatch(async (req, res, next) => {
     board.cells.push(newCellIds)
     board.markModified('cells')
     await board.save()
+
+    User.findById(userId).then((user) => {
+        createActivityLog(
+            user._id,
+            projectId,
+            boardId,
+            null,
+            `${user.name} has added "${rowHeaderModel.title}" row`,
+            ACTIVITY_LOG_TYPES.NEW
+        )
+    })
+
     res.status(200).json(newCellIds)
 })
 
 exports.addNewColumn = asyncCatch(async (req, res, next) => {
-    const { columnHeaderModel, cells } = req.body
+    const { userId, columnHeaderModel, cells } = req.body
     const { projectId, boardId } = req.params
 
     // update the updatedAt in project
@@ -401,15 +498,27 @@ exports.addNewColumn = asyncCatch(async (req, res, next) => {
 
     board.markModified('cells')
     await board.save()
+
+    User.findById(userId).then((user) => {
+        createActivityLog(
+            user._id,
+            projectId,
+            boardId,
+            null,
+            `${user.name} has added a new column "${columnHeaderModel.title}"`,
+            ACTIVITY_LOG_TYPES.NEW
+        )
+    })
+
     res.status(200).json(newCellIds)
 })
 
 exports.removeColumn = asyncCatch(async (req, res, next) => {
-    const { boardId, columnPosition } = req.params
+    const { userId, projectId, boardId, columnPosition } = req.params
     const board = await Board.findById(boardId).populate('cells', 'Cell')
     if (!board) throw new AppError('Unable to find board', 404)
 
-    board.columnCells.splice(columnPosition, 1)
+    const deletedColumn = board.columnCells.splice(columnPosition, 1)[0]
     board.markModified('columnCells')
 
     await Promise.all(
@@ -420,42 +529,96 @@ exports.removeColumn = asyncCatch(async (req, res, next) => {
     board.markModified('cells')
     await board.save()
 
+    User.findById(userId).then((user) => {
+        createActivityLog(
+            user._id,
+            projectId,
+            boardId,
+            null,
+            `${user.name} has removed "${deletedColumn.title}" column`,
+            ACTIVITY_LOG_TYPES.REMOVE
+        )
+    })
+
     res.status(204).end()
 })
 
 exports.updateColumn = asyncCatch(async (req, res, next) => {
-    const { boardId, columnPosition } = req.params
+    const { userId, projectId, boardId, columnPosition } = req.params
     const { description, title } = req.body.nameValuePairs
 
     const board = await Board.findById(boardId)
     if (!board) throw new AppError('Unable to find board', 404)
 
-    if (description) board.columnCells[columnPosition].description = description
-    if (title) board.columnCells[columnPosition].title = title
+    if (description) {
+        board.columnCells[columnPosition].description = description
+        // create activity log
+        User.findById(userId).then((user) => {
+            createActivityLog(
+                user._id,
+                projectId,
+                boardId,
+                null,
+                `${user.name} has changed column "${board.columnCells[columnPosition].title}" description`,
+                ACTIVITY_LOG_TYPES.CHANGE
+            )
+        })
+    }
+    if (title) {
+        const oldTitle = board.columnCells[columnPosition].title
+        board.columnCells[columnPosition].title = title
+        // create activity log
+        User.findById(userId).then((user) => {
+            createActivityLog(
+                user._id,
+                projectId,
+                boardId,
+                null,
+                `${user.name} has renamed "${oldTitle}" column to "${title}`,
+                ACTIVITY_LOG_TYPES.CHANGE
+            )
+        })
+    }
     board.markModified('columnCells')
     await board.save()
+
     res.status(204).end()
 })
 
 exports.updateRow = asyncCatch(async (req, res, next) => {
-    const { boardId, rowPosition } = req.params
+    const { userId, projectId, boardId, rowPosition } = req.params
     const { newTitle } = req.body.nameValuePairs
 
     const board = await Board.findById(boardId)
     if (!board) throw new AppError('Unable to find board', 404)
 
-    if (newTitle) board.rowCells[rowPosition] = newTitle
-    board.markModified('rowCells')
-    await board.save()
+    if (newTitle) {
+        const oldTitle = board.rowCells[rowPosition]
+        board.rowCells[rowPosition] = newTitle
+        board.markModified('rowCells')
+        await board.save()
+
+        User.findById(userId).then((user) => {
+            createActivityLog(
+                user._id,
+                projectId,
+                boardId,
+                null,
+                `${user.name} has renamed "${oldTitle}" row to "${newTitle}`,
+                ACTIVITY_LOG_TYPES.CHANGE
+            )
+        })
+    }
+
     res.status(204).end()
 })
 
 exports.removeRow = asyncCatch(async (req, res, next) => {
-    const { rowPosition, boardId } = req.params
+    const { userId, projectId, rowPosition, boardId } = req.params
     const board = await Board.findById(boardId).populate('cells', 'Cell')
     if (!board) throw new AppError('Unable to find board', 404)
 
-    board.rowCells.splice(rowPosition, 1)
+    const deletedRow = board.rowCells.splice(rowPosition, 1)[0]
     board.markModified('rowCells')
 
     const deletedCells = board.cells.splice(rowPosition, 1)[0]
@@ -463,12 +626,25 @@ exports.removeRow = asyncCatch(async (req, res, next) => {
     board.markModified('cells')
     await board.save()
 
+    User.findById(userId).then((user) => {
+        createActivityLog(
+            user._id,
+            projectId,
+            boardId,
+            null,
+            `${user.name} has removed "${deletedRow}" row`,
+            ACTIVITY_LOG_TYPES.REMOVE
+        )
+    })
+
     res.status(204).end()
 })
 
 exports.saveNewProject = asyncCatch(async (req, res, next) => {
+    const { userId } = req.params
     const { boards, chosenPosition, memberIds, adminIds, creatorId, title } =
         req.body
+
     const promises = await Promise.all(
         boards.map(async (board) => await saveABoard(board))
     )
@@ -492,6 +668,17 @@ exports.saveNewProject = asyncCatch(async (req, res, next) => {
             path: 'cells',
             model: 'Cell',
         },
+    })
+
+    User.findById(userId).then((user) => {
+        createActivityLog(
+            userId,
+            newProject._id,
+            null,
+            null,
+            `${user.name} has created the project`,
+            ACTIVITY_LOG_TYPES.NEW
+        )
     })
 
     res.status(200).json(newProject)
@@ -571,7 +758,6 @@ exports.getMemberOfProject = asyncCatch(async (req, res, next) => {
     )
 
     const listMember = await Promise.all(promises)
-    console.log('here is list member: ', listMember)
     res.status(200).json(listMember)
 })
 
@@ -606,7 +792,15 @@ const sendNotificationOnReplyMemberRequest = async (
         // add member to project
         project.memberIds.push(sender._id)
         await project.save()
-        console.log(project.memberIds)
+        // add activity log
+        createActivityLog(
+            receiver._id,
+            projectId,
+            null,
+            null,
+            `${receiver.name} joined the project`,
+            ACTIVITY_LOG_TYPES.UPDATE
+        )
     } else message = `${sender.name} denied to joined project ${project.title}`
 
     await Notification.create({
@@ -671,7 +865,6 @@ exports.requestMemberToJoinProject = asyncCatch(async (req, res, next) => {
 
 exports.replyToJoinProject = asyncCatch(async (req, res, next) => {
     const { userId, projectId, receiverId, response } = req.params
-    console.log(userId, projectId, receiverId, response)
     const senderId = userId
 
     if (response !== 'Accept' && response !== 'Deny')
@@ -695,6 +888,7 @@ exports.replyToJoinProject = asyncCatch(async (req, res, next) => {
             projectId,
             response === 'Accept'
         )
+
         await MemberRequest.findOneAndDelete({
             senderId: { $in: [requestSender._id, replier._id] },
             receiverId: { $in: [requestSender._id, replier._id] },
@@ -705,23 +899,30 @@ exports.replyToJoinProject = asyncCatch(async (req, res, next) => {
     res.status(204).end()
 })
 
+// currently only update project's title
 exports.updateProject = asyncCatch(async (req, res, next) => {
-    const { projectId } = req.params
-    const { boards, chosenPosition, memberIds, adminIds, creatorId, title } =
-        req.body
+    const { userId, projectId } = req.params
+    const { title } = req.body
 
     const project = await Project.findById(projectId)
+
     if (!project) return next(new AppError('Unable to find project', 404))
-
-    project.boards = boards
-    project.chosenPosition = chosenPosition
-    project.memberIds = memberIds
-    project.adminIds = adminIds
-    project.creatorId = creatorId
+    const oldTitle = project.title
     project.title = title
-
     await project.save()
-    res.status(200).end()
+
+    User.findById(userId).then((user) => {
+        createActivityLog(
+            userId,
+            projectId,
+            null,
+            null,
+            `${user.name} has changed project title from "${oldTitle}" to "${title}"`,
+            ACTIVITY_LOG_TYPES.CHANGE
+        )
+    })
+
+    res.status(204).end()
 })
 
 exports.deleteMember = asyncCatch(async (req, res, next) => {
@@ -730,10 +931,20 @@ exports.deleteMember = asyncCatch(async (req, res, next) => {
     if (!project) return next(new AppError('Unable to find project', 404))
 
     const indexMember = project.memberIds.indexOf(memberId)
-    if (indexMember > -1) project.memberIds.splice(indexMember, 1)
-
     const indexAdmin = project.adminIds.indexOf(memberId)
+    if (indexMember > -1) project.memberIds.splice(indexMember, 1)
     if (indexAdmin > -1) project.adminIds.splice(indexAdmin, 1)
+
+    User.findById(memberId).then((user) => {
+        createActivityLog(
+            user._id,
+            projectId,
+            null,
+            null,
+            `${user.name} has been removed from project`,
+            ACTIVITY_LOG_TYPES.REMOVE
+        )
+    })
 
     await project.save()
     res.status(204).end()
@@ -791,6 +1002,16 @@ const sendNotificationOnReplyAdminRequest = async (
         // add member to project
         project.adminIds.push(receiver._id)
         await project.save()
+
+        // add activity log
+        createActivityLog(
+            receiver._id,
+            projectId,
+            null,
+            null,
+            `${receiver.name} has become an admin`,
+            ACTIVITY_LOG_TYPES.UPDATE
+        )
     } else message = `You was denied to be an admin of project ${project.title}`
 
     await Notification.create({
@@ -825,6 +1046,7 @@ exports.replyToAdminRequest = asyncCatch(async (req, res, next) => {
         notificationType: 'AdminRequest',
         link: projectId,
     })
+
     if (isExisted) {
         sendNotificationOnReplyAdminRequest(
             replier,
@@ -844,6 +1066,18 @@ exports.makeAdmin = asyncCatch(async (req, res, next) => {
 
     project.adminIds.push(memberId)
     await project.save()
+
+    User.findById(memberId).then((user) => {
+        createActivityLog(
+            user._id,
+            projectId,
+            null,
+            null,
+            `${user.name} has become an admin`,
+            ACTIVITY_LOG_TYPES.UPDATE
+        )
+    })
+
     res.status(204).end()
 })
 
@@ -855,6 +1089,31 @@ exports.changeAdminToMember = asyncCatch(async (req, res, next) => {
     const index = project.adminIds.indexOf(adminId)
     if (index > -1) project.adminIds.splice(index, 1)
 
+    User.findById(adminId).then((user) => {
+        createActivityLog(
+            user._id,
+            projectId,
+            null,
+            null,
+            `${user.name} is no longer an admin`,
+            ACTIVITY_LOG_TYPES.UPDATE
+        )
+    })
+
     await project.save()
     res.status(204).end()
+})
+
+exports.getActivityLogs = asyncCatch(async (req, res, next) => {
+    const { projectId } = req.params
+
+    const activityLogs = await ActivityLog.find({
+        project: projectId,
+    })
+        .populate('creator', '_id name profileImagePath')
+        .populate('project', '_id title')
+        .populate('board', '_id boardTitle')
+        .sort({ createdAt: -1 })
+
+    res.status(200).json(activityLogs)
 })
