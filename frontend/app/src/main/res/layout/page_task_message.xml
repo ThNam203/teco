@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.page_task_message"
     android:background="@color/primary_color"
     >
     <LinearLayout
@@ -77,6 +76,7 @@
             android:hint="Write your update..."
             android:padding="15dp"
             android:textColor="@color/white"
+            android:textSize="@dimen/normal_textsize"
             android:textColorHint="@color/white" />
         <ImageButton
             android:id="@+id/sendMess"

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:layout_marginBottom="16dp"
     android:background="@drawable/background_update_task"
-    tools:background="@color/black">
+    tools:background="@color/primary_color">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
                 android:layout_width="200dp"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:textSize="16sp"
+                android:textSize="@dimen/normal_textsize"
                 android:singleLine="true"
                 android:textColor="@color/primary_word_color"
                 android:textStyle="bold"
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_more_setting"
-            app:tint="@color/white"
+            app:tint="@color/primary_icon_color"
             android:backgroundTint="@color/transparent"/>
     </LinearLayout>
     <TextView
@@ -62,6 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/primary_word_color"
+        android:textSize="@dimen/normal_textsize"
         android:maxHeight="300dp"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFiles"
@@ -100,9 +101,10 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:textColor="@color/primary_word_color"
+            android:textColor="@color/primary_word_second_color"
             android:text="Like"
             app:icon="@drawable/ic_thumb_up"
+            app:iconTint="@color/primary_icon_second_color"
             android:textAllCaps="false"
             android:background="@color/transparent"/>
         <View
@@ -114,11 +116,11 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:textColor="@color/primary_word_color"
+            android:textColor="@color/primary_word_second_color"
             android:text="Comment"
             android:textAllCaps="false"
             app:icon="@drawable/ic_comment"
-            app:iconTint="@color/primary_icon_color"
+            app:iconTint="@color/primary_icon_second_color"
             android:background="@color/transparent"/>
     </LinearLayout>
 </LinearLayout>

@@ -24,17 +24,18 @@
             android:minHeight="48dp"
             android:src="@drawable/ic_close"
             app:tint="@color/primary_icon_color" />
+
         <TextView
             android:id="@+id/tvTimelineItemTitle"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="283dp"
             android:layout_height="wrap_content"
-            tools:text="Date"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:textAlignment="center"
             android:textColor="@color/primary_word_color"
-            android:textSize="28dp"
-            android:textStyle="bold" />
+            android:textSize="@dimen/large_textsize"
+            android:textStyle="bold"
+            tools:text="Date" />
         <Button
             android:id="@+id/btnSaveTimelineItem"
             android:layout_width="60dp"
@@ -45,6 +46,7 @@
             android:layout_marginEnd="16dp"
             android:text="Save"
             android:textColor="@color/white"
+            android:textSize="@dimen/normal_textsize"
             android:backgroundTint="#0073ea"/>
     </LinearLayout>
     <View
@@ -63,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add time"
-            android:textSize="20sp"
+            android:textSize="@dimen/normal_textsize"
             android:textColor="@color/primary_word_color"/>
         <TextView
             android:id="@+id/tvTimelineValue"
@@ -71,7 +73,7 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             tools:text="09:40PM"
-            android:textSize="20sp"
+            android:textSize="@dimen/normal_textsize"
             android:layout_gravity="end"
             android:textColor="@color/primary_word_color"/>
     </LinearLayout>

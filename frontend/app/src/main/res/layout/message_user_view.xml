@@ -28,7 +28,7 @@
                 android:paddingRight="12dp"
                 tools:text="This is a Message"
                 android:textColor="#ffffff"
-                android:textSize="16sp" />
+                android:textSize="@dimen/normal_textsize" />
     </androidx.cardview.widget.CardView>
 
     <TextView

@@ -21,7 +21,8 @@
             android:letterSpacing="0.05"
             android:textColor="@color/primary_word_color"
             android:gravity="center"
-            android:textSize="20sp"/>
+            android:textStyle="bold"
+            android:textSize="@dimen/large_textsize"/>
         <ImageButton
             android:id="@+id/btnClose"
             android:layout_width="wrap_content"
@@ -51,6 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add board"
+                android:textSize="@dimen/small_textsize"
                 android:layout_margin="16dp"
                 android:textColor="@color/primary_word_color"/>
             <LinearLayout
@@ -58,9 +60,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:background="@drawable/curved_big_background"
-                android:backgroundTint="@color/primary_splitter_color"
+                android:backgroundTint="@color/primary_second_color"
                 android:padding="16dp"
-                android:layout_marginHorizontal="16dp">
+                android:layout_marginHorizontal="16dp"
+                android:elevation="5dp">
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -77,6 +80,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Board"
+                        android:textSize="@dimen/small_textsize"
                         android:textStyle="bold"
                         android:textColor="@color/primary_word_color"/>
                     <TextView
@@ -85,11 +89,13 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="Organize your workload in any way you like to"
+                        android:textSize="@dimen/small_textsize"
                         android:textColor="@color/primary_word_second_color"/>
                     <TextView
                         android:id="@+id/btnNewBoard"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/small_textsize"
                         android:text="+ Add new board"
                         android:textColor="@color/primary_word_third_color"/>
                 </LinearLayout>

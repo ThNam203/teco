@@ -17,8 +17,8 @@
             android:text="Your teammates"
             android:gravity="center_horizontal"
             android:layout_gravity="center"
-            android:textColor="@color/white"
-            android:textSize="28dp"
+            android:textColor="@color/primary_word_color"
+            android:textSize="@dimen/large_textsize"
             android:textStyle="bold" />
         <ImageButton
             android:id="@+id/btn_back"
@@ -56,7 +56,7 @@
             android:layout_gravity="center"
             android:background="@color/transparent"
             android:textColor="@color/primary_word_color"
-            android:textSize="28dp"
+            android:textSize="@dimen/large_textsize"
             android:textStyle="bold" />
         <TextView
             android:layout_width="300dp"
@@ -66,6 +66,6 @@
             android:layout_gravity="center"
             android:background="@color/transparent"
             android:textColor="@color/primary_word_color"
-            android:textSize="24dp"/>
+            android:textSize="@dimen/normal_textsize"/>
     </LinearLayout>
 </LinearLayout>

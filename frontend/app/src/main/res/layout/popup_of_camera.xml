@@ -13,7 +13,7 @@
         android:layout_marginVertical="15dp"
         android:text="Choose avatar"
         android:textColor="@color/primary_word_color"
-        android:textSize="32dp"
+        android:textSize="@dimen/large_textsize"
         android:textStyle="bold"
         android:paddingBottom="5dp"/>
     <TextView
@@ -24,7 +24,7 @@
         android:paddingVertical="5dp"
         android:text="Open camera"
         android:textColor="@color/primary_word_color"
-        android:textSize="24dp"
+        android:textSize="@dimen/normal_textsize"
         android:paddingBottom="5dp"
         android:clickable="true"
         android:focusable="true"
@@ -37,7 +37,7 @@
         android:paddingHorizontal="20dp"
         android:paddingVertical="5dp"
         android:textColor="@color/primary_word_color"
-        android:textSize="24dp"
+        android:textSize="@dimen/normal_textsize"
         android:paddingBottom="5dp"
         android:clickable="true"
         android:focusable="true"

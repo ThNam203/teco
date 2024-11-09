@@ -6,6 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Updates"
+    android:textSize="@dimen/small_textsize"
     android:padding="8dp"
     android:backgroundTint="@color/primary_second_color"
     app:icon="@drawable/ic_add_message"

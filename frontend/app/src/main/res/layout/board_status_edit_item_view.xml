@@ -29,6 +29,7 @@
         android:textColor="@color/white"
         android:singleLine="true"
         tools:text="LSDFL:SDKJFL:SKDJFLSDJFL:asdfasdSDKJF:LSDJF"
+        android:textSize="@dimen/normal_textsize"
         android:background="@color/grey"/>
     <ImageButton
         android:id="@+id/btnDelete"

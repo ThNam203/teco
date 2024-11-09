@@ -28,31 +28,31 @@
                     android:id="@+id/image_profile_border"
                     android:visibility="gone"
                     android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    app:cardCornerRadius="250dp">
+                    android:layout_margin="10sp"
+                    android:layout_width="100sp"
+                    android:layout_height="100sp"
+                    app:cardCornerRadius="250sp">
                     <ImageView
                         android:id="@+id/image_profile"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="100sp"
+                        android:layout_height="100sp"
                         android:scaleType="centerCrop"/>
                 </androidx.cardview.widget.CardView>
                 <TextView
                     android:id="@+id/default_image_profile"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="100sp"
+                    android:layout_height="100sp"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_margin="10dp"
+                    android:layout_margin="10sp"
                     android:background="@drawable/background_btn_circle"
                     android:backgroundTint="@color/teal_200"
                     android:contentDescription="btn profile"
                     android:text="N"
                     android:textAllCaps="true"
                     android:textStyle="bold"
-                    android:textColor="@color/primary_word_color"
-                    android:textSize="32dp"
+                    android:textColor="@color/white"
+                    android:textSize="36sp"
                     android:visibility="visible"/>
 
                 <TextView
@@ -62,25 +62,25 @@
                     android:layout_gravity="center"
                     android:text="Name"
                     android:textColor="@color/primary_word_color"
-                    android:textSize="24dp"
+                    android:textSize="@dimen/large_textsize"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="25dp"
+                    android:layout_marginBottom="25sp"
                     android:text="View Profile"
                     android:textColor="@color/primary_word_second_color"
-                    android:textSize="24dp" />
+                    android:textSize="@dimen/large_textsize" />
             </LinearLayout>
 
             <LinearLayout
                     android:id="@+id/btn_inbox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20sp"
+                    android:layout_marginRight="20sp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/background_btn_stroke"
                     android:orientation="horizontal">
@@ -108,7 +108,7 @@
                             android:layout_marginLeft="5dp"
                             android:text="Inbox"
                             android:textColor="@color/primary_word_color"
-                            android:textSize="24dp" />
+                            android:textSize="@dimen/normal_textsize" />
 
                         <TextView
                             android:id="@+id/desc_inbox"
@@ -117,7 +117,7 @@
                             android:layout_marginLeft="5dp"
                             android:text="No new updates"
                             android:textColor="@color/primary_word_second_color"
-                            android:textSize="24dp" />
+                            android:textSize="@dimen/small_textsize" />
 
                     </LinearLayout>
 
@@ -162,7 +162,7 @@
                         android:layout_marginLeft="5dp"
                         android:text="Your Friends"
                         android:textColor="@color/primary_word_color"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/normal_textsize" />
 
                     <TextView
                         android:id="@+id/desc_friend"
@@ -171,7 +171,7 @@
                         android:layout_marginLeft="5dp"
                         android:text="1 person"
                         android:textColor="@color/primary_word_second_color"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/small_textsize" />
 
                 </LinearLayout>
 
@@ -191,7 +191,7 @@
                 android:layout_marginTop="24dp"
                 android:text="Settings"
                 android:textColor="@color/primary_word_color"
-                android:textSize="28dp"
+                android:textSize="@dimen/large_textsize"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -368,7 +368,7 @@
                 android:paddingVertical="5dp"
                 android:text="Log out"
                 android:textColor="@color/white"
-                android:textSize="24dp"
+                android:textSize="@dimen/normal_textsize"
                 android:paddingHorizontal="10dp"/>
         </LinearLayout>
 

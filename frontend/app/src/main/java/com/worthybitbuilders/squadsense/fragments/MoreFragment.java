@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.activities.FirstScreenActivity;
 import com.worthybitbuilders.squadsense.activities.FriendActivity;
 import com.worthybitbuilders.squadsense.activities.InboxActivity;
 import com.worthybitbuilders.squadsense.activities.LogInActivity;
@@ -69,7 +70,7 @@ public class MoreFragment extends Fragment {
             }
         });
         binding.btnLogout.setOnClickListener(view -> {
-            ActivityUtils.switchToActivity(getContext(), LogInActivity.class);
+            ActivityUtils.switchToActivity(getContext(), FirstScreenActivity.class);
             SharedPreferencesManager.clearData();
             SocketClient.getInstance().disconnect();
             getActivity().finish();

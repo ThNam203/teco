@@ -10,13 +10,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@drawable/background_input"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="15dp">
+        android:layout_marginLeft="15sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginRight="15sp">
 
         <ImageButton
             android:id="@+id/btn_back"
-            android:layout_width="30dp"
+            android:layout_width="30sp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:backgroundTint="@color/transparent"
@@ -35,7 +35,7 @@
             android:textColor="@color/primary_word_color"
             android:textColorHint="@color/primary_word_second_color"
             android:background="@color/transparent"
-            android:textSize="20dp" />
+            android:textSize="@dimen/normal_textsize" />
     </LinearLayout>
     <ImageView
         android:layout_width="250dp"
@@ -55,7 +55,7 @@
         android:textAlignment="center"
         android:background="@color/transparent"
         android:textColor="@color/primary_word_color"
-        android:textSize="32dp"
+        android:textSize="@dimen/super_large_textsize"
         android:textStyle="bold"
         android:layout_marginTop="20dp"
         android:contentDescription="describe page"/>

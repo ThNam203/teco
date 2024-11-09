@@ -50,6 +50,8 @@ public class MemberActivity extends AppCompatActivity {
     MemberAdapter memberAdapter;
     List<UserModel> listMember = new ArrayList<>();
     List<String> listAdminId = new ArrayList<>();
+
+    String creatorId;
     ProjectActivityViewModel projectActivityViewModel;
 
     EventChecker eventChecker;
@@ -100,6 +102,8 @@ public class MemberActivity extends AppCompatActivity {
                 listMember.clear();
                 listMember.addAll(listMemberData);
                 listMember.sort(Comparator.comparing(UserModel::getName));
+                creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
+                memberAdapter.setCreatorId(creatorId);
                 LoadListMemberView();
                 eventChecker.markEventAsCompleteAndDoActionIfNeeded(LOAD_MEMBER_CODE);
             }

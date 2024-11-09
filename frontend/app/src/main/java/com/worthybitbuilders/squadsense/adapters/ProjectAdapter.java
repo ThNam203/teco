@@ -18,22 +18,26 @@ import java.util.List;
 
 public class ProjectAdapter extends RecyclerView.Adapter {
     private List<MinimizedProjectModel> data;
-    private ProjectItemViewHolder.ClickHandler handler;
+    private ProjectItemViewHolder.ClickHandler clickHandler;
+    private ProjectItemViewHolder.LongClickHandler longClickHandler;
 
-    public ProjectAdapter(List<MinimizedProjectModel> data, ProjectItemViewHolder.ClickHandler handler) {
+    public ProjectAdapter(List<MinimizedProjectModel> data,
+                          ProjectItemViewHolder.ClickHandler clickHandler,
+                          ProjectItemViewHolder.LongClickHandler longClickHandler) {
         this.data = data;
-        this.handler = handler;
+        this.clickHandler = clickHandler;
+        this.longClickHandler = longClickHandler;
     }
 
     public void setData(List<MinimizedProjectModel> data) {
-        this.data.addAll(data);
+        this.data = data;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_project_item_view, parent, false);
-        return new ProjectItemViewHolder(layout, this.handler);
+        return new ProjectItemViewHolder(layout, this.clickHandler, this.longClickHandler);
     }
 
     @Override
@@ -51,13 +55,16 @@ public class ProjectAdapter extends RecyclerView.Adapter {
     public static class ProjectItemViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvTitle;
         private final TextView tvLastUpdate;
-        private final ClickHandler handler;
+        private final ClickHandler clickHandler;
+        private final LongClickHandler longClickHandler;
 
-        public ProjectItemViewHolder(@NonNull View itemView, ClickHandler handler) {
+
+        public ProjectItemViewHolder(@NonNull View itemView, ClickHandler clickHandler, LongClickHandler longClickHandler) {
             super(itemView);
             this.tvTitle = itemView.findViewById(R.id.projectTitle);
             this.tvLastUpdate = itemView.findViewById(R.id.projectLastUpdate);
-            this.handler = handler;
+            this.clickHandler = clickHandler;
+            this.longClickHandler = longClickHandler;
         }
 
         public void bind(MinimizedProjectModel projectModel) {
@@ -65,11 +72,23 @@ public class ProjectAdapter extends RecyclerView.Adapter {
 
             String dateString = CustomUtils.mongooseDateToFormattedString(projectModel.getUpdatedAt());
             tvLastUpdate.setText("Last updated: " + dateString);
-            itemView.setOnClickListener(view -> this.handler.onClick(projectModel.get_id()));
+            itemView.setOnClickListener(view -> this.clickHandler.onClick(projectModel.get_id()));
+            itemView.setOnLongClickListener(view -> {
+                if(longClickHandler != null)
+                {
+                    this.longClickHandler.onLongClick(view, projectModel.get_id());
+                    return true;
+                }
+                return false;
+            });
         }
 
         public interface ClickHandler {
             void onClick(String _id);
+        }
+
+        public interface LongClickHandler {
+            void onLongClick(View view, String _id);
         }
     }
 }

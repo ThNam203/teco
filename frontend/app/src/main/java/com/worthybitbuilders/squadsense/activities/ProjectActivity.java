@@ -380,7 +380,8 @@ public class ProjectActivity extends AppCompatActivity {
                         thisDialog.dismiss();
                         Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
                         loadingDialog.show();
-                        projectActivityViewModel.removeProject(new ProjectActivityViewModel.ApiCallHandlers() {
+                        String projectId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID);
+                        projectActivityViewModel.removeProject(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
                             @Override
                             public void onSuccess() {
                                 ToastUtils.showToastSuccess(ProjectActivity.this, "Project deleted", Toast.LENGTH_SHORT);
@@ -615,6 +616,7 @@ public class ProjectActivity extends AppCompatActivity {
                 public void onSuccess() {
                     loadingDialog.dismiss();
                     isNewProjectCreateRequest = false;
+                    saveRecentAccessProject(projectActivityViewModel.getProjectId());
                 }
 
                 @Override
@@ -665,6 +667,7 @@ public class ProjectActivity extends AppCompatActivity {
                 if (position == projectActivityViewModel.getProjectModel().getChosenPosition()) {
                     boardViewModel.setBoardTitle(newTitle);
                     activityBinding.btnShowTables.setText(newTitle);
+
                 }
             }
 
@@ -1308,5 +1311,21 @@ public class ProjectActivity extends AppCompatActivity {
         dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialog.show();
+    }
+
+    private void saveRecentAccessProject(String projectId)
+    {
+        if(projectId == null) return;
+        userViewModel.saveRecentProjectId(projectId, new UserViewModel.DefaultCallback() {
+            @Override
+            public void onSuccess() {
+                //just save recent access and do no thing when success
+            }
+
+            @Override
+            public void onFailure(String message) {
+                ToastUtils.showToastError(ProjectActivity.this, message, Toast.LENGTH_SHORT);
+            }
+        });
     }
 }

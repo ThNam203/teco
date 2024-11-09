@@ -40,10 +40,10 @@ public interface ProjectService {
     @GET("{userId}/project/{projectId}")
     Call<ProjectModel> getProjectById(@Path("userId") String userId, @Path("projectId") String projectId);
 
-    @GET("{userId}/project/get-member/{projectId}")
+    @GET("{userId}/project/{projectId}/get-member")
     Call<List<UserModel>> getMember(@Path("userId") String userId, @Path("projectId") String projectId);
 
-    @DELETE("{userId}/project/delete-member/{projectId}/{memberId}")
+    @DELETE("{userId}/project/{projectId}/delete-member/{memberId}")
     Call<Void> deleteMember(@Path("userId") String userId, @Path("projectId") String projectId, @Path("memberId") String memberId);
 
     @POST("{userId}/project")
@@ -52,22 +52,22 @@ public interface ProjectService {
     @POST("{userId}/project/{projectId}")
     Call<Void> updateProject(@Path("userId") String userId, @Path("projectId") String projectId, @Body ProjectModel projectModel);
 
-    @POST("{userId}/project/request-member/{projectId}/{receiverId}")
+    @POST("{userId}/project/{projectId}/request-member/{receiverId}")
     Call<Void> requestMemberToJoinProject(@Path("userId") String userId, @Path("projectId") String projectId, @Path("receiverId") String receiverId);
 
-    @POST("{userId}/project/request-admin/{projectId}")
+    @POST("{userId}/project/{projectId}/request-admin")
     Call<Void> requestAdmin(@Path("userId") String userId, @Path("projectId") String projectId);
 
-    @POST("{userId}/project/make-admin/{projectId}/{memberId}")
+    @POST("{userId}/project/{projectId}/make-admin/{memberId}")
     Call<Void> makeAdmin(@Path("userId") String userId, @Path("projectId") String projectId, @Path("memberId") String memberId);
 
-    @POST("{userId}/project/change-admin-to-member/{projectId}/{adminId}")
+    @POST("{userId}/project/{projectId}/change-admin-to-member/{adminId}")
     Call<Void> changeAdminToMember(@Path("userId") String userId, @Path("projectId") String projectId, @Path("adminId") String adminId);
 
-    @POST("{userId}/project/reply-to-admin-request/{projectId}/{memberId}/{response}")
+    @POST("{userId}/project/{projectId}/reply-to-admin-request/{memberId}/{response}")
     Call<Void> replyToAdminRequest(@Path("userId") String userId, @Path("projectId") String projectId, @Path("memberId") String memberId, @Path("response") String response);
 
-    @POST("{userId}/project/reply-join-project/{projectId}/{receiverId}/{response}")
+    @POST("{userId}/project/{projectId}/reply-join-project/{receiverId}/{response}")
     Call<String> replyToJoinProject(@Path("userId") String userId, @Path("projectId") String projectId, @Path("receiverId") String receiverId, @Path("response") String response);
     /** Send a request and get a new empty board from server */
     @POST("{userId}/project/{projectId}/board")

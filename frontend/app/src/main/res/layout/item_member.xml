@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp"
-    android:background="@drawable/shape_update">
+    android:background="@drawable/shape_update"
+    android:elevation="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,25 +29,33 @@
                     android:src="@drawable/ic_user"/>
             </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/member_name"
+            <LinearLayout
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Name"
-                android:textColor="@color/primary_word_color"
-                android:textSize="24dp"
-                android:textStyle="bold" />
-            <ImageView
-                android:id="@+id/icon_admin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:backgroundTint="@color/transparent"
-                android:minHeight="48dp"
-                android:src="@drawable/ic_admin"
-                app:tint="@color/primary_icon_color" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/member_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Name"
+                    android:textColor="@color/primary_word_color"
+                    android:textSize="@dimen/normal_textsize"
+                    android:textStyle="bold" />
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/member_role"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Creator"
+                    android:textColor="@color/primary_word_second_color"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
             <ImageButton
                 android:id="@+id/btn_more"
                 android:layout_width="wrap_content"

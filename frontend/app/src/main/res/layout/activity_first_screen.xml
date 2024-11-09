@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.FirstScreenActivity"
+    android:orientation="vertical"
+    android:background="@color/primary_color">
+
+    <ImageView
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="30dp"
+        android:background="@color/transparent"
+        android:src="@drawable/image_first_screen" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="80dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/transparent"
+            android:text="Build Awesome Plans"
+            android:textAlignment="center"
+            android:textColor="@color/primary_word_color"
+            android:textSize="@dimen/super_large_textsize"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Let's put your creativity on the development highway"
+            android:textAlignment="center"
+            android:background="@color/transparent"
+            android:textColor="@color/primary_word_color"
+            android:textSize="@dimen/normal_textsize"
+            android:layout_marginBottom="30dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnLogin"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_btn_stroke"
+                android:backgroundTint="@color/black"
+                android:text="Login"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="@dimen/normal_textsize"
+                android:layout_marginRight="10dp"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSignup"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_btn_corner"
+                android:backgroundTint="@color/black"
+                android:text="Signup"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/normal_textsize" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

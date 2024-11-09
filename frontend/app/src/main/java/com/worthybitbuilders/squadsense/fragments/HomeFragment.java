@@ -33,13 +33,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.worthybitbuilders.squadsense.MainActivity;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.activities.AddBoardActivity;
+import com.worthybitbuilders.squadsense.activities.MemberActivity;
 import com.worthybitbuilders.squadsense.activities.ProjectActivity;
 import com.worthybitbuilders.squadsense.activities.SearchActivity;
 import com.worthybitbuilders.squadsense.adapters.ProjectAdapter;
 import com.worthybitbuilders.squadsense.databinding.FragmentHomeBinding;
 import com.worthybitbuilders.squadsense.databinding.MemberMoreOptionsBinding;
-import com.worthybitbuilders.squadsense.databinding.PopupBtnAddBinding;
+import com.worthybitbuilders.squadsense.databinding.MinimizeProjectMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.databinding.PopupOptionViewProjectBinding;
+import com.worthybitbuilders.squadsense.databinding.ProjectMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.models.MinimizedProjectModel;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.models.board_models.ProjectModel;
@@ -50,6 +52,7 @@ import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.MainActivityViewModel;
+import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
 import java.util.ArrayList;
@@ -60,6 +63,7 @@ public class HomeFragment extends Fragment {
     private ProjectAdapter projectAdapter;
     private MainActivityViewModel viewModel;
 
+    private ProjectActivityViewModel projectActivityViewModel;
     private FriendViewModel friendViewModel;
     private UserViewModel userViewModel;
     private List<AppCompatButton> listOption = new ArrayList<>();
@@ -76,16 +80,20 @@ public class HomeFragment extends Fragment {
         viewModel = new ViewModelProvider(getActivity()).get(MainActivityViewModel.class);
         friendViewModel = new ViewModelProvider(getActivity()).get(FriendViewModel.class);
         userViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
+        projectActivityViewModel = new ViewModelProvider(getActivity()).get(ProjectActivityViewModel.class);
         binding.rvProjects.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        projectAdapter = new ProjectAdapter(listMinimizeProject, _id -> {
+        projectAdapter = new ProjectAdapter(
+                listMinimizeProject,
+                _id -> {
             SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID, _id);
             saveRecentAccessProject(_id);
             Intent intent = new Intent(getContext(), ProjectActivity.class);
             intent.putExtra("whatToDo", "fetch");
             intent.putExtra("projectId", _id);
             startActivity(intent);
-        });
+        },
+                (view, _id) -> showMinimizeProjectOptions(view, _id));
 
         binding.btnOptionView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,13 +105,12 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 btn_addperson_showPopup();
-
             }
         });
         binding.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnAdd_showPopup(view);
+                ActivityUtils.switchToActivity(getContext(), AddBoardActivity.class);
             }
         });
         binding.labelSearch.setOnTouchListener(new View.OnTouchListener() {
@@ -173,22 +180,6 @@ public class HomeFragment extends Fragment {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void btnAdd_showPopup(View anchor) {
-        PopupBtnAddBinding popupBtnAddBinding = PopupBtnAddBinding.inflate(getLayoutInflater());
-        PopupWindow popupWindow = new PopupWindow(popupBtnAddBinding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popupWindow.setAnimationStyle(R.style.PopupAnimationRight);
-        popupWindow.setElevation(50);
-
-        popupBtnAddBinding.btnAddItem.setOnClickListener(view -> btn_add_item_showPopup());
-        popupBtnAddBinding.btnAddBoard.setOnClickListener(view -> btn_add_board_showPopup());
-
-        popupWindow.setTouchable(true);
-        popupWindow.setOutsideTouchable(true);
-        int xOffset = - 3 * anchor.getWidth();
-        int yOffset = - 3 * anchor.getHeight();
-        popupWindow.showAsDropDown(anchor, xOffset, yOffset);
-    }
 
     private void btn_addperson_showPopup() {
         final Dialog dialog = new Dialog(getActivity());
@@ -245,31 +236,6 @@ public class HomeFragment extends Fragment {
         dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialog.show();
-    }
-
-    private void btn_add_item_showPopup() {
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.popup_add_new_item);
-
-        //Set activity of button in dialog here
-        ImageButton btnClosePopup = (ImageButton) dialog.findViewById(R.id.btn_close_popup);
-        btnClosePopup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
-        dialog.show();
-    }
-
-    private void btn_add_board_showPopup() {
-        ActivityUtils.switchToActivity(getContext(), AddBoardActivity.class);
     }
 
     private void btnOptionView_showPopup() {
@@ -399,6 +365,12 @@ public class HomeFragment extends Fragment {
                     toRemove.forEach(item -> {
                         listMinimizeProject.remove(item);
                     });
+
+                    listMinimizeProject.sort((project1, project2) -> {
+                        int index1 = dataRecentProjectIds.indexOf(project1.get_id());
+                        int index2 = dataRecentProjectIds.indexOf(project2.get_id());
+                        return Integer.compare(index1, index2);
+                    });
                     LoadListMinimizeProjectView();
                     eventChecker.markEventAsCompleteAndDoActionIfNeeded(GET_RECENT_PROJECT_ID_CODE);
                 }
@@ -441,6 +413,54 @@ public class HomeFragment extends Fragment {
 
     private void labelSearch_showActivity() {
         ActivityUtils.switchToActivity(getContext(), SearchActivity.class);
+    }
+
+    private void showMinimizeProjectOptions(View anchor, String projectId) {
+        MinimizeProjectMoreOptionsBinding binding = MinimizeProjectMoreOptionsBinding.inflate(getLayoutInflater());
+        PopupWindow popupWindow = new PopupWindow(binding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popupWindow.setElevation(50);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        int xOffset = anchor.getWidth(); // Offset from the right edge of the anchor view
+        int yOffset = - anchor.getHeight() / 2;
+        popupWindow.showAsDropDown(anchor, xOffset, yOffset);
+
+        binding.btnDeleteProject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String titleConfirmDialog = "Delete";
+                String contentConfirmDialog = "Do you want to delete this project ?";
+                DialogUtils.showConfirmDialogDelete(getContext(), titleConfirmDialog, contentConfirmDialog, new DialogUtils.ConfirmAction() {
+                    @Override
+                    public void onAcceptToDo(Dialog thisDialog) {
+                        thisDialog.dismiss();
+                        Dialog loadingDialog = DialogUtils.GetLoadingDialog(getContext());
+                        loadingDialog.show();
+                        projectActivityViewModel.removeProject(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
+                            @Override
+                            public void onSuccess() {
+                                ToastUtils.showToastSuccess(getContext(), "Project deleted", Toast.LENGTH_SHORT);
+                                loadingDialog.dismiss();
+                                getActivity().onBackPressed();
+                            }
+
+                            @Override
+                            public void onFailure(String message) {
+                                ToastUtils.showToastError(getContext(), "You are not allowed to delete this project", Toast.LENGTH_SHORT);
+                                loadingDialog.dismiss();
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onCancel(Dialog thisDialog) {
+                        thisDialog.dismiss();
+                    }
+                });
+            }
+        });
     }
 
     private void saveRecentAccessProject(String projectId)

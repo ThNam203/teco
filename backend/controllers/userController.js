@@ -115,11 +115,21 @@ const saveAccess = async (userId, projectId, timeAccessed) => {
         const index = recentAccess.recentProjectIds.indexOf(projectId)
 
         if (index > -1) {
-            recentAccess.timeAccessed[index] = timeAccessed
+            //delete if exists and push to top of array
+            recentAccess.recentProjectIds.splice(index, 1)
+            recentAccess.timeAccessed.splice(index, 1)
+
+            recentAccess.recentProjectIds.unshift(projectId)
+            recentAccess.timeAccessed.unshift(timeAccessed)
+
             await recentAccess.save()
         } else {
-            recentAccess.recentProjectIds.push(projectId)
-            recentAccess.timeAccessed.push(timeAccessed)
+            recentAccess.recentProjectIds.unshift(projectId)
+            recentAccess.timeAccessed.unshift(timeAccessed)
+
+            if (recentAccess.recentProjectIds.length > 5)
+                recentAccess.recentProjectIds.pop()
+
             await recentAccess.save()
         }
     } else {
@@ -151,31 +161,7 @@ exports.getRecentProjectId = asyncCatch(async (req, res, next) => {
     if (!user) return next(new AppError('No user found!', 400))
 
     const recentAccess = await RecentAccess.findOne({ userId: userId })
-    if (!recentAccess) res.status(200).json([])
-
-    //filter out projects that no longer exist or user is no longer a member of the project
-    recentAccess.recentProjectIds.forEach(async (projectId) => {
-        const project = await Project.findById(projectId)
-        const index = recentAccess.recentProjectIds.indexOf(projectId)
-        if (!project) {
-            recentAccess.recentProjectIds.pull(projectId)
-            recentAccess.timeAccessed.splice(index, 1)
-        } else if (!project.memberIds.includes(userId)) {
-            recentAccess.recentProjectIds.pull(projectId)
-            recentAccess.timeAccessed.splice(index, 1)
-        } else {
-            //filter project that have timeAccessed more than 1 week
-            const timeAccessed = recentAccess.timeAccessed[index]
-            const date = new Date()
-            //total time of a week in milliseconds
-            const AWeekTime = new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000)
-            if (date - timeAccessed > AWeekTime) {
-                recentAccess.recentProjectIds.pull(projectId)
-                recentAccess.timeAccessed.splice(index, 1)
-            }
-        }
-    })
-    await recentAccess.save()
+    if (!recentAccess) return res.status(200).json([])
 
     if (recentAccess.recentProjectIds.length === 0) res.status(200).json([])
     else res.status(200).json(recentAccess.recentProjectIds)

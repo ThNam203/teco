@@ -29,12 +29,13 @@ public class SignUpViewModel extends ViewModel {
                     callback.onSuccess();
                 }
                 else {
+                    ErrorResponse err = null;
                     try {
-                        ErrorResponse err = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                        err = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
                     } catch (IOException e) {
-                        callback.onFailure("Something gone wrong!");
+                        callback.onFailure("Something has gone wrong!");
                     }
-                    callback.onFailure(response.message());
+                    callback.onFailure(err.getMessage());
                 }
             }
 

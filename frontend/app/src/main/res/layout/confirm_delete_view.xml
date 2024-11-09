@@ -21,7 +21,7 @@
             android:layout_gravity="center"
             android:textAlignment="center"
             android:textColor="@color/primary_word_color"
-            android:textSize="28dp"
+            android:textSize="@dimen/large_textsize"
             android:textStyle="bold" />
         <ImageButton
             android:id="@+id/btn_close_popup"
@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="Are you sure to delete"
-        android:textSize="18sp"
+        android:textSize="@dimen/small_textsize"
         android:textColorHint="@color/primary_word_second_color"
         android:textColor="@color/primary_word_color"
         android:layout_margin="32dp"
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="Cancel"
-            android:textSize="18sp"
+            android:textSize="@dimen/normal_textsize"
             android:textColor="@color/primary_word_second_color"
             android:layout_marginBottom="16dp"/>
         <TextView
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="Accept"
-            android:textSize="18sp"
+            android:textSize="@dimen/normal_textsize"
             android:textColor="@color/green"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"/>

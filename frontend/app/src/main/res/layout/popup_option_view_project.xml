@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_page_corner_top_left_and_right">
+    android:background="@color/primary_color">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
                 android:text="Show by"
                 android:textAlignment="center"
                 android:textColor="@color/primary_word_color"
-                android:textSize="24dp"
+                android:textSize="@dimen/large_textsize"
                 android:textStyle="bold" />
         </RelativeLayout>
         <View
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:text="Quick access"
             android:textColor="@color/primary_word_second_color"
-            android:textSize="20dp"
+            android:textSize="@dimen/normal_textsize"
             android:layout_marginLeft="25dp"
             android:layout_marginTop="10dp"/>
         <LinearLayout
@@ -60,7 +60,7 @@
                 android:background="@color/transparent"
                 android:text="Recent"
                 android:textColor="@color/primary_word_color"
-                android:textSize="20dp"
+                android:textSize="@dimen/normal_textsize"
                 android:textAllCaps="false"
                 android:drawableLeft="@drawable/ic_history"
                 android:drawableTint="@color/primary_icon_color"
@@ -79,7 +79,7 @@
                 android:background="@color/transparent"
                 android:text="All projects"
                 android:textColor="@color/primary_word_color"
-                android:textSize="20dp"
+                android:textSize="@dimen/normal_textsize"
                 android:textAllCaps="false"
                 android:drawableLeft="@drawable/ic_all_project"
                 android:drawableTint="@color/primary_icon_color"
@@ -97,7 +97,7 @@
                 android:background="@color/transparent"
                 android:text="My projects"
                 android:textColor="@color/primary_word_color"
-                android:textSize="20dp"
+                android:textSize="@dimen/normal_textsize"
                 android:textAllCaps="false"
                 android:drawableLeft="@drawable/ic_person_outline"
                 android:drawableTint="@color/primary_icon_color"

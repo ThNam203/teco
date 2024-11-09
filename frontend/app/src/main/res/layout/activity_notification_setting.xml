@@ -32,7 +32,7 @@
             android:textAlignment="center"
             android:layout_gravity="center"
             android:textColor="@color/primary_word_color"
-            android:textSize="28dp"
+            android:textSize="@dimen/large_textsize"
             android:textStyle="bold" />
     </LinearLayout>
     <LinearLayout
@@ -65,14 +65,14 @@
                 android:layout_height="wrap_content"
                 android:text="Email notifications"
                 android:textColor="@color/primary_word_color"
-                android:textSize="24dp" />
+                android:textSize="@dimen/normal_textsize" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Received directly to your email"
                 android:textColor="@color/primary_word_second_color"
-                android:textSize="24dp" />
+                android:textSize="@dimen/normal_textsize" />
 
         </LinearLayout>
         <androidx.appcompat.widget.SwitchCompat
@@ -115,14 +115,14 @@
                 android:layout_height="wrap_content"
                 android:text="Mobile notifications"
                 android:textColor="@color/primary_word_color"
-                android:textSize="24dp" />
+                android:textSize="@dimen/normal_textsize" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Received directly on your device"
                 android:textColor="@color/primary_word_second_color"
-                android:textSize="24dp" />
+                android:textSize="@dimen/normal_textsize" />
 
         </LinearLayout>
         <androidx.appcompat.widget.SwitchCompat

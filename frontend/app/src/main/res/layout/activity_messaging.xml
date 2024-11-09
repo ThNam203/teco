@@ -4,7 +4,8 @@
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/primary_color">
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -17,7 +18,8 @@
             android:layout_height="50dp"
             android:backgroundTint="@color/transparent"
             android:minHeight="48dp"
-            android:src="@drawable/ic_arrow_back" />
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/primary_icon_color" />
         <ImageView
             android:id="@+id/chatRoomImage"
             android:layout_width="50dp"
@@ -29,8 +31,9 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:textSize="24dp"
-            android:textColor="@color/black"
+            android:textSize="@dimen/normal_textsize"
+            android:textColor="@color/primary_word_color"
+            android:layout_gravity="center"
             android:layout_marginHorizontal="16dp"/>
         <ImageButton
             android:id="@+id/btnVoiceCall"
@@ -77,8 +80,37 @@
             android:layout_weight="1"
             android:layout_marginHorizontal="8dp"
             android:paddingVertical="12dp"
+            android:paddingHorizontal="10dp"
             android:layout_gravity="center"
             android:background="@drawable/background_enter_message">
+            <ImageButton
+                android:visibility="gone"
+                android:id="@+id/btnAttachFile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_attach_file"
+                app:tint="@color/blue"
+                android:layout_gravity="center"/>
+            <ImageButton
+                android:visibility="gone"
+                android:id="@+id/btnAttachImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_image_outline"
+                app:tint="@color/blue"
+                android:layout_gravity="center"/>
+            <ImageButton
+                android:id="@+id/btnShowMoreIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_arrow_right"
+                app:tint="@color/blue"
+                android:layout_gravity="center"/>
             <EditText
                 android:id="@+id/etEnterMessage"
                 android:layout_marginHorizontal="8dp"
@@ -87,9 +119,13 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:hint="Enter Message"
+                android:textColorHint="@color/primary_word_second_color"
+                android:textColor="@color/primary_word_color"
+                android:textSize="@dimen/normal_textsize"
                 android:inputType="text"
                 android:maxLines="6"
-                tools:ignore="Autofill" />
+                tools:ignore="Autofill"
+                android:layout_gravity="center"/>
 
             <ImageButton
                 android:id="@+id/btnTakeCamera"
@@ -99,15 +135,6 @@
                 android:src="@drawable/ic_camera"
                 app:tint="@color/blue"
                 android:layout_gravity="center"/>
-
-            <ImageButton
-                android:id="@+id/btnAttachFile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:background="?attr/selectableItemBackground"
-                android:src="@drawable/ic_attach_file"
-                app:tint="@color/blue"/>
         </LinearLayout>
 
         <Button
@@ -117,6 +144,7 @@
             android:visibility="gone"
             android:background="?attr/selectableItemBackground"
             android:drawableLeft="@drawable/ic_send"
-            android:drawableTint="@color/blue"/>
+            android:drawableTint="@color/blue"
+            android:layout_gravity="center"/>
     </LinearLayout>
 </LinearLayout>

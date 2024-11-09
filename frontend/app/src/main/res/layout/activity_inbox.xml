@@ -10,14 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:paddingBottom="15dp">
+        android:paddingTop="10sp"
+        android:paddingBottom="15sp">
         <ImageButton
             android:id="@+id/btn_back"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
             android:backgroundTint="@color/transparent"
-            android:minHeight="48dp"
+            android:minHeight="48sp"
             android:src="@drawable/ic_arrow_back"
             app:tint="@color/primary_icon_color" />
         <TextView
@@ -26,11 +26,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Chats"
-            android:paddingLeft="20dp"
+            android:paddingLeft="20sp"
             android:gravity="center_horizontal"
             android:layout_gravity="center"
             android:textColor="@color/primary_word_color"
-            android:textSize="28dp"
+            android:textSize="@dimen/large_textsize"
             android:textStyle="bold" />
         <ImageButton
             android:id="@+id/btn_add_chat"
@@ -78,7 +78,7 @@
             android:layout_gravity="center"
             android:background="@color/transparent"
             android:textColor="@color/primary_word_color"
-            android:textSize="24dp"
+            android:textSize="@dimen/large_textsize"
             android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>

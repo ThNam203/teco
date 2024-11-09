@@ -2,15 +2,22 @@ package com.worthybitbuilders.squadsense.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -37,6 +44,9 @@ public class MessagingActivity extends AppCompatActivity {
     private MessageAdapter messageAdapter;
     private String chatRoomImagePath;
     private String chatRoomTitle;
+
+    private final int OPEN_FILE_REQUEST_CODE = 0;
+    private final int OPEN_IMAGE_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +104,16 @@ public class MessagingActivity extends AppCompatActivity {
             startActivity(callIntent);
         });
 
+        binding.etEnterMessage.setOnClickListener(view -> {
+            binding.btnAttachFile.setVisibility(View.GONE);
+            binding.btnAttachImage.setVisibility(View.GONE);
+            binding.btnShowMoreIcon.setVisibility(View.VISIBLE);
+
+            Animation iconAppear = AnimationUtils.loadAnimation(this, R.anim.animated_fade_visible);
+            binding.btnShowMoreIcon.setAnimation(iconAppear);
+            iconAppear.start();
+        });
+
         binding.etEnterMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -102,11 +122,10 @@ public class MessagingActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int s, int start, int after) {
                 if (charSequence.length() > 0) {
                     binding.btnSend.setVisibility(View.VISIBLE);
-                    binding.btnAttachFile.setVisibility(View.GONE);
                     binding.btnTakeCamera.setVisibility(View.GONE);
+                    binding.etEnterMessage.performClick();
                 } else {
                     binding.btnSend.setVisibility(View.GONE);
-                    binding.btnAttachFile.setVisibility(View.VISIBLE);
                     binding.btnTakeCamera.setVisibility(View.VISIBLE);
                 }
             }
@@ -120,6 +139,28 @@ public class MessagingActivity extends AppCompatActivity {
             messageViewModel.sendNewMessage(message);
             binding.etEnterMessage.setText("");
         }));
+
+        binding.btnAttachFile.setOnClickListener(view -> {
+            openFileStorage();
+        });
+
+        binding.btnAttachImage.setOnClickListener(view -> {
+            openImageStorage();
+        });
+
+        binding.btnShowMoreIcon.setOnClickListener(view -> {
+
+            binding.btnAttachFile.setVisibility(View.VISIBLE);
+            binding.btnAttachImage.setVisibility(View.VISIBLE);
+            binding.btnShowMoreIcon.setVisibility(View.GONE);
+
+            Animation iconAppear = AnimationUtils.loadAnimation(this, R.anim.animated_fade_visible);
+
+            binding.btnAttachFile.setAnimation(iconAppear);
+            binding.btnAttachImage.setAnimation(iconAppear);
+
+            iconAppear.start();
+        });
 
         binding.btnClose.setOnClickListener(view -> finish());
     }
@@ -193,5 +234,50 @@ public class MessagingActivity extends AppCompatActivity {
             messageAdapter.notifyItemInserted(pos);
             binding.rvMessage.scrollToPosition(pos);
         });
+    }
+
+    private boolean checkPermissionAndAskForIt(Context context, String permission, int PERMISSION_REQUEST_CODE) {
+        if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{permission},
+                    PERMISSION_REQUEST_CODE);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void openFileStorage()
+    {
+        Intent myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        myFileIntent.setType("*/*");
+        startActivityIfNeeded(myFileIntent, OPEN_FILE_REQUEST_CODE);
+    }
+
+    private void openImageStorage()
+    {
+        Intent myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        myFileIntent.setType("image/*");
+        startActivityIfNeeded(myFileIntent, OPEN_IMAGE_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode,resultCode, data);
+        switch (requestCode)
+        {
+            case OPEN_FILE_REQUEST_CODE:
+                if(resultCode == RESULT_OK)
+                {
+                    ToastUtils.showToastSuccess(MessagingActivity.this, "file open", Toast.LENGTH_SHORT);
+                }
+                break;
+            case OPEN_IMAGE_REQUEST_CODE:
+                if(resultCode == RESULT_OK)
+                {
+                    ToastUtils.showToastSuccess(MessagingActivity.this, "image open", Toast.LENGTH_SHORT);
+                }
+                break;
+        }
     }
 }

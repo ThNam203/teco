@@ -28,7 +28,7 @@
             tools:text="Nam dep trai"
             android:textColor="@color/white"
             android:textAlignment="center"
-            android:textSize="26dp"
+            android:textSize="@dimen/large_textsize"
             android:textStyle="bold"/>
         <View
             android:layout_width="0dp"

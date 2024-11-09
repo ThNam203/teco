@@ -31,9 +31,9 @@
             android:paddingLeft="15dp"
             android:text="Edit Profile"
             android:layout_gravity="center"
-            android:gravity="center"
             android:textColor="@color/primary_word_color"
-            android:textSize="28dp" />
+            android:textStyle="bold"
+            android:textSize="@dimen/large_textsize" />
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_save_profile"
             android:layout_width="wrap_content"
@@ -44,14 +44,13 @@
             android:text="Save"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textSize="@dimen/normal_textsize"
             android:textStyle="bold"
             tools:ignore="TouchTargetSizeCheck" />
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -92,7 +91,7 @@
                         android:text="N"
                         android:textAllCaps="true"
                         android:textColor="@color/white"
-                        android:textSize="48dp"
+                        android:textSize="48sp"
                         android:textStyle="bold" />
 
                     <ImageButton
@@ -121,7 +120,7 @@
                         android:layout_height="wrap_content"
                         android:text="Full name"
                         android:textColor="@color/primary_word_color"
-                        android:textSize="24dp"
+                        android:textSize="@dimen/normal_textsize"
                         android:padding="10dp"/>
                     <EditText
                         android:id="@+id/name"
@@ -130,10 +129,10 @@
                         android:background="@drawable/background_input"
                         android:hint="Add name"
                         android:padding="10dp"
-                        android:maxLength="15"
+                        android:maxLength="25"
                         android:textColor="@color/primary_word_color"
                         android:textColorHint="@color/primary_word_second_color"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/normal_textsize" />
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -154,7 +153,7 @@
                         android:layout_height="wrap_content"
                         android:text="Introduction"
                         android:textColor="@color/primary_word_color"
-                        android:textSize="24dp"
+                        android:textSize="@dimen/normal_textsize"
                         android:padding="10dp"/>
                     <EditText
                         android:id="@+id/introduction"
@@ -165,7 +164,7 @@
                         android:padding="10dp"
                         android:textColor="@color/primary_word_color"
                         android:textColorHint="@color/primary_word_second_color"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/normal_textsize" />
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -186,7 +185,7 @@
                         android:layout_height="wrap_content"
                         android:text="Email"
                         android:textColor="@color/primary_word_color"
-                        android:textSize="24dp"
+                        android:textSize="@dimen/normal_textsize"
                         android:padding="10dp"/>
                     <EditText
                         android:id="@+id/email"
@@ -200,7 +199,7 @@
                         android:textColor="@color/primary_word_color"
                         android:textColorHint="@color/primary_word_second_color"
                         android:textCursorDrawable="@null"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/normal_textsize" />
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -234,7 +233,7 @@
                         android:maxLength="10"
                         android:textColor="@color/primary_word_color"
                         android:textColorHint="@color/primary_word_second_color"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/normal_textsize" />
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -267,7 +266,7 @@
                         android:maxLength="10"
                         android:textColor="@color/primary_word_color"
                         android:textColorHint="@color/primary_word_second_color"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/normal_textsize" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

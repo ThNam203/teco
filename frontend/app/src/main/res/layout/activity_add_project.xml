@@ -26,19 +26,18 @@
         android:layout_gravity="center"
         android:background="@color/transparent"
         android:textColor="@color/primary_word_color"
-        android:textSize="40dp"
+        android:textSize="@dimen/super_large_textsize"
         android:textStyle="bold" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="You can edit this template as you go"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginHorizontal="25dp"
         android:layout_gravity="center"
         android:textAlignment="center"
         android:background="@color/transparent"
         android:textColor="@color/primary_word_color"
-        android:textSize="24dp" />
+        android:textSize="@dimen/normal_textsize" />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,7 +71,7 @@
                     android:paddingLeft="15dp"
                     android:background="@color/transparent"
                     android:textColor="@color/primary_word_color"
-                    android:textSize="36dp"
+                    android:textSize="@dimen/super_large_textsize"
                     android:textStyle="bold" />
             </LinearLayout>
             <Button
@@ -85,7 +84,7 @@
                 android:text="Create new board"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="20dp" />
+                android:textSize="@dimen/normal_textsize" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

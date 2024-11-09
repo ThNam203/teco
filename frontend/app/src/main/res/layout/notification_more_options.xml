@@ -18,5 +18,6 @@
         android:textColor="@color/primary_word_second_color"
         android:textAllCaps="false"
         android:textStyle="normal"
+        android:textSize="@dimen/small_textsize"
         android:background="@color/transparent"/>
 </LinearLayout>

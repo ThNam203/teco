@@ -23,7 +23,7 @@
     <color name="btn_disabled_color">#e8e8f0</color>
     <color name="btn_enabled_color">#0075e2</color>
     <color name="primary_splitter_color">#ccc</color>
-    <color name="chosen_color">#00aefd</color>
+    <color name="chosen_color">#0075e2</color>
     <color name="darkgrey_translucent">#EE444444</color>
     <color name="toggle_track_on_color">#6ca8f4</color>
     <color name="toggle_track_off_color">#595959</color>
@@ -31,6 +31,11 @@
     <color name="toggle_thumb_off_color">#bababa</color>
     <color name="tablayout_unselected">#fafafa</color>
     <color name="tablayout_selected">#6ca8f4</color>
+    <color name="primary_toast_color">#2c2c2c</color>
+
+    <!--    first screen color     -->
+    <color name="first_screen_stroke_color">#c9c9c9</color>
+    <color name="first_screen_btn_color">#242424</color>
 
     <!--    main primary color     -->
     <color name="blue">#00aefd</color>

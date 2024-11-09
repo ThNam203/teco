@@ -5,4 +5,8 @@
     <dimen name="tableview_default_text_size">14sp</dimen>
     <dimen name="tableview_default_height">50dp</dimen>
     <dimen name="tableview_default_width">60dp</dimen>
+    <dimen name="small_textsize">14sp</dimen>
+    <dimen name="normal_textsize">20sp</dimen>
+    <dimen name="large_textsize">24sp</dimen>
+    <dimen name="super_large_textsize">32sp</dimen>
 </resources>

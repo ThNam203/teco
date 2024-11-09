@@ -29,7 +29,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:textColor="@color/primary_word_color"
-            android:textSize="28sp"
+            android:textSize="@dimen/large_textsize"
             android:textStyle="bold"
             tools:text="Item1" />
         <ImageButton

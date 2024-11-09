@@ -9,7 +9,7 @@
             android:id="@+id/tvColumnTitle"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="@dimen/small_textsize"
             android:textColor="@color/primary_word_color"/>
         <View
             android:layout_width="0dp"

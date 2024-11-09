@@ -41,27 +41,6 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                String inputEmail = charSequence.toString();
-                if(viewModel.IsValidEmail(inputEmail))
-                {
-                    int color = ResourcesCompat.getColor(getResources(), R.color.btn_enabled_color, null);
-                    int textColor = ResourcesCompat.getColor(getResources(), R.color.white, null);
-                    Drawable drawable = binding.btnNext.getBackground();
-                    drawable.setTint(color);
-                    binding.btnNext.setBackground(drawable);
-                    binding.btnNext.setTextColor(textColor);
-                    binding.btnNext.setEnabled(true);
-                }
-                else
-                {
-                    int color = ResourcesCompat.getColor(getResources(), R.color.btn_disabled_color, null);
-                    int textColor = ResourcesCompat.getColor(getResources(), R.color.white, null);
-                    Drawable drawable = binding.btnNext.getBackground();
-                    drawable.setTint(color);
-                    binding.btnNext.setBackground(drawable);
-                    binding.btnNext.setTextColor(textColor);
-                    binding.btnNext.setEnabled(false);
-                }
             }
 
             @Override
@@ -70,22 +49,39 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        binding.btnNext.setOnClickListener((view) -> {
-            if (!binding.etPassword.getText().toString().equals(binding.etRePassword.getText().toString())) {
-                ToastUtils.showToastError(SignUpActivity.this, "The passwords entered do not match", Toast.LENGTH_SHORT);
+        binding.btnSignup.setOnClickListener((view) -> {
+            if(binding.etEmail.getText().toString().isEmpty()){
+                ToastUtils.showToastError(SignUpActivity.this, "Email cannot be empty!", Toast.LENGTH_SHORT);
+                return;
+            }
+            else if(!viewModel.IsValidEmail(binding.etEmail.getText().toString())){
+                ToastUtils.showToastError(SignUpActivity.this, "Invalid email!", Toast.LENGTH_SHORT);
+                return;
+            }
+            else if(binding.name.getText().toString().isEmpty())
+            {
+                ToastUtils.showToastError(SignUpActivity.this, "Username cannot be empty!", Toast.LENGTH_SHORT);
+                return;
+            }
+            else if(binding.etPassword.getText().toString().isEmpty())
+            {
+                ToastUtils.showToastError(SignUpActivity.this, "Password cannot be empty!", Toast.LENGTH_SHORT);
+                return;
+            }
+            else if (!binding.etPassword.getText().toString().equals(binding.etRePassword.getText().toString())) {
+                ToastUtils.showToastError(SignUpActivity.this, "The confirm password entered does not match", Toast.LENGTH_SHORT);
                 return;
             }
 
             startLoadingIndicator();
             String name = String.valueOf(binding.name.getText());
-            if(name == null || name.isEmpty())
-                name = "Anonymous";
             String email = String.valueOf(binding.etEmail.getText());
             String password = String.valueOf(binding.etPassword.getText());
             UserModel newUser = new UserModel(name, email, password);
             viewModel.signUp(newUser, new SignUpViewModel.SignUpCallback() {
                 @Override
                 public void onSuccess() {
+                    ToastUtils.showToastSuccess(SignUpActivity.this, "Sign up successfully!", Toast.LENGTH_SHORT);
                     ActivityUtils.switchToActivity(SignUpActivity.this, LogInActivity.class);
                     finish();
                 }

@@ -16,10 +16,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerInParent="true"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="5sp"
             android:backgroundTint="@color/transparent"
             android:contentDescription="btn add person"
-            android:minHeight="48dp"
+            android:minHeight="48sp"
             android:src="@drawable/ic_arrow_back"
             app:tint="@color/primary_icon_color" />
 
@@ -30,7 +30,7 @@
             android:text="Your friends"
             android:textAlignment="center"
             android:textColor="@color/primary_word_color"
-            android:textSize="24dp"
+            android:textSize="@dimen/large_textsize"
             android:textStyle="bold" />
 
         <ImageButton
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="5sp"
             android:backgroundTint="@color/transparent"
             android:contentDescription="btn add person"
             android:minHeight="48dp"
@@ -74,7 +74,7 @@
             android:layout_gravity="center"
             android:background="@color/transparent"
             android:textColor="@color/primary_word_color"
-            android:textSize="28dp"
+            android:textSize="@dimen/large_textsize"
             android:textStyle="bold" />
         <TextView
             android:layout_width="300dp"
@@ -84,7 +84,7 @@
             android:layout_gravity="center"
             android:background="@color/transparent"
             android:textColor="@color/primary_word_color"
-            android:textSize="24dp"/>
+            android:textSize="@dimen/normal_textsize"/>
         <Button
             android:id="@+id/btn_invite"
             android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
             android:backgroundTint="@color/primary_btn_color"
             android:text="Add new friend"
             android:textAllCaps="false"
-            android:textSize="20dp"
+            android:textSize="@dimen/normal_textsize"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:layout_marginTop="10dp"/>

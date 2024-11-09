@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     public enum OptionViewProject {ALLPROJECT, RECENT, MYPROJECT}
 
-    private static OptionViewProject homeFragmentOptionViewProject = OptionViewProject.ALLPROJECT;
+    private static OptionViewProject homeFragmentOptionViewProject = OptionViewProject.RECENT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

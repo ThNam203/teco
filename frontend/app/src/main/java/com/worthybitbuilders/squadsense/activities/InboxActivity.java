@@ -2,8 +2,13 @@ package com.worthybitbuilders.squadsense.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -17,6 +22,7 @@ import com.worthybitbuilders.squadsense.adapters.ChatRoomAdapter;
 import com.worthybitbuilders.squadsense.adapters.FriendItemAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityInboxBinding;
 import com.worthybitbuilders.squadsense.databinding.AddNewChatRoomPopupBinding;
+import com.worthybitbuilders.squadsense.databinding.PopupOptionViewProjectBinding;
 import com.worthybitbuilders.squadsense.models.ChatRoom;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
@@ -61,17 +67,19 @@ public class InboxActivity extends AppCompatActivity {
     }
 
     private void showAddChatRoomPopup() {
-        AddNewChatRoomPopupBinding popupBinding = AddNewChatRoomPopupBinding.inflate(getLayoutInflater());
-        final Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(InboxActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(popupBinding.getRoot());
+        AddNewChatRoomPopupBinding addNewChatRoomPopupBinding = AddNewChatRoomPopupBinding.inflate(getLayoutInflater());
+        dialog.setContentView(addNewChatRoomPopupBinding.getRoot());
 
-        LoadFriends(popupBinding, dialog);
-        popupBinding.btnBack.setOnClickListener(view -> dialog.dismiss());
-
-        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialog.show();
+
+        LoadFriends(addNewChatRoomPopupBinding, dialog);
+        addNewChatRoomPopupBinding.btnBack.setOnClickListener(view -> dialog.dismiss());
     }
 
     private void loadChatRooms()

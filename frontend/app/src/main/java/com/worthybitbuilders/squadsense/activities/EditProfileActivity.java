@@ -266,8 +266,8 @@ public class EditProfileActivity extends AppCompatActivity {
                     loadAvatarView(true);
                     if(dialog != null)
                         dialog.dismiss();
-                    return;
                 }
+                break;
             case CAMERA_PERMISSION_REQUEST_CODE:
                 if(resultCode == RESULT_OK)
                 {
@@ -281,6 +281,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         ToastUtils.showToastError(this, "Capture image failed, please try again", Toast.LENGTH_SHORT);
                     }
                 }
+                break;
         }
     }
 

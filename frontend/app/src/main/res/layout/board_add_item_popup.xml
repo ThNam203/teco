@@ -32,7 +32,7 @@
             android:layout_gravity="center"
             android:textAlignment="center"
             android:textColor="@color/primary_word_color"
-            android:textSize="28dp"
+            android:textSize="@dimen/large_textsize"
             android:textStyle="bold" />
     </LinearLayout>
     <View
@@ -59,6 +59,7 @@
                 android:drawableLeft="@drawable/ic_status_item"
                 android:drawableTint="@color/primary_icon_color"
                 android:text="Status"
+                android:textSize="@dimen/small_textsize"
                 android:textColor="@color/primary_word_color"
                 android:textAllCaps="false"/>
             <Button
@@ -70,6 +71,7 @@
                 android:drawableTint="@color/primary_icon_color"
                 android:textAllCaps="false"
                 android:textColor="@color/primary_word_color"
+                android:textSize="@dimen/small_textsize"
                 android:text="Date"/>
             <Button
                 android:id="@+id/btnAddNumberItem"
@@ -80,6 +82,7 @@
                 android:drawableTint="@color/primary_icon_color"
                 android:text="Number"
                 android:textColor="@color/primary_word_color"
+                android:textSize="@dimen/small_textsize"
                 android:textAllCaps="false"/>
             <Button
                 android:id="@+id/btnAddCheckboxItem"
@@ -90,7 +93,8 @@
                 android:drawableTint="@color/primary_icon_color"
                 android:text="Checkbox"
                 android:textColor="@color/primary_word_color"
-                android:textAllCaps="false"/>
+                android:textSize="@dimen/small_textsize"
+                android:textAllCaps="false" />
         </LinearLayout>
         <LinearLayout
             android:orientation="vertical"
@@ -108,6 +112,7 @@
                 android:drawableTint="@color/primary_icon_color"
                 android:text="People"
                 android:textColor="@color/primary_word_color"
+                android:textSize="@dimen/small_textsize"
                 android:textAllCaps="false"/>
             <Button
                 android:id="@+id/btnAddTextItem"
@@ -118,6 +123,7 @@
                 android:drawableTint="@color/primary_icon_color"
                 android:text="Text"
                 android:textColor="@color/primary_word_color"
+                android:textSize="@dimen/small_textsize"
                 android:textAllCaps="false"/>
             <Button
                 android:id="@+id/btnAddTimelineItem"
@@ -128,6 +134,7 @@
                 android:drawableTint="@color/primary_icon_color"
                 android:text="Timeline"
                 android:textColor="@color/primary_word_color"
+                android:textSize="@dimen/small_textsize"
                 android:textAllCaps="false"/>
             <Button
                 android:id="@+id/btnAddUpdateItem"
@@ -138,6 +145,7 @@
                 android:drawableTint="@color/primary_icon_color"
                 android:text="Update"
                 android:textColor="@color/primary_word_color"
+                android:textSize="@dimen/small_textsize"
                 android:textAllCaps="false"/>
         </LinearLayout>
     </LinearLayout>
@@ -147,7 +155,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="More columns"
-        android:textSize="20dp"
+        android:textSize="@dimen/small_textsize"
         android:layout_marginVertical="12dp"
         android:textColor="#74a9e6"/>
 </LinearLayout>

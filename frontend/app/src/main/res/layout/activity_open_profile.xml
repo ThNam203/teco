@@ -50,7 +50,7 @@
             android:text="N"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="48dp" />
+            android:textSize="48sp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
                     android:text="Edit"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="20dp"
+                    android:textSize="@dimen/normal_textsize"
                     android:textStyle="bold"
                     tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
@@ -95,7 +95,7 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/primary_word_color"
-                android:textSize="36dp" />
+                android:textSize="@dimen/super_large_textsize" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -131,7 +131,7 @@
                         android:layout_marginLeft="5dp"
                         android:text="Introduction"
                         android:textColor="@color/primary_word_second_color"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/normal_textsize" />
 
                     <TextView
                         android:id="@+id/introduction"
@@ -142,7 +142,7 @@
                         android:singleLine="true"
                         android:text="Add introduction"
                         android:textColor="@color/primary_word_second_color"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/normal_textsize" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -176,7 +176,7 @@
                         android:layout_marginLeft="5dp"
                         android:text="Email"
                         android:textColor="@color/primary_word_second_color"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/normal_textsize" />
 
                     <TextView
                         android:id="@+id/email"
@@ -187,7 +187,7 @@
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:textColor="@color/primary_word_color"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/normal_textsize" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -222,7 +222,7 @@
                         android:layout_marginLeft="5dp"
                         android:text="Phone"
                         android:textColor="@color/primary_word_second_color"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/normal_textsize" />
 
                     <TextView
                         android:id="@+id/phonenumber"
@@ -233,7 +233,7 @@
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:textColor="@color/primary_word_second_color"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/normal_textsize" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -268,7 +268,7 @@
                         android:layout_marginLeft="5dp"
                         android:text="Birthday"
                         android:textColor="@color/primary_word_second_color"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/normal_textsize" />
 
                     <TextView
                         android:id="@+id/birthday"
@@ -279,7 +279,7 @@
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:textColor="@color/primary_word_second_color"
-                        android:textSize="24dp" />
+                        android:textSize="@dimen/normal_textsize" />
 
                 </LinearLayout>
             </LinearLayout>

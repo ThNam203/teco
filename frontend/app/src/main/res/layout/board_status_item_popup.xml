@@ -34,7 +34,7 @@
             android:layout_gravity="center"
             android:textAlignment="center"
             android:textColor="@color/primary_word_color"
-            android:textSize="28dp"
+            android:textSize="@dimen/large_textsize"
             android:textStyle="bold" />
     </LinearLayout>
     <View
@@ -72,7 +72,7 @@
                 android:textColor="@color/primary_word_second_color"
                 android:text="Edit Labels"
                 android:textAllCaps="false"
-                android:textSize="20sp"
+                android:textSize="@dimen/small_textsize"
                 app:layout_constraintTop_toBottomOf="@id/rvStatusContents"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -18,6 +18,7 @@ import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import java.util.List;
 
 public class MemberAdapter extends RecyclerView.Adapter {
+    private String creatorId;
     private final List<String> adminIds;
     private final List<UserModel> memberList;
     private OnActionCallback callback;
@@ -31,6 +32,11 @@ public class MemberAdapter extends RecyclerView.Adapter {
     public MemberAdapter(List<UserModel> memberList, List<String> adminIds) {
         this.memberList = memberList;
         this.adminIds = adminIds;
+    }
+
+    public void setCreatorId(String creatorId)
+    {
+        this.creatorId = creatorId;
     }
 
     public void setOnClickListener(OnActionCallback callback) {
@@ -59,24 +65,32 @@ public class MemberAdapter extends RecyclerView.Adapter {
     }
 
     private class MemberHolder extends RecyclerView.ViewHolder {
-        TextView tvMemberName;
-        ImageView memberAvatar, iconAdmin;
+        TextView tvMemberName, tvMemberRole;
+        ImageView memberAvatar;
         ImageButton btnMore;
 
         MemberHolder(View itemView) {
             super(itemView);
             tvMemberName = itemView.findViewById(R.id.member_name);
             memberAvatar = itemView.findViewById(R.id.member_avatar);
-            iconAdmin = itemView.findViewById(R.id.icon_admin);
+            tvMemberRole = itemView.findViewById(R.id.member_role);
             btnMore = itemView.findViewById(R.id.btn_more);
         }
 
         void bind(UserModel member, int position) {
             //show icon admin
-            if(adminIds.contains(member.getId()))
-                iconAdmin.setVisibility(View.VISIBLE);
+            if(creatorId.equals(member.getId()))
+            {
+                tvMemberRole.setText("Creator");
+                tvMemberRole.setVisibility(View.VISIBLE);
+            }
+            else if(adminIds.contains(member.getId()))
+            {
+                tvMemberRole.setText("Admin");
+                tvMemberRole.setVisibility(View.VISIBLE);
+            }
             else
-                iconAdmin.setVisibility(View.GONE);
+                tvMemberRole.setVisibility(View.GONE);
 
             String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
 

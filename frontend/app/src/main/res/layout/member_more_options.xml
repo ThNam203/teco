@@ -18,6 +18,7 @@
         android:textColor="@color/primary_word_second_color"
         android:textAllCaps="false"
         android:textStyle="normal"
+        android:textSize="@dimen/small_textsize"
         android:background="@color/transparent"/>
     <Button
         android:id="@+id/btnChangeToMember"
@@ -29,6 +30,7 @@
         android:textColor="@color/primary_word_second_color"
         android:textAllCaps="false"
         android:textStyle="normal"
+        android:textSize="@dimen/small_textsize"
         android:background="@color/transparent"/>
     <Button
         android:id="@+id/btnProfileInfo"
@@ -41,6 +43,7 @@
         android:textAllCaps="false"
         android:textStyle="normal"
         android:background="@color/transparent"
+        android:textSize="@dimen/small_textsize"
         android:backgroundTint="@color/transparent"/>
     <Button
         android:id="@+id/btnDeleteMember"
@@ -52,5 +55,6 @@
         android:textColor="@color/red"
         android:textAllCaps="false"
         android:textStyle="normal"
+        android:textSize="@dimen/small_textsize"
         android:background="@color/transparent"/>
 </LinearLayout>
