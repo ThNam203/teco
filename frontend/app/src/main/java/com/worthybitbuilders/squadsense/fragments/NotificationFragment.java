@@ -44,6 +44,7 @@ import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class NotificationFragment extends Fragment {
     private NotificationAdapter notificationAdapter;
     private UserViewModel userViewModel;
     private List<Notification> listNotification = new ArrayList<>(); //work as data to put in recyclerview
-    private List<Notification> tempListNotification = new ArrayList<>(); //work as cache, it use to store all notifications got from server
+    private List<Notification> listAllNotification = new ArrayList<>(); //work as cache, it use to store all notifications got from server
 
     private Notification selectedNotification;
     @Override
@@ -79,7 +80,8 @@ public class NotificationFragment extends Fragment {
             @Override
             public void onSuccess(List<Notification> notificationsData) {
                 listNotification.addAll(notificationsData);
-                tempListNotification.addAll(notificationsData);
+                listNotification.sort(Comparator.comparing(Notification::getTimeCreated).reversed());
+                listAllNotification.addAll(notificationsData);
                 binding.recyclerviewNotification.setAdapter(notificationAdapter);
                 ReloadNotificationView();
             }
@@ -117,7 +119,7 @@ public class NotificationFragment extends Fragment {
                             public void onSuccess() {
                                 ToastUtils.showToastSuccess(getContext(), "You are added to this project, check it now!", Toast.LENGTH_SHORT);
                                 listNotification.remove(position);
-                                tempListNotification.remove(position);
+                                listAllNotification.remove(position);
                                 binding.recyclerviewNotification.setAdapter(notificationAdapter);
                                 ReloadNotificationView();
                             }
@@ -134,7 +136,7 @@ public class NotificationFragment extends Fragment {
                             public void onSuccess() {
                                 ToastUtils.showToastSuccess(getContext(), "Request of " + senderName + " was accepted", Toast.LENGTH_SHORT);
                                 listNotification.remove(position);
-                                tempListNotification.remove(position);
+                                listAllNotification.remove(position);
                                 binding.recyclerviewNotification.setAdapter(notificationAdapter);
                                 ReloadNotificationView();
                             }
@@ -161,7 +163,7 @@ public class NotificationFragment extends Fragment {
                             @Override
                             public void onSuccess() {
                                 listNotification.remove(position);
-                                tempListNotification.remove(position);
+                                listAllNotification.remove(position);
                                 binding.recyclerviewNotification.setAdapter(notificationAdapter);
                                 ReloadNotificationView();
                             }
@@ -177,7 +179,7 @@ public class NotificationFragment extends Fragment {
                             @Override
                             public void onSuccess() {
                                 listNotification.remove(position);
-                                tempListNotification.remove(position);
+                                listAllNotification.remove(position);
                                 binding.recyclerviewNotification.setAdapter(notificationAdapter);
                                 ReloadNotificationView();
                             }
@@ -196,7 +198,7 @@ public class NotificationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 listNotification.clear();
-                listNotification.addAll(tempListNotification);
+                listNotification.addAll(listAllNotification);
 
                 //reload view of list
                 binding.recyclerviewNotification.setAdapter(notificationAdapter);
@@ -213,7 +215,7 @@ public class NotificationFragment extends Fragment {
 
                 //get today notification
                 String dateNow = Convert.DateToString(new Date(), Convert.Pattern.DAY_MONTH_YEAR);
-                for (Notification item : tempListNotification)
+                for (Notification item : listAllNotification)
                 {
                     if(item.getTimeCreatedDMY().equals(dateNow))
                     {
@@ -274,7 +276,7 @@ public class NotificationFragment extends Fragment {
             public void onClick(View view) {
                 DeleteNotification(selectedNotification);
                 listNotification.remove(selectedNotification);
-                tempListNotification.remove(selectedNotification);
+                listAllNotification.remove(selectedNotification);
                 binding.recyclerviewNotification.setAdapter(notificationAdapter);
                 ReloadNotificationView();
                 ToastUtils.showToastSuccess(getContext(), "Notification deleted", Toast.LENGTH_SHORT);

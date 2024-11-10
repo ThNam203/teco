@@ -1,6 +1,10 @@
 package com.worthybitbuilders.squadsense.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,13 +94,12 @@ public class FriendRequestAdapter extends RecyclerView.Adapter{
     }
 
     private class FriendRequestInboxHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvContent, tvTimestamps;
+        TextView tvContent, tvTimestamps;
         AppCompatButton btnAccept, btnDeny;
         ImageView userImage;
 
         FriendRequestInboxHolder(View itemView) {
             super(itemView);
-            tvTitle = (TextView) itemView.findViewById(R.id.title);
             tvContent = (TextView) itemView.findViewById(R.id.content);
             tvTimestamps = (TextView) itemView.findViewById(R.id.timestamps);
             userImage = (ImageView) itemView.findViewById(R.id.user_image);
@@ -105,9 +108,15 @@ public class FriendRequestAdapter extends RecyclerView.Adapter{
         }
 
         void bind(Notification notification, int position) {
-            tvTitle.setText(notification.getTitle());
-            tvContent.setText(notification.getContent());
-            tvTimestamps.setText(notification.getTimeCreated());
+            String content = notification.getTitle() + " " + notification.getContent();
+            SpannableString spannableString = new SpannableString(content);
+            int numberOfCharsToBold = notification.getTitle().length(); // Ví dụ: in đậm 4 chữ đầu
+            if (numberOfCharsToBold <= content.length()) {
+                spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, numberOfCharsToBold, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+            tvContent.setText(spannableString);
+            tvTimestamps.setText(notification.getCustomTimeCreated());
 
             userViewModel.getUserById(notification.getSenderId(), new UserViewModel.UserCallback() {
                 @Override

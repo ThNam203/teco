@@ -83,7 +83,11 @@ public class Notification {
         this.link = link;
     }
 
-    public String getTimeCreated()
+    public Timestamp getTimeCreated()
+    {
+        return createdAt;
+    }
+    public String getCustomTimeCreated()
     {
         //if the notification is sent today -> show time else show date
         String dateNow = Convert.DateToString(new Date(), Convert.Pattern.DAY_MONTH_YEAR);

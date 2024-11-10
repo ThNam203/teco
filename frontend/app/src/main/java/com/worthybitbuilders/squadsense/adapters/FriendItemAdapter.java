@@ -9,17 +9,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStore;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.models.UserModel;
+import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
+import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FriendItemAdapter extends RecyclerView.Adapter {
     private final List<UserModel> friendList;
     private OnActionCallback callback;
+
+    FriendViewModel friendViewModel;
 
     public interface OnActionCallback {
         void OnMoreOptionsClick(int position);
@@ -27,6 +36,13 @@ public class FriendItemAdapter extends RecyclerView.Adapter {
 
     public FriendItemAdapter(List<UserModel> friendList) {
         this.friendList = friendList;
+        friendViewModel = new ViewModelProvider(new ViewModelStoreOwner() {
+            @NonNull
+            @Override
+            public ViewModelStore getViewModelStore() {
+                return new ViewModelStore();
+            }
+        }).get(FriendViewModel.class);
     }
 
     public void setOnClickListener(OnActionCallback callback) {
@@ -55,13 +71,14 @@ public class FriendItemAdapter extends RecyclerView.Adapter {
     }
 
     private class FriendItemHolder extends RecyclerView.ViewHolder {
-        TextView tvFriendName;
+        TextView tvFriendName, tvFriendConnection;
         ImageView friendAvatar;
 
         ImageButton btnMore;
         FriendItemHolder(View itemView) {
             super(itemView);
             tvFriendName = itemView.findViewById(R.id.friend_name);
+            tvFriendConnection = itemView.findViewById(R.id.friend_connection);
             friendAvatar = itemView.findViewById(R.id.friend_avatar);
             btnMore = itemView.findViewById(R.id.btn_more);
         }
@@ -73,6 +90,33 @@ public class FriendItemAdapter extends RecyclerView.Adapter {
                     .load(friend.getProfileImagePath())
                     .placeholder(R.drawable.ic_user)
                     .into(friendAvatar);
+
+            friendViewModel.getFriendById(friend.getId(), new FriendViewModel.getFriendCallback() {
+                @Override
+                public void onSuccess(List<UserModel> friends) {
+                    List<UserModel> listFriend1 = friends;
+                    String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+                    friendViewModel.getFriendById(userId, new FriendViewModel.getFriendCallback() {
+                        @Override
+                        public void onSuccess(List<UserModel> friends) {
+                            List<UserModel> sameElements = new ArrayList<>(listFriend1); // Tạo một danh sách mới để giữ lại các phần tử chung
+                            sameElements.retainAll(friends);
+                            final int numSameElements = sameElements.size();
+                            tvFriendConnection.setText(String.valueOf(numSameElements) + (numSameElements > 1 ? " connections" : " connection"));
+                        }
+
+                        @Override
+                        public void onFailure(String message) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure(String message) {
+
+                }
+            });
 
             btnMore.setOnClickListener(view -> callback.OnMoreOptionsClick(position));
         }

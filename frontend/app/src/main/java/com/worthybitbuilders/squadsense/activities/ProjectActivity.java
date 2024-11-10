@@ -23,11 +23,14 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.adapters.BoardItemMemberAdapter;
+import com.worthybitbuilders.squadsense.adapters.BoardItemOwnerAdapter;
 import com.worthybitbuilders.squadsense.adapters.EditBoardsAdapter;
 import com.worthybitbuilders.squadsense.adapters.StatusContentsAdapter;
 import com.worthybitbuilders.squadsense.adapters.StatusEditItemAdapter;
@@ -40,6 +43,7 @@ import com.worthybitbuilders.squadsense.databinding.BoardColumnRenamePopupBindin
 import com.worthybitbuilders.squadsense.databinding.BoardDateItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardEditBoardsViewBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardNumberItemPopupBinding;
+import com.worthybitbuilders.squadsense.databinding.BoardOwnerItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardStatusEditNewItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardStatusEditViewBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardStatusItemPopupBinding;
@@ -49,6 +53,7 @@ import com.worthybitbuilders.squadsense.databinding.ColumnMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.databinding.PopupRenameBinding;
 import com.worthybitbuilders.squadsense.databinding.ProjectMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.factory.ProjectActivityViewModelFactory;
+import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardColumnHeaderModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardContentModel;
@@ -74,6 +79,7 @@ import org.json.JSONException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -180,7 +186,7 @@ public class ProjectActivity extends AppCompatActivity {
 
             @Override
             public void onUserItemClick(BoardUserItemModel userItemModel) {
-
+                showOwnerPopup(userItemModel);
             }
 
             @Override
@@ -381,7 +387,7 @@ public class ProjectActivity extends AppCompatActivity {
                         Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
                         loadingDialog.show();
                         String projectId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID);
-                        projectActivityViewModel.removeProject(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
+                        projectActivityViewModel.deleteProject(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
                             @Override
                             public void onSuccess() {
                                 ToastUtils.showToastSuccess(ProjectActivity.this, "Project deleted", Toast.LENGTH_SHORT);
@@ -739,6 +745,78 @@ public class ProjectActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
         dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.show();
+    }
+
+    private void showOwnerPopup(BoardUserItemModel userItemModel)
+    {
+        final Dialog dialog = new Dialog(ProjectActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        BoardOwnerItemPopupBinding binding = BoardOwnerItemPopupBinding.inflate(getLayoutInflater());
+        dialog.setContentView(binding.getRoot());
+
+        List<UserModel> listMember = new ArrayList<>();
+        List<UserModel> listOwner = new ArrayList<>();
+        binding.rvMembers.setLayoutManager(new LinearLayoutManager(ProjectActivity.this));
+        binding.rvOwers.setLayoutManager(new LinearLayoutManager(ProjectActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        BoardItemMemberAdapter boardItemMemberAdapter = new BoardItemMemberAdapter(listMember);
+        BoardItemOwnerAdapter boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner);
+
+        String projectId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID);
+        projectActivityViewModel.getMember(projectId, new ProjectActivityViewModel.ApiCallMemberHandlers() {
+            @Override
+            public void onSuccess(List<UserModel> listMemberData) {
+                listMember.addAll(listMemberData);
+                boardItemMemberAdapter.notifyDataSetChanged();
+                binding.rvMembers.setAdapter(boardItemMemberAdapter);
+                if(listMember.size() > 0) binding.rvMembers.setVisibility(View.VISIBLE);
+                else binding.rvMembers.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                ToastUtils.showToastError(ProjectActivity.this, message, Toast.LENGTH_SHORT);
+            }
+        });
+
+        boardItemMemberAdapter.setOnClickListener(new BoardItemMemberAdapter.OnActionCallback() {
+            @Override
+            public void OnClick(int position, boolean status) {
+                if(status)
+                {
+                    listOwner.add(listMember.get(position));
+                    boardItemOwnerAdapter.notifyDataSetChanged();
+                    binding.rvOwers.setAdapter(boardItemOwnerAdapter);
+                    binding.layoutRvOwers.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    listOwner.remove(listMember.get(position));
+                    boardItemOwnerAdapter.notifyDataSetChanged();
+                    binding.rvOwers.setAdapter(boardItemOwnerAdapter);
+                    if(listOwner.size() > 0) binding.layoutRvOwers.setVisibility(View.VISIBLE);
+                    else binding.layoutRvOwers.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        boardItemOwnerAdapter.setOnClickListener(new BoardItemOwnerAdapter.OnActionCallback() {
+            @Override
+            public void OnClick(int position) {
+                listOwner.remove(listOwner.get(position));
+                boardItemOwnerAdapter.notifyDataSetChanged();
+                binding.rvOwers.setAdapter(boardItemOwnerAdapter);
+                if(listOwner.size() > 0) binding.layoutRvOwers.setVisibility(View.VISIBLE);
+                else binding.layoutRvOwers.setVisibility(View.GONE);
+            }
+        });
+
+        binding.btnClosePopup.setOnClickListener(view -> dialog.dismiss());
+
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialog.show();
     }
 

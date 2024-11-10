@@ -146,7 +146,7 @@ public class FriendRequestActivity extends AppCompatActivity {
         friendViewModel.reply(replierId, requestSender, response, new FriendViewModel.FriendRequestCallback() {
             @Override
             public void onSuccess() {
-                ToastUtils.showToastSuccess(FriendRequestActivity.this, "Reply sent successfully!", Toast.LENGTH_SHORT);
+
             }
 
             @Override

@@ -1,38 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activities.ProjectActivityLogActivity">
-    <FrameLayout
+    tools:context=".activities.ProjectActivityLogActivity"
+    android:background="@color/primary_color">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerInParent="true"
-            android:backgroundTint="@color/transparent"
-            android:contentDescription="btn add person"
-            android:minHeight="48dp"
-            android:src="@drawable/ic_arrow_back"
-            app:tint="@color/primary_icon_color" />
-        <TextView
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:backgroundTint="@color/transparent"
+                android:contentDescription="btn add person"
+                android:minHeight="48dp"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/primary_icon_color" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Activity Log"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/primary_word_color"
+                android:textSize="@dimen/large_textsize" />
+        </FrameLayout>
+        <EditText
+            android:id="@+id/input_search"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Activity Log"
-            android:textStyle="bold"
-            android:layout_gravity="center"
-            android:gravity="center"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginVertical="12dp"
+            android:background="@drawable/background_input"
+            android:drawableLeft="@drawable/ic_search"
+            android:drawablePadding="5dp"
+            android:drawableTint="@color/primary_word_second_color"
+            android:hint="Search activity logs"
+            android:minHeight="48dp"
+            android:padding="5dp"
             android:textColor="@color/primary_word_color"
-            android:textSize="28dp" />
-    </FrameLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvActivityLogs"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="16dp"/>
-</LinearLayout>
+            android:textColorHint="@color/primary_word_second_color"
+            android:textSize="@dimen/normal_textsize" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvActivityLogs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"/>
+    </LinearLayout>
+
+
+    <ImageButton
+        android:id="@+id/btn_search"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="32sp"
+        android:layout_marginTop="32sp"
+        android:layout_marginEnd="32sp"
+        android:layout_marginRight="30sp"
+        android:layout_marginBottom="102sp"
+        android:background="@drawable/background_btn_circle"
+        android:src="@drawable/ic_search"
+        app:tint="@color/white" />
+    <ImageButton
+        android:id="@+id/btn_filter"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="30sp"
+        android:background="@drawable/background_btn_circle"
+        android:src="@drawable/ic_filter"
+        app:tint="@color/white" />
+</RelativeLayout>

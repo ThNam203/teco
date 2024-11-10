@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -231,7 +233,12 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) getActivity().getSystemService(getContext().WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        int screenHeight = displayMetrics.heightPixels;
+        int halfScreenHeight = screenHeight / 2;
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, halfScreenHeight);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
@@ -435,20 +442,17 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onAcceptToDo(Dialog thisDialog) {
                         thisDialog.dismiss();
-                        Dialog loadingDialog = DialogUtils.GetLoadingDialog(getContext());
-                        loadingDialog.show();
-                        projectActivityViewModel.removeProject(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
+                        projectActivityViewModel.deleteProject(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
                             @Override
                             public void onSuccess() {
+                                popupWindow.dismiss();
                                 ToastUtils.showToastSuccess(getContext(), "Project deleted", Toast.LENGTH_SHORT);
-                                loadingDialog.dismiss();
-                                getActivity().onBackPressed();
+                                LoadData();
                             }
 
                             @Override
                             public void onFailure(String message) {
                                 ToastUtils.showToastError(getContext(), "You are not allowed to delete this project", Toast.LENGTH_SHORT);
-                                loadingDialog.dismiss();
                             }
                         });
 

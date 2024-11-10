@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="60sp"
+    android:layout_height="60sp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent"
+    android:gravity="center"
+    android:layout_marginRight="10sp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_gravity="center"
+        app:cardCornerRadius="250sp">
+        <ImageView
+            android:id="@+id/creator_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_user"/>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardCornerRadius="250sp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="5sp">
+        <ImageView
+            android:id="@+id/icon_tick"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:src="@drawable/ic_tick"
+            android:background="@drawable/background_btn_circle"
+            android:backgroundTint="@color/blue"
+            app:tint="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

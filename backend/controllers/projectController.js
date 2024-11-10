@@ -784,7 +784,6 @@ const sendNotificationOnReplyMemberRequest = async (
 ) => {
     let message
     const project = await Project.findById(projectId)
-    if (!project) throw new AppError('Unable to find project', 404)
 
     if (isAccept) {
         message = `${sender.name} was added to project ${project.title}`
@@ -875,6 +874,15 @@ exports.replyToJoinProject = asyncCatch(async (req, res, next) => {
     if (!replier || !requestSender)
         return next(new AppError(`User not found`, 400))
 
+    const project = await Project.findOne({ _id: projectId })
+    if (!project) {
+        await Notification.findOneAndDelete({
+            link: projectId,
+            notificationType: 'MemberRequest',
+        })
+        return next(new AppError(`Project not found`, 400))
+    }
+
     // check if member request still existed or not
     const isExisted = await MemberRequest.findOne({
         senderId: requestSender._id,
@@ -894,7 +902,15 @@ exports.replyToJoinProject = asyncCatch(async (req, res, next) => {
             receiverId: { $in: [requestSender._id, replier._id] },
             projectId: projectId,
         })
-    } else return next(new AppError('The request is not existed', 400))
+    } else {
+        await Notification.findOneAndDelete({
+            link: projectId,
+            senderId: requestSender._id,
+            receiverId: replier._id,
+            notificationType: 'MemberRequest',
+        })
+        return next(new AppError('The request is not existed', 400))
+    }
 
     res.status(204).end()
 })
@@ -994,7 +1010,6 @@ const sendNotificationOnReplyAdminRequest = async (
 ) => {
     let message
     const project = await Project.findById(projectId)
-    if (!project) throw new AppError('Unable to find project', 404)
 
     if (isAccept) {
         message = `You was accepted to be an admin of project ${project.title}`
@@ -1040,6 +1055,14 @@ exports.replyToAdminRequest = asyncCatch(async (req, res, next) => {
     if (!replier || !requestSender)
         return next(new AppError(`User not found`, 400))
 
+    const project = await Project.findById(projectId)
+    if (!project) {
+        await Notification.findOneAndDelete({
+            notificationType: 'AdminRequest',
+            link: projectId,
+        })
+        return next(new AppError('Unable to find project', 404))
+    }
     // check if admin request still existed or not
     const isExisted = await Notification.findOne({
         senderId: requestSender._id,

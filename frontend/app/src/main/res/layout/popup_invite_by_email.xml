@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/background_popup_corner_top_left_and_right"
-    android:backgroundTint="@color/primary_second_color">
+    android:backgroundTint="@color/primary_color">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,17 +59,29 @@
         android:background="@color/primary_splitter_color" />
     <EditText
         android:id="@+id/input_email"
-        android:inputType="textEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginVertical="12dp"
         android:background="@drawable/background_input"
-        android:backgroundTint="@color/primary_second_color"
-        android:cursorVisible="true"
+        android:drawableLeft="@drawable/ic_search"
+        android:drawablePadding="5dp"
         android:hint="email@gmail.com"
         android:minHeight="48dp"
-        android:padding="20dp"
+        android:inputType="textEmailAddress"
+        android:padding="5dp"
         android:textColor="@color/primary_word_color"
         android:textColorHint="@color/primary_word_second_color"
-        android:textCursorDrawable="@null"
         android:textSize="@dimen/normal_textsize" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSearchFriend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp" />
+    </ScrollView>
+
 </LinearLayout>

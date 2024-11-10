@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10sp"
-    android:background="@drawable/shape_update"
-    android:elevation="5sp">
+    android:background="@color/transparent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,16 +28,31 @@
                     android:src="@drawable/ic_user"/>
             </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/friend_name"
+            <LinearLayout
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Name"
-                android:textColor="@color/primary_word_color"
-                android:textSize="@dimen/normal_textsize"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                android:layout_gravity="center">
+                <TextView
+                    android:id="@+id/friend_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="Name"
+                    android:textColor="@color/primary_word_color"
+                    android:textSize="@dimen/normal_textsize" />
+                <TextView
+                    android:id="@+id/friend_connection"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="0 connection"
+                    android:textColor="@color/primary_word_second_color"
+                    android:textSize="@dimen/small_textsize" />
+            </LinearLayout>
+
 
             <ImageButton
                 android:id="@+id/btn_more"

@@ -18,6 +18,7 @@
     <color name="primary_word_third_color">#0075e2</color>
     <color name="primary_icon_color">#323232</color>
     <color name="primary_icon_second_color">#63636c</color>
+    <color name="primary_icon_third_color">#0075e2</color>
     <color name="primary_btn_color">#0075e2</color>
     <color name="primary_btn_second_color">#e8e8f0</color>
     <color name="btn_disabled_color">#e8e8f0</color>

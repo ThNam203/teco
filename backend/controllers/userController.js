@@ -163,6 +163,25 @@ exports.getRecentProjectId = asyncCatch(async (req, res, next) => {
     const recentAccess = await RecentAccess.findOne({ userId: userId })
     if (!recentAccess) return res.status(200).json([])
 
+    //remove any projects that have been deleted
+    const promises = recentAccess.recentProjectIds.map((projectId) =>
+        Project.findById(projectId)
+    )
+    const results = await Promise.all(promises)
+
+    const toRemove = []
+    results.forEach((project, index) => {
+        if (!project) {
+            toRemove.push(index)
+        }
+    })
+
+    toRemove.forEach((index) => {
+        recentAccess.recentProjectIds.splice(index, 1)
+        recentAccess.timeAccessed.splice(index, 1)
+    })
+    await recentAccess.save()
+
     if (recentAccess.recentProjectIds.length === 0) res.status(200).json([])
     else res.status(200).json(recentAccess.recentProjectIds)
 })

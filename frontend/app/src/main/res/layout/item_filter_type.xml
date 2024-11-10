@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent">
+    <TextView
+        android:id="@+id/tvType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="Remove"
+        android:background="@drawable/curved_small_background"
+        android:backgroundTint="@color/primary_second_color"
+        android:padding="4dp"
+        android:textColor="@color/primary_word_color"
+        android:layout_margin="4dp"/>
+</RelativeLayout>

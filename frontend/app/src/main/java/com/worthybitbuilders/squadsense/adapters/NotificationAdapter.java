@@ -153,7 +153,7 @@ public class NotificationAdapter extends RecyclerView.Adapter {
         void bind(Notification notification, int position) {
             tvTitle.setText(notification.getTitle());
             tvContent.setText(notification.getContent());
-            tvTimestamps.setText(notification.getTimeCreated());
+            tvTimestamps.setText(notification.getCustomTimeCreated());
 
             userViewModel.getUserById(notification.getSenderId(), new UserViewModel.UserCallback() {
                 @Override
@@ -206,7 +206,7 @@ public class NotificationAdapter extends RecyclerView.Adapter {
         void bind(Notification notification, int position) {
             tvTitle.setText(notification.getTitle());
             tvContent.setText(notification.getContent());
-            tvTimestamps.setText(notification.getTimeCreated());
+            tvTimestamps.setText(notification.getCustomTimeCreated());
 
             userViewModel.getUserById(notification.getSenderId(), new UserViewModel.UserCallback() {
                 @Override
@@ -256,7 +256,7 @@ public class NotificationAdapter extends RecyclerView.Adapter {
         void bind(Notification notification, int position) {
             tvTitle.setText(notification.getTitle());
             tvContent.setText(notification.getContent());
-            tvTimestamps.setText(notification.getTimeCreated());
+            tvTimestamps.setText(notification.getCustomTimeCreated());
 
             userViewModel.getUserById(notification.getSenderId(), new UserViewModel.UserCallback() {
                 @Override
@@ -312,7 +312,7 @@ public class NotificationAdapter extends RecyclerView.Adapter {
         void bind(Notification notification, int position) {
             tvTitle.setText(notification.getTitle());
             tvContent.setText(notification.getContent());
-            tvTimestamps.setText(notification.getTimeCreated());
+            tvTimestamps.setText(notification.getCustomTimeCreated());
 
             userViewModel.getUserById(notification.getSenderId(), new UserViewModel.UserCallback() {
                 @Override

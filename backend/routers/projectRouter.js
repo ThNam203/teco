@@ -14,8 +14,9 @@ router
 router
     .route('/:projectId')
     .get(projectController.getProjectById)
-    .post(projectController.updateProject)
     .delete(projectController.deleteProjectById)
+    .post(projectController.updateProject)
+
 
 router.route('/:projectId/get-member').get(projectController.getMemberOfProject)
 
@@ -42,7 +43,6 @@ router
     .route('/:projectId/reply-join-project/:receiverId/:response')
     .post(projectController.replyToJoinProject)
 
-router.route('/update-project/:projectId').post(projectController.updateProject)
 router
     .route('/:projectId/delete-member/:memberId')
     .delete(projectController.deleteMember)
