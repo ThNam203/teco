@@ -68,13 +68,14 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
 
         // updateCellId is only for when user tap the update item
         // which is because there could be more than 1 update item
+        // when open from board
         String updateCellId = intent.getStringExtra("updateCellId");
         String updateCellTitle = intent.getStringExtra("updateCellTitle");
         int rowPosition = intent.getIntExtra("rowPosition", -1);
 
         activityBinding.itemTitle.setText(rowTitle);
 
-        BoardItemDetailViewModelFactory viewModelFactory = new BoardItemDetailViewModelFactory(rowPosition, projectId, boardId, projectTitle, boardTitle, rowTitle);
+        BoardItemDetailViewModelFactory viewModelFactory = new BoardItemDetailViewModelFactory(rowPosition, projectId, boardId, updateCellId, projectTitle, boardTitle, rowTitle);
         viewModel = new ViewModelProvider(this, viewModelFactory).get(BoardDetailItemViewModel.class);
 
         // check if user press "update" column or "row header"

@@ -3,7 +3,7 @@ package com.worthybitbuilders.squadsense.models;
 import java.util.List;
 
 public class UpdateTask {
-    private class UpdateTaskAuthor {
+    public static class UpdateTaskAuthor {
         public String _id;
         public String name;
         public String email;

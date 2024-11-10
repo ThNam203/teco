@@ -17,7 +17,6 @@ router
     .delete(projectController.deleteProjectById)
     .post(projectController.updateProject)
 
-
 router.route('/:projectId/get-member').get(projectController.getMemberOfProject)
 
 router.route('/:projectId/board').post(projectController.createAndGetNewBoard)
@@ -74,7 +73,7 @@ router
     .put(projectController.updateACell)
 
 router
-    .route('/:projectId/board/:boardId/cell-update/:cellId')
+    .route('/:projectId/board/:boardId/update-task/:cellId')
     .get(projectController.getAllUpdateTasksOfACell)
     .post(
         s3Controller.s3Upload.array('files'),
@@ -82,8 +81,20 @@ router
     )
 
 router
-    .route('/:projectId/board/:boardId/cell-update/:cellId/:updateTaskId')
+    .route('/:projectId/board/:boardId/update-task/:cellId/:updateTaskId')
+    .get(projectController.getUpdateTaskAndComment)
     .patch(projectController.toggleUpdateTaskLike)
+    .post(
+        s3Controller.s3Upload.array('files'),
+        projectController.addNewCommentToUpdateTask
+    )
     .delete(projectController.removeUpdateTask)
+
+router
+    .route(
+        '/:projectId/board/:boardId/update-task/:cellId/:updateTaskId/:commentId'
+    )
+    .patch(projectController.toggleUpdateTaskCommentLike)
+    .delete(projectController.deleteComment)
 
 module.exports = router

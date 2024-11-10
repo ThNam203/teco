@@ -14,14 +14,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-        <ImageButton
-            android:id="@+id/btnRemoveFile"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:src="@drawable/ic_cancel"
-            android:background="@color/grey"
-            android:layout_marginBottom="-5dp"
-            android:layout_gravity="top|end"/>
         <ImageView
             android:id="@+id/ivFileImage"
             android:layout_width="70dp"
@@ -29,6 +21,15 @@
             android:layout_marginTop="5dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_file"/>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/btnRemoveFile"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_cancel"
+            app:tint="@color/black"
+            android:layout_marginBottom="-7dp"
+            android:layout_marginStart="7dp"
+            android:layout_gravity="top|end"/>
     </FrameLayout>
     <TextView
         android:id="@+id/tvFileName"

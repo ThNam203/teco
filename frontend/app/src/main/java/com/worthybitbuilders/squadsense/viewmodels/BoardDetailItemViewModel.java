@@ -36,6 +36,8 @@ public class BoardDetailItemViewModel extends ViewModel {
     private final ProjectService projectService = RetrofitServices.getProjectService();
     private final String projectId;
     private final String boardId;
+    private final String cellId;
+    private String updateTaskId = null;
     private final String projectTitle;
     private final String boardTitle;
     private String rowTitle;
@@ -43,10 +45,11 @@ public class BoardDetailItemViewModel extends ViewModel {
      * @param rowPosition is the position according to the board,
      *                    we need it to update the exact cell on the remote
      */
-    public BoardDetailItemViewModel(int rowPosition, String projectId, String boardId, String projectTitle, String boardTitle, String rowTitle) {
+    public BoardDetailItemViewModel(int rowPosition, String projectId, String boardId, String cellId, String projectTitle, String boardTitle, String rowTitle) {
         this.rowPosition = rowPosition;
         this.projectId = projectId;
         this.boardId = boardId;
+        this.cellId = cellId;
         this.projectTitle = projectTitle;
         this.boardTitle = boardTitle;
         this.rowTitle = rowTitle;
@@ -60,6 +63,14 @@ public class BoardDetailItemViewModel extends ViewModel {
     public String getRowTitle() { return rowTitle; }
 
     public String getBoardId() { return boardId; }
+
+    public String getCellId() {
+        return cellId;
+    }
+
+    public String getUpdateTaskId() {
+        return updateTaskId;
+    }
 
     public String getProjectTitle() { return projectTitle; }
 

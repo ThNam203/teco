@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#2b2b2b"
+        android:background="@color/primary_second_color"
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="8dp">
         <View
@@ -48,6 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:paddingVertical="4dp"
             android:layout_marginStart="16dp">
             <TextView
                 android:id="@+id/updateColumnTitle"
@@ -99,7 +100,7 @@
             android:padding="8dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_camera"
-            app:tint="@color/white"
+            app:tint="@color/primary_icon_color"
             android:background="@color/transparent"/>
         <ImageButton
             android:id="@+id/btnGetPhoto"
@@ -108,7 +109,7 @@
             android:padding="8dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_image"
-            app:tint="@color/white"
+            app:tint="@color/primary_icon_color"
             android:background="@color/transparent"/>
         <ImageButton
             android:id="@+id/btnAttachFile"
@@ -117,7 +118,7 @@
             android:padding="8dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_attach_file"
-            app:tint="@color/white"
+            app:tint="@color/primary_icon_color"
             android:background="@color/transparent"/>
     </LinearLayout>
 

@@ -50,10 +50,11 @@
         android:id="@+id/writeUpdateContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         android:layout_marginHorizontal="8dp"
         android:layout_marginBottom="16dp"
+        android:paddingStart="16dp"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:background="@drawable/board_update_item_background">
         <TextView
             android:layout_width="0dp"
@@ -64,6 +65,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             android:src="@drawable/ic_send"
             app:tint="@color/primary_icon_second_color"/>
     </LinearLayout>

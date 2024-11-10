@@ -10,15 +10,38 @@ const asyncCatch = require('../utils/asyncCatch')
 const s3Controller = require('./awsS3Controllers')
 const MemberRequest = require('../models/MemberRequest')
 const ActivityLog = require('../models/ActivityLog')
+const UpdateTaskComment = require('../models/UpdateTaskComment')
 
 const removeUpdateTaskFunc = async (updateTaskId) => {
     const deletedUpdateTask = await UpdateTask.findByIdAndDelete(updateTaskId)
+    if (!deletedUpdateTask) return
     if (deletedUpdateTask.files)
         deletedUpdateTask.files.forEach((file) =>
             s3Controller.deleteAnObject(file.location)
         )
 
+    UpdateTaskComment.find({
+        updateTaskId: deletedUpdateTask._id,
+    }).then((documents) => {
+        documents.forEach((document) => {
+            if (document && document.files) {
+                document.files.forEach((file) =>
+                    s3Controller.deleteAnObject(file.location)
+                )
+            }
+        })
+    })
+
     return deletedUpdateTask
+}
+
+const removeUpdateTaskCommentFunc = async (commendId) => {
+    const deletedComment = await UpdateTaskComment.findByIdAndDelete(commendId)
+    if (deletedComment && deletedComment.files) {
+        deletedComment.files.forEach((file) =>
+            s3Controller.deleteAnObject(file.location)
+        )
+    }
 }
 
 const createACell = async (cell) => {
@@ -343,7 +366,7 @@ exports.addNewUpdateTask = asyncCatch(async (req, res, next) => {
     const { taskContent } = req.body
     const { userId, projectId, boardId, cellId } = req.params
 
-    const fileLocations = []
+    const fileDescriptions = []
     if (req.files) {
         req.files.forEach((file) => {
             let fileType
@@ -358,7 +381,7 @@ exports.addNewUpdateTask = asyncCatch(async (req, res, next) => {
                 fileType: fileType,
             }
 
-            fileLocations.push(newFile)
+            fileDescriptions.push(newFile)
         })
     }
 
@@ -366,9 +389,11 @@ exports.addNewUpdateTask = asyncCatch(async (req, res, next) => {
 
     const newTask = await UpdateTask.create({
         author: task.author._id,
+        projectId: projectId,
+        boardId: boardId,
         cellId: cellId,
         content: task.content,
-        files: fileLocations,
+        files: fileDescriptions,
     })
 
     if (!newTask) return next(new AppError('Unable to send update', 500))
@@ -388,6 +413,48 @@ exports.addNewUpdateTask = asyncCatch(async (req, res, next) => {
     res.status(204).end()
 })
 
+exports.addNewCommentToUpdateTask = asyncCatch(async (req, res, next) => {
+    const { commentContent } = req.body
+    const { userId, projectId, boardId, cellId, updateTaskId } = req.params
+
+    const fileLocations = []
+    if (req.files) {
+        req.files.forEach((file) => {
+            let fileType
+            if (!file.mimetype) fileType = 'Document'
+            else if (file.mimetype.startsWith('image/')) fileType = 'Image'
+            else if (file.mimetype.startsWith('video/')) fileType = 'Video'
+            else fileType = 'Document'
+
+            const newFile = {
+                location: file.location,
+                name: file.originalname,
+                fileType: fileType,
+            }
+
+            fileLocations.push(newFile)
+        })
+    }
+
+    const comment = JSON.parse(commentContent)
+
+    const newComment = await UpdateTaskComment.create({
+        author: userId,
+        projectId: projectId,
+        boardId: boardId,
+        cellId: cellId,
+        updateTaskId: updateTaskId,
+        content: comment.content,
+        files: fileLocations,
+    })
+
+    if (!newComment) return next(new AppError('Unable to send comment', 500))
+
+    await newComment.populate('author', '_id name email profileImagePath')
+
+    res.status(200).json(newComment)
+})
+
 exports.toggleUpdateTaskLike = asyncCatch(async (req, res, next) => {
     const { userId, updateTaskId } = req.params
     const task = await UpdateTask.findById(updateTaskId)
@@ -396,7 +463,65 @@ exports.toggleUpdateTaskLike = asyncCatch(async (req, res, next) => {
     if (indexOfTheLiked === -1) task.likedUsers.push(userId)
     else task.likedUsers.splice(indexOfTheLiked, 1)
     await task.save()
+
     res.status(204).end()
+})
+
+exports.toggleUpdateTaskCommentLike = asyncCatch(async (req, res, next) => {
+    const { userId, commentId } = req.params
+    const comment = await UpdateTaskComment.findById(commentId)
+
+    const indexOfTheLiked = comment.likedUsers.indexOf(userId)
+    if (indexOfTheLiked === -1) comment.likedUsers.push(userId)
+    else comment.likedUsers.splice(indexOfTheLiked, 1)
+    await comment.save()
+    res.status(204).end()
+})
+
+exports.deleteComment = asyncCatch(async (req, res, next) => {
+    const { userId, commentId } = req.params
+    removeUpdateTaskCommentFunc(commentId)
+    // todo: send notification for user who follows the update task
+
+    res.status(204).end()
+})
+
+exports.getUpdateTaskAndComment = asyncCatch(async (req, res, next) => {
+    const { userId, updateTaskId } = req.params
+
+    const updateTask = await UpdateTask.findById(updateTaskId).populate(
+        'author',
+        '_id name email imageProfilePath'
+    )
+
+    const objectTask = updateTask.toObject()
+    if (updateTask.likedUsers.includes(userId)) objectTask.isLiked = true
+    else objectTask.isLiked = false
+    delete updateTask.likedUsers
+
+    const commentsRaw = await UpdateTaskComment.find({
+        updateTaskId: updateTaskId,
+    })
+        .sort({ createdAt: -1 })
+        .populate('author', '_id name email imageProfilePath')
+    commentsRaw.reverse()
+
+    const comments = commentsRaw.map((comment) => {
+        const commentObj = comment.toObject()
+        if (
+            commentObj.likedUsers.findIndex((likedUserId) =>
+                likedUserId.equals(userId)
+            ) !== -1
+        ) {
+            commentObj.isLiked = true
+        } else {
+            commentObj.isLiked = false
+        }
+        delete commentObj.likedUsers
+        return commentObj
+    })
+
+    res.status(200).json({ updateTask: objectTask, comments: comments })
 })
 
 exports.getAllUpdateTasksOfACell = asyncCatch(async (req, res, next) => {
@@ -433,6 +558,7 @@ exports.removeUpdateTask = asyncCatch(async (req, res, next) => {
             ACTIVITY_LOG_TYPES.REMOVE
         )
     })
+
     res.status(204).end()
 })
 
@@ -474,8 +600,8 @@ exports.addNewRow = asyncCatch(async (req, res, next) => {
 })
 
 exports.addNewColumn = asyncCatch(async (req, res, next) => {
-    const { userId, columnHeaderModel, cells } = req.body
-    const { projectId, boardId } = req.params
+    const { columnHeaderModel, cells } = req.body
+    const { userId, projectId, boardId } = req.params
 
     // update the updatedAt in project
     Project.findById(projectId).then((project) => {

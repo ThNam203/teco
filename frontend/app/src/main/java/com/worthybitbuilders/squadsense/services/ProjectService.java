@@ -6,6 +6,7 @@ import com.worthybitbuilders.squadsense.models.MinimizedProjectModel;
 import com.worthybitbuilders.squadsense.models.NewColumnRequestModel;
 import com.worthybitbuilders.squadsense.models.NewRowRequestModel;
 import com.worthybitbuilders.squadsense.models.UpdateTask;
+import com.worthybitbuilders.squadsense.models.UpdateTaskAndCommentModel;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardContentModel;
@@ -105,18 +106,31 @@ public interface ProjectService {
     @DELETE("{userId}/project/{projectId}/board/{boardId}/row/{rowPosition}")
     Call<Void> deleteARow(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("rowPosition") Integer rowPosition);
 
-    @GET("{userId}/project/{projectId}/board/{boardId}/cell-update/{cellId}")
+    @GET("{userId}/project/{projectId}/board/{boardId}/update-task/{cellId}")
     Call<List<UpdateTask>> getAllUpdateTasksOfACell(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId);
 
-    @PATCH("{userId}/project/{projectId}/board/{boardId}/cell-update/{cellId}/{updateTaskId}")
+    @PATCH("{userId}/project/{projectId}/board/{boardId}/update-task/{cellId}/{updateTaskId}")
     Call<Void> toggleLikeUpdateTask(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Path("updateTaskId") String updateTaskId);
 
     @Multipart
-    @POST("{userId}/project/{projectId}/board/{boardId}/cell-update/{cellId}")
+    @POST("{userId}/project/{projectId}/board/{boardId}/update-task/{cellId}")
     Call<Void> createNewUpdateTaskToRemote(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Part List<MultipartBody.Part> files, @Part("taskContent") UpdateTask taskContent);
 
-    @DELETE("{userId}/project/{projectId}/board/{boardId}/cell-update/{cellId}/{updateTaskId}")
+    @DELETE("{userId}/project/{projectId}/board/{boardId}/update-task/{cellId}/{updateTaskId}")
     Call<Void> deleteUpdateTask(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Path("updateTaskId") String updateTaskId);
+
+    @GET("{userId}/project/{projectId}/board/{boardId}/update-task/{cellId}/{updateTaskId}")
+    Call<UpdateTaskAndCommentModel> getUpdateTaskAndComment(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Path("updateTaskId") String updateTaskId);
+
+    @PATCH("{userId}/project/{projectId}/board/{boardId}/update-task/{cellId}/{updateTaskId}/{commentId}")
+    Call<Void> toggleLikeUpdateTaskComment(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Path("updateTaskId") String updateTaskId, @Path("commentId") String commentId);
+
+    @DELETE("{userId}/project/{projectId}/board/{boardId}/update-task/{cellId}/{updateTaskId}/{commentId}")
+    Call<Void> deleteComment(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Path("updateTaskId") String updateTaskId, @Path("commentId") String commentId);
+
+    @Multipart
+    @POST("{userId}/project/{projectId}/board/{boardId}/update-task/{cellId}/{updateTaskId}")
+    Call<UpdateTaskAndCommentModel.UpdateTaskComment> createNewCommentToRemote(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("cellId") String cellId, @Path("updateTaskId") String updateTaskId, @Part List<MultipartBody.Part> files, @Part("commentContent") UpdateTaskAndCommentModel.UpdateTaskComment commentContent);
 
     @GET("{userId}/project/{projectId}/activity-log")
     Call<List<ActivityLog>> getActivityLogs(@Path("userId") String userId, @Path("projectId") String projectId);

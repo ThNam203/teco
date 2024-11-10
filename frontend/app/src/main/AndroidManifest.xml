@@ -34,13 +34,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="s">
         <activity
+            android:name=".activities.UpdateTaskCommentActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ProjectActivityLogActivity"
             android:exported="false" />
         <activity
             android:name=".activities.FirstScreenActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -100,8 +104,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.LogInActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".activities.AddBoardActivity"
             android:exported="false" />

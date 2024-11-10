@@ -1,16 +1,19 @@
 package com.worthybitbuilders.squadsense.adapters;
 
-import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
@@ -24,13 +27,16 @@ import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.activities.ShowImagesActivity;
 import com.worthybitbuilders.squadsense.activities.ShowVideoActivity;
-import com.worthybitbuilders.squadsense.activities.UpdateTaskCommentActivity;
+import com.worthybitbuilders.squadsense.databinding.ConfirmDeleteViewBinding;
+import com.worthybitbuilders.squadsense.databinding.RowMoreOptionsBinding;
+import com.worthybitbuilders.squadsense.databinding.UpdateTaskCommentViewBinding;
 import com.worthybitbuilders.squadsense.databinding.UpdateTaskMoreOptionsBinding;
-import com.worthybitbuilders.squadsense.databinding.UpdateTaskViewBinding;
-import com.worthybitbuilders.squadsense.models.UpdateTask;
+import com.worthybitbuilders.squadsense.models.UpdateTaskAndCommentModel;
 import com.worthybitbuilders.squadsense.utils.CustomUtils;
+import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
-import com.worthybitbuilders.squadsense.viewmodels.BoardDetailItemViewModel;
+import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
+import com.worthybitbuilders.squadsense.viewmodels.UpdateTaskCommentViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,118 +47,122 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.UpdateTaskViewHolder> {
+public class UpdateTaskCommentAdapter extends RecyclerView.Adapter<UpdateTaskCommentAdapter.UpdateTaskCommentViewHolder> {
     private final Context context;
-    private final BoardDetailItemViewModel viewModel;
-    private List<UpdateTask> updateTasks = new ArrayList<>();
-    private final Handlers handlers;
-    public UpdateTaskAdapter(Context context, BoardDetailItemViewModel viewModel, Handlers handlers) {
+    private final UpdateTaskCommentViewModel viewModel;
+    private final List<UpdateTaskAndCommentModel.UpdateTaskComment> comments;
+
+    public UpdateTaskCommentAdapter(Context context, UpdateTaskCommentViewModel viewModel) {
         this.context = context;
         this.viewModel = viewModel;
-        this.handlers = handlers;
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<UpdateTask> updateTasks) {
-        this.updateTasks = updateTasks;
-        notifyDataSetChanged();
+        this.comments = viewModel.getComments();
     }
 
     @NonNull
     @Override
-    public UpdateTaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        UpdateTaskViewBinding itemBinding = UpdateTaskViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new UpdateTaskViewHolder(itemBinding);
+    public UpdateTaskCommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        UpdateTaskCommentViewBinding binding = UpdateTaskCommentViewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new UpdateTaskCommentViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UpdateTaskViewHolder holder, int position) {
-        holder.bind(updateTasks.get(position), position);
+    public void onBindViewHolder(@NonNull UpdateTaskCommentViewHolder holder, int position) {
+        holder.bind(comments.get(position), position);
     }
 
     @Override
     public int getItemCount() {
-        return updateTasks.size();
+        if (comments == null) return 0;
+        else return comments.size();
     }
 
-    public class UpdateTaskViewHolder extends RecyclerView.ViewHolder {
-        private final UpdateTaskViewBinding itemBinding;
-        public UpdateTaskViewHolder(@NonNull UpdateTaskViewBinding itemBinding) {
-            super(itemBinding.getRoot());
-            this.itemBinding = itemBinding;
+    public class UpdateTaskCommentViewHolder extends RecyclerView.ViewHolder {
+        private UpdateTaskCommentViewBinding itemBinding;
+        public UpdateTaskCommentViewHolder(@NonNull UpdateTaskCommentViewBinding binding) {
+            super(binding.getRoot());
+            this.itemBinding = binding;
         }
 
-        public void bind(UpdateTask task, int position) {
+        public void bind(UpdateTaskAndCommentModel.UpdateTaskComment comment, int position) {
             Glide.with(context)
-                    .load(task.getAuthorImagePath())
+                    .load(comment.getAuthor().profileImagePath)
                     .placeholder(ContextCompat.getDrawable(context, R.drawable.ic_user))
                     .into(itemBinding.ivAuthorAvatar);
 
-            itemBinding.tvAuthorName.setText(task.getAuthorName() != null ? task.getAuthorName() : task.getAuthorEmail());
-            itemBinding.tvTimestamp.setText(CustomUtils.mongooseDateToFormattedString(task.getCreatedAt()));
+            itemBinding.tvAuthorName.setText(comment.getAuthor().name != null ? comment.getAuthor().name : comment.getAuthor().email);
+            itemBinding.tvTimestamp.setText(CustomUtils.mongooseDateToFormattedString(comment.getCreatedAt()));
 
-            String taskContent = task.getContent();
+            String taskContent = comment.getContent();
             if (taskContent.isEmpty()) itemBinding.tvTaskContent.setVisibility(View.GONE);
             else itemBinding.tvTaskContent.setText(taskContent);
 
-            itemBinding.btnMoreOptions.setOnClickListener(view -> showMoreOptions(task, position));
-            itemBinding.btnComment.setOnClickListener(view -> {
-                Intent commentIntent = new Intent(context, UpdateTaskCommentActivity.class);
-                commentIntent.putExtra("updateTaskId", updateTasks.get(position).get_id());
-                commentIntent.putExtra("projectId", viewModel.getProjectId());
-                commentIntent.putExtra("boardId", viewModel.getBoardId());
-                commentIntent.putExtra("cellId", viewModel.getCellId());
-                context.startActivity(commentIntent);
-            });
-            setUpButtonLike(task, position);
-            setUpImageRecyclerView(task);
-            setUpFileRecyclerView(task);
-            setUpVideoRecyclerView(task);
+            String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+            if (!comment.getAuthor()._id.equals(userId)) itemBinding.btnMoreOptions.setVisibility(View.GONE);
+
+            itemBinding.btnMoreOptions.setOnClickListener(view -> showMoreOptions(comment, position));
+            setUpButtonLike(comment, position);
+            setUpImageRecyclerView(comment);
+            setUpFileRecyclerView(comment);
+            setUpVideoRecyclerView(comment);
         }
 
-        private void showMoreOptions(UpdateTask task, int position) {
-            UpdateTaskMoreOptionsBinding binding = UpdateTaskMoreOptionsBinding.inflate(LayoutInflater.from(context));
-            PopupWindow popupWindow = new PopupWindow(binding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
+        private void showMoreOptions(UpdateTaskAndCommentModel.UpdateTaskComment comment, int position) {
+            UpdateTaskMoreOptionsBinding moreOptionsBinding = UpdateTaskMoreOptionsBinding.inflate(LayoutInflater.from(context));
+            PopupWindow popupWindow = new PopupWindow(moreOptionsBinding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
 
-            binding.btnRemove.setOnClickListener(view -> {
-                viewModel.deleteUpdateTask(task.getCellId(), task.get_id()).enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                        if (response.isSuccessful()) {
-                            updateTasks.remove(position);
-                            notifyItemRemoved(position);
-                            notifyItemRangeChanged(position, updateTasks.size());
-                            if (updateTasks.size() == 0) handlers.onAllUpdateTasksDeleted();
-                        } else ToastUtils.showToastError(context, response.message(), Toast.LENGTH_SHORT);
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                        ToastUtils.showToastError(context, "Unable to delete, try again", Toast.LENGTH_SHORT);
-                    }
-                });
-
+            moreOptionsBinding.btnRemove.setOnClickListener(view -> {
+                showConfirmDelete(comment, position, popupWindow);
                 popupWindow.dismiss();
             });
 
-            // align the drop down
-            binding.getRoot().measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-            int xOffset = -(binding.getRoot().getMeasuredWidth() - itemBinding.btnMoreOptions.getWidth());
-
             popupWindow.setTouchable(true);
             popupWindow.setOutsideTouchable(true);
-            popupWindow.showAsDropDown(itemBinding.btnMoreOptions, xOffset, -50);
+            popupWindow.showAsDropDown(itemBinding.btnMoreOptions, 0, 0);
         }
 
-        private void setUpButtonLike(UpdateTask task, int position) {
+        private void showConfirmDelete(UpdateTaskAndCommentModel.UpdateTaskComment comment, int position, PopupWindow popupWindow) {
+            final Dialog dialog = new Dialog(context);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            ConfirmDeleteViewBinding binding = ConfirmDeleteViewBinding.inflate(LayoutInflater.from(context));
+            dialog.setContentView(binding.getRoot());
+            binding.deleteTitle.setText("Delete");
+            binding.etContent.setText("Are you sure to delete the update task");
+            binding.btnClosePopup.setOnClickListener(view -> dialog.dismiss());
+            binding.btnCancel.setOnClickListener(view -> dialog.dismiss());
+            binding.btnAccept.setOnClickListener(view -> {
+                viewModel.deleteComment(comment.get_id(), new UpdateTaskCommentViewModel.ApiCallHandler() {
+                    @Override
+                    public void onSuccess() {
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, comments.size());
+                        popupWindow.dismiss();
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        popupWindow.dismiss();
+                        if (context != null) ToastUtils.showToastError(context, message, Toast.LENGTH_SHORT);
+                    }
+                });
+            });
+
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
+            dialog.getWindow().setGravity(Gravity.CENTER);
+            dialog.show();
+        }
+
+        private void setUpButtonLike(UpdateTaskAndCommentModel.UpdateTaskComment comment, int position) {
             itemBinding.btnLike.setOnClickListener(view -> {
-                viewModel.toggleLikeUpdateTask(task.getCellId(), task.get_id()).enqueue(new Callback<Void>() {
+                viewModel.toggleCommentLike(comment.get_id()).enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                         if (response.isSuccessful()) {
-                            task.setLiked(!task.isLiked());
-                            if (task.isLiked()) task.setLikeCount(task.getLikeCount() + 1);
-                            else task.setLikeCount(task.getLikeCount() - 1);
+                            comment.setLiked(!comment.isLiked());
+                            if (comment.isLiked()) comment.setLikeCount(comment.getLikeCount() + 1);
+                            else comment.setLikeCount(comment.getLikeCount() - 1);
                             notifyItemChanged(position);
                         } else if (context != null) {
                             ToastUtils.showToastError(context, response.message(), Toast.LENGTH_SHORT);
@@ -168,29 +178,25 @@ public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.Up
                 });
             });
 
-            changeLikeButtonText(task);
-        }
-
-        private void changeLikeButtonText(UpdateTask task) {
-            if (task.isLiked()) {
+            if (comment.isLiked()) {
                 int color = Color.parseColor("#0073ea");
                 itemBinding.btnLike.setIconTint(ColorStateList.valueOf(color));
 
-                if (task.getLikeCount() == 1) {
+                if (comment.getLikeCount() == 1) {
                     itemBinding.btnLike.setText("Liked");
-                } else itemBinding.btnLike.setText(String.format(Locale.US, "You, %d others liked", task.getLikeCount() - 1));
+                } else itemBinding.btnLike.setText(String.format(Locale.US, "%d Liked", comment.getLikeCount() - 1));
             } else {
                 int color = ContextCompat.getColor(context, R.color.primary_icon_color);
-                itemBinding.btnLike.setText(String.format(Locale.US, "%d Like", task.getLikeCount()));
+                itemBinding.btnLike.setText(String.format(Locale.US, "%d Like", comment.getLikeCount()));
                 itemBinding.btnLike.setIconTint(ColorStateList.valueOf(color));
             }
         }
 
-        private void setUpImageRecyclerView(UpdateTask task) {
+        private void setUpImageRecyclerView(UpdateTaskAndCommentModel.UpdateTaskComment comment) {
             List<UpdateTaskImageAdapter.TaskImageFile> imageFiles = new ArrayList<>();
-            List<UpdateTask.UpdateTaskFile> allFiles = task.getFiles();
+            List<UpdateTaskAndCommentModel.UpdateTaskCommentFile> allFiles = comment.getFiles();
             for (int i = 0; i < allFiles.size(); i++) {
-                UpdateTask.UpdateTaskFile file = allFiles.get(i);
+                UpdateTaskAndCommentModel.UpdateTaskCommentFile file = allFiles.get(i);
                 if (Objects.equals(file.fileType, "Image"))
                     imageFiles.add(new UpdateTaskImageAdapter.TaskImageFile(file.location, file.name));
             }
@@ -216,11 +222,11 @@ public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.Up
             }
         }
 
-        private void setUpFileRecyclerView(UpdateTask task) {
+        private void setUpFileRecyclerView(UpdateTaskAndCommentModel.UpdateTaskComment comment) {
             List<UpdateTaskFileAdapter.TaskFile> files = new ArrayList<>();
-            List<UpdateTask.UpdateTaskFile> allFiles = task.getFiles();
+            List<UpdateTaskAndCommentModel.UpdateTaskCommentFile> allFiles = comment.getFiles();
             for (int i = 0; i < allFiles.size(); i++) {
-                UpdateTask.UpdateTaskFile file = allFiles.get(i);
+                UpdateTaskAndCommentModel.UpdateTaskCommentFile file = allFiles.get(i);
                 if (Objects.equals(file.fileType, "Document"))
                     files.add(new UpdateTaskFileAdapter.TaskFile(file.location, file.name));
             }
@@ -243,11 +249,11 @@ public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.Up
             }
         }
 
-        private void setUpVideoRecyclerView(UpdateTask task) {
+        private void setUpVideoRecyclerView(UpdateTaskAndCommentModel.UpdateTaskComment comment) {
             List<UpdateTaskVideoAdapter.TaskVideoFile> videoFiles = new ArrayList<>();
-            List<UpdateTask.UpdateTaskFile> allFiles = task.getFiles();
+            List<UpdateTaskAndCommentModel.UpdateTaskCommentFile> allFiles = comment.getFiles();
             for (int i = 0; i < allFiles.size(); i++) {
-                UpdateTask.UpdateTaskFile file = allFiles.get(i);
+                UpdateTaskAndCommentModel.UpdateTaskCommentFile file = allFiles.get(i);
                 if (Objects.equals(file.fileType, "Video"))
                     videoFiles.add(new UpdateTaskVideoAdapter.TaskVideoFile(file.location, file.name));
             }
@@ -266,9 +272,5 @@ public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.Up
                 itemBinding.rvVideoFiles.setAdapter(adapter);
             }
         }
-    }
-
-    public interface Handlers {
-        void onAllUpdateTasksDeleted();
     }
 }

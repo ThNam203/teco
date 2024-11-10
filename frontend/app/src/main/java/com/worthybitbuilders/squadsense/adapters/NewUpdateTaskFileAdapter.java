@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.imageview.ShapeableImageView;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.utils.ImageUtils;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
@@ -56,7 +57,7 @@ public class NewUpdateTaskFileAdapter extends RecyclerView.Adapter<NewUpdateTask
     public class FileUpdateItemViewHolder extends RecyclerView.ViewHolder {
         private ImageView ivFileImage;
         private TextView tvFileName;
-        private ImageButton btnRemoveFile;
+        private ShapeableImageView btnRemoveFile;
         public FileUpdateItemViewHolder(@NonNull View itemView) {
             super(itemView);
             this.ivFileImage = itemView.findViewById(R.id.ivFileImage);

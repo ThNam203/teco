@@ -110,9 +110,14 @@ public class NewUpdateTaskActivity extends AppCompatActivity {
                     Uri fileUri = data.getData();
                     boolean isAdded = false;
                     for (int i = 0; i < fileUris.size(); i++) {
-                        if (areUrisEqual(fileUris.get(i), fileUri)) {
-                            isAdded = true;
-                            break;
+                        try {
+                            if (areUrisEqual(fileUris.get(i), fileUri)) {
+                                isAdded = true;
+                                break;
+                            }
+                        } catch (RuntimeException e) {
+                            ToastUtils.showToastError(NewUpdateTaskActivity.this, "Something went wrong", Toast.LENGTH_SHORT);
+                            return;
                         }
                     }
 

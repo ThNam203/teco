@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const updateTaskSchema = new mongoose.Schema(
+const updateTaskCommentSchema = new mongoose.Schema(
     {
         author: {
             type: mongoose.Schema.Types.ObjectId,
@@ -22,9 +22,12 @@ const updateTaskSchema = new mongoose.Schema(
             ref: 'CellUpdate',
             required: true,
         },
-        content: {
-            type: String,
+        updateTaskId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'UpdateTask',
+            required: true,
         },
+        content: String,
         files: [
             {
                 location: String,
@@ -32,28 +35,21 @@ const updateTaskSchema = new mongoose.Schema(
                 fileType: String,
             },
         ],
-        likedUsers: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User',
-                required: true,
-                default: [],
-            },
-        ],
+        likedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     },
     {
         timestamps: true,
-        toObject: {
+        toJSON: {
             virtuals: true,
         },
-        toJSON: {
+        toObject: {
             virtuals: true,
         },
     }
 )
 
-updateTaskSchema.virtual('likeCount').get(function () {
+updateTaskCommentSchema.virtual('likeCount').get(function () {
     return this.likedUsers ? this.likedUsers.length : 0
 })
 
-module.exports = mongoose.model('UpdateTask', updateTaskSchema)
+module.exports = mongoose.model('TaskComment', updateTaskCommentSchema)

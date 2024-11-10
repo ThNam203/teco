@@ -24,6 +24,7 @@ exports.globalErrorHandler = (err, req, res, next) => {
     // if (process.env.NODE_ENV === 'development')
     //     sendErrorInDevelopmentEnv(err, res)
     // else
+    console.log(err)
     sendErrorInProductionEnv(err, res)
 }
 
