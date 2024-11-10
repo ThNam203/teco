@@ -27,17 +27,22 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.activities.ProjectActivity;
 import com.worthybitbuilders.squadsense.adapters.BoardItemDetailColumnAdapter;
+import com.worthybitbuilders.squadsense.adapters.BoardItemMemberAdapter;
+import com.worthybitbuilders.squadsense.adapters.BoardItemOwnerAdapter;
 import com.worthybitbuilders.squadsense.adapters.StatusContentsAdapter;
 import com.worthybitbuilders.squadsense.adapters.StatusEditItemAdapter;
 import com.worthybitbuilders.squadsense.databinding.BoardDateItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardNumberItemPopupBinding;
+import com.worthybitbuilders.squadsense.databinding.BoardOwnerItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardStatusEditNewItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardStatusEditViewBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardStatusItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardTextItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardTimelineItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.FragmentBoardDetailColumnBinding;
+import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardDateItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardNumberItemModel;
@@ -48,13 +53,17 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel
 import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
 import com.worthybitbuilders.squadsense.utils.CustomUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
+import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.BoardDetailItemViewModel;
+import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -121,8 +130,8 @@ public class BoardDetailColumnFragment extends Fragment {
             }
 
             @Override
-            public void onUserItemClick(BoardUserItemModel userItemModel, int columnPosition) {
-
+            public void onUserItemClick(BoardUserItemModel userItemModel, String columnTitle, int columnPosition) {
+                showOwnerPopup(userItemModel, columnTitle, columnPosition);
             }
         });
 
@@ -135,6 +144,85 @@ public class BoardDetailColumnFragment extends Fragment {
         binding.rvItemContent.addItemDecoration(itemDecorator);
 
         return binding.getRoot();
+    }
+
+
+    private void showOwnerPopup(BoardUserItemModel userItemModel, String columnTitle, int columnPos) {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        BoardOwnerItemPopupBinding binding = BoardOwnerItemPopupBinding.inflate(getLayoutInflater());
+        binding.popupTitle.setText(columnTitle);
+        dialog.setContentView(binding.getRoot());
+
+        List<UserModel> listMember = new ArrayList<>();
+        List<UserModel> listOwner = new ArrayList<>(userItemModel.getUsers());
+        binding.rvMembers.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.rvOwers.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        BoardItemMemberAdapter boardItemMemberAdapter = new BoardItemMemberAdapter(listMember);
+        BoardItemOwnerAdapter boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner);
+        binding.rvOwers.setAdapter(boardItemOwnerAdapter);
+
+        viewModel.getMember(new BoardDetailItemViewModel.MemberApiCallHandler() {
+            @Override
+            public void onSuccess(List<UserModel> listMemberData) {
+                listMember.addAll(listMemberData);
+                boardItemMemberAdapter.notifyDataSetChanged();
+                binding.rvMembers.setAdapter(boardItemMemberAdapter);
+                if(listMember.size() > 0) binding.rvMembers.setVisibility(View.VISIBLE);
+                else binding.rvMembers.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                ToastUtils.showToastError(getActivity(), message, Toast.LENGTH_SHORT);
+                dialog.dismiss();
+            }
+        });
+
+        boardItemMemberAdapter.setOnClickListener((position, status) -> {
+            if(status) {
+                listOwner.add(listMember.get(position));
+                boardItemOwnerAdapter.notifyDataSetChanged();
+                binding.layoutRvOwers.setVisibility(View.VISIBLE);
+            } else {
+                listOwner.remove(listMember.get(position));
+                boardItemOwnerAdapter.notifyDataSetChanged();
+                if(listOwner.size() > 0) binding.layoutRvOwers.setVisibility(View.VISIBLE);
+                else binding.layoutRvOwers.setVisibility(View.GONE);
+            }
+        });
+
+        boardItemOwnerAdapter.setOnClickListener(position -> {
+            listOwner.remove(listOwner.get(position));
+            boardItemOwnerAdapter.notifyDataSetChanged();
+            if(listOwner.size() > 0) binding.layoutRvOwers.setVisibility(View.VISIBLE);
+            else binding.layoutRvOwers.setVisibility(View.GONE);
+        });
+
+        binding.btnSave.setOnClickListener(view -> {
+            userItemModel.setUsers(listOwner);
+            viewModel.updateACell(userItemModel).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        adapter.notifyItemChanged(columnPos);
+                        ToastUtils.showToastSuccess(getActivity(), "Updated", Toast.LENGTH_SHORT);
+                    } else ToastUtils.showToastError(getActivity(), response.message(), Toast.LENGTH_SHORT);
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    ToastUtils.showToastError(getActivity(), t.getMessage(), Toast.LENGTH_SHORT);
+                }
+            });
+            dialog.dismiss();
+        });
+        binding.btnClosePopup.setOnClickListener(view -> dialog.dismiss());
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialog.show();
     }
 
     private void showTextItemPopup(BoardTextItemModel itemModel, String title, int columnPos) {

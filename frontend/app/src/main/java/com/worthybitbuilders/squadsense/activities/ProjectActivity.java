@@ -185,8 +185,8 @@ public class ProjectActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onUserItemClick(BoardUserItemModel userItemModel) {
-                showOwnerPopup(userItemModel);
+            public void onUserItemClick(BoardUserItemModel userItemModel, String columnTitle, int columnPos, int rowPos) {
+                showOwnerPopup(userItemModel, columnTitle, columnPos, rowPos);
             }
 
             @Override
@@ -236,6 +236,10 @@ public class ProjectActivity extends AppCompatActivity {
             if (boardViewModel.getSortState() == BoardViewModel.SortState.ASCENDING)
                 DrawableCompat.setTint(binding.btnSortAscContainer.getBackground(), Color.parseColor("#8ecae6"));
             else DrawableCompat.setTint(binding.btnSortAscContainer.getBackground(), ContextCompat.getColor(ProjectActivity.this, R.color.transparent));
+
+            if (boardViewModel.getSortState() == BoardViewModel.SortState.DESCENDING)
+                DrawableCompat.setTint(binding.btnSortDescContainer.getBackground(), Color.parseColor("#8ecae6"));
+            else DrawableCompat.setTint(binding.btnSortDescContainer.getBackground(), ContextCompat.getColor(ProjectActivity.this, R.color.transparent));
         }
 
         binding.btnSortAsc.setOnClickListener(view -> {
@@ -754,19 +758,20 @@ public class ProjectActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void showOwnerPopup(BoardUserItemModel userItemModel)
-    {
+    private void showOwnerPopup(BoardUserItemModel userItemModel, String columnTitle, int columnPos, int rowPos) {
         final Dialog dialog = new Dialog(ProjectActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         BoardOwnerItemPopupBinding binding = BoardOwnerItemPopupBinding.inflate(getLayoutInflater());
+        binding.popupTitle.setText(columnTitle);
         dialog.setContentView(binding.getRoot());
 
         List<UserModel> listMember = new ArrayList<>();
-        List<UserModel> listOwner = new ArrayList<>();
+        List<UserModel> listOwner = new ArrayList<>(userItemModel.getUsers());
         binding.rvMembers.setLayoutManager(new LinearLayoutManager(ProjectActivity.this));
         binding.rvOwers.setLayoutManager(new LinearLayoutManager(ProjectActivity.this, LinearLayoutManager.HORIZONTAL, false));
         BoardItemMemberAdapter boardItemMemberAdapter = new BoardItemMemberAdapter(listMember);
         BoardItemOwnerAdapter boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner);
+        binding.rvOwers.setAdapter(boardItemOwnerAdapter);
 
         String projectId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID);
         projectActivityViewModel.getMember(projectId, new ProjectActivityViewModel.ApiCallMemberHandlers() {
@@ -785,40 +790,45 @@ public class ProjectActivity extends AppCompatActivity {
             }
         });
 
-        boardItemMemberAdapter.setOnClickListener(new BoardItemMemberAdapter.OnActionCallback() {
-            @Override
-            public void OnClick(int position, boolean status) {
-                if(status)
-                {
-                    listOwner.add(listMember.get(position));
-                    boardItemOwnerAdapter.notifyDataSetChanged();
-                    binding.rvOwers.setAdapter(boardItemOwnerAdapter);
-                    binding.layoutRvOwers.setVisibility(View.VISIBLE);
-                }
-                else
-                {
-                    listOwner.remove(listMember.get(position));
-                    boardItemOwnerAdapter.notifyDataSetChanged();
-                    binding.rvOwers.setAdapter(boardItemOwnerAdapter);
-                    if(listOwner.size() > 0) binding.layoutRvOwers.setVisibility(View.VISIBLE);
-                    else binding.layoutRvOwers.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        boardItemOwnerAdapter.setOnClickListener(new BoardItemOwnerAdapter.OnActionCallback() {
-            @Override
-            public void OnClick(int position) {
-                listOwner.remove(listOwner.get(position));
+        boardItemMemberAdapter.setOnClickListener((position, status) -> {
+            if(status) {
+                listOwner.add(listMember.get(position));
                 boardItemOwnerAdapter.notifyDataSetChanged();
-                binding.rvOwers.setAdapter(boardItemOwnerAdapter);
+                binding.layoutRvOwers.setVisibility(View.VISIBLE);
+            } else {
+                listOwner.remove(listMember.get(position));
+                boardItemOwnerAdapter.notifyDataSetChanged();
                 if(listOwner.size() > 0) binding.layoutRvOwers.setVisibility(View.VISIBLE);
                 else binding.layoutRvOwers.setVisibility(View.GONE);
             }
         });
 
-        binding.btnClosePopup.setOnClickListener(view -> dialog.dismiss());
+        boardItemOwnerAdapter.setOnClickListener(position -> {
+            listOwner.remove(listOwner.get(position));
+            boardItemOwnerAdapter.notifyDataSetChanged();
+            if(listOwner.size() > 0) binding.layoutRvOwers.setVisibility(View.VISIBLE);
+            else binding.layoutRvOwers.setVisibility(View.GONE);
+        });
 
+        binding.btnSave.setOnClickListener(view -> {
+            userItemModel.setUsers(listOwner);
+            boardViewModel.updateACell(userItemModel).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        boardAdapter.changeCellItem(columnPos, rowPos, userItemModel);
+                        ToastUtils.showToastSuccess(ProjectActivity.this, "Updated", Toast.LENGTH_SHORT);
+                    } else ToastUtils.showToastError(ProjectActivity.this, response.message(), Toast.LENGTH_SHORT);
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    ToastUtils.showToastError(ProjectActivity.this, t.getMessage(), Toast.LENGTH_SHORT);
+                }
+            });
+            dialog.dismiss();
+        });
+        binding.btnClosePopup.setOnClickListener(view -> dialog.dismiss());
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;

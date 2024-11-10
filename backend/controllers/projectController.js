@@ -49,7 +49,6 @@ const createACell = async (cell) => {
     const { cellType } = cell
     // must delete, if not we cant create
     // the reasone is the cellType overlap with the discriminator key
-    console.log(cellType)
     delete cell.cellType
     if (cell._id) delete cell._id
     switch (cellType) {
@@ -72,10 +71,7 @@ const createACell = async (cell) => {
             newCell = await cellModels.CellDate.create(cell)
             break
         case 'CellUser':
-            newCell = await cellModels.CellUser.create({
-                ...cell,
-                userId: cell.userId ? cell.userId : null,
-            })
+            newCell = await cellModels.CellUser.create(cell)
             break
         case 'CellCheckbox':
             newCell = await cellModels.CellCheckbox.create(cell)
@@ -136,7 +132,7 @@ const updateACell = async (cell) => {
                 cell._id,
                 cell,
                 { new: true }
-            )
+            ).populate('users', '_id name profileImagePath')
             break
         case 'CellCheckbox':
             newCell = await cellModels.CellCheckbox.findByIdAndUpdate(
@@ -821,9 +817,18 @@ exports.getCellsInARow = asyncCatch(async (req, res, next) => {
 
     const cellsInRow = []
     const columnTitles = []
-    for (let i = 0; i < board.columnCells.length; i += 1) {
-        cellsInRow.push(board.cells[rowPosition][i])
+    for (let i = 0; i < board.columnCells.length; i += 1)
         columnTitles.push(board.columnCells[i].title)
+
+    let idx = 0
+    // eslint-disable-next-line no-restricted-syntax, guard-for-in
+    for (const column in board.columnCells) {
+        if (board.cells[rowPosition][idx].cellType === 'CellUser') {
+            // eslint-disable-next-line no-await-in-loop
+            await board.cells[rowPosition][idx].populate('users')
+        }
+        cellsInRow.push(board.cells[rowPosition][idx])
+        idx += 1
     }
 
     res.status(200).json({
@@ -847,6 +852,22 @@ exports.getProjectById = asyncCatch(async (req, res, next) => {
             model: 'Cell',
         },
     })
+
+    // populate "user" cell
+    await Promise.all(
+        populatedProject.boards.map(async (board) => {
+            await Promise.all(
+                board.cells.map(async (cellRow) => {
+                    await Promise.all(
+                        cellRow.map(async (cell) => {
+                            if (cell.cellType === 'CellUser')
+                                await cell.populate('users')
+                        })
+                    )
+                })
+            )
+        })
+    )
 
     if (!populatedProject)
         return next(new AppError('Unable to get the project', 500))

@@ -45,11 +45,11 @@ const cellDateSchema = new mongoose.Schema({
 })
 
 const cellUserSchema = new mongoose.Schema({
-    userId: {
+    users: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-    },
-    userImagePath: String,
+        default: [],
+    }],
 })
 
 const cellCheckboxSchema = new mongoose.Schema({

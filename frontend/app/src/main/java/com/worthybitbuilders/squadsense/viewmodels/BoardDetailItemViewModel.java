@@ -4,8 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.gson.Gson;
 import com.worthybitbuilders.squadsense.models.BoardDetailItemModel;
+import com.worthybitbuilders.squadsense.models.ErrorResponse;
 import com.worthybitbuilders.squadsense.models.UpdateTask;
+import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardBaseItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardDateItemModel;
@@ -21,6 +24,7 @@ import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -99,6 +103,33 @@ public class BoardDetailItemViewModel extends ViewModel {
 
             @Override
             public void onFailure(@NonNull Call<BoardDetailItemModel> call, Throwable t) {
+                handlers.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public void getMember(MemberApiCallHandler handlers) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<List<UserModel>> call = projectService.getMember(userId, projectId);
+        call.enqueue(new Callback<List<UserModel>>() {
+            @Override
+            public void onResponse(Call<List<UserModel>> call, Response<List<UserModel>> response) {
+                if (response.isSuccessful()) {
+                    List<UserModel> members = response.body();
+                    handlers.onSuccess(members);
+                } else {
+                    ErrorResponse err = null;
+                    try {
+                        err = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                    } catch (IOException e) {
+                        handlers.onFailure("Something has gone wrong!");
+                    }
+                    handlers.onFailure(err.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UserModel>> call, Throwable t) {
                 handlers.onFailure(t.getMessage());
             }
         });
@@ -202,6 +233,11 @@ public class BoardDetailItemViewModel extends ViewModel {
 
     public interface ApiCallHandler {
         void onSuccess();
+        void onFailure(String message);
+    }
+
+    public interface MemberApiCallHandler {
+        void onSuccess(List<UserModel> members);
         void onFailure(String message);
     }
 }

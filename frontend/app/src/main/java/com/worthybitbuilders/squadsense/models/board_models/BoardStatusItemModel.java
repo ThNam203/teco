@@ -26,6 +26,7 @@ public class BoardStatusItemModel extends BoardBaseItemModel {
         this.contents = contents;
         this.colors = colors;
     }
+
     public BoardStatusItemModel(BoardStatusItemModel itemModel) {
         super(itemModel.getContent(), "CellStatus");
         this.contents = itemModel.getContents();

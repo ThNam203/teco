@@ -1,28 +1,28 @@
 package com.worthybitbuilders.squadsense.models.board_models;
 
+import com.worthybitbuilders.squadsense.models.UserModel;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class BoardUserItemModel extends BoardBaseItemModel {
-    private String userId;
-    private String userImagePath;
+    private List<UserModel> users;
 
     public BoardUserItemModel() {
         super("", "CellUser");
-        this.userId = "";
-        this.userImagePath = "";
+        this.users = new ArrayList<>();
     }
 
-    public String getUserId() {
-        return userId;
+    public BoardUserItemModel(List<UserModel> users) {
+        super("", "CellUser");
+        this.users = users;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public List<UserModel> getUsers() {
+        return users;
     }
 
-    public String getUserImagePath() {
-        return userImagePath;
-    }
-
-    public void setUserImagePath(String userImagePath) {
-        this.userImagePath = userImagePath;
+    public void setUsers(List<UserModel> users) {
+        this.users = users;
     }
 }

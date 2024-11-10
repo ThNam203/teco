@@ -76,7 +76,7 @@ public class ProjectActivityViewModel extends ViewModel {
         List<String> authors = new ArrayList<>();
         authors.add(userId);
         ProjectModel unsetIdProjectModel;
-        if (templateName.equals("sampleProject"))
+        if (templateName.equals("defaultTemplate"))
             unsetIdProjectModel = new ProjectModel(0, ProjectTemplates.sampleProjectContent());
         else if (templateName.equals("ITManagement"))
             unsetIdProjectModel = new ProjectModel(0, ProjectTemplates.sampleITManagementContent());
