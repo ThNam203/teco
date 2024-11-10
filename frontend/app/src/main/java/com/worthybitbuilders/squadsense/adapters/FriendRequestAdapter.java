@@ -108,9 +108,9 @@ public class FriendRequestAdapter extends RecyclerView.Adapter{
         }
 
         void bind(Notification notification, int position) {
-            String content = notification.getTitle() + " " + notification.getContent();
+            String content = notification.getContent();
             SpannableString spannableString = new SpannableString(content);
-            int numberOfCharsToBold = notification.getTitle().length(); // Ví dụ: in đậm 4 chữ đầu
+            int numberOfCharsToBold = notification.getTitle().length(); // Ví dụ: in đậm vài chữ đầu
             if (numberOfCharsToBold <= content.length()) {
                 spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, numberOfCharsToBold, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }

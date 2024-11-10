@@ -298,8 +298,12 @@ public class ProjectActivityLogActivity extends AppCompatActivity {
     private void filterCreator(List<ActivityLog> list)
     {
         List<ActivityLog> toRemove = new ArrayList<>();
+        List<String> listSelectedCreatorId = new ArrayList<>();
+        listSelectedCreator.forEach(creator -> {
+            if(!listSelectedCreatorId.contains(creator._id)) listSelectedCreatorId.add(creator._id);
+        });
         list.forEach(activityLog -> {
-            if(!listSelectedCreator.contains(activityLog.getCreator()))
+            if(!listSelectedCreatorId.contains(activityLog.getCreator()._id))
                 toRemove.add(activityLog);
         });
         toRemove.forEach(item -> list.remove(item));

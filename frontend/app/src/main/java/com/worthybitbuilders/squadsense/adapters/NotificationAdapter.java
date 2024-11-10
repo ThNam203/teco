@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.activities.InboxActivity;
+import com.worthybitbuilders.squadsense.databinding.FragmentHomeBinding;
 import com.worthybitbuilders.squadsense.models.Notification;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
@@ -33,7 +34,8 @@ public class NotificationAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_ADMIN_REQUEST = 3;
     private List<Notification> notificationList;
     private OnActionCallback actionCallback;
-    private OnReplyCallback replyCallback;
+    private ReplyMemberRequestHandler memberRequestHandler;
+    private ReplyAdminRequestHandler adminRequestHandler ;
     private UserViewModel userViewModel;
 
     public interface OnActionCallback {
@@ -41,11 +43,15 @@ public class NotificationAdapter extends RecyclerView.Adapter {
         void OnShowingOption(int position);
     }
 
-    public interface OnReplyCallback{
-        void OnAccept(int position, String NOTIFICATION_TYPE);
-        void OnDeny(int position, String NOTIFICATION_TYPE);
+    public interface ReplyMemberRequestHandler{
+        void OnAccept(int position);
+        void OnDeny(int position);
     }
 
+    public interface ReplyAdminRequestHandler{
+        void OnAccept(int position);
+        void OnDeny(int position);
+    }
     public NotificationAdapter(List<Notification> notificationList) {
         this.notificationList = notificationList;
         userViewModel = new ViewModelProvider(new ViewModelStoreOwner() {
@@ -61,9 +67,15 @@ public class NotificationAdapter extends RecyclerView.Adapter {
     {
         this.actionCallback = actionCallback;
     }
-    public void setOnReplyListener(OnReplyCallback replyCallback)
+
+    public void setOnReplyMemberRequest(ReplyMemberRequestHandler handler)
     {
-        this.replyCallback = replyCallback;
+        this.memberRequestHandler = handler;
+    }
+
+    public void setOnReplyAdminRequest(ReplyAdminRequestHandler handler)
+    {
+        this.adminRequestHandler = handler;
     }
 
     @Override
@@ -102,12 +114,12 @@ public class NotificationAdapter extends RecyclerView.Adapter {
         else if (viewType == VIEW_TYPE_MEMBER_REQUEST) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_notification_member_request, parent, false);
-            return new MemberRequestNotificationHolder(view);
+            return new MemberRequestNotificationHolder(view, memberRequestHandler);
         }
         else if (viewType == VIEW_TYPE_ADMIN_REQUEST) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_notification_admin_request, parent, false);
-            return new AdminRequestNotificationHolder(view);
+            return new AdminRequestNotificationHolder(view, adminRequestHandler);
         }
         return null;
     }
@@ -141,6 +153,7 @@ public class NotificationAdapter extends RecyclerView.Adapter {
         TextView tvTitle, tvContent, tvTimestamps;
         ImageButton btnMore;
         ImageView userImage;
+
         FriendRequestNotificationHolder(View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.title);
@@ -241,8 +254,8 @@ public class NotificationAdapter extends RecyclerView.Adapter {
 
         AppCompatButton btnAccept, btnDeny;
         ImageView userImage;
-
-        MemberRequestNotificationHolder(View itemView) {
+        ReplyMemberRequestHandler handler;
+        MemberRequestNotificationHolder(View itemView, ReplyMemberRequestHandler handler) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.title);
             tvContent = (TextView) itemView.findViewById(R.id.content);
@@ -251,6 +264,7 @@ public class NotificationAdapter extends RecyclerView.Adapter {
 
             btnAccept = (AppCompatButton) itemView.findViewById(R.id.btn_accept);
             btnDeny =(AppCompatButton) itemView.findViewById(R.id.btn_deny);
+            this.handler = handler;
         }
 
         void bind(Notification notification, int position) {
@@ -279,14 +293,14 @@ public class NotificationAdapter extends RecyclerView.Adapter {
             btnAccept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    replyCallback.OnAccept(position, notification.getNotificationType());
+                    handler.OnAccept(position);
                 }
             });
 
             btnDeny.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    replyCallback.OnDeny(position, notification.getNotificationType());
+                    handler.OnDeny(position);
                 }
             });
         }
@@ -297,8 +311,8 @@ public class NotificationAdapter extends RecyclerView.Adapter {
 
         AppCompatButton btnAccept, btnDeny;
         ImageView userImage;
-
-        AdminRequestNotificationHolder(View itemView) {
+        ReplyAdminRequestHandler handler;
+        AdminRequestNotificationHolder(View itemView, ReplyAdminRequestHandler handler) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.title);
             tvContent = (TextView) itemView.findViewById(R.id.content);
@@ -307,6 +321,7 @@ public class NotificationAdapter extends RecyclerView.Adapter {
 
             btnAccept = (AppCompatButton) itemView.findViewById(R.id.btn_accept);
             btnDeny =(AppCompatButton) itemView.findViewById(R.id.btn_deny);
+            this.handler = handler;
         }
 
         void bind(Notification notification, int position) {
@@ -335,14 +350,14 @@ public class NotificationAdapter extends RecyclerView.Adapter {
             btnAccept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    replyCallback.OnAccept(position, notification.getNotificationType());
+                    handler.OnAccept(position);
                 }
             });
 
             btnDeny.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    replyCallback.OnDeny(position, notification.getNotificationType());
+                    handler.OnDeny(position);
                 }
             });
         }

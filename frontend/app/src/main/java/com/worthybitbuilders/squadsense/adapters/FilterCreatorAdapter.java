@@ -51,6 +51,7 @@ public class FilterCreatorAdapter extends RecyclerView.Adapter {
         }
 
         void bind(ActivityLog.ActivityLogCreator creator, int position) {
+            binding.creatorName.setText(creator.name);
             Glide.with(itemView.getContext())
                     .load(creator.profileImagePath)
                     .placeholder(R.drawable.ic_user)

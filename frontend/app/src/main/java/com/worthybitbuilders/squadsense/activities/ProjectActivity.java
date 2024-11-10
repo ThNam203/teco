@@ -631,7 +631,28 @@ public class ProjectActivity extends AppCompatActivity {
                     loadingDialog.dismiss();
                     finish();
                 }
-            });
+            }, "sampleProject");
+        }
+        else if (whatToDo.equals("ITManagement")) {
+            isNewProjectCreateRequest = true;
+            loadingDialog.show();
+            projectActivityViewModel.saveNewProjectToRemote(new ProjectActivityViewModel.ApiCallHandlers() {
+                @Override
+                public void onSuccess() {
+                    loadingDialog.dismiss();
+                    isNewProjectCreateRequest = false;
+                    saveRecentAccessProject(projectActivityViewModel.getProjectId());
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    ToastUtils.showToastError(ProjectActivity.this, "Failed to create new project123, please try again", Toast.LENGTH_LONG);
+                    loadingDialog.dismiss();
+                    finish();
+                }
+            },"ITManagement");
+
+
         }
     }
 

@@ -23,7 +23,8 @@ public interface UserService {
 
     @GET("{userId}/get-user-by-email/{email}")
     Call<UserModel> getUserByEmail(@Path("userId") String userId, @Path("email") String email);
-
+    @GET("{userId}/get-all-users")
+    Call<List<UserModel>> getAllUsers(@Path("userId") String userId);
     @POST("{userId}/save-recent-project-id/{projectId}")
     Call<Void> saveRecentProjectIds(@Path("userId") String userId, @Path("projectId") String projectId);
 

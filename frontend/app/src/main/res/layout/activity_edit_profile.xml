@@ -263,7 +263,7 @@
                         android:background="@drawable/background_input"
                         android:hint="Add a birthday"
                         android:padding="10dp"
-                        android:maxLength="10"
+                        android:focusable="false"
                         android:textColor="@color/primary_word_color"
                         android:textColorHint="@color/primary_word_second_color"
                         android:textSize="@dimen/normal_textsize" />

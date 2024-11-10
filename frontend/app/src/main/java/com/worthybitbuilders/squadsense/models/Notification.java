@@ -1,6 +1,6 @@
 package com.worthybitbuilders.squadsense.models;
 
-import com.worthybitbuilders.squadsense.utils.Convert;
+import com.worthybitbuilders.squadsense.utils.ConvertUtils;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -90,8 +90,8 @@ public class Notification {
     public String getCustomTimeCreated()
     {
         //if the notification is sent today -> show time else show date
-        String dateNow = Convert.DateToString(new Date(), Convert.Pattern.DAY_MONTH_YEAR);
-        String dateCreatedDMY = Convert.TimestampsToString(createdAt, Convert.Pattern.DAY_MONTH_YEAR);
+        String dateNow = ConvertUtils.DateToString(new Date(), ConvertUtils.Pattern.DAY_MONTH_YEAR);
+        String dateCreatedDMY = ConvertUtils.TimestampsToString(createdAt, ConvertUtils.Pattern.DAY_MONTH_YEAR);
 
         if(dateNow.equals(dateCreatedDMY))
             return getTimeCreatedHm();
@@ -100,19 +100,19 @@ public class Notification {
     }
 
     public String getTimeCreatedDMY() {
-        return Convert.TimestampsToString(createdAt, Convert.Pattern.DAY_MONTH_YEAR);
+        return ConvertUtils.TimestampsToString(createdAt, ConvertUtils.Pattern.DAY_MONTH_YEAR);
     }
 
     public String getTimeCreatedHm() {
-        return Convert.TimestampsToString(createdAt, Convert.Pattern.HOUR_MINUTE);
+        return ConvertUtils.TimestampsToString(createdAt, ConvertUtils.Pattern.HOUR_MINUTE);
     }
 
     public String getTimeUpdate() {
         //if the notification is sent today -> show time else show date
 
-        String dateNow = Convert.DateToString(new Date(), Convert.Pattern.DAY_MONTH_YEAR);
-        String dateCreatedDMY = Convert.TimestampsToString(updatedAt, Convert.Pattern.DAY_MONTH_YEAR);
-        String dateCreatedHm = Convert.TimestampsToString(updatedAt, Convert.Pattern.HOUR_MINUTE);
+        String dateNow = ConvertUtils.DateToString(new Date(), ConvertUtils.Pattern.DAY_MONTH_YEAR);
+        String dateCreatedDMY = ConvertUtils.TimestampsToString(updatedAt, ConvertUtils.Pattern.DAY_MONTH_YEAR);
+        String dateCreatedHm = ConvertUtils.TimestampsToString(updatedAt, ConvertUtils.Pattern.HOUR_MINUTE);
 
         if(dateNow.equals(dateCreatedDMY))
             return dateCreatedHm;

@@ -15,8 +15,9 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
 
     public enum OptionViewProject {ALLPROJECT, RECENT, MYPROJECT}
-
     private static OptionViewProject homeFragmentOptionViewProject = OptionViewProject.RECENT;
+
+    private static String notificationFragmentOptionView = "All";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,4 +67,13 @@ public class MainActivity extends AppCompatActivity {
         homeFragmentOptionViewProject = optionViewProject;
     }
 
+    public static String getNotificationFragmentOptionView()
+    {
+        return notificationFragmentOptionView;
+    }
+
+    public static void setNotificationFragmentOptionView(String optionViewNotification)
+    {
+        notificationFragmentOptionView = optionViewNotification;
+    }
 }

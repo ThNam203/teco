@@ -59,8 +59,6 @@ public class UserViewModel extends ViewModel {
         });
     }
 
-
-
     public void getUserByEmail (String email, UserCallback callback) {
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         Call<UserModel> result = userService.getUserByEmail(userId, email);
@@ -224,9 +222,40 @@ public class UserViewModel extends ViewModel {
         });
     }
 
+    public void getAllUser (CallListUserHandlers callback) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<List<UserModel>> result = userService.getAllUsers(userId);
+        result.enqueue(new Callback<List<UserModel>>() {
+            @Override
+            public void onResponse(Call<List<UserModel>> call, Response<List<UserModel>> response) {
+                if (response.isSuccessful()) {
+                    List<UserModel> user = response.body();
+                    callback.onSuccess(user);
+                }
+                else {
+                    ErrorResponse err = null;
+                    try {
+                        err = new Gson().fromJson(response.errorBody().string(), ErrorResponse.class);
+                    } catch (IOException e) {
+                        callback.onFailure("Something has gone wrong!");
+                    }
+                    callback.onFailure(err.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UserModel>> call, Throwable t) {
+                callback.onFailure(t.getMessage());
+            }
+        });
+    }
 
     public interface UserCallback {
         void onSuccess(UserModel user);
+        void onFailure(String message);
+    }
+    public interface CallListUserHandlers {
+        void onSuccess(List<UserModel> dataUsers);
         void onFailure(String message);
     }
     public interface RecentProjectIdsCallback {

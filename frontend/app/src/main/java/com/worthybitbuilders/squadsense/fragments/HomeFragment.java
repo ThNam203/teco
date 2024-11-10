@@ -9,21 +9,18 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
@@ -34,19 +31,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.worthybitbuilders.squadsense.MainActivity;
 import com.worthybitbuilders.squadsense.R;
-import com.worthybitbuilders.squadsense.activities.AddBoardActivity;
-import com.worthybitbuilders.squadsense.activities.MemberActivity;
+import com.worthybitbuilders.squadsense.activities.AddProjectActivity;
 import com.worthybitbuilders.squadsense.activities.ProjectActivity;
 import com.worthybitbuilders.squadsense.activities.SearchActivity;
 import com.worthybitbuilders.squadsense.adapters.ProjectAdapter;
+import com.worthybitbuilders.squadsense.adapters.SearchingFriendAdapter;
 import com.worthybitbuilders.squadsense.databinding.FragmentHomeBinding;
-import com.worthybitbuilders.squadsense.databinding.MemberMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.databinding.MinimizeProjectMoreOptionsBinding;
+import com.worthybitbuilders.squadsense.databinding.PopupInviteByEmailBinding;
 import com.worthybitbuilders.squadsense.databinding.PopupOptionViewProjectBinding;
 import com.worthybitbuilders.squadsense.databinding.ProjectMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.models.MinimizedProjectModel;
 import com.worthybitbuilders.squadsense.models.UserModel;
-import com.worthybitbuilders.squadsense.models.board_models.ProjectModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.EventChecker;
@@ -112,7 +108,7 @@ public class HomeFragment extends Fragment {
         binding.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityUtils.switchToActivity(getContext(), AddBoardActivity.class);
+                ActivityUtils.switchToActivity(getContext(), AddProjectActivity.class);
             }
         });
         binding.labelSearch.setOnTouchListener(new View.OnTouchListener() {
@@ -185,17 +181,79 @@ public class HomeFragment extends Fragment {
 
     private void btn_addperson_showPopup() {
         final Dialog dialog = new Dialog(getActivity());
+        PopupInviteByEmailBinding popupInviteByEmailBinding = PopupInviteByEmailBinding.inflate(getLayoutInflater());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.popup_invite_by_email);
+        dialog.setContentView(popupInviteByEmailBinding.getRoot());
+        popupInviteByEmailBinding.rvSearchFriend.setLayoutManager(new LinearLayoutManager(getContext()));
+        List<UserModel> listAllUser = new ArrayList<>();
+        List<UserModel> listSearchingUser = new ArrayList<>();
+        SearchingFriendAdapter searchingFriendAdapter = new SearchingFriendAdapter(listSearchingUser);
 
-        //Set activity of button in dialog here
-        ImageButton btnClosePopup = (ImageButton) dialog.findViewById(R.id.btn_close_popup);
-        AppCompatButton btnInvite = (AppCompatButton) dialog.findViewById(R.id.btn_invite);
-        EditText inputEmail = (EditText) dialog.findViewById(R.id.input_email);
+        searchingFriendAdapter.setOnClickItemFriend(new SearchingFriendAdapter.ClickHandler() {
+            @Override
+            public void onClick(int position) {
+                popupInviteByEmailBinding.inputEmail.setText(listSearchingUser.get(position).getEmail());
+            }
+        });
+        userViewModel.getAllUser(new UserViewModel.CallListUserHandlers() {
+            @Override
+            public void onSuccess(List<UserModel> dataUsers) {
+                String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+                dataUsers.forEach(user -> {
+                    if(!user.getId().equals(userId)) listAllUser.add(user);
+                });
+            }
+
+            @Override
+            public void onFailure(String message) {
+                ToastUtils.showToastError(getContext(), message, Toast.LENGTH_SHORT);
+            }
+        });
+
+        popupInviteByEmailBinding.inputEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String toSearch = popupInviteByEmailBinding.inputEmail.getText().toString();
+                listSearchingUser.clear();
+                if(!toSearch.isEmpty())
+                {
+                    listAllUser.forEach(user -> {
+                        if(user.getEmail().startsWith(toSearch)) listSearchingUser.add(user);
+                    });
+                }
+
+                popupInviteByEmailBinding.rvSearchFriend.setAdapter(searchingFriendAdapter);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        popupInviteByEmailBinding.inputEmail.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if(popupInviteByEmailBinding.inputEmail.getCompoundDrawables()[2] == null) return false;
+                    if (event.getRawX() >= (popupInviteByEmailBinding.inputEmail.getRight() - popupInviteByEmailBinding.inputEmail.getCompoundDrawables()[2].getBounds().width())) {
+                        // Người dùng đã chạm vào nút xóa
+                        popupInviteByEmailBinding.inputEmail.setText(""); // Xóa toàn bộ chữ trong EditText
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 
 
-        btnInvite.setOnClickListener(view -> {
-            String receiverEmail = inputEmail.getText().toString();
+        popupInviteByEmailBinding.btnInvite.setOnClickListener(view -> {
+            String receiverEmail = popupInviteByEmailBinding.inputEmail.getText().toString();
 
             if(!friendViewModel.IsValidEmail(receiverEmail))
             {
@@ -226,7 +284,7 @@ public class HomeFragment extends Fragment {
             });
         });
 
-        btnClosePopup.setOnClickListener(new View.OnClickListener() {
+        popupInviteByEmailBinding.btnClosePopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();

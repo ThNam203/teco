@@ -25,4 +25,6 @@ router
 router
     .route('/:userId/get-my-own-project-id')
     .get(userController.getMyOwnProjectIds)
+
+router.route('/:userId/get-all-users').get(userController.getAllUsers)
 module.exports = router

@@ -16,6 +16,7 @@ import java.time.Duration;
 
 public class ToastUtils {
     public static void showToastSuccess(Context context, String message, int duration) {
+        if (context == null) return;
         // Inflate the custom layout
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.custom_toast_success, null);
@@ -32,6 +33,7 @@ public class ToastUtils {
         toast.show();
     }
     public static void showToastError(Context context, String message, int duration) {
+        if (context == null) return;
         // Inflate the custom layout
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.custom_toast_error, null);
