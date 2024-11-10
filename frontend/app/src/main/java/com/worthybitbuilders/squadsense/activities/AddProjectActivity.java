@@ -18,7 +18,8 @@ public class AddProjectActivity extends AppCompatActivity {
 
         binding.ITManagement.setOnClickListener(view -> {
             Intent boardIntent = new Intent(AddProjectActivity.this, ProjectActivity.class);
-            boardIntent.putExtra("whatToDo", "ITManagement");
+            boardIntent.putExtra("templateName", "ITManagement");
+            boardIntent.putExtra("whatToDo", "createNew");
             finish();
             startActivity(boardIntent);
         });
@@ -26,6 +27,7 @@ public class AddProjectActivity extends AppCompatActivity {
         binding.btnClose.setOnClickListener(view -> AddProjectActivity.super.onBackPressed());
         binding.btnCreateNewBoard.setOnClickListener(view -> {
             Intent boardIntent = new Intent(AddProjectActivity.this, ProjectActivity.class);
+            boardIntent.putExtra("templateName", "defaultTemplate");
             boardIntent.putExtra("whatToDo", "createNew");
             finish();
             startActivity(boardIntent);

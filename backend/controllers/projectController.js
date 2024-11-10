@@ -49,6 +49,7 @@ const createACell = async (cell) => {
     const { cellType } = cell
     // must delete, if not we cant create
     // the reasone is the cellType overlap with the discriminator key
+    console.log(cellType)
     delete cell.cellType
     if (cell._id) delete cell._id
     switch (cellType) {

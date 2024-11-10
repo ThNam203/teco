@@ -71,15 +71,19 @@ public class ProjectActivityViewModel extends ViewModel {
      * The new project is automatically created by this method
      * which is then saved in the view model
      */
-    public void saveNewProjectToRemote(ApiCallHandlers handlers, String projectTemplate) {
+    public void saveNewProjectToRemote(ApiCallHandlers handlers, String templateName) {
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         List<String> authors = new ArrayList<>();
         authors.add(userId);
         ProjectModel unsetIdProjectModel;
-        if(projectTemplate.equals("sampleProject"))
+        if (templateName.equals("sampleProject"))
             unsetIdProjectModel = new ProjectModel(0, ProjectTemplates.sampleProjectContent());
-        else
+        else if (templateName.equals("ITManagement"))
             unsetIdProjectModel = new ProjectModel(0, ProjectTemplates.sampleITManagementContent());
+        else {
+            throw new RuntimeException("Illegal template name");
+        }
+
         Call<ProjectModel> saveProject = projectService.saveProject(userId, unsetIdProjectModel);
         saveProject.enqueue(new Callback<ProjectModel>() {
             @Override
