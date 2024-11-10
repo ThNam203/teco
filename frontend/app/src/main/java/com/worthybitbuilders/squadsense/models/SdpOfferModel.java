@@ -1,11 +1,11 @@
 package com.worthybitbuilders.squadsense.models;
 
 public class SdpOfferModel {
-    private String chatRoomId;
-    private String sdp;
-    private String callerId;
-    private String callerName;
-    private String callerImagePath;
+    private final String chatRoomId;
+    private final String sdp;
+    private final String callerId;
+    private final String callerName;
+    private final String callerImagePath;
 
     public SdpOfferModel(String chatRoomId, String sdp, String callerId, String callerName, String callerImagePath) {
         this.chatRoomId = chatRoomId;

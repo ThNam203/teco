@@ -61,7 +61,6 @@ public class CallVideoActivity extends AppCompatActivity {
     private boolean isAudioOn = true;
     private MediaPlayer mediaPlayer;
 
-
     // Prepare the MediaPlayer with the media file
     private void prepareMediaPlayer() {
         mediaPlayer = new MediaPlayer();

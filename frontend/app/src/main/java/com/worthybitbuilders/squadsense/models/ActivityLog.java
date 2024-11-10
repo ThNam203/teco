@@ -1,7 +1,7 @@
 package com.worthybitbuilders.squadsense.models;
 
 public class ActivityLog {
-    public class ActivityLogCreator {
+    public static class ActivityLogCreator {
         public String _id;
         public String name;
         public String profileImagePath;
@@ -13,7 +13,7 @@ public class ActivityLog {
         }
     }
 
-    public class ActivityLogProject {
+    public static class ActivityLogProject {
 
         public String _id;
         public String title;
@@ -24,7 +24,7 @@ public class ActivityLog {
         }
     }
 
-    public class ActivityLogBoard {
+    public static class ActivityLogBoard {
 
         public String _id;
         public String boardTitle;
@@ -35,13 +35,14 @@ public class ActivityLog {
         }
     }
 
-    private ActivityLogCreator creator;
-    private ActivityLogProject project;
-    private ActivityLogBoard board;
-    private String cellId;
-    private String description;
-    private String type;
-    private String createdAt;
+    private final ActivityLogCreator creator;
+    private final ActivityLogProject project;
+    private final ActivityLogBoard board;
+    private final String cellId;
+    private final String description;
+    /** Four types: New, Update, Change, Remove */
+    private final String type;
+    private final String createdAt;
 
     public ActivityLog(ActivityLogCreator creator, ActivityLogProject project, ActivityLogBoard board, String cellId, String description, String type, String createdAt) {
         this.creator = creator;
@@ -63,10 +64,6 @@ public class ActivityLog {
 
     public ActivityLogBoard getBoard() {
         return board;
-    }
-
-    public String getCellId() {
-        return cellId;
     }
 
     public String getDescription() {
