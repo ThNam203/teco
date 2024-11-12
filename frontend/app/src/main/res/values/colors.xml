@@ -11,7 +11,7 @@
     <!--    dark theme color   -->
 
     <color name="primary_color">#ffffff</color>
-    <color name="primary_second_color">#e2e2e2</color>
+    <color name="primary_second_color">#f5f6f8</color>
     <color name="primary_third_color">#2c2c2c</color>
     <color name="primary_word_color">#323232</color>
     <color name="primary_word_second_color">#6a697a</color>
