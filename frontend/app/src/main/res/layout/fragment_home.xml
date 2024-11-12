@@ -40,7 +40,7 @@
         android:drawableLeft="@drawable/ic_search"
         android:drawablePadding="5dp"
         android:drawableTint="@color/primary_word_second_color"
-        android:hint="Search boards, docs, and dashboards"
+        android:hint="Search boards and projects"
         android:minHeight="48dp"
         android:padding="5dp"
         android:textColor="@color/primary_word_color"

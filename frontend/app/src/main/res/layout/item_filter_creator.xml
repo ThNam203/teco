@@ -41,7 +41,6 @@
                 app:tint="@color/white" />
         </androidx.cardview.widget.CardView>
     </RelativeLayout>
-
     <TextView
         android:id="@+id/creatorName"
         android:layout_width="match_parent"
@@ -52,5 +51,6 @@
         android:textSize="@dimen/small_textsize"
         android:singleLine="true"
         android:textColor="@color/primary_word_color"/>
+
 
 </LinearLayout>

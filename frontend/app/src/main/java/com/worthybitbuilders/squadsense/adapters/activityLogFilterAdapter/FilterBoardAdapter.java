@@ -1,4 +1,4 @@
-package com.worthybitbuilders.squadsense.adapters;
+package com.worthybitbuilders.squadsense.adapters.activityLogFilterAdapter;
 
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;

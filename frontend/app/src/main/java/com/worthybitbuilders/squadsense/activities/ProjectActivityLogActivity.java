@@ -2,7 +2,6 @@ package com.worthybitbuilders.squadsense.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -21,19 +20,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.adapters.ActivityLogAdapter;
-import com.worthybitbuilders.squadsense.adapters.FilterBoardAdapter;
-import com.worthybitbuilders.squadsense.adapters.FilterCreatorAdapter;
-import com.worthybitbuilders.squadsense.adapters.FilterDateAdapter;
-import com.worthybitbuilders.squadsense.adapters.FilterTypeAdapter;
+import com.worthybitbuilders.squadsense.adapters.activityLogFilterAdapter.FilterBoardAdapter;
+import com.worthybitbuilders.squadsense.adapters.activityLogFilterAdapter.FilterCreatorAdapter;
+import com.worthybitbuilders.squadsense.adapters.activityLogFilterAdapter.FilterDateAdapter;
+import com.worthybitbuilders.squadsense.adapters.activityLogFilterAdapter.FilterTypeAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityProjectActivityLogBinding;
-import com.worthybitbuilders.squadsense.databinding.PopupFilterBinding;
+import com.worthybitbuilders.squadsense.databinding.PopupFilterActivityLogBinding;
 import com.worthybitbuilders.squadsense.models.ActivityLog;
-import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.services.ProjectService;
 import com.worthybitbuilders.squadsense.services.RetrofitServices;
 import com.worthybitbuilders.squadsense.utils.CustomUtils;
@@ -199,7 +196,7 @@ public class ProjectActivityLogActivity extends AppCompatActivity {
     private void showFilterPopup() {
         final Dialog dialog = new Dialog(ProjectActivityLogActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        PopupFilterBinding popupFilterBinding = PopupFilterBinding.inflate(getLayoutInflater());
+        PopupFilterActivityLogBinding popupFilterBinding = PopupFilterActivityLogBinding.inflate(getLayoutInflater());
         dialog.setContentView(popupFilterBinding.getRoot());
 
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -330,7 +327,7 @@ public class ProjectActivityLogActivity extends AppCompatActivity {
         listSelectedBoard.clear();
     }
 
-    private void loadListFilterType(PopupFilterBinding popupFilterBinding, List<String> tempSelectedType)
+    private void loadListFilterType(PopupFilterActivityLogBinding popupFilterBinding, List<String> tempSelectedType)
     {
         popupFilterBinding.rvFilterType.setLayoutManager(new LinearLayoutManager(ProjectActivityLogActivity.this, LinearLayoutManager.HORIZONTAL, false));
         List<String> listType = new ArrayList<>();
@@ -352,7 +349,7 @@ public class ProjectActivityLogActivity extends AppCompatActivity {
         popupFilterBinding.rvFilterType.setAdapter(filterTypeAdapter);
     }
 
-    private void loadListFilterDate(PopupFilterBinding popupFilterBinding, List<String> tempSelectedDate)
+    private void loadListFilterDate(PopupFilterActivityLogBinding popupFilterBinding, List<String> tempSelectedDate)
     {
         popupFilterBinding.rvFilterDate.setLayoutManager(new LinearLayoutManager(ProjectActivityLogActivity.this, LinearLayoutManager.HORIZONTAL, false));
         List<String> listDate = new ArrayList<>();
@@ -375,7 +372,7 @@ public class ProjectActivityLogActivity extends AppCompatActivity {
         popupFilterBinding.rvFilterDate.setAdapter(filterDateAdapter);
     }
 
-    private void loadListFilterCreator(PopupFilterBinding popupFilterBinding, List<ActivityLog.ActivityLogCreator> tempSelectedCreator)
+    private void loadListFilterCreator(PopupFilterActivityLogBinding popupFilterBinding, List<ActivityLog.ActivityLogCreator> tempSelectedCreator)
     {
         popupFilterBinding.rvFilterCreator.setLayoutManager(new LinearLayoutManager(ProjectActivityLogActivity.this, LinearLayoutManager.HORIZONTAL, false));
         List<ActivityLog.ActivityLogCreator> listCreator = new ArrayList<>();
@@ -404,7 +401,7 @@ public class ProjectActivityLogActivity extends AppCompatActivity {
         popupFilterBinding.rvFilterCreator.setAdapter(filterCreatorAdapter);
     }
 
-    private void loadListFilterBoard(PopupFilterBinding popupFilterBinding, List<ActivityLog.ActivityLogBoard> tempSelectedBoard)
+    private void loadListFilterBoard(PopupFilterActivityLogBinding popupFilterBinding, List<ActivityLog.ActivityLogBoard> tempSelectedBoard)
     {
         popupFilterBinding.rvFilterBoard.setLayoutManager(new LinearLayoutManager(ProjectActivityLogActivity.this, LinearLayoutManager.HORIZONTAL, false));
         List<ActivityLog.ActivityLogBoard> listBoard = new ArrayList<>();

@@ -29,35 +29,51 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:cursorVisible="true"
-            android:hint="Search boards, docs, and dashboards"
+            android:hint="Search boards and projects"
             android:minHeight="48dp"
             android:padding="5dp"
             android:textColor="@color/primary_word_color"
             android:textColorHint="@color/primary_word_second_color"
             android:background="@color/transparent"
-            android:textSize="@dimen/normal_textsize" />
+            android:textSize="@dimen/normal_textsize"
+            android:singleLine="true"
+            android:ellipsize="none"/>
     </LinearLayout>
-    <ImageView
-        android:layout_width="250dp"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:background="@color/transparent"
-        android:src="@drawable/image_search"
-        android:layout_marginTop="50dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/layout_no_result"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_gravity="center"
-        android:text="What's the name of your board, doc or dashboard?"
-        android:textAlignment="center"
-        android:background="@color/transparent"
-        android:textColor="@color/primary_word_color"
-        android:textSize="@dimen/super_large_textsize"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        android:contentDescription="describe page"/>
-
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:background="@color/transparent"
+            android:src="@drawable/image_search"
+            android:layout_marginTop="50dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_gravity="center"
+            android:text="What's the name of your board or project?"
+            android:textAlignment="center"
+            android:background="@color/transparent"
+            android:textColor="@color/primary_word_color"
+            android:textSize="@dimen/super_large_textsize"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:contentDescription="describe page"/>
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSearchingProject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15sp"
+            android:visibility="gone"/>
+    </ScrollView>
 </LinearLayout>

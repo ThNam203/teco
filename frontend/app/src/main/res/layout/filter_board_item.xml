@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="10dp">
+        <TextView
+            android:id="@+id/filterTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="By Type"
+            android:textColor="@color/primary_word_color"
+            android:textStyle="bold"
+            android:textSize="@dimen/normal_textsize"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginVertical="15sp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvFilterItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/primary_splitter_color" />
+    </LinearLayout>
+</RelativeLayout>

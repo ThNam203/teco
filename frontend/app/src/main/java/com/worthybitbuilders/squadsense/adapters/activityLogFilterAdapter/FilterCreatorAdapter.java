@@ -1,4 +1,4 @@
-package com.worthybitbuilders.squadsense.adapters;
+package com.worthybitbuilders.squadsense.adapters.activityLogFilterAdapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

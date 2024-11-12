@@ -23,7 +23,6 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.skydoves.colorpickerview.ColorPickerDialog;
@@ -35,6 +34,8 @@ import com.worthybitbuilders.squadsense.adapters.EditBoardsAdapter;
 import com.worthybitbuilders.squadsense.adapters.StatusContentsAdapter;
 import com.worthybitbuilders.squadsense.adapters.StatusEditItemAdapter;
 import com.worthybitbuilders.squadsense.adapters.TableViewAdapter;
+import com.worthybitbuilders.squadsense.adapters.activityLogFilterAdapter.FilterTypeAdapter;
+import com.worthybitbuilders.squadsense.adapters.filterBoardAdapter.BoardFilterAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityProjectBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardAddItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardAddNewRowPopupBinding;
@@ -50,10 +51,14 @@ import com.worthybitbuilders.squadsense.databinding.BoardStatusItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardTextItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardTimelineItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.ColumnMoreOptionsBinding;
+import com.worthybitbuilders.squadsense.databinding.PopupFilterActivityLogBinding;
+import com.worthybitbuilders.squadsense.databinding.PopupFilterBoardBinding;
 import com.worthybitbuilders.squadsense.databinding.PopupRenameBinding;
 import com.worthybitbuilders.squadsense.databinding.ProjectMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.factory.ProjectActivityViewModelFactory;
+import com.worthybitbuilders.squadsense.models.FilterModel;
 import com.worthybitbuilders.squadsense.models.UserModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardBaseItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardColumnHeaderModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardContentModel;
@@ -81,6 +86,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -99,6 +105,8 @@ public class ProjectActivity extends AppCompatActivity {
     private UserViewModel userViewModel;
     private boolean isNewProjectCreateRequest = false;
 
+    private List<List<String>> listSelectedCollection = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +115,7 @@ public class ProjectActivity extends AppCompatActivity {
         setContentView(activityBinding.getRoot());
         activityBinding.tableView.setShowCornerView(true);
         activityBinding.btnShowTables.setOnClickListener(view -> showTables());
+        activityBinding.btnFilter.setOnClickListener(view -> showPopupFilter());
         activityBinding.btnNewBoardOnEmpty.setOnClickListener(view -> showTables());
 
         Intent intent = getIntent();
@@ -735,6 +744,104 @@ public class ProjectActivity extends AppCompatActivity {
         dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialog.show();
+    }
+
+    private void showPopupFilter(){
+        final Dialog dialog = new Dialog(ProjectActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        PopupFilterBoardBinding popupFilterBinding = PopupFilterBoardBinding.inflate(getLayoutInflater());
+        dialog.setContentView(popupFilterBinding.getRoot());
+
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialog.show();
+
+        popupFilterBinding.btnClosePopup.setOnClickListener(view -> dialog.dismiss());
+
+        //setup popup filter with items to filter
+        popupFilterBinding.rvBoardFilter.setLayoutManager(new LinearLayoutManager(ProjectActivity.this));
+        List<FilterModel> listFilterBoard = new ArrayList<>();
+        List<List<String>> listFilterCollection = new ArrayList<>();
+        List<List<String>> tempListSelectedCollection = new ArrayList<>();
+        for (List<String> selectedCollection : listSelectedCollection) {
+            List<String> newList = new ArrayList<>(selectedCollection);
+            tempListSelectedCollection.add(newList);
+        }
+        List<BoardColumnHeaderModel> listColumn = projectActivityViewModel.getProjectModel().getBoards().get(0).getColumnCells();
+        listColumn.forEach(column -> {
+            if(column.getColumnType() == BoardColumnHeaderModel.ColumnType.User)
+            {
+                //get index of column that i am getting it's title
+                int indexColumn = listColumn.indexOf(column);
+                //add title of column
+                listFilterBoard.add(new FilterModel("By " + column.getTitle(), FilterModel.TypeFilter.AVATAR));
+                List<String> filterCollection = new ArrayList<>();
+                List<String> selectedCollection = new ArrayList<>();
+                //get content of all cells in that column
+                List<List<BoardBaseItemModel>> board = projectActivityViewModel.getProjectModel().getBoards().get(0).getCells();
+                board.forEach(row -> {
+                    String content = row.get(indexColumn).getContent();
+                    if(!content.isEmpty())
+                    {
+                        if(!filterCollection.contains(content))
+                            filterCollection.add(row.get(indexColumn).getContent());
+                    }
+                });
+                listFilterCollection.add(filterCollection);
+
+                if(indexColumn < tempListSelectedCollection.size())
+                    selectedCollection.addAll(tempListSelectedCollection.get(indexColumn));
+                else {
+                    tempListSelectedCollection.add(selectedCollection);
+                }
+            }
+            else
+            {
+                //get index of column that i am getting it's title
+                int indexColumn = listColumn.indexOf(column);
+                //add title of column
+                listFilterBoard.add(new FilterModel("By " + column.getTitle(), FilterModel.TypeFilter.TEXT));
+                List<String> filterCollection = new ArrayList<>();
+                List<String> selectedCollection = new ArrayList<>();
+                //get content of all cells in that column
+                List<List<BoardBaseItemModel>> board = projectActivityViewModel.getProjectModel().getBoards().get(0).getCells();
+                board.forEach(row -> {
+                    String content = row.get(indexColumn).getContent();
+                    if(!content.isEmpty())
+                    {
+                        if(!filterCollection.contains(content))
+                            filterCollection.add(row.get(indexColumn).getContent());
+                    }
+                });
+                listFilterCollection.add(filterCollection);
+
+                if(indexColumn < tempListSelectedCollection.size())
+                    selectedCollection.addAll(tempListSelectedCollection.get(indexColumn));
+                else {
+                    tempListSelectedCollection.add(selectedCollection);
+                }
+            }
+        });
+
+        BoardFilterAdapter filterBoardAdapter = new BoardFilterAdapter(listFilterBoard, listFilterCollection, tempListSelectedCollection);
+        popupFilterBinding.rvBoardFilter.setAdapter(filterBoardAdapter);
+
+        popupFilterBinding.btnDone.setOnClickListener(view -> {
+            listSelectedCollection.clear();
+            for (List<String> selectedCollection : tempListSelectedCollection) {
+                List<String> newList = new ArrayList<>(selectedCollection);
+                listSelectedCollection.add(newList);
+            }
+            dialog.dismiss();
+        });
+
+        popupFilterBinding.btnClear.setOnClickListener(view -> {
+            tempListSelectedCollection.clear();
+            popupFilterBinding.rvBoardFilter.setAdapter(filterBoardAdapter);
+        });
+
     }
 
     private void showNewRowPopup() {

@@ -622,7 +622,7 @@ exports.addNewColumn = asyncCatch(async (req, res, next) => {
     board.markModified('cells')
     await board.save()
 
-    User.findById(userId).then((user) => {
+    await User.findById(userId).then((user) => {
         createActivityLog(
             user._id,
             projectId,
@@ -632,7 +632,6 @@ exports.addNewColumn = asyncCatch(async (req, res, next) => {
             ACTIVITY_LOG_TYPES.NEW
         )
     })
-
     res.status(200).json(newCellIds)
 })
 
