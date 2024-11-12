@@ -19,10 +19,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.activities.AddProjectActivity;
 import com.worthybitbuilders.squadsense.activities.FirstScreenActivity;
 import com.worthybitbuilders.squadsense.activities.FriendActivity;
 import com.worthybitbuilders.squadsense.activities.InboxActivity;
 import com.worthybitbuilders.squadsense.activities.LogInActivity;
+import com.worthybitbuilders.squadsense.activities.MapActivity;
 import com.worthybitbuilders.squadsense.activities.NotificationSettingActivity;
 import com.worthybitbuilders.squadsense.activities.OpenProfileActivity;
 import com.worthybitbuilders.squadsense.databinding.FragmentMoreBinding;
@@ -59,6 +61,9 @@ public class MoreFragment extends Fragment {
         LoadData();
 
         //set onclick of buttons here
+        binding.btnLanguage.setOnClickListener(view -> {
+            ActivityUtils.switchToActivity(getContext(), MapActivity.class);
+        });
         binding.btnNotificationSettings.setOnClickListener(view -> btnNotificationSetting_showActivity());
         binding.btnTheme.setOnClickListener(view -> btnTheme_showPopup());
         binding.btnInbox.setOnClickListener(view -> btnInbox_showActivity());

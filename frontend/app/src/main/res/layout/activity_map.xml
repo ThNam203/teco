@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.MapActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:background="#802b2b2b"
+        android:layout_gravity="top"
+        />
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_gravity="bottom"
+        android:weightSum="2"
+        android:background="#802b2b2b"
+        android:padding="8dp"
+        android:elevation="8dp"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        android:baselineAligned="false"
+        android:layoutDirection="ltr">
+
+        <Button
+            android:id="@+id/btnSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select makers"/>
+        <Button
+            android:id="@+id/btnRmMarker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:text="Remove maker"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
+</LinearLayout>
