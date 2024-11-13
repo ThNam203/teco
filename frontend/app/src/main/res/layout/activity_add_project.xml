@@ -124,7 +124,7 @@
                     android:id="@+id/content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="IT management IT management IT management IT management IT management"
+                    android:text="Manage all your IT operations in one collaborative workspace"
                     android:maxLines="2"
                     android:textSize="@dimen/small_textsize"
                     android:textColor="@color/primary_word_color"
@@ -136,6 +136,195 @@
                     android:background="@color/primary_splitter_color"/>
                 <TextView
                     android:id="@+id/btnPreviewITManagement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_btn_corner"
+                    android:backgroundTint="@color/primary_btn_color"
+                    android:layout_gravity="right"
+                    android:text="Choose this template"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/small_textsize"
+                    android:paddingVertical="8dp"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginVertical="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/FacilitiesRequests"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/background_btn_stroke"
+                android:backgroundTint="@color/primary_splitter_color"
+                android:layout_marginVertical="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="10dp"
+                    android:paddingTop="10dp">
+                    <ImageView
+                        android:id="@+id/icon1"
+                        android:layout_width="40sp"
+                        android:layout_height="40sp"
+                        android:src="@drawable/ic_stack"
+                        android:background="@drawable/background_btn_corner_secondary"
+                        android:backgroundTint="@color/blue"
+                        app:tint="@color/white"/>
+                    <TextView
+                        android:id="@+id/title1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Facilities requests"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/primary_word_color"
+                        android:paddingLeft="10dp"/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/content1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Manage all facilities requests in one space"
+                    android:maxLines="2"
+                    android:textSize="@dimen/small_textsize"
+                    android:textColor="@color/primary_word_color"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary_splitter_color"/>
+                <TextView
+                    android:id="@+id/btnPreviewFacilitiesRequests"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_btn_corner"
+                    android:backgroundTint="@color/primary_btn_color"
+                    android:layout_gravity="right"
+                    android:text="Choose this template"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/small_textsize"
+                    android:paddingVertical="8dp"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginVertical="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ProjectRequestAndApprovals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/background_btn_stroke"
+                android:backgroundTint="@color/primary_splitter_color"
+                android:layout_marginVertical="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="10dp"
+                    android:paddingTop="10dp">
+                    <ImageView
+                        android:id="@+id/icon3"
+                        android:layout_width="40sp"
+                        android:layout_height="40sp"
+                        android:src="@drawable/ic_stack"
+                        android:background="@drawable/background_btn_corner_secondary"
+                        android:backgroundTint="@color/blue"
+                        app:tint="@color/white"/>
+                    <TextView
+                        android:id="@+id/title3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Project request and approvals"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/primary_word_color"
+                        android:paddingLeft="10dp"/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/content3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Manage all incoming project requests and approvals in one place"
+                    android:maxLines="2"
+                    android:textSize="@dimen/small_textsize"
+                    android:textColor="@color/primary_word_color"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary_splitter_color"/>
+                <TextView
+                    android:id="@+id/btnPreviewProjectRequestAndApprovals"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_btn_corner"
+                    android:backgroundTint="@color/primary_btn_color"
+                    android:layout_gravity="right"
+                    android:text="Choose this template"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/small_textsize"
+                    android:paddingVertical="8dp"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginVertical="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/RecruitmentAndOnboarding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/background_btn_stroke"
+                android:backgroundTint="@color/primary_splitter_color"
+                android:layout_marginVertical="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="10dp"
+                    android:paddingTop="10dp">
+                    <ImageView
+                        android:id="@+id/icon4"
+                        android:layout_width="40sp"
+                        android:layout_height="40sp"
+                        android:src="@drawable/ic_stack"
+                        android:background="@drawable/background_btn_corner_secondary"
+                        android:backgroundTint="@color/blue"
+                        app:tint="@color/white"/>
+                    <TextView
+                        android:id="@+id/title4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Recruitment and onboarding"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:textColor="@color/primary_word_color"
+                        android:paddingLeft="10dp"/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/content4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="From applying to onboarding, easily manage the entire recruitment and onboarding process"
+                    android:maxLines="2"
+                    android:textSize="@dimen/small_textsize"
+                    android:textColor="@color/primary_word_color"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary_splitter_color"/>
+                <TextView
+                    android:id="@+id/btnPreviewRecruitmentAndOnboarding"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/background_btn_corner"

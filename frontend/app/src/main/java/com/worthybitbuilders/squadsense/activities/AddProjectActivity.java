@@ -24,6 +24,22 @@ public class AddProjectActivity extends AppCompatActivity {
             startActivity(boardIntent);
         });
 
+        binding.FacilitiesRequests.setOnClickListener(view -> {
+            Intent boardIntent = new Intent(AddProjectActivity.this, ProjectActivity.class);
+            boardIntent.putExtra("templateName", "FacilitiesRequests");
+            boardIntent.putExtra("whatToDo", "createNew");
+            finish();
+            startActivity(boardIntent);
+        });
+
+        binding.ProjectRequestAndApprovals.setOnClickListener(view -> {
+            Intent boardIntent = new Intent(AddProjectActivity.this, ProjectActivity.class);
+            boardIntent.putExtra("templateName", "ProjectRequestAndApprovals");
+            boardIntent.putExtra("whatToDo", "createNew");
+            finish();
+            startActivity(boardIntent);
+        });
+
         binding.btnClose.setOnClickListener(view -> AddProjectActivity.super.onBackPressed());
         binding.btnCreateNewBoard.setOnClickListener(view -> {
             Intent boardIntent = new Intent(AddProjectActivity.this, ProjectActivity.class);

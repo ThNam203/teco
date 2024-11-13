@@ -80,7 +80,12 @@ public class ProjectActivityViewModel extends ViewModel {
             unsetIdProjectModel = new ProjectModel(0, ProjectTemplates.sampleProjectContent());
         else if (templateName.equals("ITManagement"))
             unsetIdProjectModel = new ProjectModel(0, ProjectTemplates.sampleITManagementContent());
-        else {
+        else if (templateName.equals("FacilitiesRequests")) {
+            unsetIdProjectModel = new ProjectModel(0, ProjectTemplates.sampleFacilitiesRequestsContent());
+        }
+        else if (templateName.equals("ProjectRequestAndApprovals")) {
+            unsetIdProjectModel = new ProjectModel(0, ProjectTemplates.sampleProjectRequestAndApprovalsContent());
+        } else {
             throw new RuntimeException("Illegal template name");
         }
 
