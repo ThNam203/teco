@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.databinding.ActivityMapBinding;
 
@@ -56,21 +58,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         locationArrayList = new ArrayList<>();
-        // add address in tokyo
-        locationArrayList.add(new Address(null));
-        locationArrayList.get(0).setLatitude(35.6803997);
-        locationArrayList.get(0).setLongitude(139.7690174);
-        locationArrayList.get(0).setAddressLine(0, "Tokyo");
-        // add address in kyoto
-        locationArrayList.add(new Address(null));
-        locationArrayList.get(1).setLatitude(35.0116363);
-        locationArrayList.get(1).setLongitude(135.7680294);
-        locationArrayList.get(1).setAddressLine(0, "Kyoto");
-        // add address in osaka
-        locationArrayList.add(new Address(null));
-        locationArrayList.get(2).setLatitude(34.6937378);
-        locationArrayList.get(2).setLongitude(135.5021651);
-        locationArrayList.get(2).setAddressLine(0, "Osaka");
+//        // add address in tokyo
+//        locationArrayList.add(new Address(null));
+//        locationArrayList.get(0).setLatitude(35.6803997);
+//        locationArrayList.get(0).setLongitude(139.7690174);
+//        locationArrayList.get(0).setAddressLine(0, "Tokyo");
+//        // add address in kyoto
+//        locationArrayList.add(new Address(null));
+//        locationArrayList.get(1).setLatitude(35.0116363);
+//        locationArrayList.get(1).setLongitude(135.7680294);
+//        locationArrayList.get(1).setAddressLine(0, "Kyoto");
+//        // add address in osaka
+//        locationArrayList.add(new Address(null));
+//        locationArrayList.get(2).setLatitude(34.6937378);
+//        locationArrayList.get(2).setLongitude(135.5021651);
+//        locationArrayList.get(2).setAddressLine(0, "Osaka");
+
 
         binding.btnSelect.setOnClickListener(view -> {
             Log.d("Location", "-------------");
@@ -107,6 +110,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         map.getUiSettings().setZoomControlsEnabled(true);
         // set marker click listener
         map.setOnMarkerClickListener(this);
+
         for (int i = 0; i < locationArrayList.size(); i++) {
             MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(locationArrayList.get(i).getLatitude(), locationArrayList.get(i).getLongitude())).title(locationArrayList.get(i).getAddressLine(0));
 
@@ -114,6 +118,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             // move camera to first location
             map.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
             map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(locationArrayList.get(i).getLatitude(), locationArrayList.get(i).getLongitude())));
+        }
+        // if locationArrayList is empty, move camera to current location
+        if (locationArrayList.size() == 0) {
+            getCurrentLocation();
         }
 
         map.setOnMapClickListener(latLng -> {
@@ -129,6 +137,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             } catch (Exception e) {
                 Toast.makeText(MapActivity.this, "Không xác định được vị trí", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
+            }
+        });
+    }
+
+    // get current location
+    private void getCurrentLocation() {
+        // check permission
+        if (ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+            return;
+        }
+        // get current location
+        Task<Location> task = LocationServices.getFusedLocationProviderClient(MapActivity.this).getLastLocation();
+        task.addOnSuccessListener(location -> {
+            if (location != null) {
+                LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                MarkerOptions markerOptions = new MarkerOptions().position(currentLatLng).title("Current Location");
+                map.addMarker(markerOptions);
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 10));
             }
         });
     }
@@ -180,4 +207,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
         return false;
     }
+
+
 }
