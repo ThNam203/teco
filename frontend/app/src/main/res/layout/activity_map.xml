@@ -1,62 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.MapActivity">
-    <LinearLayout
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:background="#802b2b2b"
-        android:layout_gravity="top"
-        />
-    </LinearLayout>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </FrameLayout>
-
-    <LinearLayout
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/btn_back"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:adjustViewBounds="true"
+            android:background="@color/primary_color"
+            app:shapeAppearanceOverlay="@style/RoundedImageView"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_margin="16dp"
+            android:scaleType="center"
+            app:tint="@color/primary_icon_color"
+            tools:background="@color/red"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="32dp"
+            android:background="@drawable/curved_small_background"
+            android:backgroundTint="@color/primary_color"
+            android:gravity="center_vertical"
+            android:paddingStart="8dp"
+            android:visibility="gone"
+            android:layout_marginHorizontal="8dp"
+            android:paddingEnd="8dp"
+            android:hint="Search..."
+            android:imeOptions="actionSearch"
+            android:inputType="textNoSuggestions"
+            android:lines="1"
+            android:textColor="@color/primary_word_color"
+            android:textColorHint="@color/primary_word_second_color"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/barrier"
+            app:layout_constraintStart_toEndOf="@id/btn_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:autofillHints=""
+            tools:backgroundTint="@color/red" />
+        <View
+            android:id="@+id/barrier"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="16dp"
+            android:background="@color/transparent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/clearButton"
+            app:shapeAppearanceOverlay="@style/RoundedImageView"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="16dp"
+            android:scaleType="center"
+            android:visibility="gone"
+            android:background="@color/primary_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:srcCompat="@drawable/ic_close"
+            tools:background="@color/red"/>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/searchButton"
+            app:shapeAppearanceOverlay="@style/RoundedImageView"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:scaleType="center"
+            android:layout_margin="16dp"
+            android:background="@color/primary_color"
+            app:srcCompat="@drawable/ic_search"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:background="@color/red"
+            android:layout_gravity="end|center_vertical"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:weightSum="2"
         android:background="#802b2b2b"
-        android:padding="8dp"
-        android:elevation="8dp"
-        android:clipToPadding="false"
-        android:clipChildren="false"
         android:baselineAligned="false"
-        android:layoutDirection="ltr">
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:elevation="8dp"
+        android:gravity="center"
+        android:layoutDirection="ltr"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:weightSum="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <Button
             android:id="@+id/btnSelect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select makers"/>
+            android:text="Select makers" />
+
         <Button
             android:id="@+id/btnRmMarker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:text="Remove maker"
-            android:textColor="@color/white"
-            />
+            android:textColor="@color/white" />
     </LinearLayout>
-</LinearLayout>
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/btnMyLocation"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        app:icon="@drawable/ic_my_location"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -876,8 +876,9 @@ public class ProjectActivity extends AppCompatActivity {
         List<UserModel> listOwner = new ArrayList<>(userItemModel.getUsers());
         binding.rvMembers.setLayoutManager(new LinearLayoutManager(ProjectActivity.this));
         binding.rvOwers.setLayoutManager(new LinearLayoutManager(ProjectActivity.this, LinearLayoutManager.HORIZONTAL, false));
-        BoardItemMemberAdapter boardItemMemberAdapter = new BoardItemMemberAdapter(listMember);
         BoardItemOwnerAdapter boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner);
+        BoardItemMemberAdapter boardItemMemberAdapter = new BoardItemMemberAdapter();
+        binding.rvMembers.setAdapter(boardItemMemberAdapter);
         binding.rvOwers.setAdapter(boardItemOwnerAdapter);
 
         String projectId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID);
@@ -885,7 +886,16 @@ public class ProjectActivity extends AppCompatActivity {
             @Override
             public void onSuccess(List<UserModel> listMemberData) {
                 listMember.addAll(listMemberData);
-                boardItemMemberAdapter.notifyDataSetChanged();
+                List<Boolean> statuses = new ArrayList<>();
+                for (int i = 0; i < listMember.size(); i++) {
+                    boolean isSet = false;
+                    for (int j = 0; j < userItemModel.getUsers().size(); j++) {
+                        if (userItemModel.getUsers().get(j).getId().equals(listMember.get(i).getId()))
+                            isSet = true;
+                    }
+                    statuses.add(isSet);
+                }
+                boardItemMemberAdapter.setData(listMember, statuses);
                 binding.rvMembers.setAdapter(boardItemMemberAdapter);
                 if(listMember.size() > 0) binding.rvMembers.setVisibility(View.VISIBLE);
                 else binding.rvMembers.setVisibility(View.GONE);
@@ -898,12 +908,12 @@ public class ProjectActivity extends AppCompatActivity {
         });
 
         boardItemMemberAdapter.setOnClickListener((position, status) -> {
-            if(status) {
+            if (status) {
                 listOwner.add(listMember.get(position));
-                boardItemOwnerAdapter.notifyDataSetChanged();
+                boardItemOwnerAdapter.notifyItemInserted(listOwner.size() - 1);
                 binding.layoutRvOwers.setVisibility(View.VISIBLE);
             } else {
-                listOwner.remove(listMember.get(position));
+                listOwner.removeIf(userModel -> userModel.getId().equals(listMember.get(position).getId()));
                 boardItemOwnerAdapter.notifyDataSetChanged();
                 if(listOwner.size() > 0) binding.layoutRvOwers.setVisibility(View.VISIBLE);
                 else binding.layoutRvOwers.setVisibility(View.GONE);
@@ -911,8 +921,17 @@ public class ProjectActivity extends AppCompatActivity {
         });
 
         boardItemOwnerAdapter.setOnClickListener(position -> {
-            listOwner.remove(listOwner.get(position));
-            boardItemOwnerAdapter.notifyDataSetChanged();
+            UserModel deletedModel = listOwner.remove(position);
+            boardItemOwnerAdapter.notifyItemRemoved(position);
+            boardItemOwnerAdapter.notifyItemRangeChanged(position, listOwner.size());
+
+            for (int i = 0; i < listMember.size(); i++) {
+                if (listMember.get(i).getId().equals(deletedModel.getId())) {
+                    boardItemMemberAdapter.setStatusAt(i, false);
+                    break;
+                }
+            }
+
             if(listOwner.size() > 0) binding.layoutRvOwers.setVisibility(View.VISIBLE);
             else binding.layoutRvOwers.setVisibility(View.GONE);
         });

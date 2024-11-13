@@ -35,15 +35,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+    private final static int LOCATION_REQUEST_CODE = 44;
     private ActivityMapBinding binding;
     private GoogleMap map;
     private SupportMapFragment mapActivity;
-
     private ArrayList<Address> locationArrayList;
-    private final static int LOCATION_REQUEST_CODE = 44;
-
     private boolean removeMarkerMode = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,22 +55,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         locationArrayList = new ArrayList<>();
-//        // add address in tokyo
-//        locationArrayList.add(new Address(null));
-//        locationArrayList.get(0).setLatitude(35.6803997);
-//        locationArrayList.get(0).setLongitude(139.7690174);
-//        locationArrayList.get(0).setAddressLine(0, "Tokyo");
-//        // add address in kyoto
-//        locationArrayList.add(new Address(null));
-//        locationArrayList.get(1).setLatitude(35.0116363);
-//        locationArrayList.get(1).setLongitude(135.7680294);
-//        locationArrayList.get(1).setAddressLine(0, "Kyoto");
-//        // add address in osaka
-//        locationArrayList.add(new Address(null));
-//        locationArrayList.get(2).setLatitude(34.6937378);
-//        locationArrayList.get(2).setLongitude(135.5021651);
-//        locationArrayList.get(2).setAddressLine(0, "Osaka");
-
 
         binding.btnSelect.setOnClickListener(view -> {
             Log.d("Location", "-------------");
@@ -96,13 +77,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-        onHandleSearch();
+//        onHandleSearch();
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        // set map type
         map.setIndoorEnabled(true);
         map.setBuildingsEnabled(true);
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -112,17 +92,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         map.setOnMarkerClickListener(this);
 
         for (int i = 0; i < locationArrayList.size(); i++) {
-            MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(locationArrayList.get(i).getLatitude(), locationArrayList.get(i).getLongitude())).title(locationArrayList.get(i).getAddressLine(0));
-
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(new LatLng(locationArrayList.get(i).getLatitude(), locationArrayList.get(i).getLongitude()))
+                    .title(locationArrayList.get(i)
+                    .getAddressLine(0));
             map.addMarker(markerOptions);
             // move camera to first location
             map.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
             map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(locationArrayList.get(i).getLatitude(), locationArrayList.get(i).getLongitude())));
         }
         // if locationArrayList is empty, move camera to current location
-        if (locationArrayList.size() == 0) {
-            getCurrentLocation();
-        }
+        if (locationArrayList.size() == 0) getCurrentLocation();
+        binding.btnMyLocation.setOnClickListener((view) -> getCurrentLocation());
 
         map.setOnMapClickListener(latLng -> {
             Geocoder geocoder = new Geocoder(MapActivity.this);
@@ -153,41 +134,41 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         task.addOnSuccessListener(location -> {
             if (location != null) {
                 LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                MarkerOptions markerOptions = new MarkerOptions().position(currentLatLng).title("Current Location");
+                MarkerOptions markerOptions = new MarkerOptions().position(currentLatLng).title("Your Location");
                 map.addMarker(markerOptions);
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 10));
             }
         });
     }
 
-    private void onHandleSearch() {
-        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                String location = binding.searchView.getQuery().toString();
-                List<Address> addresses = null;
-                Geocoder geocoder = new Geocoder(MapActivity.this);
-                try {
-                    addresses = geocoder.getFromLocationName(location, 1);
-                    if (addresses != null) {
-                        Address address = addresses.get(0);
-                        LatLng point = new LatLng(address.getLatitude(), address.getLongitude());
-                        MarkerOptions markerEnd = new MarkerOptions().position(point).title(location);
-                        map.addMarker(markerEnd);
-                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 10));
-                    }
-                } catch (Exception e) {
-                    Toast.makeText(MapActivity.this, "Không tìm ra địa điểm: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-    }
+//    private void onHandleSearch() {
+//        binding.btn.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String s) {
+//                String location = binding.searchView.getQuery().toString();
+//                List<Address> addresses = null;
+//                Geocoder geocoder = new Geocoder(MapActivity.this);
+//                try {
+//                    addresses = geocoder.getFromLocationName(location, 1);
+//                    if (addresses != null) {
+//                        Address address = addresses.get(0);
+//                        LatLng point = new LatLng(address.getLatitude(), address.getLongitude());
+//                        MarkerOptions markerEnd = new MarkerOptions().position(point).title(location);
+//                        map.addMarker(markerEnd);
+//                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 10));
+//                    }
+//                } catch (Exception e) {
+//                    Toast.makeText(MapActivity.this, "Không tìm ra địa điểm: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//                }
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                return false;
+//            }
+//        });
+//    }
 
     @Override
     public boolean onMarkerClick(Marker marker) {

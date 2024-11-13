@@ -1,10 +1,10 @@
 package com.worthybitbuilders.squadsense.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,24 +18,30 @@ import com.worthybitbuilders.squadsense.models.UserModel;
 import java.util.List;
 
 public class BoardItemMemberAdapter extends RecyclerView.Adapter{
-    private final List<UserModel> memberList;
+    private List<UserModel> memberList = null;
+    private List<Boolean> statuses;
     private OnActionCallback callback;
 
     public interface OnActionCallback {
         void OnClick(int position, boolean status);
     }
 
-    public BoardItemMemberAdapter(List<UserModel> memberList) {
+    public BoardItemMemberAdapter() {}
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setData(List<UserModel> memberList, List<Boolean> statuses) {
         this.memberList = memberList;
+        this.statuses = statuses;
+        notifyDataSetChanged();
+    }
+
+    public void setStatusAt(int position, boolean status) {
+        this.statuses.set(position, status);
+        notifyItemChanged(position);
     }
 
     public void setOnClickListener(OnActionCallback callback) {
         this.callback = callback;
-    }
-
-    public void setOwner(int position, boolean status)
-    {
-
     }
 
     @NonNull
@@ -49,12 +55,15 @@ public class BoardItemMemberAdapter extends RecyclerView.Adapter{
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         UserModel member = (UserModel) memberList.get(position);
-        ((BoardItemMemberHolder) holder).bind(member, position);
+        // if the user is set before
+        boolean isSet = statuses.get(position);
+        ((BoardItemMemberHolder) holder).bind(member, isSet, position);
     }
 
     @Override
     public int getItemCount() {
-        return memberList.size();
+        if (memberList == null) return 0;
+        else return memberList.size();
     }
 
     private class BoardItemMemberHolder extends RecyclerView.ViewHolder {
@@ -68,8 +77,9 @@ public class BoardItemMemberAdapter extends RecyclerView.Adapter{
             tvMemberName = itemView.findViewById(R.id.member_name);
         }
 
-        void bind(UserModel member, int position) {
+        void bind(UserModel member, Boolean isSet, int position) {
             tvMemberName.setText(member.getName());
+            checkBox.setChecked(isSet);
 
             Glide.with(itemView.getContext())
                     .load(member.getProfileImagePath())

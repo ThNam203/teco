@@ -67,6 +67,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -158,16 +159,25 @@ public class BoardDetailColumnFragment extends Fragment {
         List<UserModel> listOwner = new ArrayList<>(userItemModel.getUsers());
         binding.rvMembers.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.rvOwers.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        BoardItemMemberAdapter boardItemMemberAdapter = new BoardItemMemberAdapter(listMember);
         BoardItemOwnerAdapter boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner);
+        BoardItemMemberAdapter boardItemMemberAdapter = new BoardItemMemberAdapter();
+        binding.rvMembers.setAdapter(boardItemMemberAdapter);
         binding.rvOwers.setAdapter(boardItemOwnerAdapter);
 
         viewModel.getMember(new BoardDetailItemViewModel.MemberApiCallHandler() {
             @Override
             public void onSuccess(List<UserModel> listMemberData) {
                 listMember.addAll(listMemberData);
-                boardItemMemberAdapter.notifyDataSetChanged();
-                binding.rvMembers.setAdapter(boardItemMemberAdapter);
+                List<Boolean> statuses = new ArrayList<>();
+                for (int i = 0; i < listMember.size(); i++) {
+                    boolean isSet = false;
+                    for (int j = 0; j < userItemModel.getUsers().size(); j++) {
+                        if (userItemModel.getUsers().get(j).getId().equals(listMember.get(i).getId()))
+                            isSet = true;
+                    }
+                    statuses.add(isSet);
+                }
+                boardItemMemberAdapter.setData(listMember, statuses);
                 if(listMember.size() > 0) binding.rvMembers.setVisibility(View.VISIBLE);
                 else binding.rvMembers.setVisibility(View.GONE);
             }
@@ -180,12 +190,12 @@ public class BoardDetailColumnFragment extends Fragment {
         });
 
         boardItemMemberAdapter.setOnClickListener((position, status) -> {
-            if(status) {
+            if (status) {
                 listOwner.add(listMember.get(position));
-                boardItemOwnerAdapter.notifyDataSetChanged();
+                boardItemOwnerAdapter.notifyItemInserted(listOwner.size() - 1);
                 binding.layoutRvOwers.setVisibility(View.VISIBLE);
             } else {
-                listOwner.remove(listMember.get(position));
+                listOwner.removeIf(userModel -> userModel.getId().equals(listMember.get(position).getId()));
                 boardItemOwnerAdapter.notifyDataSetChanged();
                 if(listOwner.size() > 0) binding.layoutRvOwers.setVisibility(View.VISIBLE);
                 else binding.layoutRvOwers.setVisibility(View.GONE);
@@ -193,8 +203,17 @@ public class BoardDetailColumnFragment extends Fragment {
         });
 
         boardItemOwnerAdapter.setOnClickListener(position -> {
-            listOwner.remove(listOwner.get(position));
-            boardItemOwnerAdapter.notifyDataSetChanged();
+            UserModel deletedModel = listOwner.remove(position);
+            boardItemOwnerAdapter.notifyItemRemoved(position);
+            boardItemOwnerAdapter.notifyItemRangeChanged(position, listOwner.size());
+
+            for (int i = 0; i < listMember.size(); i++) {
+                if (listMember.get(i).getId().equals(deletedModel.getId())) {
+                    boardItemMemberAdapter.setStatusAt(i, false);
+                    break;
+                }
+            }
+
             if(listOwner.size() > 0) binding.layoutRvOwers.setVisibility(View.VISIBLE);
             else binding.layoutRvOwers.setVisibility(View.GONE);
         });

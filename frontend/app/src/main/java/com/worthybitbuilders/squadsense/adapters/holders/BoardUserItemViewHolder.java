@@ -12,12 +12,13 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
 
 public class BoardUserItemViewHolder extends AbstractViewHolder {
-    public ImageView userButton;
-    public ImageView userSecondButton;
+    public ShapeableImageView userButton;
+    public ShapeableImageView userSecondButton;
     public TextView moreUsersHolder;
     UserItemClickHandler handlers;
     public BoardUserItemViewHolder(@NonNull View itemView, UserItemClickHandler handlers) {
