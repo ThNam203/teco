@@ -115,6 +115,18 @@ public class BoardViewModel extends ViewModel {
         return mCellLiveData;
     }
 
+    public List<BoardColumnHeaderModel> getmColumnHeaderModelList() {
+        return mColumnHeaderModelList;
+    }
+
+    public List<BoardRowHeaderModel> getmRowHeaderModelList() {
+        return mRowHeaderModelList;
+    }
+
+    public List<List<BoardBaseItemModel>> getmCellModelList() {
+        return mCellModelList;
+    }
+
     public void setProjectId(String projectId) {
         this.projectId = projectId;
     }

@@ -171,7 +171,7 @@
                         android:layout_height="40sp"
                         android:src="@drawable/ic_stack"
                         android:background="@drawable/background_btn_corner_secondary"
-                        android:backgroundTint="@color/blue"
+                        android:backgroundTint="@color/green"
                         app:tint="@color/white"/>
                     <TextView
                         android:id="@+id/title1"
@@ -234,7 +234,7 @@
                         android:layout_height="40sp"
                         android:src="@drawable/ic_stack"
                         android:background="@drawable/background_btn_corner_secondary"
-                        android:backgroundTint="@color/blue"
+                        android:backgroundTint="@color/pink"
                         app:tint="@color/white"/>
                     <TextView
                         android:id="@+id/title3"
@@ -297,7 +297,7 @@
                         android:layout_height="40sp"
                         android:src="@drawable/ic_stack"
                         android:background="@drawable/background_btn_corner_secondary"
-                        android:backgroundTint="@color/blue"
+                        android:backgroundTint="@color/yellow"
                         app:tint="@color/white"/>
                     <TextView
                         android:id="@+id/title4"

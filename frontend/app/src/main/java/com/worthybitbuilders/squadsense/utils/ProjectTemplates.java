@@ -29,6 +29,19 @@ public class ProjectTemplates {
 
         List<List<BoardBaseItemModel>> cells = new ArrayList<>();
 
+        List<String> statusColors = new ArrayList<>();
+        statusColors.add("#ec8f3c");
+        statusColors.add("#e43d16");
+        statusColors.add("#14c90f");
+        statusColors.add("#0f9fc9");
+        statusColors.add("#0fc998");
+        statusColors.add("#4c0fb5");
+        statusColors.add("#b50f9f");
+        statusColors.add("#c90f14");
+        statusColors.add("#c9a00f");
+        statusColors.add("#0fc9c4");
+        statusColors.add("#0f79b5");
+
         List<String> statusContent = new ArrayList<>();
         statusContent.add("Lam chua xong");
         statusContent.add("Bat dau lam");
@@ -37,25 +50,25 @@ public class ProjectTemplates {
 
         List<BoardBaseItemModel> firstRow = new ArrayList<>();
         firstRow.add(new BoardUserItemModel());
-        firstRow.add(new BoardStatusItemModel("Lam chua xong", statusContent));
+        firstRow.add(new BoardStatusItemModel("Lam chua xong", statusContent, statusColors));
         firstRow.add(new BoardTextItemModel("Bat dau lam"));
         firstRow.add(new BoardTextItemModel("Lam gan xong"));
 
         List<BoardBaseItemModel> secondRow = new ArrayList<>();
         secondRow.add(new BoardUserItemModel());
-        secondRow.add(new BoardStatusItemModel("Da xong", statusContent));
+        secondRow.add(new BoardStatusItemModel("Da xong", statusContent, statusColors));
         secondRow.add(new BoardTextItemModel("Lam chua xong"));
         secondRow.add(new BoardTextItemModel("Bat dau lam"));
 
         List<BoardBaseItemModel> thirdRow = new ArrayList<>();
         thirdRow.add(new BoardUserItemModel());
-        thirdRow.add(new BoardStatusItemModel("Lam gan xong", statusContent));
+        thirdRow.add(new BoardStatusItemModel("Lam gan xong", statusContent, statusColors));
         thirdRow.add(new BoardTextItemModel("Da xong"));
         thirdRow.add(new BoardTextItemModel("Bat dau lam"));
 
         List<BoardBaseItemModel> fourthRow = new ArrayList<>();
         fourthRow.add(new BoardUserItemModel());
-        fourthRow.add(new BoardStatusItemModel("Lam gan xong", statusContent));
+        fourthRow.add(new BoardStatusItemModel("Lam gan xong", statusContent, statusColors));
         fourthRow.add(new BoardTextItemModel("Da xong"));
         fourthRow.add(new BoardTextItemModel("Bat dau lam"));
 
@@ -93,6 +106,19 @@ public class ProjectTemplates {
         columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Text, "Email"));
 
         List<List<BoardBaseItemModel>> cells = new ArrayList<>();
+
+        List<String> statusColors = new ArrayList<>();
+        statusColors.add("#ec8f3c");
+        statusColors.add("#e43d16");
+        statusColors.add("#14c90f");
+        statusColors.add("#0f9fc9");
+        statusColors.add("#0fc998");
+        statusColors.add("#4c0fb5");
+        statusColors.add("#b50f9f");
+        statusColors.add("#c90f14");
+        statusColors.add("#c9a00f");
+        statusColors.add("#0fc9c4");
+        statusColors.add("#0f79b5");
 
         List<String> teamContent = new ArrayList<>();
         teamContent.add("Product");
@@ -156,15 +182,15 @@ public class ProjectTemplates {
         firstRow.add(new BoardUserItemModel());
         firstRow.add(new BoardUserItemModel());
         firstRow.add(new BoardDateItemModel(2020,7,23));
-        firstRow.add(new BoardStatusItemModel("Product", teamContent));
-        firstRow.add(new BoardStatusItemModel("Florida", siteContent));
-        firstRow.add(new BoardStatusItemModel("PC", computerTypeContent));
-        firstRow.add(new BoardStatusItemModel("Working on it", computerSetupContent));
-        firstRow.add(new BoardStatusItemModel("Done", googleAccountContent));
-        firstRow.add(new BoardStatusItemModel("", zoomAccountContent));
-        firstRow.add(new BoardStatusItemModel("Working on it", account365Content));
-        firstRow.add(new BoardStatusItemModel("Stuck", setupDeskMonitorContent));
-        firstRow.add(new BoardStatusItemModel("Working on it", setupEntranceTagContent));
+        firstRow.add(new BoardStatusItemModel("Product", teamContent, statusColors));
+        firstRow.add(new BoardStatusItemModel("Florida", siteContent, statusColors));
+        firstRow.add(new BoardStatusItemModel("PC", computerTypeContent, statusColors));
+        firstRow.add(new BoardStatusItemModel("Working on it", computerSetupContent, statusColors));
+        firstRow.add(new BoardStatusItemModel("Done", googleAccountContent, statusColors));
+        firstRow.add(new BoardStatusItemModel("", zoomAccountContent, statusColors));
+        firstRow.add(new BoardStatusItemModel("Working on it", account365Content, statusColors));
+        firstRow.add(new BoardStatusItemModel("Stuck", setupDeskMonitorContent, statusColors));
+        firstRow.add(new BoardStatusItemModel("Working on it", setupEntranceTagContent, statusColors));
         firstRow.add(new BoardTextItemModel("21521010@gm.uit.edu"));
 
         List<BoardBaseItemModel> secondRow = new ArrayList<>();
@@ -172,15 +198,15 @@ public class ProjectTemplates {
         secondRow.add(new BoardUserItemModel());
         secondRow.add(new BoardUserItemModel());
         secondRow.add(new BoardDateItemModel(2020,8,14));
-        secondRow.add(new BoardStatusItemModel("Finance", teamContent));
-        secondRow.add(new BoardStatusItemModel("New York", siteContent));
-        secondRow.add(new BoardStatusItemModel("Mac", computerTypeContent));
-        secondRow.add(new BoardStatusItemModel("Stuck", computerSetupContent));
-        secondRow.add(new BoardStatusItemModel("Done", googleAccountContent));
-        secondRow.add(new BoardStatusItemModel("", zoomAccountContent));
-        secondRow.add(new BoardStatusItemModel("Done", account365Content));
-        secondRow.add(new BoardStatusItemModel("Working on it", setupDeskMonitorContent));
-        secondRow.add(new BoardStatusItemModel("Done", setupEntranceTagContent));
+        secondRow.add(new BoardStatusItemModel("Finance", teamContent, statusColors));
+        secondRow.add(new BoardStatusItemModel("New York", siteContent, statusColors));
+        secondRow.add(new BoardStatusItemModel("Mac", computerTypeContent, statusColors));
+        secondRow.add(new BoardStatusItemModel("Stuck", computerSetupContent, statusColors));
+        secondRow.add(new BoardStatusItemModel("Done", googleAccountContent, statusColors));
+        secondRow.add(new BoardStatusItemModel("", zoomAccountContent, statusColors));
+        secondRow.add(new BoardStatusItemModel("Done", account365Content, statusColors));
+        secondRow.add(new BoardStatusItemModel("Working on it", setupDeskMonitorContent, statusColors));
+        secondRow.add(new BoardStatusItemModel("Done", setupEntranceTagContent, statusColors));
         secondRow.add(new BoardTextItemModel("21520101@gm.uit.edu"));
 
         List<BoardBaseItemModel> thirdRow = new ArrayList<>();
@@ -188,15 +214,15 @@ public class ProjectTemplates {
         thirdRow.add(new BoardUserItemModel());
         thirdRow.add(new BoardUserItemModel());
         thirdRow.add(new BoardDateItemModel(2020,8,29));
-        thirdRow.add(new BoardStatusItemModel("Partners", teamContent));
-        thirdRow.add(new BoardStatusItemModel("Denver", siteContent));
-        thirdRow.add(new BoardStatusItemModel("PC", computerTypeContent));
-        thirdRow.add(new BoardStatusItemModel("Done", computerSetupContent));
-        thirdRow.add(new BoardStatusItemModel("Done", googleAccountContent));
-        thirdRow.add(new BoardStatusItemModel("Stuck", zoomAccountContent));
-        thirdRow.add(new BoardStatusItemModel("Done", account365Content));
-        thirdRow.add(new BoardStatusItemModel("Done", setupDeskMonitorContent));
-        thirdRow.add(new BoardStatusItemModel("Done", setupEntranceTagContent));
+        thirdRow.add(new BoardStatusItemModel("Partners", teamContent, statusColors));
+        thirdRow.add(new BoardStatusItemModel("Denver", siteContent, statusColors));
+        thirdRow.add(new BoardStatusItemModel("PC", computerTypeContent, statusColors));
+        thirdRow.add(new BoardStatusItemModel("Done", computerSetupContent, statusColors));
+        thirdRow.add(new BoardStatusItemModel("Done", googleAccountContent, statusColors));
+        thirdRow.add(new BoardStatusItemModel("Stuck", zoomAccountContent, statusColors));
+        thirdRow.add(new BoardStatusItemModel("Done", account365Content, statusColors));
+        thirdRow.add(new BoardStatusItemModel("Done", setupDeskMonitorContent, statusColors));
+        thirdRow.add(new BoardStatusItemModel("Done", setupEntranceTagContent, statusColors));
         thirdRow.add(new BoardTextItemModel(""));
 
         List<BoardBaseItemModel> fourthRow = new ArrayList<>();
@@ -204,15 +230,15 @@ public class ProjectTemplates {
         fourthRow.add(new BoardUserItemModel());
         fourthRow.add(new BoardUserItemModel());
         fourthRow.add(new BoardDateItemModel(2020,9,1));
-        fourthRow.add(new BoardStatusItemModel("Sales", teamContent));
-        fourthRow.add(new BoardStatusItemModel("Florida", siteContent));
-        fourthRow.add(new BoardStatusItemModel("Mac", computerTypeContent));
-        fourthRow.add(new BoardStatusItemModel("Done", computerSetupContent));
-        fourthRow.add(new BoardStatusItemModel("Done", googleAccountContent));
-        fourthRow.add(new BoardStatusItemModel("Done", zoomAccountContent));
-        fourthRow.add(new BoardStatusItemModel("Done", account365Content));
-        fourthRow.add(new BoardStatusItemModel("Done", setupDeskMonitorContent));
-        fourthRow.add(new BoardStatusItemModel("Done", setupEntranceTagContent));
+        fourthRow.add(new BoardStatusItemModel("Sales", teamContent, statusColors));
+        fourthRow.add(new BoardStatusItemModel("Florida", siteContent, statusColors));
+        fourthRow.add(new BoardStatusItemModel("Mac", computerTypeContent, statusColors));
+        fourthRow.add(new BoardStatusItemModel("Done", computerSetupContent, statusColors));
+        fourthRow.add(new BoardStatusItemModel("Done", googleAccountContent, statusColors));
+        fourthRow.add(new BoardStatusItemModel("Done", zoomAccountContent, statusColors));
+        fourthRow.add(new BoardStatusItemModel("Done", account365Content, statusColors));
+        fourthRow.add(new BoardStatusItemModel("Done", setupDeskMonitorContent, statusColors));
+        fourthRow.add(new BoardStatusItemModel("Done", setupEntranceTagContent, statusColors));
         fourthRow.add(new BoardTextItemModel(""));
 
         cells.add(firstRow);
@@ -245,6 +271,19 @@ public class ProjectTemplates {
         columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Status,"Department"));
 
         List<List<BoardBaseItemModel>> cells = new ArrayList<>();
+
+        List<String> statusColors = new ArrayList<>();
+        statusColors.add("#ec8f3c");
+        statusColors.add("#e43d16");
+        statusColors.add("#14c90f");
+        statusColors.add("#0f9fc9");
+        statusColors.add("#0fc998");
+        statusColors.add("#4c0fb5");
+        statusColors.add("#b50f9f");
+        statusColors.add("#c90f14");
+        statusColors.add("#c9a00f");
+        statusColors.add("#0fc9c4");
+        statusColors.add("#0f79b5");
 
         List<String> priorityContent = new ArrayList<>();
         priorityContent.add("High");
@@ -280,44 +319,45 @@ public class ProjectTemplates {
         List<BoardBaseItemModel> firstRow = new ArrayList<>();
         firstRow.add(new BoardUpdateItemModel());
         firstRow.add(new BoardTextItemModel("I need to order food for the guests"));
-        firstRow.add(new BoardDateItemModel(2020,8,14));
-        firstRow.add(new BoardStatusItemModel("High", priorityContent));
+        firstRow.add(new BoardDateItemModel(2020, 8, 14));
+        firstRow.add(new BoardStatusItemModel("High", priorityContent, statusColors));
         firstRow.add(new BoardUserItemModel());
-        firstRow.add(new BoardDateItemModel(2020,8,14));
-        firstRow.add(new BoardStatusItemModel("New", statusContent));
-        firstRow.add(new BoardStatusItemModel("Report a maintenance issue", typeContent));
+        firstRow.add(new BoardDateItemModel(2020, 8, 14));
+        firstRow.add(new BoardStatusItemModel("New", statusContent, statusColors));
+        firstRow.add(new BoardStatusItemModel("Report a maintenance issue", typeContent, statusColors));
         firstRow.add(new BoardTextItemModel("John Doe"));
         firstRow.add(new BoardTextItemModel("johndoe@gmail.com"));
         firstRow.add(new BoardTextItemModel("123456789"));
-        firstRow.add(new BoardStatusItemModel("Sales", departmentContent));
+        firstRow.add(new BoardStatusItemModel("Sales", departmentContent, statusColors));
 
         List<BoardBaseItemModel> secondRow = new ArrayList<>();
         secondRow.add(new BoardUpdateItemModel());
         secondRow.add(new BoardTextItemModel("I need it for the meetup"));
-        secondRow.add(new BoardDateItemModel(2020,8,15));
-        secondRow.add(new BoardStatusItemModel("Medium", priorityContent));
+        secondRow.add(new BoardDateItemModel(2020, 8, 15));
+        secondRow.add(new BoardStatusItemModel("Medium", priorityContent, statusColors));
         secondRow.add(new BoardUserItemModel());
         secondRow.add(new BoardDateItemModel());
-        secondRow.add(new BoardStatusItemModel("Waiting for approval", statusContent));
-        secondRow.add(new BoardStatusItemModel("Request a move", typeContent));
+        secondRow.add(new BoardStatusItemModel("Waiting for approval", statusContent, statusColors));
+        secondRow.add(new BoardStatusItemModel("Request a move", typeContent, statusColors));
         secondRow.add(new BoardTextItemModel("Jane Doe"));
         secondRow.add(new BoardTextItemModel("janedoe@gmail.com"));
         secondRow.add(new BoardTextItemModel("123456789"));
-        secondRow.add(new BoardStatusItemModel("Marketing", departmentContent));
+        secondRow.add(new BoardStatusItemModel("Marketing", departmentContent, statusColors));
 
         List<BoardBaseItemModel> thirdRow = new ArrayList<>();
         thirdRow.add(new BoardUpdateItemModel());
         thirdRow.add(new BoardTextItemModel("We need it by 9 am"));
-        thirdRow.add(new BoardDateItemModel(2020,8,16));
-        thirdRow.add(new BoardStatusItemModel("Low", priorityContent));
+        thirdRow.add(new BoardDateItemModel(2020, 8, 16));
+        thirdRow.add(new BoardStatusItemModel("Low", priorityContent, statusColors));
         thirdRow.add(new BoardUserItemModel());
         thirdRow.add(new BoardDateItemModel());
-        thirdRow.add(new BoardStatusItemModel("Done", statusContent));
-        thirdRow.add(new BoardStatusItemModel("General question", typeContent));
+        thirdRow.add(new BoardStatusItemModel("Done", statusContent, statusColors));
+        thirdRow.add(new BoardStatusItemModel("General question", typeContent, statusColors));
         thirdRow.add(new BoardTextItemModel("Tom"));
         thirdRow.add(new BoardTextItemModel("tom@gmail.com"));
         thirdRow.add(new BoardTextItemModel("123456789"));
-        thirdRow.add(new BoardStatusItemModel("IT", departmentContent));
+        thirdRow.add(new BoardStatusItemModel("IT", departmentContent, statusColors));
+
 
         cells.add(firstRow);
         cells.add(secondRow);
@@ -346,6 +386,19 @@ public class ProjectTemplates {
 
         List<List<BoardBaseItemModel>> cells = new ArrayList<>();
 
+        List<String> statusColors = new ArrayList<>();
+        statusColors.add("#ec8f3c");
+        statusColors.add("#e43d16");
+        statusColors.add("#14c90f");
+        statusColors.add("#0f9fc9");
+        statusColors.add("#0fc998");
+        statusColors.add("#4c0fb5");
+        statusColors.add("#b50f9f");
+        statusColors.add("#c90f14");
+        statusColors.add("#c9a00f");
+        statusColors.add("#0fc9c4");
+        statusColors.add("#0f79b5");
+
         List<String> statusContent = new ArrayList<>();
         statusContent.add("New Request");
         statusContent.add("Under Consideration");
@@ -355,70 +408,71 @@ public class ProjectTemplates {
         List<BoardBaseItemModel> firstRow = new ArrayList<>();
         firstRow.add(new BoardUpdateItemModel());
         firstRow.add(new BoardUserItemModel());
-        firstRow.add(new BoardStatusItemModel("New Request", statusContent));
-        firstRow.add(new BoardDateItemModel(2020,8,14));
-        firstRow.add(new BoardTextItemModel("The feasibility study also analyzes in detail the project objectives, performance measures, assumptions, constraints and alternative options."));
-        firstRow.add(new BoardTextItemModel("This technology migration will reduce overhead costs associated with the large workforce currently required to manage these tasks. De-centralized employees will have more autonomy to manage their payroll elections, training, reporting, and various other administrative tasks. The company will also benefit from more timely and accurate financial reporting as a result of our regional managers’ ability to enter and continuously update their financial metrics. This real time access reduces errors, improves cycle time, and is readily available to any authorized user."));
-        firstRow.add(new BoardTextItemModel("Timesheet and payroll data will be immediately accessible for quality control and reporting purposes which will reduce the need for staff in non-billable positions to gather, analyze and compile data\n" +
-                "Employees will have the ability to register for training which reduces the burden on managers and training staff\n" +
+        firstRow.add(new BoardStatusItemModel("New Request", statusContent, statusColors));
+        firstRow.add(new BoardDateItemModel(2020, 8, 14));
+        firstRow.add(new BoardTextItemModel("The feasibility study also analyzes in detail the project objectives, performance measures, assumptions, constraints, and alternative options."));
+        firstRow.add(new BoardTextItemModel("This technology migration will reduce overhead costs associated with the large workforce currently required to manage these tasks. De-centralized employees will have more autonomy to manage their payroll elections, training, reporting, and various other administrative tasks. The company will also benefit from more timely and accurate financial reporting as a result of our regional managers’ ability to enter and continuously update their financial metrics. This real-time access reduces errors, improves cycle time, and is readily available to any authorized user."));
+        firstRow.add(new BoardTextItemModel("Timesheet and payroll data will be immediately accessible for quality control and reporting purposes, which will reduce the need for staff in non-billable positions to gather, analyze, and compile data.\n" +
+                "Employees will have the ability to register for training, which reduces the burden on managers and training staff.\n" +
                 "\n" +
                 "\n" +
                 "\n" +
-                "Employees will be able to enter and edit their timesheet data at any time from any location instead of phoning their data to their regional manager for entry into the mainframe system\n" +
-                "Timesheet and payroll data will be immediately accessible for quality control and reporting purposes which will reduce the need for staff in non-billable positions to gather, analyze and compile data\n" +
-                "Employees will have the ability to register for training which reduces the burden on managers and training staff"));
+                "Employees will be able to enter and edit their timesheet data at any time from any location instead of phoning their data to their regional manager for entry into the mainframe system.\n" +
+                "Timesheet and payroll data will be immediately accessible for quality control and reporting purposes, which will reduce the need for staff in non-billable positions to gather, analyze, and compile data.\n" +
+                "Employees will have the ability to register for training, which reduces the burden on managers and training staff."));
         firstRow.add(new BoardNumberItemModel("1000000"));
 
         List<BoardBaseItemModel> secondRow = new ArrayList<>();
         secondRow.add(new BoardUpdateItemModel());
         secondRow.add(new BoardUserItemModel());
-        secondRow.add(new BoardStatusItemModel("Under Consideration", statusContent));
-        secondRow.add(new BoardDateItemModel(2020,8,15));
-        secondRow.add(new BoardTextItemModel("The feasibility study also analyzes in detail the project objectives, performance measures, assumptions, constraints and alternative options."));
-        secondRow.add(new BoardTextItemModel("This technology migration will reduce overhead costs associated with the large workforce currently required to manage these tasks. De-centralized employees will have more autonomy to manage their payroll elections, training, reporting, and various other administrative tasks. The company will also benefit from more timely and accurate financial reporting as a result of our regional managers’ ability to enter and continuously update their financial metrics. This real time access reduces errors, improves cycle time, and is readily available to any authorized user."));
-        secondRow.add(new BoardTextItemModel("Timesheet and payroll data will be immediately accessible for quality control and reporting purposes which will reduce the need for staff in non-billable positions to gather, analyze and compile data\n" +
-                "Employees will have the ability to register for training which reduces the burden on managers and training staff\n" +
+        secondRow.add(new BoardStatusItemModel("Under Consideration", statusContent, statusColors));
+        secondRow.add(new BoardDateItemModel(2020, 8, 15));
+        secondRow.add(new BoardTextItemModel("The feasibility study also analyzes in detail the project objectives, performance measures, assumptions, constraints, and alternative options."));
+        secondRow.add(new BoardTextItemModel("This technology migration will reduce overhead costs associated with the large workforce currently required to manage these tasks. De-centralized employees will have more autonomy to manage their payroll elections, training, reporting, and various other administrative tasks. The company will also benefit from more timely and accurate financial reporting as a result of our regional managers’ ability to enter and continuously update their financial metrics. This real-time access reduces errors, improves cycle time, and is readily available to any authorized user."));
+        secondRow.add(new BoardTextItemModel("Timesheet and payroll data will be immediately accessible for quality control and reporting purposes, which will reduce the need for staff in non-billable positions to gather, analyze, and compile data.\n" +
+                "Employees will have the ability to register for training, which reduces the burden on managers and training staff.\n" +
                 "\n" +
                 "\n" +
                 "\n" +
-                "Employees will be able to enter and edit their timesheet data at any time from any location instead of phoning their data to their regional manager for entry into the mainframe system\n" +
-                "Timesheet and payroll data will be immediately accessible for quality control and reporting purposes which will reduce the need for staff in non-billable positions to gather, analyze and compile data\n" +
-                "Employees will have the ability to register for training which reduces the burden on managers and training staff"));
+                "Employees will be able to enter and edit their timesheet data at any time from any location instead of phoning their data to their regional manager for entry into the mainframe system.\n" +
+                "Timesheet and payroll data will be immediately accessible for quality control and reporting purposes, which will reduce the need for staff in non-billable positions to gather, analyze, and compile data.\n" +
+                "Employees will have the ability to register for training, which reduces the burden on managers and training staff."));
         secondRow.add(new BoardNumberItemModel("1000000"));
 
         List<BoardBaseItemModel> thirdRow = new ArrayList<>();
         thirdRow.add(new BoardUpdateItemModel());
         thirdRow.add(new BoardUserItemModel());
-        thirdRow.add(new BoardStatusItemModel("Approved", statusContent));
-        thirdRow.add(new BoardDateItemModel(2020,8,16));
-        thirdRow.add(new BoardTextItemModel("The feasibility study also analyzes in detail the project objectives, performance measures, assumptions, constraints and alternative options."));
-        thirdRow.add(new BoardTextItemModel("This technology migration will reduce overhead costs associated with the large workforce currently required to manage these tasks. De-centralized employees will have more autonomy to manage their payroll elections, training, reporting, and various other administrative tasks. The company will also benefit from more timely and accurate financial reporting as a result of our regional managers’ ability to enter and continuously update their financial metrics. This real time access reduces errors, improves cycle time, and is readily available to any authorized user."));
-        thirdRow.add(new BoardTextItemModel("Timesheet and payroll data will be immediately accessible for quality control and reporting purposes which will reduce the need for staff in non-billable positions to gather, analyze and compile data\n" +
-                "Employees will have the ability to register for training which reduces the burden on managers and training staff\n" +
+        thirdRow.add(new BoardStatusItemModel("Approved", statusContent, statusColors));
+        thirdRow.add(new BoardDateItemModel(2020, 8, 16));
+        thirdRow.add(new BoardTextItemModel("The feasibility study also analyzes in detail the project objectives, performance measures, assumptions, constraints, and alternative options."));
+        thirdRow.add(new BoardTextItemModel("This technology migration will reduce overhead costs associated with the large workforce currently required to manage these tasks. De-centralized employees will have more autonomy to manage their payroll elections, training, reporting, and various other administrative tasks. The company will also benefit from more timely and accurate financial reporting as a result of our regional managers’ ability to enter and continuously update their financial metrics. This real-time access reduces errors, improves cycle time, and is readily available to any authorized user."));
+        thirdRow.add(new BoardTextItemModel("Timesheet and payroll data will be immediately accessible for quality control and reporting purposes, which will reduce the need for staff in non-billable positions to gather, analyze, and compile data.\n" +
+                "Employees will have the ability to register for training, which reduces the burden on managers and training staff.\n" +
                 "\n" +
                 "\n" +
                 "\n" +
-                "Employees will be able to enter and edit their timesheet data at any time from any location instead of phoning their data to their regional manager for entry into the mainframe system\n" +
-                "Timesheet and payroll data will be immediately accessible for quality control and reporting purposes which will reduce the need for staff in non-billable positions to gather, analyze and compile data\n" +
-                "Employees will have the ability to register for training which reduces the burden on managers and training staff"));
+                "Employees will be able to enter and edit their timesheet data at any time from any location instead of phoning their data to their regional manager for entry into the mainframe system.\n" +
+                "Timesheet and payroll data will be immediately accessible for quality control and reporting purposes, which will reduce the need for staff in non-billable positions to gather, analyze, and compile data.\n" +
+                "Employees will have the ability to register for training, which reduces the burden on managers and training staff."));
         thirdRow.add(new BoardNumberItemModel("1000000"));
 
         List<BoardBaseItemModel> fourthRow = new ArrayList<>();
         fourthRow.add(new BoardUpdateItemModel());
         fourthRow.add(new BoardUserItemModel());
-        fourthRow.add(new BoardStatusItemModel("Rejected", statusContent));
-        fourthRow.add(new BoardDateItemModel(2020,8,17));
-        fourthRow.add(new BoardTextItemModel("The feasibility study also analyzes in detail the project objectives, performance measures, assumptions, constraints and alternative options."));
-fourthRow.add(new BoardTextItemModel("This technology migration will reduce overhead costs associated with the large workforce currently required to manage these tasks. De-centralized employees will have more autonomy to manage their payroll elections, training, reporting, and various other administrative tasks. The company will also benefit from more timely and accurate financial reporting as a result of our regional managers’ ability to enter and continuously update their financial metrics. This real time access reduces errors, improves cycle time, and is readily available to any authorized user."));
-        fourthRow.add(new BoardTextItemModel("Timesheet and payroll data will be immediately accessible for quality control and reporting purposes which will reduce the need for staff in non-billable positions to gather, analyze and compile data\n" +
-                "Employees will have the ability to register for training which reduces the burden on managers and training staff\n" +
+        fourthRow.add(new BoardStatusItemModel("Rejected", statusContent, statusColors));
+        fourthRow.add(new BoardDateItemModel(2020, 8, 17));
+        fourthRow.add(new BoardTextItemModel("The feasibility study also analyzes in detail the project objectives, performance measures, assumptions, constraints, and alternative options."));
+        fourthRow.add(new BoardTextItemModel("This technology migration will reduce overhead costs associated with the large workforce currently required to manage these tasks. De-centralized employees will have more autonomy to manage their payroll elections, training, reporting, and various other administrative tasks. The company will also benefit from more timely and accurate financial reporting as a result of our regional managers’ ability to enter and continuously update their financial metrics. This real-time access reduces errors, improves cycle time, and is readily available to any authorized user."));
+        fourthRow.add(new BoardTextItemModel("Timesheet and payroll data will be immediately accessible for quality control and reporting purposes, which will reduce the need for staff in non-billable positions to gather, analyze, and compile data.\n" +
+                "Employees will have the ability to register for training, which reduces the burden on managers and training staff.\n" +
                 "\n" +
                 "\n" +
                 "\n" +
-                "Employees will be able to enter and edit their timesheet data at any time from any location instead of phoning their data to their regional manager for entry into the mainframe system\n" +
-                "Timesheet and payroll data will be immediately accessible for quality control and reporting purposes which will reduce the need for staff in non-billable positions to gather, analyze and compile data\n" +
-                "Employees will have the ability to register for training which reduces the burden on managers and training staff"));
+                "Employees will be able to enter and edit their timesheet data at any time from any location instead of phoning their data to their regional manager for entry into the mainframe system.\n" +
+                "Timesheet and payroll data will be immediately accessible for quality control and reporting purposes, which will reduce the need for staff in non-billable positions to gather, analyze, and compile data.\n" +
+                "Employees will have the ability to register for training, which reduces the burden on managers and training staff."));
         fourthRow.add(new BoardNumberItemModel("1000000"));
+
 
         cells.add(firstRow);
         cells.add(secondRow);
@@ -427,6 +481,161 @@ fourthRow.add(new BoardTextItemModel("This technology migration will reduce over
 
         List<BoardContentModel> content = new ArrayList<>();
         content.add(new BoardContentModel("Project Request & Approvals",rowTitles,columnTitles, cells));
+        return content;
+    }
+    public static List<BoardContentModel> sampleRecuitmenAndOnboardingContent() {
+        List<String> rowTitles = new ArrayList<>();
+        rowTitles.add("Applicant 1");
+        rowTitles.add("Applicant 2");
+        rowTitles.add("Applicant 3");
+        rowTitles.add("Applicant 4");
+
+        List<BoardColumnHeaderModel> columnTitles = new ArrayList<>();
+        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Update, "Updates"));
+        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.User, "Recruiter"));
+        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Date, "Application date"));
+        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Text, "Role"));
+        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Status, "Department"));
+        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Status, "Resume"));
+        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Status, "Phone interview"));
+        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Status, "In-person interview"));
+        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Status, "References"));
+        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Status, "Offer sent"));
+        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Status, "Contract"));
+
+        List<List<BoardBaseItemModel>> cells = new ArrayList<>();
+
+        List<String> statusColors = new ArrayList<>();
+        statusColors.add("#ec8f3c");
+        statusColors.add("#e43d16");
+        statusColors.add("#14c90f");
+        statusColors.add("#0f9fc9");
+        statusColors.add("#0fc998");
+        statusColors.add("#4c0fb5");
+        statusColors.add("#b50f9f");
+        statusColors.add("#c90f14");
+        statusColors.add("#c9a00f");
+        statusColors.add("#0fc9c4");
+        statusColors.add("#0f79b5");
+
+        List<String> DepartmentContent = new ArrayList<>();
+        DepartmentContent.add("Marketing");
+        DepartmentContent.add("Sales");
+        DepartmentContent.add("IT");
+        DepartmentContent.add("HR");
+        DepartmentContent.add("Finance");
+        DepartmentContent.add("Legal");
+        DepartmentContent.add("Operations");
+        DepartmentContent.add("Customer Service");
+        DepartmentContent.add("R&D");
+
+        List<String> RoleContent = new ArrayList<>();
+        RoleContent.add("Marketing Manager");
+        RoleContent.add("Sales Manager");
+        RoleContent.add("IT Manager");
+        RoleContent.add("HR Manager");
+        RoleContent.add("Finance Manager");
+        RoleContent.add("Legal Manager");
+        RoleContent.add("Operations Manager");
+        RoleContent.add("Customer Service Manager");
+        RoleContent.add("R&D Manager");
+
+        List<String> ResumeContent = new ArrayList<>();
+        ResumeContent.add("Working on it");
+        ResumeContent.add("No go");
+        ResumeContent.add("Go");
+        ResumeContent.add("");
+
+        List<String> PhoneInterviewContent = new ArrayList<>();
+        PhoneInterviewContent.add("Working on it");
+        PhoneInterviewContent.add("No go");
+        PhoneInterviewContent.add("Go");
+        PhoneInterviewContent.add("");
+
+        List<String> InPersonInterviewContent = new ArrayList<>();
+        InPersonInterviewContent.add("Working on it");
+        InPersonInterviewContent.add("No go");
+        InPersonInterviewContent.add("Go");
+        InPersonInterviewContent.add("");
+
+        List<String> ReferencesContent = new ArrayList<>();
+        ReferencesContent.add("Working on it");
+        ReferencesContent.add("No go");
+        ReferencesContent.add("Go");
+        ReferencesContent.add("");
+
+        List<String> OfferSentContent = new ArrayList<>();
+        OfferSentContent.add("Working on it");
+        OfferSentContent.add("No go");
+        OfferSentContent.add("Go");
+        OfferSentContent.add("");
+
+        List<String> ContractContent = new ArrayList<>();
+        ContractContent.add("Working on it");
+        ContractContent.add("No go");
+        ContractContent.add("Go");
+        ContractContent.add("");
+
+
+        List<BoardBaseItemModel> firstRow = new ArrayList<>();
+        firstRow.add(new BoardUpdateItemModel());
+        firstRow.add(new BoardUserItemModel());
+        firstRow.add(new BoardDateItemModel(2020, 8, 17));
+        firstRow.add(new BoardTextItemModel("Marketing Manager"));
+        firstRow.add(new BoardStatusItemModel("Marketing", DepartmentContent, statusColors));
+        firstRow.add(new BoardStatusItemModel("Go", ResumeContent, statusColors));
+        firstRow.add(new BoardStatusItemModel("Go", PhoneInterviewContent, statusColors));
+        firstRow.add(new BoardStatusItemModel("Go", InPersonInterviewContent, statusColors));
+        firstRow.add(new BoardStatusItemModel("Go", ReferencesContent, statusColors));
+        firstRow.add(new BoardStatusItemModel("Go", OfferSentContent, statusColors));
+        firstRow.add(new BoardStatusItemModel("Go", ContractContent, statusColors));
+
+        List<BoardBaseItemModel> secondRow = new ArrayList<>();
+        secondRow.add(new BoardUpdateItemModel());
+        secondRow.add(new BoardUserItemModel());
+        secondRow.add(new BoardDateItemModel(2020, 8, 17));
+        secondRow.add(new BoardTextItemModel("Sales Manager"));
+        secondRow.add(new BoardStatusItemModel("Sales", DepartmentContent, statusColors));
+        secondRow.add(new BoardStatusItemModel("No go", ResumeContent, statusColors));
+        secondRow.add(new BoardStatusItemModel("No go", PhoneInterviewContent, statusColors));
+        secondRow.add(new BoardStatusItemModel("No go", InPersonInterviewContent, statusColors));
+        secondRow.add(new BoardStatusItemModel("Working on it", ReferencesContent, statusColors));
+        secondRow.add(new BoardStatusItemModel("Working on it", OfferSentContent, statusColors));
+        secondRow.add(new BoardStatusItemModel("", ContractContent, statusColors));
+
+        List<BoardBaseItemModel> thirdRow = new ArrayList<>();
+        thirdRow.add(new BoardUpdateItemModel());
+        thirdRow.add(new BoardUserItemModel());
+        thirdRow.add(new BoardDateItemModel(2020, 8, 17));
+        thirdRow.add(new BoardTextItemModel("IT Manager"));
+        thirdRow.add(new BoardStatusItemModel("IT", DepartmentContent, statusColors));
+        thirdRow.add(new BoardStatusItemModel("No go", ResumeContent, statusColors));
+        thirdRow.add(new BoardStatusItemModel("Go", PhoneInterviewContent, statusColors));
+        thirdRow.add(new BoardStatusItemModel("Working on it", InPersonInterviewContent, statusColors));
+        thirdRow.add(new BoardStatusItemModel("", ReferencesContent, statusColors));
+        thirdRow.add(new BoardStatusItemModel("Go", OfferSentContent, statusColors));
+        thirdRow.add(new BoardStatusItemModel("", ContractContent, statusColors));
+
+        List<BoardBaseItemModel> fourthRow = new ArrayList<>();
+        fourthRow.add(new BoardUpdateItemModel());
+        fourthRow.add(new BoardUserItemModel());
+        fourthRow.add(new BoardDateItemModel(2020, 8, 17));
+        fourthRow.add(new BoardTextItemModel("HR Manager"));
+        fourthRow.add(new BoardStatusItemModel("HR", DepartmentContent, statusColors));
+        fourthRow.add(new BoardStatusItemModel("Working on it", ResumeContent, statusColors));
+        fourthRow.add(new BoardStatusItemModel("Working on it", PhoneInterviewContent, statusColors));
+        fourthRow.add(new BoardStatusItemModel("Go", InPersonInterviewContent, statusColors));
+        fourthRow.add(new BoardStatusItemModel("", ReferencesContent, statusColors));
+        fourthRow.add(new BoardStatusItemModel("", OfferSentContent, statusColors));
+        fourthRow.add(new BoardStatusItemModel("Go", ContractContent, statusColors));
+
+        cells.add(firstRow);
+        cells.add(secondRow);
+        cells.add(thirdRow);
+        cells.add(fourthRow);
+
+        List<BoardContentModel> content = new ArrayList<>();
+        content.add(new BoardContentModel("Recruitment & On boarding", rowTitles, columnTitles, cells));
         return content;
     }
 }

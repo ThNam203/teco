@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.util.Pair;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -471,6 +472,25 @@ public class ProjectActivity extends AppCompatActivity {
         }
     }
 
+    private void showPopupOwnerFor(Role role, BoardOwnerItemPopupBinding popupBinding)
+    {
+        popupBinding.rvMembers.setVisibility(View.VISIBLE);
+        popupBinding.layoutRvOwers.setVisibility(View.VISIBLE);
+        popupBinding.btnSave.setVisibility(View.VISIBLE);
+
+        switch (role)
+        {
+            case CREATOR:
+                break;
+            case ADMIN:
+                break;
+            case MEMBER:
+                popupBinding.rvMembers.setVisibility(View.GONE);
+                popupBinding.btnSave.setVisibility(View.GONE);
+                break;
+        }
+    }
+
     private void showRenamePopup()
     {
         final Dialog dialog = new Dialog(this);
@@ -780,7 +800,8 @@ public class ProjectActivity extends AppCompatActivity {
             List<String> newList = new ArrayList<>(selectedCollection);
             tempListSelectedCollection.add(newList);
         }
-        List<BoardColumnHeaderModel> listColumn = projectActivityViewModel.getProjectModel().getBoards().get(0).getColumnCells();
+
+        List<BoardColumnHeaderModel> listColumn = boardViewModel.getmColumnHeaderModelList();
         listColumn.forEach(column -> {
             if(column.getColumnType() == BoardColumnHeaderModel.ColumnType.User)
             {
@@ -791,13 +812,15 @@ public class ProjectActivity extends AppCompatActivity {
                 List<String> filterCollection = new ArrayList<>();
                 List<String> selectedCollection = new ArrayList<>();
                 //get content of all cells in that column
-                List<List<BoardBaseItemModel>> board = projectActivityViewModel.getProjectModel().getBoards().get(0).getCells();
+                List<List<BoardBaseItemModel>> board = boardViewModel.getmCellModelList();
                 board.forEach(row -> {
-                    String content = row.get(indexColumn).getContent();
-                    if(!content.isEmpty())
+                    BoardUserItemModel userItem = (BoardUserItemModel)row.get(indexColumn);
+                    if(!userItem.getUsers().isEmpty())
                     {
-                        if(!filterCollection.contains(content))
-                            filterCollection.add(row.get(indexColumn).getContent());
+                        userItem.getUsers().forEach(user -> {
+                            if(!filterCollection.contains(user.getId()))
+                                filterCollection.add(user.getId());
+                        });
                     }
                 });
                 listFilterCollection.add(filterCollection);
@@ -808,6 +831,10 @@ public class ProjectActivity extends AppCompatActivity {
                     tempListSelectedCollection.add(selectedCollection);
                 }
             }
+            else if (column.getColumnType() == BoardColumnHeaderModel.ColumnType.NewColumn)
+            {
+                //do no thing to this column
+            }
             else
             {
                 //get index of column that i am getting it's title
@@ -817,7 +844,7 @@ public class ProjectActivity extends AppCompatActivity {
                 List<String> filterCollection = new ArrayList<>();
                 List<String> selectedCollection = new ArrayList<>();
                 //get content of all cells in that column
-                List<List<BoardBaseItemModel>> board = projectActivityViewModel.getProjectModel().getBoards().get(0).getCells();
+                List<List<BoardBaseItemModel>> board = boardViewModel.getmCellModelList();
                 board.forEach(row -> {
                     String content = row.get(indexColumn).getContent();
                     if(!content.isEmpty())
@@ -835,6 +862,7 @@ public class ProjectActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         BoardFilterAdapter filterBoardAdapter = new BoardFilterAdapter(listFilterBoard, listFilterCollection, tempListSelectedCollection);
         popupFilterBinding.rvBoardFilter.setAdapter(filterBoardAdapter);
@@ -887,7 +915,7 @@ public class ProjectActivity extends AppCompatActivity {
         List<UserModel> listOwner = new ArrayList<>(userItemModel.getUsers());
         binding.rvMembers.setLayoutManager(new LinearLayoutManager(ProjectActivity.this));
         binding.rvOwers.setLayoutManager(new LinearLayoutManager(ProjectActivity.this, LinearLayoutManager.HORIZONTAL, false));
-        BoardItemOwnerAdapter boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner);
+        BoardItemOwnerAdapter boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, projectActivityViewModel);
         BoardItemMemberAdapter boardItemMemberAdapter = new BoardItemMemberAdapter();
         binding.rvMembers.setAdapter(boardItemMemberAdapter);
         binding.rvOwers.setAdapter(boardItemOwnerAdapter);
@@ -908,8 +936,14 @@ public class ProjectActivity extends AppCompatActivity {
                 }
                 boardItemMemberAdapter.setData(listMember, statuses);
                 binding.rvMembers.setAdapter(boardItemMemberAdapter);
-                if(listMember.size() > 0) binding.rvMembers.setVisibility(View.VISIBLE);
-                else binding.rvMembers.setVisibility(View.GONE);
+
+                String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+                if(projectActivityViewModel.getProjectModel().getCreatorId().equals(userId))
+                    showPopupOwnerFor(Role.CREATOR, binding);
+                else if (projectActivityViewModel.getProjectModel().getAdminIds().contains(userId))
+                    showPopupOwnerFor(Role.ADMIN, binding);
+                else
+                    showPopupOwnerFor(Role.MEMBER, binding);
             }
 
             @Override

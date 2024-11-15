@@ -32,6 +32,19 @@ public class ProjectModel {
         this.boards = boards;
     }
 
+    public ProjectModel(int chosenPosition, List<BoardContentModel> boards,String title) {
+        this.title = title;
+        this.creatorId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+
+        memberIds = new ArrayList<>();
+        adminIds = new ArrayList<>();
+        memberIds.add(creatorId);
+        adminIds.add(creatorId);
+
+        this.chosenPosition = chosenPosition;
+        this.boards = boards;
+    }
+
     /**
      * This constructor is used to create when retrieving data from server
      */

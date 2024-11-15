@@ -8,11 +8,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStore;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.models.UserModel;
+import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
+import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
 import java.util.List;
 
@@ -20,8 +26,15 @@ public class BoardItemOwnerAdapter extends RecyclerView.Adapter{
     private final List<UserModel> listOwner;
     private OnActionCallback callback;
 
+    private ProjectActivityViewModel projectActivityViewModel;
+
     public interface OnActionCallback {
         void OnClick(int position);
+    }
+
+    public BoardItemOwnerAdapter(List<UserModel> listOwner, ProjectActivityViewModel projectActivityViewModel) {
+        this.listOwner = listOwner;
+        this.projectActivityViewModel = projectActivityViewModel;
     }
 
     public BoardItemOwnerAdapter(List<UserModel> listOwner) {
@@ -53,10 +66,12 @@ public class BoardItemOwnerAdapter extends RecyclerView.Adapter{
 
     private class BoardItemOwnerHolder extends RecyclerView.ViewHolder {
         ImageView ownerAvatar, btnDelete;
+        TextView tvOwnerName;
         BoardItemOwnerHolder(View itemView) {
             super(itemView);
             ownerAvatar = itemView.findViewById(R.id.owner_avatar);
             btnDelete = itemView.findViewById(R.id.btn_delete);
+            tvOwnerName = itemView.findViewById(R.id.ownerName);
         }
 
         void bind(UserModel member, int position) {
@@ -64,6 +79,16 @@ public class BoardItemOwnerAdapter extends RecyclerView.Adapter{
                     .load(member.getProfileImagePath())
                     .placeholder(R.drawable.ic_user)
                     .into(ownerAvatar);
+            tvOwnerName.setText(member.getName());
+            if(projectActivityViewModel != null)
+            {
+                String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+                if(!projectActivityViewModel.getProjectModel().getCreatorId().equals(userId)
+                        && !projectActivityViewModel.getProjectModel().getAdminIds().contains(userId))
+                    btnDelete.setVisibility(View.GONE);
+                else
+                    btnDelete.setVisibility(View.VISIBLE);
+            }
 
             btnDelete.setOnClickListener(view -> callback.OnClick(position));
         }
