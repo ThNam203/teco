@@ -20,7 +20,9 @@ public class BoardColumnHeaderModel {
         User(7, "User"),
         @SerializedName("Checkbox")
         Checkbox(8, "Checkbox"),
-        NewColumn(9, "+ New Column");
+        @SerializedName("Map")
+        Map(9, "Map"),
+        NewColumn(10, "+ New Column");
 
         private int key;
         private String name;

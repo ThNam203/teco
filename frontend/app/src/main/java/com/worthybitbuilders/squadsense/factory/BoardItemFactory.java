@@ -5,6 +5,7 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemMod
 import com.worthybitbuilders.squadsense.models.board_models.BoardColumnHeaderModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardDateItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardEmptyItemModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardMapItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardNumberItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardStatusItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardTextItemModel;
@@ -33,6 +34,10 @@ public class BoardItemFactory {
             newItem = new BoardUserItemModel();
         } else if (type == BoardColumnHeaderModel.ColumnType.Checkbox) {
             newItem = new BoardCheckboxItemModel(false);
+        } else if (type == BoardColumnHeaderModel.ColumnType.Map) {
+            newItem = new BoardMapItemModel();
+        } else {
+            throw new IllegalArgumentException("Illegal item model");
         }
 
         return newItem;

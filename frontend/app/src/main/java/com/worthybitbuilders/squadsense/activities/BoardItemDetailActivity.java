@@ -17,6 +17,7 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -103,14 +104,14 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
                     int finalI = i;
 
                     if (isFromUpdateColumn && Objects.equals(updateCellId, cellId)) {
-                        DrawableCompat.setTint(updateButton.getBackground(), Color.parseColor("#0073ea"));
+                        DrawableCompat.setTint(updateButton.getBackground(), ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_btn_color));
                         changeToUpdateFragment(updateCellId, data.getColumnTitles().get(finalI));
                     }
 
                     updateButton.setOnClickListener(view -> {
                         if (Objects.equals(currentChosenCellId, cellId)) return;
                         changeAllButtonBackgroundToDefault();
-                        DrawableCompat.setTint(updateButton.getBackground(), Color.parseColor("#0073ea"));
+                        DrawableCompat.setTint(updateButton.getBackground(), ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_btn_color));
                         changeToUpdateFragment(cellId, data.getColumnTitles().get(finalI));
                     });
                     buttons.add(new Pair<>((Button)updateButton, cellId));
@@ -231,7 +232,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
     }
 
     private void changeAllButtonBackgroundToDefault() {
-        buttons.forEach(pair -> DrawableCompat.setTint(pair.first.getBackground(), Color.parseColor("#2b2b2b")));
+        buttons.forEach(pair -> DrawableCompat.setTint(pair.first.getBackground(), ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_btn_second_color)));
     }
 
     private void changeToUpdateFragment(String cellId, String columnTitle) {
@@ -246,7 +247,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         // "randombullshitgo" should be synced, should not change
         currentChosenCellId = "randombullshitgo";
         changeAllButtonBackgroundToDefault();
-        DrawableCompat.setTint(activityBinding.btnShowColumns.getBackground(), Color.parseColor("#0073ea"));
+        DrawableCompat.setTint(activityBinding.btnShowColumns.getBackground(), ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_btn_color));
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(activityBinding.fragmentContainer.getId(), BoardDetailColumnFragment.newInstance())
@@ -258,10 +259,10 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         String cellId = itemModel.get_id();
         for (int i = 0; i < buttons.size(); i++) {
             if (Objects.equals(buttons.get(i).second, cellId)) {
-                DrawableCompat.setTint(buttons.get(i).first.getBackground(), Color.parseColor("#0073ea"));
+                DrawableCompat.setTint(buttons.get(i).first.getBackground(), ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_btn_color));
                 changeToUpdateFragment(cellId, columnTitle);
             } else {
-                DrawableCompat.setTint(buttons.get(i).first.getBackground(), Color.parseColor("#2b2b2b"));
+                DrawableCompat.setTint(buttons.get(i).first.getBackground(), ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_btn_second_color));
             }
         }
     }

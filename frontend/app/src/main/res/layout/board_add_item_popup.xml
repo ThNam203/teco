@@ -43,6 +43,7 @@
         android:layout_marginTop="12dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:layout_marginBottom="8dp"
         android:layout_height="wrap_content">
         <LinearLayout
             android:orientation="vertical"
@@ -92,6 +93,17 @@
                 android:drawableLeft="@drawable/ic_checkbox_item"
                 android:drawableTint="@color/primary_icon_color"
                 android:text="Checkbox"
+                android:textColor="@color/primary_word_color"
+                android:textSize="@dimen/small_textsize"
+                android:textAllCaps="false" />
+            <Button
+                android:id="@+id/btnAddMapItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/primary_btn_second_color"
+                android:drawableLeft="@drawable/ic_map"
+                android:drawableTint="@color/primary_icon_color"
+                android:text="Map"
                 android:textColor="@color/primary_word_color"
                 android:textSize="@dimen/small_textsize"
                 android:textAllCaps="false" />
@@ -149,13 +161,4 @@
                 android:textAllCaps="false"/>
         </LinearLayout>
     </LinearLayout>
-    <TextView
-        android:id="@+id/btnMoreItems"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="More columns"
-        android:textSize="@dimen/small_textsize"
-        android:layout_marginVertical="12dp"
-        android:textColor="#74a9e6"/>
 </LinearLayout>

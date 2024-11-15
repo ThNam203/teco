@@ -59,8 +59,9 @@
                 android:text="Columns"
                 android:padding="8dp"
                 android:layout_marginEnd="8dp"
-                android:backgroundTint="@color/primary_btn_second_color"
+                android:backgroundTint="@color/primary_btn_color"
                 app:icon="@drawable/ic_table_sheet"
+                app:iconTint="@color/primary_icon_color"
                 android:textAllCaps="false"
                 android:textColor="@color/primary_word_color"/>
         </LinearLayout>

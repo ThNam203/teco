@@ -10,5 +10,6 @@
     android:padding="8dp"
     android:backgroundTint="@color/primary_second_color"
     app:icon="@drawable/ic_add_message"
+    app:iconTint="@color/primary_icon_color"
     android:textAllCaps="false"
     android:textColor="@color/primary_word_color"/>

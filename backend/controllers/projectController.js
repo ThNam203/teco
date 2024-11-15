@@ -76,6 +76,9 @@ const createACell = async (cell) => {
         case 'CellCheckbox':
             newCell = await cellModels.CellCheckbox.create(cell)
             break
+        case 'CellMap':
+            newCell = await cellModels.CellMap.create(cell)
+            break
         default:
             throw new AppError('Unable to save a cell', 500)
     }
@@ -136,6 +139,13 @@ const updateACell = async (cell) => {
             break
         case 'CellCheckbox':
             newCell = await cellModels.CellCheckbox.findByIdAndUpdate(
+                cell._id,
+                cell,
+                { new: true }
+            )
+            break
+        case 'CellMap':
+            newCell = await cellModels.CellMap.findByIdAndUpdate(
                 cell._id,
                 cell,
                 { new: true }

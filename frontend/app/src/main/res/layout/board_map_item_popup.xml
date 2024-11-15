@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/background_page_corner_top_left_and_right"
+    android:backgroundTint="@color/primary_second_color">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingHorizontal="10dp"
+        android:paddingBottom="15dp">
+        <ImageButton
+            android:id="@+id/btnClosePopup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:backgroundTint="@color/transparent"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_close"
+            app:tint="@color/primary_icon_color" />
+        <TextView
+            android:id="@+id/textItemTitle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Address"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/primary_word_color"
+            android:textSize="@dimen/large_textsize"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:singleLine="true"
+            android:padding="0dp"
+            android:layout_marginEnd="16dp"
+            android:text="Save"
+            android:textSize="@dimen/normal_textsize"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:backgroundTint="#0073ea"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/primary_splitter_color" />
+    <TextView
+        android:id="@+id/tvAddressLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/primary_word_color"
+        tools:text="Location: tt.DInh Quan, xa Phu Ngoc, Viet Nam"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="16dp"
+        android:textSize="20sp"
+        android:textColor="@color/primary_word_color"
+        android:text="Description:"/>
+    <EditText
+        android:id="@+id/etAddressDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your description..."
+        android:minHeight="50dp"
+        android:maxHeight="300dp"
+        android:textColorHint="@color/primary_word_second_color"
+        android:textColor="@color/primary_word_color"
+        android:layout_marginHorizontal="32dp"
+        android:textSize="@dimen/normal_textsize"
+        android:background="@null"/>
+</LinearLayout>

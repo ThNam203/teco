@@ -44,6 +44,20 @@ const cellDateSchema = new mongoose.Schema({
     minute: Number,
 })
 
+const addressSchema = new mongoose.Schema({
+    title: {
+      type: String,
+      required: true
+    },
+    description: String,
+    latitude: Number,
+    longitude: Number,
+}, {_id: false});
+
+const cellMapSchema = new mongoose.Schema({
+    addresses: [addressSchema]
+})
+
 const cellUserSchema = new mongoose.Schema({
     users: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -67,6 +81,7 @@ const CellTimeline = CellBase.discriminator('CellTimeline', cellTimelineSchema)
 const CellDate = CellBase.discriminator('CellDate', cellDateSchema)
 const CellUser = CellBase.discriminator('CellUser', cellUserSchema)
 const CellCheckbox = CellBase.discriminator('CellCheckbox', cellCheckboxSchema)
+const CellMap = CellBase.discriminator('CellMap', cellMapSchema)
 
 module.exports = {
     CellBase,
@@ -78,4 +93,5 @@ module.exports = {
     CellUpdate,
     CellUser,
     CellCheckbox,
+    CellMap
 }

@@ -20,6 +20,7 @@ import com.worthybitbuilders.squadsense.adapters.holders.BoardCheckboxItemViewHo
 import com.worthybitbuilders.squadsense.adapters.holders.BoardColumnHeaderViewHolder;
 import com.worthybitbuilders.squadsense.adapters.holders.BoardDateItemViewHolder;
 import com.worthybitbuilders.squadsense.adapters.holders.BoardEmptyItemViewHolder;
+import com.worthybitbuilders.squadsense.adapters.holders.BoardMapItemViewHolder;
 import com.worthybitbuilders.squadsense.adapters.holders.BoardNumberItemViewHolder;
 import com.worthybitbuilders.squadsense.adapters.holders.BoardRowHeaderViewHolder;
 import com.worthybitbuilders.squadsense.adapters.holders.BoardStatusItemViewHolder;
@@ -31,6 +32,7 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardBaseItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardColumnHeaderModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardDateItemModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardMapItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardNumberItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardRowHeaderModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardStatusItemModel;
@@ -55,7 +57,8 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
                     BoardNumberItemViewHolder.NumberItemClickHandlers,
                     BoardCheckboxItemViewHolder.CheckboxItemClickHandlers,
                     BoardDateItemViewHolder.DateItemClickHandlers,
-                    BoardTimelineItemViewHolder.TimelineItemClickHandlers
+                    BoardTimelineItemViewHolder.TimelineItemClickHandlers,
+                    BoardMapItemViewHolder.MapItemClickHandlers
     {
         void onNewColumnHeaderClick();
         void onNewRowHeaderClick();
@@ -126,6 +129,9 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
         } else if (viewType == BoardColumnHeaderModel.ColumnType.TimeLine.getKey()) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.board_item_timeline, parent, false);
             return new BoardTimelineItemViewHolder(view, handlers);
+        } else if (viewType == BoardColumnHeaderModel.ColumnType.Map.getKey()) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.board_item_map, parent, false);
+            return new BoardMapItemViewHolder(view, handlers);
         }
 
         throw new NotImplementedError();
@@ -153,6 +159,8 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
             ((BoardDateItemViewHolder) holder).setItemModel((BoardDateItemModel) cellItemModel, columnTitle, columnPosition, rowPosition);
         } else if (holder instanceof BoardTimelineItemViewHolder) {
             ((BoardTimelineItemViewHolder) holder).setItemModel((BoardTimelineItemModel) cellItemModel, columnTitle, columnPosition, rowPosition);
+        } else if (holder instanceof BoardMapItemViewHolder) {
+            ((BoardMapItemViewHolder) holder).setItemModel((BoardMapItemModel) cellItemModel, columnTitle, columnPosition, rowPosition);
         }
     }
 
@@ -187,6 +195,8 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
             columnHolder.itemView.setLayoutParams(new LinearLayout.LayoutParams(180, LinearLayout.LayoutParams.MATCH_PARENT));
         } else if (columnHeaderItemModel.getColumnType() == BoardColumnHeaderModel.ColumnType.TimeLine) {
             columnHolder.itemView.setLayoutParams(new LinearLayout.LayoutParams(180, LinearLayout.LayoutParams.MATCH_PARENT));
+        } else if (columnHeaderItemModel.getColumnType() == BoardColumnHeaderModel.ColumnType.Map) {
+            columnHolder.itemView.setLayoutParams(new LinearLayout.LayoutParams(150, LinearLayout.LayoutParams.MATCH_PARENT));
         }
 
         if (columnHeaderItemModel.getColumnType() == BoardColumnHeaderModel.ColumnType.NewColumn)

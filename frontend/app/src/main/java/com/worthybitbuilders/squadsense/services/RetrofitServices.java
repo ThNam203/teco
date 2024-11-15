@@ -11,6 +11,7 @@ import com.worthybitbuilders.squadsense.models.ChatRoom;
 import com.worthybitbuilders.squadsense.models.board_models.BoardBaseItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardDateItemModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardMapItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardNumberItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardStatusItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardTextItemModel;
@@ -87,6 +88,8 @@ public class RetrofitServices {
                     return context.deserialize(jsonObject, BoardUserItemModel.class);
                 case "CellCheckbox":
                     return context.deserialize(jsonObject, BoardCheckboxItemModel.class);
+                case "CellMap":
+                    return context.deserialize(jsonObject, BoardMapItemModel.class);
             }
 
             throw new IllegalArgumentException();

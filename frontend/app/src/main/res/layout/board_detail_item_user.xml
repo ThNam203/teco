@@ -23,17 +23,21 @@
         android:layout_height="50dp"
         android:background="@drawable/background_board_detail_cell"
         android:gravity="center">
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/taskItemUser"
             android:layout_width="32dp"
             android:layout_height="32dp"
+            app:shapeAppearanceOverlay="@style/RoundedImageView"
+            android:scaleType="fitXY"
             android:layout_gravity="center"
             android:backgroundTint="@color/transparent"
             android:src="@drawable/ic_person"/>
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/taskItemSecondUser"
             android:layout_width="32dp"
             android:layout_height="32dp"
+            app:shapeAppearanceOverlay="@style/RoundedImageView"
+            android:scaleType="fitXY"
             android:layout_gravity="center"
             android:visibility="gone"
             android:layout_marginStart="24dp"

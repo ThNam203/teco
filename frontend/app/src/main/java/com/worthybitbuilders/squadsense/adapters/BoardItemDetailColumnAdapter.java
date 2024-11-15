@@ -23,6 +23,7 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardBaseItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardColumnHeaderModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardDateItemModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardMapItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardNumberItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardStatusItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardTextItemModel;
@@ -145,6 +146,8 @@ public class BoardItemDetailColumnAdapter extends RecyclerView.Adapter {
                 return BoardColumnHeaderModel.ColumnType.User.getKey();
             case "CellUpdate":
                 return BoardColumnHeaderModel.ColumnType.Update.getKey();
+            case "CellMap":
+                return BoardColumnHeaderModel.ColumnType.Map.getKey();
             default:
                 throw new NotImplementedError();
         }

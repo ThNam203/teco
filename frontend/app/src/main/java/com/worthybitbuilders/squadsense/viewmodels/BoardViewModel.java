@@ -14,6 +14,7 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardColumnHeaderMod
 import com.worthybitbuilders.squadsense.models.board_models.BoardContentModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardDateItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardEmptyItemModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardMapItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardNumberItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardRowHeaderModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardStatusItemModel;
@@ -330,6 +331,8 @@ public class BoardViewModel extends ViewModel {
                 return projectService.updateCellToRemote(userId, projectId, boardId, cellModel.get_id(), (BoardUserItemModel) cellModel);
             case "CellCheckbox":
                 return projectService.updateCellToRemote(userId, projectId, boardId, cellModel.get_id(), (BoardCheckboxItemModel) cellModel);
+            case "CellMap":
+                return projectService.updateCellToRemote(userId, projectId, boardId, cellModel.get_id(), (BoardMapItemModel) cellModel);
             default:
                 throw new RuntimeException();
         }

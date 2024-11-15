@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="8dp">
+    <TextView
+        android:id="@+id/tvMapResultTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/primary_word_color"
+        android:singleLine="true"
+        tools:text="Viet Nam"/>
+    <TextView
+        android:id="@+id/tvMapResultDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/primary_word_second_color"
+        android:singleLine="true"
+        tools:text="Dinh quan, Dong nai"/>
+</LinearLayout>

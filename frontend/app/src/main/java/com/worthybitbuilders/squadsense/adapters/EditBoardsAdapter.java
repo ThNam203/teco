@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.worthybitbuilders.squadsense.R;
@@ -85,7 +86,8 @@ public class EditBoardsAdapter extends RecyclerView.Adapter<EditBoardsAdapter.Ed
             this.etBoardName.setText(boardName);
             this.tvBoardName.setText(boardName);
             this.handlers = handlers;
-            if (chosenPosition == position) this.container.setBackgroundColor(ContextCompat.getColor(context, R.color.primary_splitter_color));
+            if (chosenPosition == position)
+                DrawableCompat.setTint(this.container.getBackground(), ContextCompat.getColor(context, R.color.primary_splitter_color));
 
             this.btnMoreOptions.setOnClickListener(view -> showMoreOptionsPopup(position, boardName));
 

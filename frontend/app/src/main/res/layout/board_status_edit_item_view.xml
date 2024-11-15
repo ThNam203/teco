@@ -18,7 +18,7 @@
         android:background="@color/transparent"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_choose_color"
-        app:tint="@color/white"/>
+        app:tint="@color/primary_icon_color"/>
     <EditText
         android:id="@+id/etText"
         android:layout_width="0dp"
@@ -28,7 +28,7 @@
         android:paddingVertical="12dp"
         android:textColor="@color/white"
         android:singleLine="true"
-        tools:text="LSDFL:SDKJFL:SKDJFLSDJFL:asdfasdSDKJF:LSDJF"
+        tools:text="aaaaaaaaaaaaaaaaa"
         android:textSize="@dimen/normal_textsize"
         android:background="@color/grey"/>
     <ImageButton
@@ -41,5 +41,5 @@
         android:background="@color/transparent"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_delete"
-        app:tint="@color/white"/>
+        app:tint="@color/primary_icon_color"/>
 </LinearLayout>
