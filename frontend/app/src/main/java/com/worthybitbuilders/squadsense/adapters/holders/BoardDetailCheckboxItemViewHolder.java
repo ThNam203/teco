@@ -28,7 +28,7 @@ public class BoardDetailCheckboxItemViewHolder extends AbstractViewHolder {
     public void setItemModel(BoardCheckboxItemModel itemModel, String columnTitle, int columnPos) {
         this.tvTitleColumn.setText(columnTitle);
         this.cbCheckBox.setChecked(itemModel.getChecked());
-        this.checkboxContainer.setOnClickListener((view) -> handlers.onCheckboxItemClick(itemModel, columnPos));
+        this.cbCheckBox.setOnClickListener((view) -> handlers.onCheckboxItemClick(itemModel, columnPos));
     }
 
     public interface CheckboxItemClickHandlers {

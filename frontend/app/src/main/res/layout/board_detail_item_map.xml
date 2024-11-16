@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout
+    android:id="@+id/userItemContainer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical">
+    <TextView
+        android:id="@+id/tvColumnTitle"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/small_textsize"
+        android:textColor="@color/primary_word_color"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <RelativeLayout
+        android:layout_width="160dp"
+        android:layout_height="50dp"
+        android:background="@drawable/background_board_detail_cell"
+        android:gravity="center">
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="@dimen/tableview_default_height"
+            android:src="@drawable/ic_location"
+            app:tint="@color/primary_icon_color"/>
+        <TextView
+            android:id="@+id/tvMapItemContent"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tableview_default_height"
+            android:paddingHorizontal="4dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:singleLine="true"
+            android:textColor="@color/primary_word_color"
+            android:textSize="@dimen/tableview_default_text_size"
+            android:gravity="center"
+            tools:text="Viet Nam"/>
+    </RelativeLayout>
+</LinearLayout>

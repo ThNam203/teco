@@ -26,11 +26,9 @@
                     android:id="@+id/checkBoxItemCheckbox"
                     android:layout_width="80dp"
                     android:layout_height="@dimen/tableview_default_height"
-                    android:layout_gravity="center"
                     android:scaleY="1.5"
                     android:scaleX="1.5"
-                    android:backgroundTint="@color/transparent"
-                    android:button="@android:color/transparent"
-                    app:tint="@color/white"/>
+                    android:layout_gravity="center"
+                    android:background="@color/transparent" />
         </FrameLayout>
 </LinearLayout>

@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.adapters.holders.BoardDetailCheckboxItemViewHolder;
 import com.worthybitbuilders.squadsense.adapters.holders.BoardDetailDateItemViewHolder;
+import com.worthybitbuilders.squadsense.adapters.holders.BoardDetailMapItemViewHolder;
 import com.worthybitbuilders.squadsense.adapters.holders.BoardDetailNumberItemViewHolder;
 import com.worthybitbuilders.squadsense.adapters.holders.BoardDetailStatusItemViewHolder;
 import com.worthybitbuilders.squadsense.adapters.holders.BoardDetailTextItemViewHolder;
 import com.worthybitbuilders.squadsense.adapters.holders.BoardDetailTimelineItemViewHolder;
 import com.worthybitbuilders.squadsense.adapters.holders.BoardDetailUpdateItemViewHolder;
 import com.worthybitbuilders.squadsense.adapters.holders.BoardDetailUserItemViewHolder;
+import com.worthybitbuilders.squadsense.adapters.holders.BoardMapItemViewHolder;
 import com.worthybitbuilders.squadsense.models.BoardDetailItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardBaseItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
@@ -46,7 +48,8 @@ public class BoardItemDetailColumnAdapter extends RecyclerView.Adapter {
             BoardDetailCheckboxItemViewHolder.CheckboxItemClickHandlers,
             BoardDetailDateItemViewHolder.DateItemClickHandlers,
             BoardDetailTimelineItemViewHolder.TimelineItemClickHandlers,
-            BoardDetailUpdateItemViewHolder.UpdateItemClickHandlers
+            BoardDetailUpdateItemViewHolder.UpdateItemClickHandlers,
+            BoardDetailMapItemViewHolder.MapItemClickHandlers
     {}
 
     public BoardItemDetailColumnAdapter(BoardDetailItemViewModel viewModel, Context mContext, ClickHandlers clickHandlers) {
@@ -86,6 +89,9 @@ public class BoardItemDetailColumnAdapter extends RecyclerView.Adapter {
         } else if (viewType == BoardColumnHeaderModel.ColumnType.Update.getKey()) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.board_detail_item_update, parent, false);
             return new BoardDetailUpdateItemViewHolder(view, clickHandlers);
+        } else if (viewType == BoardColumnHeaderModel.ColumnType.Map.getKey()) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.board_detail_item_map, parent, false);
+            return new BoardDetailMapItemViewHolder(view, clickHandlers);
         }
 
         throw new NotImplementedError();
@@ -116,6 +122,8 @@ public class BoardItemDetailColumnAdapter extends RecyclerView.Adapter {
             ((BoardDetailTimelineItemViewHolder) holder).setItemModel((BoardTimelineItemModel) cellItemModel, columnTitle, position);
         } else if (holder instanceof BoardDetailUpdateItemViewHolder) {
             ((BoardDetailUpdateItemViewHolder) holder).setItemModel((BoardUpdateItemModel) cellItemModel, columnTitle);
+        } else if (holder instanceof BoardDetailMapItemViewHolder) {
+            ((BoardDetailMapItemViewHolder) holder).setItemModel((BoardMapItemModel) cellItemModel, columnTitle, position);
         }
     }
 

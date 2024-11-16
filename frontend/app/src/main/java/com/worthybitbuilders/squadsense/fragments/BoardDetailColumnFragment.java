@@ -3,6 +3,7 @@ package com.worthybitbuilders.squadsense.fragments;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -24,9 +25,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.gson.Gson;
 import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.activities.MapActivity;
 import com.worthybitbuilders.squadsense.activities.ProjectActivity;
 import com.worthybitbuilders.squadsense.adapters.BoardItemDetailColumnAdapter;
 import com.worthybitbuilders.squadsense.adapters.BoardItemMemberAdapter;
@@ -45,6 +48,7 @@ import com.worthybitbuilders.squadsense.databinding.FragmentBoardDetailColumnBin
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardDateItemModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardMapItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardNumberItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardStatusItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardTextItemModel;
@@ -95,6 +99,17 @@ public class BoardDetailColumnFragment extends Fragment {
         viewModel = new ViewModelProvider(getActivity()).get(BoardDetailItemViewModel.class);
 
         adapter = new BoardItemDetailColumnAdapter(viewModel, getActivity(), new BoardItemDetailColumnAdapter.ClickHandlers() {
+            @Override
+            public void onMapItemClick(BoardMapItemModel itemModel, String columnTitle, int columnPos) {
+                Intent mapIntent = new Intent(getActivity(), MapActivity.class);
+                String itemJson = new Gson().toJson(itemModel);
+                mapIntent.putExtra("itemModel", itemJson);
+                mapIntent.putExtra("projectId", viewModel.getProjectId());
+                mapIntent.putExtra("boardId", viewModel.getBoardId());
+                mapIntent.putExtra("cellId", itemModel.get_id());
+                startActivity(mapIntent);
+            }
+
             @Override
             public void onUpdateItemClick(BoardUpdateItemModel itemModel, String columnTitle) {
                 ((ItemClickHelper) getActivity()).onUpdateItemClick(itemModel, columnTitle);
