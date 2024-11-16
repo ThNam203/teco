@@ -31,15 +31,15 @@
             android:src="@drawable/ic_person"/>
         <TextView
             android:id="@+id/taskItemMoreUser"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="24dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="20dp"
             android:visibility="gone"
             tools:text="+3"
             android:gravity="center"
             android:textColor="@color/primary_word_color"
             android:layout_gravity="center"
             android:background="@drawable/curved_big_background"
-            android:backgroundTint="@color/blue"/>
+            android:backgroundTint="@color/primary_second_color"/>
     </RelativeLayout>
 </LinearLayout>

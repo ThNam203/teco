@@ -127,7 +127,7 @@ const saveAccess = async (userId, projectId, timeAccessed) => {
             recentAccess.recentProjectIds.unshift(projectId)
             recentAccess.timeAccessed.unshift(timeAccessed)
 
-            if (recentAccess.recentProjectIds.length > 5)
+            if (recentAccess.recentProjectIds.length > 10)
                 recentAccess.recentProjectIds.pop()
 
             await recentAccess.save()

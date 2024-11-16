@@ -73,13 +73,17 @@
         android:background="@drawable/background_btn_circle"
         android:src="@drawable/ic_search"
         app:tint="@color/white" />
+
     <ImageButton
         android:id="@+id/btn_filter"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="30sp"
+        android:layout_marginStart="30sp"
+        android:layout_marginTop="30sp"
+        android:layout_marginEnd="30sp"
+        android:layout_marginBottom="30sp"
         android:background="@drawable/background_btn_circle"
         android:src="@drawable/ic_filter"
         app:tint="@color/white" />

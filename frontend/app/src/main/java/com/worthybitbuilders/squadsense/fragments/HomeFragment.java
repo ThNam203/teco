@@ -222,9 +222,18 @@ public class HomeFragment extends Fragment {
                 listSearchingUser.clear();
                 if(!toSearch.isEmpty())
                 {
+                    Drawable[] drawables = popupInviteByEmailBinding.inputEmail.getCompoundDrawables();
+                    Drawable clearDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_close);
+                    popupInviteByEmailBinding.inputEmail.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], clearDrawable, drawables[3]);
+
                     listAllUser.forEach(user -> {
                         if(user.getEmail().startsWith(toSearch)) listSearchingUser.add(user);
                     });
+                }
+                else
+                {
+                    Drawable[] drawables = popupInviteByEmailBinding.inputEmail.getCompoundDrawables();
+                    popupInviteByEmailBinding.inputEmail.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], null, drawables[3]);
                 }
 
                 popupInviteByEmailBinding.rvSearchFriend.setAdapter(searchingFriendAdapter);

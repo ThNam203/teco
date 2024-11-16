@@ -7,46 +7,48 @@
     android:orientation="vertical"
     android:background="@drawable/background_page_corner_top_left_and_right"
     android:backgroundTint="@color/primary_second_color">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="15dp"
         android:paddingHorizontal="10dp"
-        android:paddingBottom="15dp">
+        android:paddingVertical="10dp">
         <ImageButton
-            android:id="@+id/btnClosePopup"
+            android:id="@+id/btn_close_popup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
             android:backgroundTint="@color/transparent"
+            android:contentDescription="btn add person"
             android:minHeight="48dp"
             android:src="@drawable/ic_close"
             app:tint="@color/primary_icon_color" />
+
         <TextView
             android:id="@+id/textNumberTitle"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Status"
-            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:text="Number"
             android:textAlignment="center"
             android:textColor="@color/primary_word_color"
             android:textSize="@dimen/large_textsize"
             android:textStyle="bold" />
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSaveNumberItem"
             android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_height="40dp"
             android:singleLine="true"
-            android:padding="0dp"
-            android:layout_marginEnd="16dp"
             android:text="Save"
             android:textAllCaps="false"
+            android:textSize="@dimen/small_textsize"
             android:textColor="@color/white"
-            android:textSize="@dimen/normal_textsize"
-            android:backgroundTint="@color/primary_btn_color"/>
-    </LinearLayout>
+            android:background="@drawable/background_btn_corner"
+            android:backgroundTint="@color/primary_btn_color"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"/>
+    </RelativeLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

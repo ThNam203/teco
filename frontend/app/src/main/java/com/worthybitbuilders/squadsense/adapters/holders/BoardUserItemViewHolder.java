@@ -39,7 +39,7 @@ public class BoardUserItemViewHolder extends AbstractViewHolder {
         }
         else if (userItemModel.getUsers().size() > 2) {
             moreUsersHolder.setVisibility(View.VISIBLE);
-            moreUsersHolder.setText(userItemModel.getUsers().size() - 1);
+            moreUsersHolder.setText("+" + String.valueOf(userItemModel.getUsers().size() - 1));
         }
     }
 

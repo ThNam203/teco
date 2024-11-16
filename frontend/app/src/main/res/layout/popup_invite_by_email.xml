@@ -66,7 +66,6 @@
         android:background="@drawable/background_input"
         android:drawableLeft="@drawable/ic_search"
         android:drawableTint="@color/primary_icon_second_color"
-        android:drawableRight="@drawable/ic_close"
         android:drawablePadding="5dp"
         android:hint="email@gmail.com"
         android:minHeight="48dp"
