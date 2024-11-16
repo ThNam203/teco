@@ -3,7 +3,7 @@ package com.worthybitbuilders.squadsense.models.board_models;
 public class BoardCheckboxItemModel extends BoardBaseItemModel {
     private Boolean isChecked;
     public BoardCheckboxItemModel(Boolean isChecked) {
-        super("", "CellCheckBox");
+        super("", "CellCheckbox");
         this.isChecked = isChecked;
     }
 

@@ -41,6 +41,7 @@ public class BoardMapItemModel extends BoardBaseItemModel {
 
     @Override
     public String getContent() {
+        if (addresses == null) return "";
         if (addresses.size() > 1) {
             return String.valueOf(addresses.size()) + " addresses";
         } else if (addresses.size() == 1) return addresses.get(0).title;

@@ -86,6 +86,7 @@ const createACell = async (cell) => {
 }
 
 const updateACell = async (cell) => {
+    console.log(cell)
     let newCell
     switch (cell.cellType) {
         case 'CellStatus':
