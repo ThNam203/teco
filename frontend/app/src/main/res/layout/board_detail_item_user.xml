@@ -18,42 +18,47 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1"/>
+
     <RelativeLayout
         android:layout_width="160dp"
-        android:layout_height="50dp"
-        android:background="@drawable/background_board_detail_cell"
+        android:layout_height="@dimen/tableview_default_height"
+        android:background="@drawable/background_btn_corner"
+        android:backgroundTint="@color/primary_second_color"
         android:gravity="center">
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/taskItemUser"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            app:shapeAppearanceOverlay="@style/RoundedImageView"
-            android:scaleType="fitXY"
             android:layout_gravity="center"
             android:backgroundTint="@color/transparent"
-            android:src="@drawable/ic_person"/>
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_person"
+            app:shapeAppearanceOverlay="@style/RoundedImageView" />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/taskItemSecondUser"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            app:shapeAppearanceOverlay="@style/RoundedImageView"
-            android:scaleType="fitXY"
             android:layout_gravity="center"
-            android:visibility="gone"
             android:layout_marginStart="24dp"
             android:backgroundTint="@color/transparent"
-            android:src="@drawable/ic_person"/>
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_person"
+            android:visibility="gone"
+            app:shapeAppearanceOverlay="@style/RoundedImageView" />
+
         <TextView
             android:id="@+id/taskItemMoreUser"
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:layout_gravity="center"
             android:layout_marginStart="24dp"
-            android:visibility="gone"
-            tools:text="+3"
+            android:background="@drawable/curved_big_background"
+            android:backgroundTint="#D3D4D6"
             android:gravity="center"
             android:textColor="@color/primary_word_color"
-            android:layout_gravity="center"
-            android:background="@drawable/curved_big_background"
-            android:backgroundTint="@color/blue"/>
+            android:visibility="gone"
+            tools:text="+3" />
     </RelativeLayout>
 </LinearLayout>

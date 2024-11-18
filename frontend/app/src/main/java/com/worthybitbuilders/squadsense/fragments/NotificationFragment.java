@@ -4,9 +4,12 @@ import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
@@ -113,6 +116,39 @@ public class NotificationFragment extends Fragment {
                 datePickerDialog.show();
                 datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
                 datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(Color.GREEN);
+            }
+        });
+
+        binding.tvSearch.setOnClickListener(view -> binding.tvSearch.setCursorVisible(true));
+        binding.tvSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String toSearch = binding.tvSearch.getText().toString();
+                List<Notification> listSearchingNotification = new ArrayList<>();
+
+                if(toSearch.isEmpty()) {
+                    binding.recyclerviewNotification.setAdapter(notificationAdapter);
+                }
+                else
+                {
+                    listNotification.forEach(notification -> {
+                        if(notification.getTitle().contains(toSearch) || notification.getContent().contains(toSearch))
+                            listSearchingNotification.add(notification);
+                    });
+
+                    NotificationAdapter adapter = new NotificationAdapter(listSearchingNotification);
+                    binding.recyclerviewNotification.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 
@@ -348,6 +384,7 @@ public class NotificationFragment extends Fragment {
 
     private void handlerAllNotificationOptionView()
     {
+        closeCurrentKeyboardOnDevice();
         listNotification.clear();
         listNotification.addAll(listAllNotification);
 
@@ -361,6 +398,7 @@ public class NotificationFragment extends Fragment {
 
     private void handlerTodayNotificationOptionView()
     {
+        closeCurrentKeyboardOnDevice();
         listNotification.clear();
 
         //get today notification
@@ -384,6 +422,7 @@ public class NotificationFragment extends Fragment {
 
     private void handlerSelectDateNotificationOptionView(String selectedDate)
     {
+        closeCurrentKeyboardOnDevice();
         listNotification.clear();
 
         //get today notification
@@ -417,5 +456,13 @@ public class NotificationFragment extends Fragment {
                 ToastUtils.showToastError(getContext(), message, Toast.LENGTH_SHORT);
             }
         });
+    }
+
+    private void closeCurrentKeyboardOnDevice()
+    {
+        binding.tvSearch.setCursorVisible(false);
+        View rootView = requireActivity().getWindow().getDecorView().getRootView();
+        InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(getContext().INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
     }
 }

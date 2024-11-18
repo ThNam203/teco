@@ -16,16 +16,16 @@ import java.util.List;
 public class ProjectTemplates {
     public static List<BoardContentModel> sampleProjectContent() {
         List<String> rowTitles = new ArrayList<>();
-        rowTitles.add("Nam");
-        rowTitles.add("Dat");
-        rowTitles.add("Khoi");
-        rowTitles.add("Son");
+        rowTitles.add("Task 1");
+        rowTitles.add("Task 2");
+        rowTitles.add("Task 3");
+        rowTitles.add("Task 4");
 
         List<BoardColumnHeaderModel> columnTitles = new ArrayList<>();
-        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.User, "Avatar"));
+        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.User, "Person"));
         columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Status, "Frontend"));
-        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Text, "Backend"));
-        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Text, "Fullstack"));
+        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Status, "Backend"));
+        columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Text, "Note"));
 
         List<List<BoardBaseItemModel>> cells = new ArrayList<>();
 
@@ -43,34 +43,34 @@ public class ProjectTemplates {
         statusColors.add("#0f79b5");
 
         List<String> statusContent = new ArrayList<>();
-        statusContent.add("Lam chua xong");
-        statusContent.add("Bat dau lam");
-        statusContent.add("Lam gan xong");
-        statusContent.add("Da xong");
+        statusContent.add("Working");
+        statusContent.add("Start working");
+        statusContent.add("Done");
+        statusContent.add("Nearly done");
 
         List<BoardBaseItemModel> firstRow = new ArrayList<>();
         firstRow.add(new BoardUserItemModel());
-        firstRow.add(new BoardStatusItemModel("Lam chua xong", statusContent, statusColors));
-        firstRow.add(new BoardTextItemModel("Bat dau lam"));
-        firstRow.add(new BoardTextItemModel("Lam gan xong"));
+        firstRow.add(new BoardStatusItemModel("Working", statusContent, statusColors));
+        firstRow.add(new BoardStatusItemModel("Start working", statusContent, statusColors));
+        firstRow.add(new BoardTextItemModel(""));
 
         List<BoardBaseItemModel> secondRow = new ArrayList<>();
         secondRow.add(new BoardUserItemModel());
-        secondRow.add(new BoardStatusItemModel("Da xong", statusContent, statusColors));
-        secondRow.add(new BoardTextItemModel("Lam chua xong"));
-        secondRow.add(new BoardTextItemModel("Bat dau lam"));
+        secondRow.add(new BoardStatusItemModel("Done", statusContent, statusColors));
+        secondRow.add(new BoardStatusItemModel("Working", statusContent, statusColors));
+        secondRow.add(new BoardTextItemModel(""));
 
         List<BoardBaseItemModel> thirdRow = new ArrayList<>();
         thirdRow.add(new BoardUserItemModel());
-        thirdRow.add(new BoardStatusItemModel("Lam gan xong", statusContent, statusColors));
-        thirdRow.add(new BoardTextItemModel("Da xong"));
-        thirdRow.add(new BoardTextItemModel("Bat dau lam"));
+        thirdRow.add(new BoardStatusItemModel("Nearly done", statusContent, statusColors));
+        thirdRow.add(new BoardStatusItemModel("Done", statusContent, statusColors));
+        thirdRow.add(new BoardTextItemModel(""));
 
         List<BoardBaseItemModel> fourthRow = new ArrayList<>();
         fourthRow.add(new BoardUserItemModel());
-        fourthRow.add(new BoardStatusItemModel("Lam gan xong", statusContent, statusColors));
-        fourthRow.add(new BoardTextItemModel("Da xong"));
-        fourthRow.add(new BoardTextItemModel("Bat dau lam"));
+        fourthRow.add(new BoardStatusItemModel("Nearly done", statusContent, statusColors));
+        fourthRow.add(new BoardStatusItemModel("Done", statusContent, statusColors));
+        fourthRow.add(new BoardTextItemModel(""));
 
         cells.add(firstRow);
         cells.add(secondRow);
@@ -78,7 +78,7 @@ public class ProjectTemplates {
         cells.add(fourthRow);
 
         List<BoardContentModel> projectContent = new ArrayList<>();
-        projectContent.add(new BoardContentModel("Members", rowTitles, columnTitles, cells));
+        projectContent.add(new BoardContentModel("Task board", rowTitles, columnTitles, cells));
         return projectContent;
     }
     public static List<BoardContentModel> sampleITManagementContent(){

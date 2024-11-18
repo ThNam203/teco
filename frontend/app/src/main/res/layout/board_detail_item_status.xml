@@ -20,15 +20,16 @@
     <TextView
         android:id="@+id/tvTaskStatusContent"
         android:layout_width="160dp"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/tableview_default_height"
         android:paddingLeft="10dp"
         android:paddingTop="5dp"
         android:paddingRight="10dp"
         android:paddingBottom="5dp"
         android:singleLine="true"
-        android:textColor="@color/primary_word_second_color"
+        android:textColor="@color/primary_word_color"
         android:textSize="14sp"
         android:gravity="center"
-        android:background="@drawable/background_board_detail_cell"
+        android:background="@drawable/background_btn_corner"
+        android:backgroundTint="@color/primary_second_color"
         tools:text="Working on it"/>
 </LinearLayout>

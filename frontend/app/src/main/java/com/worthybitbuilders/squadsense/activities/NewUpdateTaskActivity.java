@@ -138,6 +138,7 @@ public class NewUpdateTaskActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         Intent intent = getIntent();
+        String rowTitle = intent.getStringExtra("rowTitle");
         String columnTitle = intent.getStringExtra("columnTitle");
         String projectTitle = intent.getStringExtra("projectTitle");
         String boardTitle = intent.getStringExtra("boardTitle");
@@ -145,7 +146,7 @@ public class NewUpdateTaskActivity extends AppCompatActivity {
         this.boardId = intent.getStringExtra("boardId");
         this.cellId = intent.getStringExtra("cellId");
         binding.updateColumnTitle.setText(columnTitle);
-        binding.additionalTitle.setText(String.format(Locale.US, "%s in %s", boardTitle, projectTitle));
+        binding.additionalTitle.setText(String.format(Locale.US, "%s > %s > %s", projectTitle, boardTitle, rowTitle));
 
         newUpdateTaskFileAdapter = new NewUpdateTaskFileAdapter(fileUris, this, position -> {
             fileUris.remove(position);
@@ -171,7 +172,8 @@ public class NewUpdateTaskActivity extends AppCompatActivity {
 
         binding.btnSendUpdate.setOnClickListener(view -> {
             String content = binding.etUpdateContent.getText().toString();
-            uploadUpdateTask(fileUris, content);
+            if(!content.isEmpty() || fileUris.size() > 0) uploadUpdateTask(fileUris, content);
+            else finish();
         });
 
         binding.btnClose.setOnClickListener(view -> finish());

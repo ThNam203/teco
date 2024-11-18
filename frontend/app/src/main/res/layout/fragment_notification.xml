@@ -36,7 +36,7 @@
     </RelativeLayout>
 
     <EditText
-        android:id="@+id/text_input"
+        android:id="@+id/tvSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"

@@ -61,9 +61,9 @@
                 android:layout_marginEnd="8dp"
                 android:backgroundTint="@color/primary_btn_color"
                 app:icon="@drawable/ic_table_sheet"
-                app:iconTint="@color/primary_icon_color"
+                app:iconTint="@color/white"
                 android:textAllCaps="false"
-                android:textColor="@color/primary_word_color"/>
+                android:textColor="@color/white"/>
         </LinearLayout>
     </HorizontalScrollView>
     <FrameLayout

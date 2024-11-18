@@ -67,7 +67,7 @@ public class BoardItemDetailColumnAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == BoardColumnHeaderModel.ColumnType.Status.getKey()) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.board_detail_item_status, parent, false);
-            return new BoardDetailStatusItemViewHolder(view, clickHandlers);
+            return new BoardDetailStatusItemViewHolder(view, mContext, clickHandlers);
         } else if (viewType == BoardColumnHeaderModel.ColumnType.Text.getKey()) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.board_detail_item_text, parent, false);
             return new BoardDetailTextItemViewHolder(view, clickHandlers);

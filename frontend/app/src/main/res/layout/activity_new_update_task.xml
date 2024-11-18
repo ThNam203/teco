@@ -27,7 +27,7 @@
             android:id="@+id/btnSendUpdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/primary_word_color"
+            android:textColor="@color/primary_word_third_color"
             android:layout_gravity="center_vertical"
             android:padding="16dp"
             android:textSize="18sp"
@@ -42,29 +42,30 @@
         android:layout_marginVertical="8dp">
         <View
             android:layout_width="10dp"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:background="@color/blue"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingVertical="4dp"
-            android:layout_marginStart="16dp">
+            android:paddingHorizontal="16dp">
             <TextView
                 android:id="@+id/updateColumnTitle"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textSize="18sp"
+                android:textStyle="bold"
                 android:textColor="@color/primary_word_color"
                 tools:text="Item 1"/>
             <TextView
                 android:id="@+id/additionalTitle"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:textSize="16sp"
                 android:textColor="@color/primary_word_color"
                 tools:text="Item 1"/>
@@ -73,7 +74,7 @@
     <EditText
         android:id="@+id/etUpdateContent"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:hint="Write your update..."
         android:gravity="start"

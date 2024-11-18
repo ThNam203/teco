@@ -19,13 +19,14 @@
     <FrameLayout
         android:layout_width="160dp"
         android:layout_height="match_parent"
-        android:background="@drawable/background_board_detail_cell">
+        android:background="@drawable/background_btn_corner"
+        android:backgroundTint="@color/primary_second_color">
         <ImageButton
             android:id="@+id/btnEnterUpdate"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="160dp"
+            android:layout_height="@dimen/tableview_default_height"
             android:src="@drawable/ic_add_message"
             android:backgroundTint="@color/transparent"
-            app:tint="@color/white"/>
+            app:tint="@color/primary_icon_color"/>
     </FrameLayout>
 </LinearLayout>

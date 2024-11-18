@@ -2,6 +2,7 @@ package com.worthybitbuilders.squadsense.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -48,6 +49,9 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
     private ActivityBoardItemDetailBinding activityBinding;
     private BoardDetailItemViewModel viewModel;
     private String currentChosenCellId = null;
+
+    private String rowTitle = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +70,8 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         String rowTitle = intent.getStringExtra("rowTitle");
         String projectTitle = intent.getStringExtra("projectTitle");
         String boardTitle = intent.getStringExtra("boardTitle");
+
+        this.rowTitle = rowTitle;
 
         // updateCellId is only for when user tap the update item
         // which is because there could be more than 1 update item
@@ -103,16 +109,23 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
                     String cellId = data.getCells().get(i).get_id();
                     int finalI = i;
 
+                    changeAllButtonBackgroundToDefault();
                     if (isFromUpdateColumn && Objects.equals(updateCellId, cellId)) {
                         DrawableCompat.setTint(updateButton.getBackground(), ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_btn_color));
-                        changeToUpdateFragment(updateCellId, data.getColumnTitles().get(finalI));
+                        int colorTint = ContextCompat.getColor(BoardItemDetailActivity.this, R.color.white);
+                        ((Button) updateButton).setTextColor(colorTint);
+                        ((Button) updateButton).setCompoundDrawableTintList(ColorStateList.valueOf(colorTint));
+                        changeToUpdateFragment(updateCellId, data.getColumnTitles().get(finalI), rowTitle);
                     }
 
                     updateButton.setOnClickListener(view -> {
                         if (Objects.equals(currentChosenCellId, cellId)) return;
                         changeAllButtonBackgroundToDefault();
                         DrawableCompat.setTint(updateButton.getBackground(), ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_btn_color));
-                        changeToUpdateFragment(cellId, data.getColumnTitles().get(finalI));
+                        int colorTint = ContextCompat.getColor(BoardItemDetailActivity.this, R.color.white);
+                        ((Button) updateButton).setTextColor(colorTint);
+                        ((Button) updateButton).setCompoundDrawableTintList(ColorStateList.valueOf(colorTint));
+                        changeToUpdateFragment(cellId, data.getColumnTitles().get(finalI), rowTitle);
                     });
                     buttons.add(new Pair<>((Button)updateButton, cellId));
                     activityBinding.buttonsContainer.addView(updateButton);
@@ -232,14 +245,19 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
     }
 
     private void changeAllButtonBackgroundToDefault() {
-        buttons.forEach(pair -> DrawableCompat.setTint(pair.first.getBackground(), ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_btn_second_color)));
+        buttons.forEach(pair -> {
+            DrawableCompat.setTint(pair.first.getBackground(), ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_btn_second_color));
+            int colorTint = ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_word_color);
+            pair.first.setTextColor(colorTint);
+            pair.first.setCompoundDrawableTintList(ColorStateList.valueOf(colorTint));
+        });
     }
 
-    private void changeToUpdateFragment(String cellId, String columnTitle) {
+    private void changeToUpdateFragment(String cellId, String columnTitle, String rowTitle) {
         currentChosenCellId = cellId;
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(activityBinding.fragmentContainer.getId(), BoardDetailUpdateFragment.newInstance(cellId, columnTitle))
+                .replace(activityBinding.fragmentContainer.getId(), BoardDetailUpdateFragment.newInstance(cellId, columnTitle, rowTitle))
                 .commit();
     }
 
@@ -248,6 +266,9 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         currentChosenCellId = "randombullshitgo";
         changeAllButtonBackgroundToDefault();
         DrawableCompat.setTint(activityBinding.btnShowColumns.getBackground(), ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_btn_color));
+        int colorTint = ContextCompat.getColor(BoardItemDetailActivity.this, R.color.white);
+        activityBinding.btnShowColumns.setTextColor(colorTint);
+        activityBinding.btnShowColumns.setCompoundDrawableTintList(ColorStateList.valueOf(colorTint));
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(activityBinding.fragmentContainer.getId(), BoardDetailColumnFragment.newInstance())
@@ -260,7 +281,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         for (int i = 0; i < buttons.size(); i++) {
             if (Objects.equals(buttons.get(i).second, cellId)) {
                 DrawableCompat.setTint(buttons.get(i).first.getBackground(), ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_btn_color));
-                changeToUpdateFragment(cellId, columnTitle);
+                changeToUpdateFragment(cellId, columnTitle, this.rowTitle);
             } else {
                 DrawableCompat.setTint(buttons.get(i).first.getBackground(), ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_btn_second_color));
             }
