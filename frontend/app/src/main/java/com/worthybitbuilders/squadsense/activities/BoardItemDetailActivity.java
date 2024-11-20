@@ -85,7 +85,6 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         BoardItemDetailViewModelFactory viewModelFactory = new BoardItemDetailViewModelFactory(rowPosition, projectId, boardId, updateCellId, projectTitle, boardTitle, rowTitle);
         viewModel = new ViewModelProvider(this, viewModelFactory).get(BoardDetailItemViewModel.class);
 
-        // check if user press "update" column or "row header"
         if (rowPosition == -1 || projectId.isEmpty() || boardId.isEmpty()) {
             ToastUtils.showToastError(this, "Something went wrong, please try again", Toast.LENGTH_LONG);
             finish();
@@ -99,6 +98,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
             public void onSuccess() {
                 BoardDetailItemModel data = viewModel.getItemsLiveData().getValue();
                 if (data == null) return;
+                if (isFromUpdateColumn) changeAllButtonBackgroundToDefault();
                 for (int i = 0; i < data.getCells().size(); i++) {
                     if (!Objects.equals(data.getCells().get(i).getCellType(), "CellUpdate")) continue;
                     View updateButton = LayoutInflater.from(BoardItemDetailActivity.this).inflate(R.layout.board_detail_item_update_button_view, null, false);
@@ -109,7 +109,6 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
                     String cellId = data.getCells().get(i).get_id();
                     int finalI = i;
 
-                    changeAllButtonBackgroundToDefault();
                     if (isFromUpdateColumn && Objects.equals(updateCellId, cellId)) {
                         DrawableCompat.setTint(updateButton.getBackground(), ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_btn_color));
                         int colorTint = ContextCompat.getColor(BoardItemDetailActivity.this, R.color.white);
@@ -142,9 +141,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         });
 
         if (!isFromUpdateColumn) changeToColumnFragment();
-
         activityBinding.btnMoreOptions.setOnClickListener(view -> showMoreOptions());
-
         activityBinding.btnShowColumns.setOnClickListener(view -> changeToColumnFragment());
         setContentView(activityBinding.getRoot());
     }
@@ -255,6 +252,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
 
     private void changeToUpdateFragment(String cellId, String columnTitle, String rowTitle) {
         currentChosenCellId = cellId;
+        viewModel.setUpdateCellId(cellId);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(activityBinding.fragmentContainer.getId(), BoardDetailUpdateFragment.newInstance(cellId, columnTitle, rowTitle))

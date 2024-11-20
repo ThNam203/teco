@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/background_page_corner_top_left_and_right"
+    android:backgroundTint="@color/primary_second_color">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingHorizontal="10dp"
+        android:paddingBottom="15dp">
+        <ImageButton
+            android:id="@+id/btnClosePopup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:backgroundTint="@color/transparent"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_close"
+            app:tint="@color/primary_icon_color" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="All addresses"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/primary_word_color"
+            android:textSize="@dimen/large_textsize"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:singleLine="true"
+            android:padding="0dp"
+            android:layout_marginEnd="16dp"
+            android:text="Save"
+            android:textSize="@dimen/normal_textsize"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:backgroundTint="#0073ea"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tvEmptyAddresses"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:text="There is currently no address"
+        android:textSize="22sp"
+        android:layout_marginBottom="16dp"
+        android:textColor="@color/primary_word_color"
+        android:visibility="gone"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAddresses"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"/>
+</LinearLayout>

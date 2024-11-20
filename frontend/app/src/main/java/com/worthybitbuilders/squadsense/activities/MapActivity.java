@@ -35,9 +35,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.GsonBuilder;
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.adapters.MapAddressAdapter;
 import com.worthybitbuilders.squadsense.adapters.MapSearchResultAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityMapBinding;
-import com.worthybitbuilders.squadsense.databinding.BoardMapItemPopupBinding;
+import com.worthybitbuilders.squadsense.databinding.BoardMapItemAddressPopupBinding;
+import com.worthybitbuilders.squadsense.databinding.BoardMapItemAllAddressPopupBinding;
 import com.worthybitbuilders.squadsense.models.board_models.BoardMapItemModel;
 import com.worthybitbuilders.squadsense.services.ProjectService;
 import com.worthybitbuilders.squadsense.services.RetrofitServices;
@@ -123,6 +125,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
 
         binding.btnBack.setOnClickListener((view) -> finish());
+        binding.btnShowAllAddresses.setOnClickListener((view) -> allAddressesPopup());
 
         binding.etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -212,7 +215,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void locationPopup(BoardMapItemModel.AddressModel addressModel, boolean isAddingNewAddress, Integer updatingPosition) {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        BoardMapItemPopupBinding popupBinding = BoardMapItemPopupBinding.inflate(getLayoutInflater());
+        BoardMapItemAddressPopupBinding popupBinding = BoardMapItemAddressPopupBinding.inflate(getLayoutInflater());
         dialog.setContentView(popupBinding.getRoot());
 
         if (isAddingNewAddress) popupBinding.btnSave.setText("Add");
@@ -237,7 +240,88 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     if (response.isSuccessful()) {
                         // the reason why it is null
                         // is when after updating, if user click another part it wont be remove by ".remove()"
+                        addressMarkers.add(temporaryMarker);
                         temporaryMarker = null;
+                    } else {
+                        ToastUtils.showToastError(MapActivity.this, "Unable to update, you should consider reset this page", Toast.LENGTH_LONG);
+                    }
+
+                    loadingDialog.dismiss();
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                    ToastUtils.showToastError(MapActivity.this, "Something went wrong, you should consider reset this page", Toast.LENGTH_LONG);
+                    loadingDialog.dismiss();
+                    dialog.dismiss();
+                }
+            });
+        }));
+
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialog.show();
+    }
+
+    public void allAddressesPopup() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        BoardMapItemAllAddressPopupBinding popupBinding = BoardMapItemAllAddressPopupBinding.inflate(getLayoutInflater());
+        dialog.setContentView(popupBinding.getRoot());
+        popupBinding.btnClosePopup.setOnClickListener((view) -> dialog.dismiss());
+
+        List<BoardMapItemModel.AddressModel> addresses = new ArrayList<>();
+        if (boardMapItemModel.getAddresses() != null) addresses.addAll(boardMapItemModel.getAddresses());
+
+        if (addresses.size() == 0) {
+            popupBinding.tvEmptyAddresses.setVisibility(View.VISIBLE);
+            popupBinding.rvAddresses.setVisibility(View.GONE);
+        } else {
+            popupBinding.tvEmptyAddresses.setVisibility(View.GONE);
+            popupBinding.rvAddresses.setVisibility(View.VISIBLE);
+        }
+
+        MapAddressAdapter adapter = new MapAddressAdapter();
+        adapter.setData(addresses, new MapAddressAdapter.ClickHandler() {
+            @Override
+            public void OnAddressClick(BoardMapItemModel.AddressModel addressModel, int position) {
+                LatLng point = addressMarkers.get(position).getPosition();
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 10));
+            }
+
+            @Override
+            public void OnDeleteClick(BoardMapItemModel.AddressModel addressModel, int position) {
+                addresses.remove(position);
+                addressMarkers.remove(position).remove();
+                adapter.notifyItemRemoved(position);
+                adapter.notifyItemRangeChanged(position, addresses.size());
+                
+                if (addresses.size() == 0) {
+                    popupBinding.tvEmptyAddresses.setVisibility(View.VISIBLE);
+                    popupBinding.rvAddresses.setVisibility(View.GONE);
+                } else {
+                    popupBinding.tvEmptyAddresses.setVisibility(View.GONE);
+                    popupBinding.rvAddresses.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        popupBinding.rvAddresses.setLayoutManager(new LinearLayoutManager(MapActivity.this, RecyclerView.VERTICAL, false));
+        popupBinding.rvAddresses.setAdapter(adapter);
+
+        popupBinding.btnSave.setOnClickListener((view -> {
+            Dialog loadingDialog = DialogUtils.GetLoadingDialog(MapActivity.this);
+            loadingDialog.show();
+            // TODO: if it fails to update, there should be a way to reverse the changes that took effect
+            boardMapItemModel.setAddresses(addresses);
+            projectService.updateCellToRemote(userId, projectId, boardId, cellId, boardMapItemModel).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        ToastUtils.showToastSuccess(MapActivity.this, "Updated", Toast.LENGTH_SHORT);
                     } else {
                         ToastUtils.showToastError(MapActivity.this, "Unable to update, you should consider reset this page", Toast.LENGTH_LONG);
                     }

@@ -101,7 +101,7 @@ public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.Up
                 commentIntent.putExtra("updateTaskId", updateTasks.get(position).get_id());
                 commentIntent.putExtra("projectId", viewModel.getProjectId());
                 commentIntent.putExtra("boardId", viewModel.getBoardId());
-                commentIntent.putExtra("cellId", viewModel.getCellId());
+                commentIntent.putExtra("cellId", viewModel.getUpdateCellId());
                 context.startActivity(commentIntent);
             });
             setUpButtonLike(task, position);
