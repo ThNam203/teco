@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
@@ -31,7 +32,10 @@ public class BoardUserItemViewHolder extends AbstractViewHolder {
 
     public void setItemModel(BoardUserItemModel userItemModel, Context context, String columnTitle, int columnPos, int rowPos) {
         itemView.setOnClickListener((view) -> handlers.onUserItemClick(userItemModel, columnTitle, columnPos, rowPos));
-        if (userItemModel.getUsers() == null || userItemModel.getUsers().size() == 0) return;
+        if (userItemModel.getUsers() == null || userItemModel.getUsers().size() == 0) {
+            userButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_person));
+            return;
+        };
         Glide.with(context).load(userItemModel.getUsers().get(0).getProfileImagePath()).placeholder(R.drawable.ic_user).into(userButton);
         if (userItemModel.getUsers().size() == 2) {
             userSecondButton.setVisibility(View.VISIBLE);

@@ -169,7 +169,6 @@ public class BoardDetailColumnFragment extends Fragment {
         BoardOwnerItemPopupBinding binding = BoardOwnerItemPopupBinding.inflate(getLayoutInflater());
         binding.popupTitle.setText(columnTitle);
         dialog.setContentView(binding.getRoot());
-
         List<UserModel> listMember = new ArrayList<>();
         List<UserModel> listOwner = new ArrayList<>(userItemModel.getUsers());
         binding.rvMembers.setLayoutManager(new LinearLayoutManager(getActivity()));
