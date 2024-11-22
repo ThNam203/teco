@@ -124,7 +124,6 @@ public class SearchActivity extends AppCompatActivity {
                     SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID, _id);
                     saveRecentAccessProject(_id);
                     Intent intent = new Intent(SearchActivity.this, ProjectActivity.class);
-                    intent.putExtra("whatToDo", "fetch");
                     intent.putExtra("projectId", _id);
                     startActivity(intent);
                 },

@@ -31,6 +31,16 @@ import retrofit2.Response;
 public class ProjectActivityViewModel extends ViewModel {
     ProjectService projectService = RetrofitServices.getProjectService();
     private ProjectModel projectModel = null;
+    // when starting the activity
+    // we set the initial value for chosenPosition (boardPosition)
+    // after that we dont
+    private transient boolean hasSetChosenPositionInitially = false;
+    private int initialChosenBoardPosition;
+
+    public void setInitialChosenBoardPosition(int initialChosenBoardPosition) {
+        this.initialChosenBoardPosition = initialChosenBoardPosition;
+    }
+
     private final MutableLiveData<ProjectModel> projectModelLiveData = new MutableLiveData<>();
     private String projectId;
     public ProjectActivityViewModel(String projectId) {
@@ -47,7 +57,20 @@ public class ProjectActivityViewModel extends ViewModel {
             @Override
             public void onResponse(Call<ProjectModel> call, Response<ProjectModel> response) {
                 if (response.isSuccessful()) {
+                    int previousChosenBoardPosition = -1;
+                    if (projectModel != null) previousChosenBoardPosition = projectModel.getChosenPosition();
+
                     projectModel = response.body();
+                    if (projectModel == null) {
+                        projectModelLiveData.setValue(null);
+                        return;
+                    }
+
+                    if (!hasSetChosenPositionInitially) {
+                        projectModel.setChosenPosition(initialChosenBoardPosition);
+                        hasSetChosenPositionInitially = true;
+                    }
+                    else projectModel.setChosenPosition(previousChosenBoardPosition);
                     projectModelLiveData.setValue(projectModel);
                     handler.onSuccess();
                 } else {

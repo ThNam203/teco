@@ -86,7 +86,6 @@ const createACell = async (cell) => {
 }
 
 const updateACell = async (cell) => {
-    console.log(cell)
     let newCell
     switch (cell.cellType) {
         case 'CellStatus':
@@ -830,6 +829,8 @@ exports.getCellsInARow = asyncCatch(async (req, res, next) => {
     for (let i = 0; i < board.columnCells.length; i += 1)
         columnTitles.push(board.columnCells[i].title)
 
+    console.log(rowPosition)
+
     let idx = 0
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (const column in board.columnCells) {
@@ -846,6 +847,61 @@ exports.getCellsInARow = asyncCatch(async (req, res, next) => {
         cells: cellsInRow,
         rowTitle: board.rowCells[rowPosition],
     })
+})
+
+exports.getUserWork = asyncCatch(async (req, res, next) => {
+    const { userId } = req.params
+    const projects = await Project.find({
+        memberIds: { $in: [userId] },
+    })
+
+    const works = []
+
+    await Promise.all(
+        projects.map(async (project) => {
+            await project.populate({
+                path: 'boards',
+                model: 'Board',
+                populate: {
+                    path: 'cells',
+                    model: 'Cell',
+                },
+            })
+
+            project.boards.forEach((board, boardPosition) => {
+                const work = {}
+                board.cells.forEach((cellRow, cellRowPosition) => {
+                    for (
+                        let cellIdx = 0;
+                        cellIdx < cellRow.length;
+                        cellIdx += 1
+                    ) {
+                        const cell = cellRow[cellIdx]
+                        if (cell.cellType === 'CellUser') {
+                            const isInArray = cell.users.some((user) =>
+                                user.equals(userId)
+                            )
+
+                            if (isInArray) {
+                                work.projectId = project._id
+                                work.projectTitle = project.title
+                                work.boardId = board._id
+                                work.boardTitle = board.boardTitle
+                                work.boardPosition = boardPosition
+                                work.rowTitle = board.rowCells[cellRowPosition]
+                                work.cellRowPosition = cellRowPosition
+                                work.cellCreatedDate = cell.createdAt
+                                works.push(work)
+                                break
+                            }
+                        }
+                    }
+                })
+            })
+        })
+    )
+
+    res.status(200).json(works)
 })
 
 exports.getProjectById = asyncCatch(async (req, res, next) => {

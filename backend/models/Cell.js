@@ -9,6 +9,7 @@ const cellBaseSchema = new mongoose.Schema(
     },
     {
         discriminatorKey: 'cellType',
+        timestamps: true,
     }
 )
 

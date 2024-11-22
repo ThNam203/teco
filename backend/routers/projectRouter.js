@@ -6,6 +6,8 @@ const router = express.Router({
     mergeParams: true,
 })
 
+router.route('/work').get(projectController.getUserWork)
+
 router
     .route('/')
     .get(projectController.getAllProjectOfUser)

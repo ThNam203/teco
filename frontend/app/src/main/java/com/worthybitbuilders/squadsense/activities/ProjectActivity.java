@@ -109,7 +109,6 @@ public class ProjectActivity extends AppCompatActivity {
     private ActivityProjectBinding activityBinding;
     private UserViewModel userViewModel;
     private boolean isNewProjectCreateRequest = false;
-
     private List<List<String>> listSelectedCollection = new ArrayList<>();
 
     @Override
@@ -126,6 +125,7 @@ public class ProjectActivity extends AppCompatActivity {
         Intent intent = getIntent();
         ProjectActivityViewModelFactory factory = new ProjectActivityViewModelFactory(intent.getStringExtra("projectId"));
         projectActivityViewModel = new ViewModelProvider(this, factory).get(ProjectActivityViewModel.class);
+        projectActivityViewModel.setInitialChosenBoardPosition(intent.getIntExtra("boardPosition", 0));
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         boardViewModel = new ViewModelProvider(this).get(BoardViewModel.class);
 
@@ -193,7 +193,6 @@ public class ProjectActivity extends AppCompatActivity {
                 showRowIntent.putExtra("boardId", boardViewModel.getBoardId());
                 showRowIntent.putExtra("projectTitle", projectActivityViewModel.getProjectModel().getTitle());
                 showRowIntent.putExtra("boardTitle", boardViewModel.getBoardTitle());
-                showRowIntent.putExtra("isFromUpdateColumn", false);
                 showRowIntent.putExtra("rowPosition", rowPosition);
                 showRowIntent.putExtra("rowTitle", rowTitle);
                 startActivity(showRowIntent);
@@ -221,6 +220,7 @@ public class ProjectActivity extends AppCompatActivity {
         });
         activityBinding.tableView.setAdapter(boardAdapter);
 
+//        projectActivityViewModel.getProjectModel().setChosenPosition(intent.getIntExtra("boardPosition", 0));sdf
         projectActivityViewModel.getProjectModelLiveData().observe(this, projectModel -> {
             if (projectModel == null) return;
             // set cells content, pass the adapter to let them call the set item
@@ -643,6 +643,7 @@ public class ProjectActivity extends AppCompatActivity {
 
     /**
      * The reason to use onStart() is the onStop() will eventually navigate to this
+     * so it will update the project (fetch data)
      */
     @Override
     protected void onStart() {
@@ -651,18 +652,18 @@ public class ProjectActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: better way to handle this ("fetch", "createNew")
+     * TODO: better way to handle this "createNew"
      * @whatToDo is the thing that specify how the activity should handle
      * the case
      * One is create new board, it needs to send and get data from server ("createNew")
-     * Two is fetch the board which is created before ("fetch")
+     * else is to fetch the board which is created before
      */
 
     private void createNewProjectIfRequest() {
         Intent intent = getIntent();
         String whatToDo = intent.getStringExtra("whatToDo");
         Dialog loadingDialog = DialogUtils.GetLoadingDialog(this);
-        if (whatToDo.equals("createNew")) {
+        if (whatToDo != null && whatToDo.equals("createNew")) {
             String templateName = intent.getStringExtra("templateName");
             if (templateName == null) {
                 ToastUtils.showToastError(ProjectActivity.this, "Something went wrong, please try again", Toast.LENGTH_LONG);
@@ -839,7 +840,7 @@ public class ProjectActivity extends AppCompatActivity {
             }
             else
             {
-                //get index of column that i am getting it's title
+                //get index of column that i am getting its title
                 int indexColumn = listColumn.indexOf(column);
                 //add title of column
                 listFilterBoard.add(new FilterModel("By " + column.getTitle(), FilterModel.TypeFilter.TEXT));

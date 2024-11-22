@@ -8,6 +8,7 @@ import com.worthybitbuilders.squadsense.models.NewRowRequestModel;
 import com.worthybitbuilders.squadsense.models.UpdateTask;
 import com.worthybitbuilders.squadsense.models.UpdateTaskAndCommentModel;
 import com.worthybitbuilders.squadsense.models.UserModel;
+import com.worthybitbuilders.squadsense.models.WorkModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardContentModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardDateItemModel;
@@ -38,6 +39,9 @@ import retrofit2.http.Path;
 public interface ProjectService {
     @GET("{userId}/project")
     Call<List<MinimizedProjectModel>> getAllProject(@Path("userId") String userId);
+
+    @GET("{userId}/project/work")
+    Call<List<WorkModel>> getAllWork(@Path("userId") String userId);
 
     @GET("{userId}/project/{projectId}")
     Call<ProjectModel> getProjectById(@Path("userId") String userId, @Path("projectId") String projectId);
