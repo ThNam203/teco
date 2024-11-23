@@ -24,7 +24,6 @@ public class BoardFilterAdapter extends RecyclerView.Adapter {
         this.listSelectedCollection = listSelectedCollection;
     }
 
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

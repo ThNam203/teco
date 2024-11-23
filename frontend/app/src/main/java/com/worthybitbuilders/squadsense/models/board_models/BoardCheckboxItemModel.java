@@ -7,6 +7,12 @@ public class BoardCheckboxItemModel extends BoardBaseItemModel {
         this.isChecked = isChecked;
     }
 
+    @Override
+    public String getContent() {
+        if (isChecked) return "true";
+        else return "false";
+    }
+
     public Boolean getChecked() {
         return isChecked;
     }

@@ -829,8 +829,6 @@ exports.getCellsInARow = asyncCatch(async (req, res, next) => {
     for (let i = 0; i < board.columnCells.length; i += 1)
         columnTitles.push(board.columnCells[i].title)
 
-    console.log(rowPosition)
-
     let idx = 0
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (const column in board.columnCells) {

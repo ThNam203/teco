@@ -421,6 +421,100 @@ public class BoardViewModel extends ViewModel {
         adapter.notifyDataSetChanged();
     }
 
+    public void filterRow(List<List<String>> filterCriteria, TableViewAdapter adapter) {
+        // if we are filtering, then we remove the sort column data
+        sortingColumnPosition = -1;
+
+        boolean needToFilter = false;
+        for (int i = 0; i < filterCriteria.size(); i++) {
+            if (filterCriteria.get(i).size() >= 1) {
+                needToFilter = true;
+                break;
+            }
+        }
+        if (!needToFilter) {
+            adapter.setAllItems(
+                    mColumnHeaderModelList,
+                    mRowHeaderModelList,
+                    mCellModelList
+            );
+            adapter.notifyDataSetChanged();
+            return;
+        }
+
+        List<Integer> includeRowPositions = new ArrayList<>();
+
+        // -1 is to exclude the "new column" and "new row"
+        for (int rowPos = 0; rowPos < mRowHeaderModelList.size() - 1; rowPos++) {
+            for (int colPos = 0; colPos < mColumnHeaderModelList.size() - 1; colPos++) {
+                List<String> criteria = filterCriteria.get(colPos);
+                if (criteria.size() == 0) continue;
+
+                BoardBaseItemModel itemModel = mCellModelList.get(rowPos).get(colPos);
+                // in an entire row, if one cell MEETS the criteria then we add it and no need to check remaining cells
+                boolean isAdded = false;
+                switch (itemModel.getCellType()) {
+                    case "CellStatus":
+                    case "CellText":
+                    case "CellNumber":
+                    case "CellTimeline":
+                    case "CellDate":
+                    case "CellCheckbox":
+                    case "CellMap":
+                        if (criteria.contains(itemModel.getContent())) {
+                            includeRowPositions.add(rowPos);
+                            isAdded = true;
+                        }
+                        break;
+                    case "CellUser":
+                        List<String> userIds = new ArrayList<>();
+                        for (int i = 0; i < ((BoardUserItemModel) itemModel).getUsers().size(); i++) {
+                            userIds.add(((BoardUserItemModel) itemModel).getUsers().get(i).getId());
+                        }
+
+                        for (String userIdCriteria : criteria) {
+                            for (String userId : userIds) {
+                                if (userIdCriteria.equals(userId)) {
+                                    includeRowPositions.add(rowPos);
+                                    isAdded = true;
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        throw new RuntimeException();
+                }
+
+                if (isAdded) break;
+            }
+        }
+
+        List<BoardRowHeaderModel> filteredRows = new ArrayList<>();
+        List<List<BoardBaseItemModel>> filteredCells = new ArrayList<>();
+        for (int i = 0; i < mRowHeaderModelList.size(); i++) {
+            if (includeRowPositions.contains(i)) {
+                filteredRows.add(mRowHeaderModelList.get(i));
+                filteredCells.add(new ArrayList<>(mCellModelList.get(i)));
+            }
+        }
+
+        // remove the "new column" header and cells
+        List<BoardColumnHeaderModel> filteredColumns = new ArrayList<>(mColumnHeaderModelList);
+        filteredColumns.remove(filteredColumns.size() - 1);
+        for (int i = 0; i < filteredCells.size(); i++) {
+            filteredCells.get(i).remove(filteredCells.get(i).size() - 1);
+        }
+
+        adapter.setAllItems(
+                filteredColumns,
+                filteredRows,
+                filteredCells
+        );
+
+        adapter.notifyDataSetChanged();
+    }
+
     public interface ApiCallHandler {
         void onSuccess();
         void onFailure(String message);

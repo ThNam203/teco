@@ -269,11 +269,15 @@ public class ProjectActivity extends AppCompatActivity {
 
         binding.btnSortAsc.setOnClickListener(view -> {
             boardViewModel.sortColumn(columnPosition, BoardViewModel.SortState.ASCENDING, boardAdapter);
+            // if we sort column then we remove the filter criteria to not click each other
+            for (int i = 0; i < listSelectedCollection.size(); i++) listSelectedCollection.get(i).clear();
             popupWindow.dismiss();
         });
 
         binding.btnSortDesc.setOnClickListener(view -> {
             boardViewModel.sortColumn(columnPosition, BoardViewModel.SortState.DESCENDING, boardAdapter);
+            // if we sort column then we remove the filter criteria to not click each other
+            for (int i = 0; i < listSelectedCollection.size(); i++) listSelectedCollection.get(i).clear();
             popupWindow.dismiss();
         });
 
@@ -796,6 +800,7 @@ public class ProjectActivity extends AppCompatActivity {
 
         //setup popup filter with items to filter
         popupFilterBinding.rvBoardFilter.setLayoutManager(new LinearLayoutManager(ProjectActivity.this));
+        // consists of board names
         List<FilterModel> listFilterBoard = new ArrayList<>();
         List<List<String>> listFilterCollection = new ArrayList<>();
         List<List<String>> tempListSelectedCollection = new ArrayList<>();
@@ -826,6 +831,7 @@ public class ProjectActivity extends AppCompatActivity {
                         });
                     }
                 });
+
                 listFilterCollection.add(filterCollection);
 
                 if(indexColumn < tempListSelectedCollection.size())
@@ -876,6 +882,7 @@ public class ProjectActivity extends AppCompatActivity {
                 List<String> newList = new ArrayList<>(selectedCollection);
                 listSelectedCollection.add(newList);
             }
+            boardViewModel.filterRow(listSelectedCollection, boardAdapter);
             dialog.dismiss();
         });
 
