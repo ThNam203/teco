@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,14 +23,18 @@ import com.worthybitbuilders.squadsense.adapters.ChatRoomAdapter;
 import com.worthybitbuilders.squadsense.adapters.FriendItemAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityInboxBinding;
 import com.worthybitbuilders.squadsense.databinding.AddNewChatRoomPopupBinding;
+import com.worthybitbuilders.squadsense.databinding.InboxMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.databinding.PopupOptionViewProjectBinding;
+import com.worthybitbuilders.squadsense.databinding.ProjectMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.models.ChatRoom;
 import com.worthybitbuilders.squadsense.models.UserModel;
+import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.ChatRoomViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
+import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,7 +67,7 @@ public class InboxActivity extends AppCompatActivity {
         friendItemAdapter = new FriendItemAdapter(friendList);
         loadChatRooms();
 
-        binding.btnAddChat.setOnClickListener(view -> showAddChatRoomPopup());
+        binding.btnMore.setOnClickListener(view -> showInboxMoreOptions(view));
         binding.btnBack.setOnClickListener(view -> InboxActivity.super.onBackPressed());
     }
 
@@ -229,5 +234,18 @@ public class InboxActivity extends AppCompatActivity {
             binding.emptyChatsContainer.setVisibility(View.VISIBLE);
             binding.rvInbox.setVisibility(View.GONE);
         }
+    }
+
+    private void showInboxMoreOptions(View anchor) {
+        InboxMoreOptionsBinding binding = InboxMoreOptionsBinding.inflate(getLayoutInflater());
+        PopupWindow popupWindow = new PopupWindow(binding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popupWindow.setElevation(50);
+
+        binding.btnAddChat.setOnClickListener(view -> showAddChatRoomPopup());
+
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.showAsDropDown(anchor, 0, 0);
     }
 }

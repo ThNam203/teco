@@ -125,7 +125,7 @@ public class NewUpdateTaskActivity extends AppCompatActivity {
                         fileUris.add(fileUri);
                         newUpdateTaskFileAdapter.notifyItemInserted(fileUris.size() - 1);
                     } else {
-                        ToastUtils.showToastError(this, "File is already selected", Toast.LENGTH_SHORT);
+                        ToastUtils.showToastError(this, "Image is already selected", Toast.LENGTH_SHORT);
                     }
                 }
             }

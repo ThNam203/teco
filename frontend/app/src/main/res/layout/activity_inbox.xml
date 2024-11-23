@@ -33,11 +33,11 @@
             android:textSize="@dimen/large_textsize"
             android:textStyle="bold" />
         <ImageButton
-            android:id="@+id/btn_add_chat"
+            android:id="@+id/btnMore"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:backgroundTint="@color/transparent"
-            android:src="@drawable/ic_add"
+            android:src="@drawable/ic_more_setting"
             app:tint="@color/primary_icon_color" />
         <ImageButton
             android:id="@+id/btn_close"

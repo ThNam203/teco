@@ -847,58 +847,101 @@ exports.getCellsInARow = asyncCatch(async (req, res, next) => {
     })
 })
 
+// exports.getUserWork = asyncCatch(async (req, res, next) => {
+//     const { userId } = req.params
+//     const projects = await Project.find({
+//         memberIds: { $in: [userId] },
+//     })
+
+//     const works = []
+
+//     await Promise.all(
+//         projects.map(async (project) => {
+//             await project.populate({
+//                 path: 'boards',
+//                 model: 'Board',
+//                 populate: {
+//                     path: 'cells',
+//                     model: 'Cell',
+//                 },
+//             })
+
+//             project.boards.forEach((board, boardPosition) => {
+//                 const work = {}
+//                 board.cells.forEach((cellRow, cellRowPosition) => {
+//                     for (
+//                         let cellIdx = 0;
+//                         cellIdx < cellRow.length;
+//                         cellIdx += 1
+//                     ) {
+//                         const cell = cellRow[cellIdx]
+//                         if (cell.cellType === 'CellUser') {
+//                             const isInArray = cell.users.some((user) =>
+//                                 user.equals(userId)
+//                             )
+
+//                             if (isInArray) {
+//                                 work.projectId = project._id
+//                                 work.projectTitle = project.title
+//                                 work.boardId = board._id
+//                                 work.boardTitle = board.boardTitle
+//                                 work.boardPosition = boardPosition
+//                                 work.rowTitle = board.rowCells[cellRowPosition]
+//                                 work.cellRowPosition = cellRowPosition
+//                                 work.cellCreatedDate = cell.createdAt
+//                                 works.push(work)
+//                                 break
+//                             }
+//                         }
+//                     }
+//                 })
+//             })
+//         })
+//     )
+
+//     console.log(works)
+//     res.status(200).json(works)
+// })
+
 exports.getUserWork = asyncCatch(async (req, res, next) => {
     const { userId } = req.params
     const projects = await Project.find({
         memberIds: { $in: [userId] },
+    }).populate({
+        path: 'boards',
+        model: 'Board',
+        populate: {
+            path: 'cells',
+            model: 'Cell',
+        },
     })
 
-    const works = []
+    const works = projects.reduce((result, project) => {
+        project.boards.forEach((board, boardPosition) => {
+            board.cells.forEach((cellRow, cellRowPosition) => {
+                const workCell = cellRow.find(
+                    (cell) =>
+                        cell.cellType === 'CellUser' &&
+                        cell.users.some((user) => user.equals(userId))
+                )
 
-    await Promise.all(
-        projects.map(async (project) => {
-            await project.populate({
-                path: 'boards',
-                model: 'Board',
-                populate: {
-                    path: 'cells',
-                    model: 'Cell',
-                },
-            })
-
-            project.boards.forEach((board, boardPosition) => {
-                const work = {}
-                board.cells.forEach((cellRow, cellRowPosition) => {
-                    for (
-                        let cellIdx = 0;
-                        cellIdx < cellRow.length;
-                        cellIdx += 1
-                    ) {
-                        const cell = cellRow[cellIdx]
-                        if (cell.cellType === 'CellUser') {
-                            const isInArray = cell.users.some((user) =>
-                                user.equals(userId)
-                            )
-
-                            if (isInArray) {
-                                work.projectId = project._id
-                                work.projectTitle = project.title
-                                work.boardId = board._id
-                                work.boardTitle = board.boardTitle
-                                work.boardPosition = boardPosition
-                                work.rowTitle = board.rowCells[cellRowPosition]
-                                work.cellRowPosition = cellRowPosition
-                                work.cellCreatedDate = cell.createdAt
-                                works.push(work)
-                                break
-                            }
-                        }
-                    }
-                })
+                if (workCell) {
+                    result.push({
+                        projectId: project._id,
+                        projectTitle: project.title,
+                        boardId: board._id,
+                        boardTitle: board.boardTitle,
+                        boardPosition: boardPosition,
+                        rowTitle: board.rowCells[cellRowPosition],
+                        cellRowPosition: cellRowPosition,
+                        cellCreatedDate: workCell.createdAt,
+                    })
+                }
             })
         })
-    )
 
+        return result
+    }, [])
     res.status(200).json(works)
 })
 

@@ -13,6 +13,7 @@ import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.models.WorkModel;
 
 import java.util.List;
+import java.util.Locale;
 
 public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.WorkViewHolder> {
     private List<WorkModel> modelList = null;
@@ -55,7 +56,7 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.WorkViewHolder
         }
 
         public void bind(WorkModel workModel) {
-            rowTitle.setText(workModel.getRowTitle());
+            rowTitle.setText(String.format(Locale.US, "%s > %s > %s", workModel.getProjectTitle(), workModel.getBoardTitle(), workModel.getRowTitle()));
         }
     }
 

@@ -1,16 +1,25 @@
 package com.worthybitbuilders.squadsense.activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,12 +27,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.documentfile.provider.DocumentFile;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.adapters.AttachFileAdapter;
 import com.worthybitbuilders.squadsense.adapters.MessageAdapter;
+import com.worthybitbuilders.squadsense.adapters.NewUpdateTaskFileAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityMessagingBinding;
 import com.worthybitbuilders.squadsense.factory.MessageActivityViewModelFactory;
 import com.worthybitbuilders.squadsense.models.ChatRoom;
@@ -32,6 +45,13 @@ import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.MessageActivityViewModel;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -47,6 +67,10 @@ public class MessagingActivity extends AppCompatActivity {
 
     private final int OPEN_FILE_REQUEST_CODE = 0;
     private final int OPEN_IMAGE_REQUEST_CODE = 1;
+    private final int OPEN_CAMERA_REQUEST_CODE = 2;
+
+    private AttachFileAdapter attachFileAdapter;
+    private final List<Uri> fileUris = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +90,13 @@ public class MessagingActivity extends AppCompatActivity {
         // because a notification only give the id, not chatRoomImagePath and chatRoomTitle
         if (chatRoomImagePath == null || chatRoomTitle == null) getChatRoomInformation();
 
+        binding.rvAttach.setLayoutManager(new LinearLayoutManager(MessagingActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        attachFileAdapter = new AttachFileAdapter(fileUris, this, position -> {
+            fileUris.remove(position);
+            attachFileAdapter.notifyItemRemoved(position);
+            attachFileAdapter.notifyItemRangeChanged(position, fileUris.size());
+        });
+        binding.rvAttach.setAdapter(attachFileAdapter);
         binding.chatRoomTitle.setText(chatRoomTitle);
         Glide
             .with(this)
@@ -105,8 +136,11 @@ public class MessagingActivity extends AppCompatActivity {
         });
 
         binding.etEnterMessage.setOnClickListener(view -> {
+            binding.etEnterMessage.setCursorVisible(true);
+
             binding.btnAttachFile.setVisibility(View.GONE);
             binding.btnAttachImage.setVisibility(View.GONE);
+            binding.btnTakeCamera.setVisibility(View.GONE);
             binding.btnShowMoreIcon.setVisibility(View.VISIBLE);
 
             Animation iconAppear = AnimationUtils.loadAnimation(this, R.anim.animated_fade_visible);
@@ -120,14 +154,7 @@ public class MessagingActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int s, int start, int after) {
-                if (charSequence.length() > 0) {
-                    binding.btnSend.setVisibility(View.VISIBLE);
-                    binding.btnTakeCamera.setVisibility(View.GONE);
-                    binding.etEnterMessage.performClick();
-                } else {
-                    binding.btnSend.setVisibility(View.GONE);
-                    binding.btnTakeCamera.setVisibility(View.VISIBLE);
-                }
+                if (charSequence.length() > 0) binding.etEnterMessage.performClick();
             }
 
             @Override
@@ -136,6 +163,7 @@ public class MessagingActivity extends AppCompatActivity {
 
         binding.btnSend.setOnClickListener((view -> {
             String message = String.valueOf(binding.etEnterMessage.getText());
+            if(message.isEmpty()) return;
             messageViewModel.sendNewMessage(message);
             binding.etEnterMessage.setText("");
         }));
@@ -148,16 +176,24 @@ public class MessagingActivity extends AppCompatActivity {
             openImageStorage();
         });
 
+        binding.btnTakeCamera.setOnClickListener(view -> {
+            if(!checkPermissionAndAskForIt(MessagingActivity.this, Manifest.permission.CAMERA, OPEN_CAMERA_REQUEST_CODE)) return;
+            openCamera();
+        });
+
         binding.btnShowMoreIcon.setOnClickListener(view -> {
+            binding.etEnterMessage.setCursorVisible(false);
 
             binding.btnAttachFile.setVisibility(View.VISIBLE);
             binding.btnAttachImage.setVisibility(View.VISIBLE);
+            binding.btnTakeCamera.setVisibility(View.VISIBLE);
             binding.btnShowMoreIcon.setVisibility(View.GONE);
 
             Animation iconAppear = AnimationUtils.loadAnimation(this, R.anim.animated_fade_visible);
 
             binding.btnAttachFile.setAnimation(iconAppear);
             binding.btnAttachImage.setAnimation(iconAppear);
+            binding.btnTakeCamera.setAnimation(iconAppear);
 
             iconAppear.start();
         });
@@ -261,6 +297,32 @@ public class MessagingActivity extends AppCompatActivity {
         startActivityIfNeeded(myFileIntent, OPEN_IMAGE_REQUEST_CODE);
     }
 
+    private void openCamera(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // the "if" below not working on some phone
+//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        try {
+            File photoFile = null;
+            try {
+                photoFile = createTempImageFile();
+            } catch (IOException ex) {
+                ToastUtils.showToastError(this, "Unable to take picture, please try again", Toast.LENGTH_LONG);
+            }
+
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.worthybitbuilders.squadsense.fileprovider",
+                        photoFile);
+                fileUris.add(photoURI);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityIfNeeded(takePictureIntent, OPEN_CAMERA_REQUEST_CODE);
+            }
+        } catch (Exception e) {
+//            ToastUtils.showToastError(this, "No usable camera, operation failed", Toast.LENGTH_LONG);
+            ToastUtils.showToastError(this, "Something wrong with camera", Toast.LENGTH_LONG);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode,resultCode, data);
@@ -269,15 +331,122 @@ public class MessagingActivity extends AppCompatActivity {
             case OPEN_FILE_REQUEST_CODE:
                 if(resultCode == RESULT_OK)
                 {
-                    ToastUtils.showToastSuccess(MessagingActivity.this, "file open", Toast.LENGTH_SHORT);
+                    if (data == null) return;
+                    Uri fileUri = data.getData();
+                    boolean isAdded = false;
+                    for (int i = 0; i < fileUris.size(); i++) {
+                        if (areUrisEqual(fileUris.get(i), fileUri)) {
+                            isAdded = true;
+                            break;
+                        }
+                    }
+
+                    if (!isAdded) {
+                        fileUris.add(fileUri);
+                        attachFileAdapter.notifyItemInserted(fileUris.size() - 1);
+                    } else {
+                        ToastUtils.showToastError(this, "File is already selected", Toast.LENGTH_SHORT);
+                    }
+
+                    if(fileUris.size() > 0) binding.rvAttach.setVisibility(View.VISIBLE);
+                    else binding.rvAttach.setVisibility(View.INVISIBLE);
                 }
                 break;
             case OPEN_IMAGE_REQUEST_CODE:
                 if(resultCode == RESULT_OK)
                 {
-                    ToastUtils.showToastSuccess(MessagingActivity.this, "image open", Toast.LENGTH_SHORT);
+                    if (data == null) return;
+                    Uri fileUri = data.getData();
+                    boolean isAdded = false;
+                    for (int i = 0; i < fileUris.size(); i++) {
+                        if (areUrisEqual(fileUris.get(i), fileUri)) {
+                            isAdded = true;
+                            break;
+                        }
+                    }
+
+                    if (!isAdded) {
+                        fileUris.add(fileUri);
+                        attachFileAdapter.notifyItemInserted(fileUris.size() - 1);
+                    } else {
+                        ToastUtils.showToastError(this, "Image is already selected", Toast.LENGTH_SHORT);
+                    }
+
+                    if(fileUris.size() > 0) binding.rvAttach.setVisibility(View.VISIBLE);
+                    else binding.rvAttach.setVisibility(View.INVISIBLE);
                 }
                 break;
+            case OPEN_CAMERA_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    attachFileAdapter.notifyItemInserted(fileUris.size() - 1);
+                } else {
+                    fileUris.remove(fileUris.size() - 1);
+                }
+
+                if(fileUris.size() > 0) binding.rvAttach.setVisibility(View.VISIBLE);
+                else binding.rvAttach.setVisibility(View.INVISIBLE);
+                break;
         }
+    }
+
+    public boolean areUrisEqual(Uri firstUri, Uri secondUri) {
+        ContentResolver contentResolver = getContentResolver();
+
+        // Get the document IDs for the URIs
+        String documentId1 = DocumentsContract.getDocumentId(firstUri);
+        String documentId2 = DocumentsContract.getDocumentId(secondUri);
+
+        // Retrieve the DocumentFile instances using the document IDs
+        DocumentFile document1 = DocumentFile.fromSingleUri(this, firstUri);
+        DocumentFile document2 = DocumentFile.fromSingleUri(this, secondUri);
+
+        // Check if the documents are null or not
+        if (document1 == null || document2 == null) {
+            return false;
+        }
+
+        // Compare the document IDs
+        boolean areDocumentIdsEqual = documentId1.equals(documentId2);
+
+        // Compare the actual files using their content URIs
+        boolean areFilesEqual = document1.getUri().equals(document2.getUri());
+
+        // Return true if both the document IDs and files are equal
+        return areDocumentIdsEqual && areFilesEqual;
+    }
+    @SuppressLint("Range")
+    private String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
+    }
+    private File createTempImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "IMG_" + timeStamp;
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        return File.createTempFile(imageFileName, ".jpg", storageDir);
+    }
+
+    private File createTempFile(Uri fileUri) throws IOException {
+        String fileName = getFileName(fileUri);
+        String fileExtension = MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(fileUri));
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+        return File.createTempFile(fileName, fileExtension, storageDir);
     }
 }

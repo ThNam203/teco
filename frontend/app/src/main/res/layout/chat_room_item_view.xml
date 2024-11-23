@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:background="@color/transparent"
-    tools:background="@color/black">
+    tools:background="@color/primary_second_color">
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/chatRoomImage"
         android:layout_width="60dp"

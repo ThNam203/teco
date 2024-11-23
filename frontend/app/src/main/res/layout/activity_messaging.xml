@@ -57,15 +57,26 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMessage"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginBottom="16dp"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintBottom_toTopOf="@+id/text_gchat_indicator"
-        app:layout_constraintTop_toBottomOf="@+id/layout_group_chat" />
+        android:background="@color/transparent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMessage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAttach"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/primary_second_color"
+            android:visibility="invisible"/>
+    </RelativeLayout>
+
+
 
     <LinearLayout
         android:id="@+id/layout_gchat_chatbox"
@@ -104,6 +115,16 @@
                 app:tint="@color/blue"
                 android:layout_gravity="center"/>
             <ImageButton
+                android:id="@+id/btnTakeCamera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_camera"
+                app:tint="@color/blue"
+                android:layout_marginHorizontal="8dp"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+            <ImageButton
                 android:id="@+id/btnShowMoreIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -128,23 +149,13 @@
                 android:layout_gravity="center"/>
 
             <ImageButton
-                android:id="@+id/btnTakeCamera"
+                android:id="@+id/btnSend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:src="@drawable/ic_camera"
+                android:src="@drawable/ic_send"
                 app:tint="@color/blue"
                 android:layout_gravity="center"/>
         </LinearLayout>
-
-        <Button
-            android:id="@+id/btnSend"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:background="?attr/selectableItemBackground"
-            android:drawableLeft="@drawable/ic_send"
-            android:drawableTint="@color/blue"
-            android:layout_gravity="center"/>
     </LinearLayout>
 </LinearLayout>
