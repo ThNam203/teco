@@ -37,9 +37,12 @@ public class EditBoardsAdapter extends RecyclerView.Adapter<EditBoardsAdapter.Ed
     private final Context context;
     private final ProjectActivityViewModel projectActivityViewModel;
 
-    public EditBoardsAdapter(ProjectActivityViewModel projectActivityViewModel, Context context) {
+    private boolean isReadOnly = false;
+
+    public EditBoardsAdapter(ProjectActivityViewModel projectActivityViewModel, Context context, boolean isReadOnly) {
         this.context = context;
         this.projectActivityViewModel = projectActivityViewModel;
+        this.isReadOnly = isReadOnly;
     }
 
     public void setHandlers(ClickHandlers handlers) {
@@ -88,6 +91,9 @@ public class EditBoardsAdapter extends RecyclerView.Adapter<EditBoardsAdapter.Ed
             this.handlers = handlers;
             if (chosenPosition == position)
                 DrawableCompat.setTint(this.container.getBackground(), ContextCompat.getColor(context, R.color.primary_splitter_color));
+
+            if(isReadOnly) this.btnMoreOptions.setVisibility(View.GONE);
+            else this.btnMoreOptions.setVisibility(View.VISIBLE);
 
             this.btnMoreOptions.setOnClickListener(view -> showMoreOptionsPopup(position, boardName));
 

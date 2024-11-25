@@ -26,15 +26,15 @@ public class BoardItemOwnerAdapter extends RecyclerView.Adapter{
     private final List<UserModel> listOwner;
     private OnActionCallback callback;
 
-    private ProjectActivityViewModel projectActivityViewModel;
+    private boolean isReadOnly = false;
 
     public interface OnActionCallback {
         void OnClick(int position);
     }
 
-    public BoardItemOwnerAdapter(List<UserModel> listOwner, ProjectActivityViewModel projectActivityViewModel) {
+    public BoardItemOwnerAdapter(List<UserModel> listOwner, boolean isReadOnly) {
         this.listOwner = listOwner;
-        this.projectActivityViewModel = projectActivityViewModel;
+        this.isReadOnly = isReadOnly;
     }
 
     public BoardItemOwnerAdapter(List<UserModel> listOwner) {
@@ -80,15 +80,9 @@ public class BoardItemOwnerAdapter extends RecyclerView.Adapter{
                     .placeholder(R.drawable.ic_user)
                     .into(ownerAvatar);
             tvOwnerName.setText(member.getName());
-            if(projectActivityViewModel != null)
-            {
-                String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
-                if(!projectActivityViewModel.getProjectModel().getCreatorId().equals(userId)
-                        && !projectActivityViewModel.getProjectModel().getAdminIds().contains(userId))
-                    btnDelete.setVisibility(View.GONE);
-                else
-                    btnDelete.setVisibility(View.VISIBLE);
-            }
+
+            if(isReadOnly) btnDelete.setVisibility(View.GONE);
+            else btnDelete.setVisibility(View.VISIBLE);
 
             btnDelete.setOnClickListener(view -> callback.OnClick(position));
         }

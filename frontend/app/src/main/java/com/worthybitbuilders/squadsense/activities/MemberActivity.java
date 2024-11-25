@@ -144,7 +144,7 @@ public class MemberActivity extends AppCompatActivity {
         String projectId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID);
         if(!projectId.isEmpty())
         {
-            projectActivityViewModel.getProjectById(new ProjectActivityViewModel.ApiCallHandlers() {
+            projectActivityViewModel.getProjectById(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
                 @Override
                 public void onSuccess() {
                     listAdminId.addAll(projectActivityViewModel.getProjectModel().getAdminIds());

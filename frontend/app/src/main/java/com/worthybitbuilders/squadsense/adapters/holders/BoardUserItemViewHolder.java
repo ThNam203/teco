@@ -33,17 +33,31 @@ public class BoardUserItemViewHolder extends AbstractViewHolder {
     public void setItemModel(BoardUserItemModel userItemModel, Context context, String columnTitle, int columnPos, int rowPos) {
         itemView.setOnClickListener((view) -> handlers.onUserItemClick(userItemModel, columnTitle, columnPos, rowPos));
         if (userItemModel.getUsers() == null || userItemModel.getUsers().size() == 0) {
-            userButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_person));
-            return;
-        };
-        Glide.with(context).load(userItemModel.getUsers().get(0).getProfileImagePath()).placeholder(R.drawable.ic_user).into(userButton);
-        if (userItemModel.getUsers().size() == 2) {
+            userButton.setVisibility(View.VISIBLE);
+            userSecondButton.setVisibility(View.GONE);
+            moreUsersHolder.setVisibility(View.GONE);
+            Glide.with(context).load(R.drawable.ic_person).into(userButton);
+        }
+        else if(userItemModel.getUsers().size() == 1)
+        {
+            userButton.setVisibility(View.VISIBLE);
+            userSecondButton.setVisibility(View.GONE);
+            moreUsersHolder.setVisibility(View.GONE);
+            Glide.with(context).load(userItemModel.getUsers().get(0).getProfileImagePath()).placeholder(R.drawable.ic_user).into(userButton);
+        }
+        else if (userItemModel.getUsers().size() == 2) {
+            userButton.setVisibility(View.VISIBLE);
             userSecondButton.setVisibility(View.VISIBLE);
+            moreUsersHolder.setVisibility(View.GONE);
+            Glide.with(context).load(userItemModel.getUsers().get(0).getProfileImagePath()).placeholder(R.drawable.ic_user).into(userButton);
             Glide.with(context).load(userItemModel.getUsers().get(1).getProfileImagePath()).placeholder(R.drawable.ic_user).into(userSecondButton);
         }
         else if (userItemModel.getUsers().size() > 2) {
+            userButton.setVisibility(View.VISIBLE);
+            userSecondButton.setVisibility(View.GONE);
             moreUsersHolder.setVisibility(View.VISIBLE);
             moreUsersHolder.setText("+" + String.valueOf(userItemModel.getUsers().size() - 1));
+            Glide.with(context).load(userItemModel.getUsers().get(0).getProfileImagePath()).placeholder(R.drawable.ic_user).into(userButton);
         }
     }
 

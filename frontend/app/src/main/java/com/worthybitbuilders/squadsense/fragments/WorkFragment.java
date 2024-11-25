@@ -71,6 +71,7 @@ public class WorkFragment extends Fragment {
             detailIntent.putExtra("boardTitle", model.getBoardTitle());
             detailIntent.putExtra("rowPosition", model.getCellRowPosition());
             detailIntent.putExtra("rowTitle", model.getRowTitle());
+
             detailIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(detailIntent);
         });

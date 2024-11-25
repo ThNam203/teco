@@ -33,8 +33,10 @@ import com.worthybitbuilders.squadsense.fragments.BoardDetailUpdateFragment;
 import com.worthybitbuilders.squadsense.models.BoardDetailItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
+import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.BoardDetailItemViewModel;
+import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
 
 import org.json.JSONException;
 
@@ -48,6 +50,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
     final private List<Pair<Button, String>> buttons = new ArrayList<>();
     private ActivityBoardItemDetailBinding activityBinding;
     private BoardDetailItemViewModel viewModel;
+    private ProjectActivityViewModel projectActivityViewModel;
     private String currentChosenCellId = null;
 
     private String rowTitle = "";
@@ -73,6 +76,8 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
 
         this.rowTitle = rowTitle;
 
+
+
         // updateCellId is only for when user tap the update item
         // which is because there could be more than 1 update item
         // when open from board
@@ -82,8 +87,11 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
 
         activityBinding.itemTitle.setText(rowTitle);
 
+
+
         BoardItemDetailViewModelFactory viewModelFactory = new BoardItemDetailViewModelFactory(rowPosition, projectId, boardId, updateCellId, projectTitle, boardTitle, rowTitle);
         viewModel = new ViewModelProvider(this, viewModelFactory).get(BoardDetailItemViewModel.class);
+        projectActivityViewModel = new ViewModelProvider(this).get(ProjectActivityViewModel.class);
 
         if (rowPosition == -1 || projectId.isEmpty() || boardId.isEmpty()) {
             ToastUtils.showToastError(this, "Something went wrong, please try again", Toast.LENGTH_LONG);
@@ -92,6 +100,21 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
 
         Dialog loadingDialog = DialogUtils.GetLoadingDialog(this);
         loadingDialog.show();
+
+        projectActivityViewModel.getProjectById(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
+            @Override
+            public void onSuccess() {
+                String creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
+                List<String> listAdminId = projectActivityViewModel.getProjectModel().getAdminIds();
+                loadViewWithSuitableRole(creatorId, listAdminId);
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+            }
+        });
+
 
         viewModel.getDataFromRemote(new BoardDetailItemViewModel.ApiCallHandler() {
             @Override
@@ -283,6 +306,28 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
             } else {
                 DrawableCompat.setTint(buttons.get(i).first.getBackground(), ContextCompat.getColor(BoardItemDetailActivity.this, R.color.primary_btn_second_color));
             }
+        }
+    }
+
+    private enum Role {CREATOR, ADMIN, MEMBER}
+    private void loadViewWithSuitableRole(String creatorId, List<String> listAdminId)
+    {
+        Role role;
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        if(creatorId.equals(userId)) role = Role.CREATOR;
+        else if(listAdminId.contains(userId)) role = Role.ADMIN;
+        else role = Role.MEMBER;
+
+        switch (role){
+            case CREATOR:
+                activityBinding.btnMoreOptions.setVisibility(View.VISIBLE);
+                break;
+            case ADMIN:
+                activityBinding.btnMoreOptions.setVisibility(View.VISIBLE);
+                break;
+            case MEMBER:
+                activityBinding.btnMoreOptions.setVisibility(View.GONE);
+                break;
         }
     }
 }

@@ -7,41 +7,45 @@
     android:layout_height="match_parent"
     android:background="@color/primary_color"
     android:orientation="vertical">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        android:paddingVertical="10dp">
+
         <ImageButton
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
             android:backgroundTint="@color/transparent"
+            android:contentDescription="btn add person"
             android:minHeight="48dp"
             android:src="@drawable/ic_arrow_back"
             app:tint="@color/primary_icon_color" />
+
         <TextView
             android:id="@+id/itemTitle"
-            android:layout_weight="1"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:text="Item 1"
+            android:textAlignment="center"
             android:textColor="@color/primary_word_color"
             android:textSize="@dimen/large_textsize"
-            android:textStyle="bold"
-            tools:text="Item1" />
+            android:textStyle="bold" />
         <ImageButton
             android:id="@+id/btnMoreOptions"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:backgroundTint="@color/transparent"
             android:contentDescription="btn add person"
             android:minHeight="48dp"
             android:src="@drawable/ic_more_setting"
-            app:tint="@color/primary_icon_color" />
-    </LinearLayout>
+            app:tint="@color/primary_icon_color"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

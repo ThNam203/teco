@@ -9,8 +9,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp"
         android:paddingVertical="10dp">
+
         <ImageButton
             android:id="@+id/btnClosePopup"
             android:layout_width="wrap_content"
@@ -22,12 +22,13 @@
             android:minHeight="48dp"
             android:src="@drawable/ic_close"
             app:tint="@color/primary_icon_color" />
+
         <TextView
             android:id="@+id/popupTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Owner"
+            android:text="New row"
             android:textAlignment="center"
             android:textColor="@color/primary_word_color"
             android:textSize="@dimen/large_textsize"
@@ -44,7 +45,8 @@
             android:background="@drawable/background_btn_corner"
             android:backgroundTint="@color/primary_btn_color"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"/>
     </RelativeLayout>
     <View
         android:layout_width="match_parent"

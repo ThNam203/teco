@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
-            android:text="Add / Edit Boards"
+            android:text="Boards"
             android:letterSpacing="0.05"
             android:textColor="@color/primary_word_color"
             android:gravity="center"
@@ -44,60 +44,66 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:itemCount="8"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/primary_splitter_color"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add board"
-                android:textSize="@dimen/small_textsize"
-                android:layout_margin="16dp"
-                android:textColor="@color/primary_word_color"/>
             <LinearLayout
+                android:id="@+id/layout_add_board"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@drawable/curved_big_background"
-                android:backgroundTint="@color/primary_second_color"
-                android:padding="16dp"
-                android:layout_marginHorizontal="16dp"
-                android:elevation="5dp">
-                <ImageView
+                android:orientation="vertical">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary_splitter_color"/>
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/new_table"
-                    android:layout_marginStart="8dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    android:text="Add board"
+                    android:textSize="@dimen/small_textsize"
+                    android:layout_margin="16dp"
+                    android:textColor="@color/primary_word_color"/>
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="16dp">
-                    <TextView
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/curved_big_background"
+                    android:backgroundTint="@color/primary_second_color"
+                    android:padding="16dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:elevation="5dp">
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Board"
-                        android:textSize="@dimen/small_textsize"
-                        android:textStyle="bold"
-                        android:textColor="@color/primary_word_color"/>
-                    <TextView
+                        android:src="@drawable/new_table"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                    <LinearLayout
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="Organize your workload in any way you like to"
-                        android:textSize="@dimen/small_textsize"
-                        android:textColor="@color/primary_word_second_color"/>
-                    <TextView
-                        android:id="@+id/btnNewBoard"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/small_textsize"
-                        android:text="+ Add new board"
-                        android:textColor="@color/primary_word_third_color"/>
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Board"
+                            android:textSize="@dimen/small_textsize"
+                            android:textStyle="bold"
+                            android:textColor="@color/primary_word_color"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="Organize your workload in any way you like to"
+                            android:textSize="@dimen/small_textsize"
+                            android:textColor="@color/primary_word_second_color"/>
+                        <TextView
+                            android:id="@+id/btnNewBoard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/small_textsize"
+                            android:text="+ Add new board"
+                            android:textColor="@color/primary_word_third_color"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

@@ -56,7 +56,7 @@
         android:id="@+id/rvWork"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="8dp"/>
+        android:paddingHorizontal="8dp" />
     <LinearLayout
         android:id="@+id/emptyWorkNotification"
         android:layout_width="match_parent"
@@ -74,22 +74,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:text="You have unfollowed all your boards"
+            android:text="Stay on Top of Your Projects: Create, Manage, and Succeed!"
             android:textAlignment="center"
             android:background="@color/transparent"
             android:textColor="@color/primary_word_color"
             android:textSize="@dimen/large_textsize"
             android:textStyle="bold" />
-        <TextView
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:text="You have unfollowed 0 boards you were assigned to. To see your items, start following boards again"
-            android:textAlignment="center"
-            android:background="@color/transparent"
-            android:textColor="@color/primary_word_color"
-            android:textSize="@dimen/normal_textsize" />
     </LinearLayout>
 </LinearLayout>

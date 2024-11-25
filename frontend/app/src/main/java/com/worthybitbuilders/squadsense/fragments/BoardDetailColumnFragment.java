@@ -79,8 +79,12 @@ import retrofit2.Response;
 
 public class BoardDetailColumnFragment extends Fragment {
     BoardDetailItemViewModel viewModel;
+    ProjectActivityViewModel projectActivityViewModel;
     private FragmentBoardDetailColumnBinding binding;
     private BoardItemDetailColumnAdapter adapter;
+
+    private String creatorId = "";
+    private List<String> listAdminId = new ArrayList<>();
 
     public static BoardDetailColumnFragment newInstance() {
         BoardDetailColumnFragment fragment = new BoardDetailColumnFragment();
@@ -97,6 +101,25 @@ public class BoardDetailColumnFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentBoardDetailColumnBinding.inflate(getLayoutInflater());
         viewModel = new ViewModelProvider(getActivity()).get(BoardDetailItemViewModel.class);
+        projectActivityViewModel = new ViewModelProvider(getActivity()).get(ProjectActivityViewModel.class);
+
+        String projectId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID);
+        if(projectId == null) {
+            ToastUtils.showToastError(getContext(), "Something went wrong, please try again", Toast.LENGTH_LONG);
+            getActivity().finish();
+        }
+        projectActivityViewModel.getProjectById(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
+            @Override
+            public void onSuccess() {
+                creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
+                listAdminId.addAll(projectActivityViewModel.getProjectModel().getAdminIds());
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+            }
+        });
 
         adapter = new BoardItemDetailColumnAdapter(viewModel, getActivity(), new BoardItemDetailColumnAdapter.ClickHandlers() {
             @Override
@@ -173,7 +196,14 @@ public class BoardDetailColumnFragment extends Fragment {
         List<UserModel> listOwner = new ArrayList<>(userItemModel.getUsers());
         binding.rvMembers.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.rvOwers.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        BoardItemOwnerAdapter boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner);
+        BoardItemOwnerAdapter boardItemOwnerAdapter;
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        if(creatorId.equals(userId))
+            boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, false);
+        else if (listAdminId.contains(userId))
+            boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, false);
+        else
+            boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, true);
         BoardItemMemberAdapter boardItemMemberAdapter = new BoardItemMemberAdapter();
         binding.rvMembers.setAdapter(boardItemMemberAdapter);
         binding.rvOwers.setAdapter(boardItemOwnerAdapter);
@@ -192,8 +222,15 @@ public class BoardDetailColumnFragment extends Fragment {
                     statuses.add(isSet);
                 }
                 boardItemMemberAdapter.setData(listMember, statuses);
-                if(listMember.size() > 0) binding.rvMembers.setVisibility(View.VISIBLE);
-                else binding.rvMembers.setVisibility(View.GONE);
+
+                String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+                if(creatorId.equals(userId))
+                    showPopupOwnerFor(Role.CREATOR, binding);
+                else if (listAdminId.contains(userId))
+                    showPopupOwnerFor(Role.ADMIN, binding);
+                else
+                    showPopupOwnerFor(Role.MEMBER, binding);
+
             }
 
             @Override
@@ -804,5 +841,25 @@ public class BoardDetailColumnFragment extends Fragment {
         dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialog.show();
+    }
+
+    private enum Role {CREATOR, ADMIN, MEMBER}
+    private void showPopupOwnerFor(Role role, BoardOwnerItemPopupBinding popupBinding)
+    {
+        popupBinding.rvMembers.setVisibility(View.VISIBLE);
+        popupBinding.layoutRvOwers.setVisibility(View.VISIBLE);
+        popupBinding.btnSave.setVisibility(View.VISIBLE);
+
+        switch (role)
+        {
+            case CREATOR:
+                break;
+            case ADMIN:
+                break;
+            case MEMBER:
+                popupBinding.rvMembers.setVisibility(View.GONE);
+                popupBinding.btnSave.setVisibility(View.GONE);
+                break;
+        }
     }
 }

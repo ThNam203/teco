@@ -178,12 +178,18 @@ public class ProjectActivity extends AppCompatActivity {
 
             @Override
             public void onNewColumnHeaderClick() {
-                showAddBoardItemPopup();
+                String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+                if(projectActivityViewModel.getProjectModel().getCreatorId().equals(userId) || projectActivityViewModel.getProjectModel().getAdminIds().contains(userId))
+                    showAddBoardItemPopup();
+                else ToastUtils.showToastError(ProjectActivity.this, "You don't have permission to add new collumn", Toast.LENGTH_SHORT);
             }
 
             @Override
             public void onNewRowHeaderClick() {
-                showNewRowPopup();
+                String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+                if(projectActivityViewModel.getProjectModel().getCreatorId().equals(userId) || projectActivityViewModel.getProjectModel().getAdminIds().contains(userId))
+                    showNewRowPopup();
+                else ToastUtils.showToastError(ProjectActivity.this, "You don't have permission to add new row", Toast.LENGTH_SHORT);
             }
 
             @Override
@@ -195,6 +201,12 @@ public class ProjectActivity extends AppCompatActivity {
                 showRowIntent.putExtra("boardTitle", boardViewModel.getBoardTitle());
                 showRowIntent.putExtra("rowPosition", rowPosition);
                 showRowIntent.putExtra("rowTitle", rowTitle);
+                showRowIntent.putExtra("creatorId", projectActivityViewModel.getProjectModel().getCreatorId());
+
+                Bundle bundle = new Bundle();
+                bundle.putStringArrayList("adminId", (ArrayList<String>) projectActivityViewModel.getProjectModel().getAdminIds());
+                showRowIntent.putExtras(bundle);
+
                 startActivity(showRowIntent);
             }
 
@@ -697,7 +709,8 @@ public class ProjectActivity extends AppCompatActivity {
     private void updateProject() {
         Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
         loadingDialog.show();
-        projectActivityViewModel.getProjectById(new ProjectActivityViewModel.ApiCallHandlers() {
+        String projectId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID);
+        projectActivityViewModel.getProjectById(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
             @Override
             public void onSuccess() {
                 loadingDialog.dismiss();
@@ -718,7 +731,24 @@ public class ProjectActivity extends AppCompatActivity {
         BoardEditBoardsViewBinding binding = BoardEditBoardsViewBinding.inflate(getLayoutInflater());
         dialog.setContentView(binding.getRoot());
 
-        EditBoardsAdapter editBoardsAdapter = new EditBoardsAdapter(this.projectActivityViewModel, this);
+        EditBoardsAdapter editBoardsAdapter;
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        if(projectActivityViewModel.getProjectModel().getCreatorId().equals(userId))
+        {
+            editBoardsAdapter = new EditBoardsAdapter(this.projectActivityViewModel, this, false);
+            binding.layoutAddBoard.setVisibility(View.VISIBLE);
+        }
+        else if (projectActivityViewModel.getProjectModel().getAdminIds().contains(userId))
+        {
+            editBoardsAdapter = new EditBoardsAdapter(this.projectActivityViewModel, this, false);
+            binding.layoutAddBoard.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            editBoardsAdapter = new EditBoardsAdapter(this.projectActivityViewModel, this, true);
+            binding.layoutAddBoard.setVisibility(View.GONE);
+        }
+
         editBoardsAdapter.setHandlers(new EditBoardsAdapter.ClickHandlers() {
             @Override
             public void onRemoveClick(int position) {
@@ -925,7 +955,15 @@ public class ProjectActivity extends AppCompatActivity {
         List<UserModel> listOwner = new ArrayList<>(userItemModel.getUsers());
         binding.rvMembers.setLayoutManager(new LinearLayoutManager(ProjectActivity.this));
         binding.rvOwers.setLayoutManager(new LinearLayoutManager(ProjectActivity.this, LinearLayoutManager.HORIZONTAL, false));
-        BoardItemOwnerAdapter boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, projectActivityViewModel);
+        BoardItemOwnerAdapter boardItemOwnerAdapter;
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        if(projectActivityViewModel.getProjectModel().getCreatorId().equals(userId))
+            boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, false);
+        else if (projectActivityViewModel.getProjectModel().getAdminIds().contains(userId))
+            boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, false);
+        else
+            boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, true);
+
         BoardItemMemberAdapter boardItemMemberAdapter = new BoardItemMemberAdapter();
         binding.rvMembers.setAdapter(boardItemMemberAdapter);
         binding.rvOwers.setAdapter(boardItemOwnerAdapter);
