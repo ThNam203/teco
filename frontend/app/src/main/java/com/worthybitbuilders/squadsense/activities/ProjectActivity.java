@@ -102,6 +102,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.worthybitbuilders.squadsense.utils.ActivityUtils;
+
 public class ProjectActivity extends AppCompatActivity {
     private TableViewAdapter boardAdapter;
     private ProjectActivityViewModel projectActivityViewModel;
@@ -266,6 +268,10 @@ public class ProjectActivity extends AppCompatActivity {
 
         activityBinding.btnMoreOptions.setOnClickListener(this::showProjectOptions);
         activityBinding.btnBack.setOnClickListener((view) -> onBackPressed());
+        activityBinding.btnReport.setOnClickListener((view)->{
+            Intent reportIntent = new Intent(this, ReportActivity.class);
+            this.startActivity(reportIntent);
+        });
         createNewProjectIfRequest();
     }
 
