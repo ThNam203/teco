@@ -1,48 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_marginEnd="8dp"
-android:layout_marginTop="16dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginEnd="8dp"
+    android:layout_marginTop="16dp">
     <ImageView
         android:id="@+id/ivOtherAvatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginHorizontal="8dp"
         tools:src="@drawable/ic_user"
         android:contentDescription="User Icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-        <LinearLayout
-            android:id="@+id/messageContainer"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/messageContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/curved_small_background"
+        android:backgroundTint="#C0C0C0"
+        android:layout_marginHorizontal="8dp"
+        app:layout_constraintStart_toEndOf="@+id/ivOtherAvatar"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvOtherMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/curved_small_background"
-            android:backgroundTint="#C0C0C0"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <TextView
-                android:id="@+id/tvOtherMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:maxWidth="260dp"
-                android:paddingLeft="12dp"
-                android:paddingTop="8dp"
-                android:paddingRight="12dp"
-                tools:text="This is a Message"
-                android:textColor="@color/primary_word_color"
-                android:textSize="@dimen/normal_textsize" />
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvOtherFiles"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:itemCount="4"
-                android:orientation="horizontal"/>
-        </LinearLayout>
+            android:maxWidth="250dp"
+            android:paddingLeft="12dp"
+            android:paddingTop="8dp"
+            android:paddingRight="12dp"
+            android:textColor="@color/primary_word_color"
+            android:textSize="@dimen/normal_textsize"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="This is a Message" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvOtherFiles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:maxWidth="250dp"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvOtherMessage"
+            tools:itemCount="4" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <TextView
         android:id="@+id/tvOtherTimestamp"
         android:layout_width="wrap_content"
@@ -50,8 +57,6 @@ android:layout_marginTop="16dp">
         tools:text="10:00"
         android:textColor="@color/primary_word_second_color"
         android:textSize="12sp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_gravity="bottom"
-        app:layout_constraintEnd_toStartOf="@+id/messageContainer" />
+        android:layout_marginStart="8dp"
+        android:layout_gravity="bottom"/>
 </LinearLayout>

@@ -16,35 +16,36 @@
         android:textColor="@color/primary_word_second_color"
         android:textSize="12sp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_gravity="bottom"
-        app:layout_constraintEnd_toStartOf="@+id/messageContainer" />
-    <LinearLayout
+        android:layout_gravity="bottom" />
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/messageContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/curved_small_background"
-        android:backgroundTint="#774df2"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:backgroundTint="#774df2">
             <TextView
                 android:id="@+id/tvMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:maxWidth="260dp"
+                android:maxWidth="250dp"
                 android:paddingLeft="12dp"
                 android:paddingTop="8dp"
                 android:paddingRight="12dp"
                 tools:text="This is a Message"
                 android:textColor="@color/primary_word_color"
-                android:textSize="@dimen/normal_textsize" />
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvFiles"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:itemCount="4"
-            android:orientation="horizontal"/>
-    </LinearLayout>
+                android:textSize="@dimen/normal_textsize"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvFiles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="250dp"
+                android:paddingHorizontal="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvMessage"
+                tools:itemCount="4" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -100,7 +99,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
             if (message.getFiles() != null && message.getFiles().size() > 0) {
                 MessageFileAdapter adapter = new MessageFileAdapter(message.getFiles(), mContext);
-                rvFiles.setLayoutManager(new GridLayoutManager(mContext, 3));
+                rvFiles.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
                 rvFiles.setVisibility(View.VISIBLE);
                 rvFiles.setAdapter(adapter);
             }
@@ -125,7 +124,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
             if (message.getFiles() != null && message.getFiles().size() > 0) {
                 MessageFileAdapter adapter = new MessageFileAdapter(message.getFiles(), mContext);
-                rvFiles.setLayoutManager(new GridLayoutManager(mContext, 3));
+                rvFiles.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
                 rvFiles.setVisibility(View.VISIBLE);
                 rvFiles.setAdapter(adapter);
             }

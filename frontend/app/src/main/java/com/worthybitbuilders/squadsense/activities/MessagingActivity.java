@@ -172,7 +172,13 @@ public class MessagingActivity extends AppCompatActivity {
 
         binding.btnSend.setOnClickListener((view -> {
             String message = String.valueOf(binding.etEnterMessage.getText());
-            if(message.isEmpty()) return;
+            if(message.isEmpty() && fileUris.size() == 0) return;
+
+            binding.etEnterMessage.setText("");
+            if (fileUris.size() == 0) {
+                messageViewModel.sendNewMessage(message, new ArrayList<>());
+                return;
+            }
 
             List<MultipartBody.Part> parts = new ArrayList<>();
             for (int i = 0; i < fileUris.size(); i++) {
@@ -205,8 +211,6 @@ public class MessagingActivity extends AppCompatActivity {
                     ToastUtils.showToastError(MessagingActivity.this, "Something went wrong while trying to send message", Toast.LENGTH_LONG);
                 }
             });
-
-            binding.etEnterMessage.setText("");
         }));
 
         binding.btnAttachFile.setOnClickListener(view -> {
