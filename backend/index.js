@@ -10,6 +10,7 @@ const friendRouter = require('./routers/friendRouter')
 const notificationRouter = require('./routers/notificationRouter')
 const projectRouter = require('./routers/projectRouter')
 const chatRoomRouter = require('./routers/chatRoomRouter')
+const s3Controller = require('./controllers/awsS3Controllers')
 
 const app = express()
 const server = http.createServer(app)
@@ -24,6 +25,27 @@ app.use(
     })
 )
 
+app.post('/upload-files', s3Controller.s3Upload.array('files'), (req, res) => {
+    if (req.files) {
+        const fileDescriptions = []
+        req.files.forEach((file) => {
+            let fileType
+            if (!file.mimetype) fileType = 'Document'
+            else if (file.mimetype.startsWith('image/')) fileType = 'Image'
+            else if (file.mimetype.startsWith('video/')) fileType = 'Video'
+            else fileType = 'Document'
+
+            const newFile = {
+                location: file.location,
+                name: file.originalname,
+                fileType: fileType,
+            }
+
+            fileDescriptions.push(newFile)
+        })
+        res.status(200).json(fileDescriptions)
+    } else res.status(500).json('Unable to upload image')
+})
 app.use('/', authRouter)
 app.use('/', userRouter)
 app.use('/', friendRouter)

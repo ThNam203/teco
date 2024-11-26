@@ -39,14 +39,20 @@ import com.worthybitbuilders.squadsense.adapters.MessageAdapter;
 import com.worthybitbuilders.squadsense.adapters.NewUpdateTaskFileAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityMessagingBinding;
 import com.worthybitbuilders.squadsense.factory.MessageActivityViewModelFactory;
+import com.worthybitbuilders.squadsense.models.ChatMessage;
 import com.worthybitbuilders.squadsense.models.ChatRoom;
+import com.worthybitbuilders.squadsense.services.RetrofitServices;
+import com.worthybitbuilders.squadsense.services.UtilService;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.MessageActivityViewModel;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,6 +60,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,7 +73,7 @@ public class MessagingActivity extends AppCompatActivity {
     private MessageAdapter messageAdapter;
     private String chatRoomImagePath;
     private String chatRoomTitle;
-
+    private UtilService utilService = RetrofitServices.getUtilService();
     private final int OPEN_FILE_REQUEST_CODE = 0;
     private final int OPEN_IMAGE_REQUEST_CODE = 1;
     private final int OPEN_CAMERA_REQUEST_CODE = 2;
@@ -164,7 +173,39 @@ public class MessagingActivity extends AppCompatActivity {
         binding.btnSend.setOnClickListener((view -> {
             String message = String.valueOf(binding.etEnterMessage.getText());
             if(message.isEmpty()) return;
-            messageViewModel.sendNewMessage(message);
+
+            List<MultipartBody.Part> parts = new ArrayList<>();
+            for (int i = 0; i < fileUris.size(); i++) {
+                try {
+                    Uri fileUri = fileUris.get(i);
+                    String fileName = getFileName(fileUri);
+
+                    InputStream inputStream = getContentResolver().openInputStream(fileUri);
+                    File file = createTempFile(fileUri);
+                    copyInputStreamToFile(inputStream, file);
+                    RequestBody requestFile = RequestBody.create(MediaType.parse(getMimeType(fileUri)), file);
+                    parts.add(MultipartBody.Part.createFormData("files", fileName, requestFile));
+                } catch (IOException ignored) {}
+            }
+
+            fileUris.clear();
+            attachFileAdapter.notifyDataSetChanged();
+            binding.rvAttach.setVisibility(View.GONE);
+
+            utilService.uploadFiles(parts).enqueue(new Callback<List<ChatMessage.MessageFile>>() {
+                @Override
+                public void onResponse(Call<List<ChatMessage.MessageFile>> call, Response<List<ChatMessage.MessageFile>> response) {
+                    if (response.isSuccessful()) {
+                        messageViewModel.sendNewMessage(message, response.body());
+                    } else ToastUtils.showToastError(MessagingActivity.this, "Unable to send message, please try again", Toast.LENGTH_LONG);
+                }
+
+                @Override
+                public void onFailure(Call<List<ChatMessage.MessageFile>> call, Throwable t) {
+                    ToastUtils.showToastError(MessagingActivity.this, "Something went wrong while trying to send message", Toast.LENGTH_LONG);
+                }
+            });
+
             binding.etEnterMessage.setText("");
         }));
 
@@ -349,7 +390,7 @@ public class MessagingActivity extends AppCompatActivity {
                     }
 
                     if(fileUris.size() > 0) binding.rvAttach.setVisibility(View.VISIBLE);
-                    else binding.rvAttach.setVisibility(View.INVISIBLE);
+                    else binding.rvAttach.setVisibility(View.GONE);
                 }
                 break;
             case OPEN_IMAGE_REQUEST_CODE:
@@ -373,7 +414,7 @@ public class MessagingActivity extends AppCompatActivity {
                     }
 
                     if(fileUris.size() > 0) binding.rvAttach.setVisibility(View.VISIBLE);
-                    else binding.rvAttach.setVisibility(View.INVISIBLE);
+                    else binding.rvAttach.setVisibility(View.GONE);
                 }
                 break;
             case OPEN_CAMERA_REQUEST_CODE:
@@ -384,7 +425,7 @@ public class MessagingActivity extends AppCompatActivity {
                 }
 
                 if(fileUris.size() > 0) binding.rvAttach.setVisibility(View.VISIBLE);
-                else binding.rvAttach.setVisibility(View.INVISIBLE);
+                else binding.rvAttach.setVisibility(View.GONE);
                 break;
         }
     }
@@ -448,5 +489,36 @@ public class MessagingActivity extends AppCompatActivity {
         String fileExtension = MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(fileUri));
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
         return File.createTempFile(fileName, fileExtension, storageDir);
+    }
+
+    private void copyInputStreamToFile(InputStream inputStream, File file) throws IOException {
+        OutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream(file);
+            byte[] buffer = new byte[4 * 1024]; // 4KB buffer
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (outputStream != null) {
+                outputStream.close();
+            }
+        }
+    }
+
+    public String getMimeType(Uri uri) {
+        String mimeType = null;
+        if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme())) {
+            ContentResolver cr = getContentResolver();
+            mimeType = cr.getType(uri);
+        } else {
+            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
+            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase());
+        }
+        return mimeType;
     }
 }

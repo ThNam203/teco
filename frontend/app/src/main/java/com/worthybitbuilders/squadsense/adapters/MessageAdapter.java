@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -77,12 +79,14 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
         TextView tvMessage, tvTimestamp;
         ImageView ivProfileImage;
+        RecyclerView rvFiles;
 
         ReceivedMessageHolder(View itemView) {
             super(itemView);
             tvMessage = itemView.findViewById(R.id.tvOtherMessage);
             tvTimestamp = itemView.findViewById(R.id.tvOtherTimestamp);
             ivProfileImage = itemView.findViewById(R.id.ivOtherAvatar);
+            rvFiles = itemView.findViewById(R.id.rvOtherFiles);
         }
 
         void bind(ChatMessage message) {
@@ -93,22 +97,38 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     .load(message.getSender().profileImagePath)
                     .placeholder(R.drawable.ic_user)
                     .into(ivProfileImage);
+
+            if (message.getFiles() != null && message.getFiles().size() > 0) {
+                MessageFileAdapter adapter = new MessageFileAdapter(message.getFiles(), mContext);
+                rvFiles.setLayoutManager(new GridLayoutManager(mContext, 3));
+                rvFiles.setVisibility(View.VISIBLE);
+                rvFiles.setAdapter(adapter);
+            }
         }
     }
 
     private class SentMessageHolder extends RecyclerView.ViewHolder {
         TextView tvMessage, tvTimestamp;
+        RecyclerView rvFiles;
 
         SentMessageHolder(View itemView) {
             super(itemView);
             tvMessage = (TextView) itemView.findViewById(R.id.tvMessage);
             tvTimestamp = (TextView) itemView.findViewById(R.id.tvTimestamp);
+            rvFiles = itemView.findViewById(R.id.rvFiles);
         }
 
         void bind(ChatMessage message) {
             tvMessage.setText(message.getMessage());
             String formattedDate = CustomUtils.mongooseDateToFormattedString(message.getCreatedAt());
             tvTimestamp.setText(formattedDate);
+
+            if (message.getFiles() != null && message.getFiles().size() > 0) {
+                MessageFileAdapter adapter = new MessageFileAdapter(message.getFiles(), mContext);
+                rvFiles.setLayoutManager(new GridLayoutManager(mContext, 3));
+                rvFiles.setVisibility(View.VISIBLE);
+                rvFiles.setAdapter(adapter);
+            }
         }
     }
 }

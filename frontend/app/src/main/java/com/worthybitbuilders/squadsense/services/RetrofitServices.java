@@ -21,6 +21,7 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
 
 import java.lang.reflect.Type;
 
+import okhttp3.internal.Util;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -30,8 +31,9 @@ public class RetrofitServices {
     private static ChatRoomService chatRoomService = null;
     private static NotificationService notificationService = null;
     private static ProjectService projectService = null;
+    private static UtilService utilService = null;
 
-    private final static String BASE_URL = "http://192.168.1.7:3000/";
+    private final static String BASE_URL = "http://10.0.140.194:3000/";
   
     private static final Gson mGson = new GsonBuilder()
             .registerTypeAdapter(BoardBaseItemModel.class, new BoardCellDeserializer())
@@ -65,6 +67,11 @@ public class RetrofitServices {
     public static ProjectService getProjectService() {
         if (projectService == null) projectService = retrofit.create(ProjectService.class);
         return projectService;
+    }
+
+    public static UtilService getUtilService() {
+        if (utilService == null) utilService = retrofit.create(UtilService.class);
+        return utilService;
     }
 
     private static class BoardCellDeserializer implements JsonDeserializer<BoardBaseItemModel> {

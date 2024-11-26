@@ -45,8 +45,8 @@ public class MessageActivityViewModel extends ViewModel {
         this.chatRoomId = chatRoomId;
     }
 
-    public void sendNewMessage(String messageContent) {
-        ChatMessageRequest newMessage = new ChatMessageRequest(chatRoomId, messageContent, userId);
+    public void sendNewMessage(String messageContent, List<ChatMessage.MessageFile> files) {
+        ChatMessageRequest newMessage = new ChatMessageRequest(chatRoomId, messageContent, userId, files);
         String jsonData = new Gson().toJson(newMessage);
         socket.emit("newMessage", jsonData);
     }

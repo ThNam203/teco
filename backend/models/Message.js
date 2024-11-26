@@ -16,6 +16,13 @@ const messageSchema = new mongoose.Schema(
             ref: 'User',
             required: true,
         },
+        files: [
+            {
+                location: String,
+                name: String,
+                fileType: String,
+            },
+        ],
     },
     {
         timestamps: true,

@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
 
     //
     socket.on('newMessage', async (data) => {
-        const { chatRoomId, message, senderId } = JSON.parse(data)
+        const { chatRoomId, message, senderId, files } = JSON.parse(data)
         const chatRoom = await ChatRoom.findById(chatRoomId)
         if (!chatRoom)
             return socket
@@ -31,6 +31,7 @@ io.on('connection', (socket) => {
             chatRoomId,
             message,
             sender: senderId,
+            files: files,
         })
 
         if (!newChatMessage)
