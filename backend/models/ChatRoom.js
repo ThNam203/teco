@@ -10,6 +10,10 @@ const chatRoomSchema = new mongoose.Schema(
             type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
             required: true,
         },
+        isGroup: {
+            type: Boolean,
+            default: false,
+        },
         logoPath: {
             type: String,
         },

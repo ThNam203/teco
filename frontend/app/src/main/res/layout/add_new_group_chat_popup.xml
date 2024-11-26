@@ -14,7 +14,7 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Create group"
+            android:text="New group"
             android:gravity="center_horizontal"
             android:layout_gravity="center"
             android:textColor="@color/primary_word_color"
@@ -27,7 +27,65 @@
             android:backgroundTint="@color/transparent"
             android:src="@drawable/ic_arrow_back"
             app:tint="@color/primary_icon_color" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAddGroup"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:singleLine="true"
+            android:text="Create"
+            android:textAllCaps="false"
+            android:layout_marginHorizontal="8dp"
+            android:textSize="@dimen/small_textsize"
+            android:textColor="@color/white"
+            android:background="@drawable/background_btn_corner"
+            android:backgroundTint="@color/primary_btn_color"
+            android:layout_gravity="center_vertical|end"/>
     </FrameLayout>
+    <LinearLayout
+        android:id="@+id/containerGroupName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="8dp"
+        android:visibility="gone"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Group name: "
+            android:layout_gravity="center"
+            android:textColor="@color/primary_word_color"
+            android:textSize="@dimen/normal_textsize" />
+        <EditText
+            android:id="@+id/etGroupName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="Your group name"
+            android:textColor="@color/primary_word_color"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/containerGroupMembers"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginHorizontal="8dp"
+        android:visibility="gone"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Members: "
+            android:layout_gravity="center"
+            android:textColor="@color/primary_word_color"
+            android:textSize="@dimen/normal_textsize" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvGroupMembers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_friends"
         android:layout_width="match_parent"

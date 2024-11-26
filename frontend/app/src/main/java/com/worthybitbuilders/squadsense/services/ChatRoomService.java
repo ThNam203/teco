@@ -24,5 +24,5 @@ public interface ChatRoomService {
     Call<List<ChatMessage>> getAllMessageInChatRoom(@Path("userId") String userId, @Path("chatRoomId") String chatRoomId);
 
     @POST("{userId}/chatroom")
-    Call<ChatRoom> createNewChatRoom(@Path("userId") String userId, @Body JSONObject memberIds);
+    Call<ChatRoom> createNewChatRoom(@Path("userId") String userId, @Body JSONObject data);
 }

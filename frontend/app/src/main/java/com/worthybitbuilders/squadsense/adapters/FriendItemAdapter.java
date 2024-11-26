@@ -27,22 +27,24 @@ import java.util.List;
 public class FriendItemAdapter extends RecyclerView.Adapter {
     private final List<UserModel> friendList;
     private OnActionCallback callback;
-
     FriendViewModel friendViewModel;
+    private boolean isShowingButtonMore;
 
     public interface OnActionCallback {
+        void OnItemClick(int position);
         void OnMoreOptionsClick(int position);
     }
 
     public FriendItemAdapter(List<UserModel> friendList) {
         this.friendList = friendList;
-        friendViewModel = new ViewModelProvider(new ViewModelStoreOwner() {
-            @NonNull
-            @Override
-            public ViewModelStore getViewModelStore() {
-                return new ViewModelStore();
-            }
-        }).get(FriendViewModel.class);
+        this.isShowingButtonMore = true;
+        friendViewModel = new ViewModelProvider(() -> new ViewModelStore()).get(FriendViewModel.class);
+    }
+
+    public FriendItemAdapter(List<UserModel> friendList, boolean isShowingButtonMore) {
+        this.friendList = friendList;
+        friendViewModel = new ViewModelProvider(() -> new ViewModelStore()).get(FriendViewModel.class);
+        this.isShowingButtonMore = isShowingButtonMore;
     }
 
     public void setOnClickListener(OnActionCallback callback) {
@@ -73,7 +75,6 @@ public class FriendItemAdapter extends RecyclerView.Adapter {
     private class FriendItemHolder extends RecyclerView.ViewHolder {
         TextView tvFriendName, tvFriendConnection;
         ImageView friendAvatar;
-
         ImageButton btnMore;
         FriendItemHolder(View itemView) {
             super(itemView);
@@ -118,7 +119,9 @@ public class FriendItemAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            btnMore.setOnClickListener(view -> callback.OnMoreOptionsClick(position));
+            itemView.setOnClickListener((view) -> callback.OnItemClick(position));
+            if (isShowingButtonMore) btnMore.setOnClickListener(view -> callback.OnMoreOptionsClick(position));
+            else btnMore.setVisibility(View.GONE);
         }
     }
 }

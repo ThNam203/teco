@@ -135,6 +135,9 @@ public class AddMemberActivity extends AppCompatActivity {
 
         friendItemAdapter.setOnClickListener(new FriendItemAdapter.OnActionCallback() {
             @Override
+            public void OnItemClick(int position) {}
+
+            @Override
             public void OnMoreOptionsClick(int position) {
                 View anchor = binding.rvFriends.getLayoutManager().findViewByPosition(position);
                 selectedFriend = listFriend.get(position);

@@ -5,7 +5,7 @@ const AppError = require('../utils/AppError')
 const asyncCatch = require('../utils/asyncCatch')
 
 exports.createNewChatRoom = asyncCatch(async (req, res, next) => {
-    const { memberIds } = req.body.nameValuePairs
+    const { memberIds, isGroup = false, title } = req.body.nameValuePairs
 
     const members = await Promise.all(
         memberIds.map(async (memberId) => {
@@ -16,7 +16,9 @@ exports.createNewChatRoom = asyncCatch(async (req, res, next) => {
     )
 
     const newChatRoom = await ChatRoom.create({
+        title: title,
         members: memberIds,
+        isGroup: isGroup,
     })
 
     if (newChatRoom) {
@@ -28,7 +30,8 @@ exports.createNewChatRoom = asyncCatch(async (req, res, next) => {
         )
     } else throw new AppError('Unable to create new chat room', 500)
 
-    res.status(204).end()
+    await newChatRoom.populate('members', '_id name profileImagePath')
+    res.status(200).json(newChatRoom)
 })
 
 exports.getAllChatroomsOfUser = asyncCatch(async (req, res, next) => {

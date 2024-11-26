@@ -115,9 +115,10 @@ public class FriendActivity extends AppCompatActivity {
 
         friendItemAdapter.setOnClickListener(new FriendItemAdapter.OnActionCallback() {
             @Override
-            public void OnMoreOptionsClick(int position) {
+            public void OnItemClick(int position) {}
 
-            }
+            @Override
+            public void OnMoreOptionsClick(int position) {}
         });
     }
 

@@ -19,22 +19,20 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.worthybitbuilders.squadsense.R;
+import com.worthybitbuilders.squadsense.adapters.BoardItemOwnerAdapter;
 import com.worthybitbuilders.squadsense.adapters.ChatRoomAdapter;
 import com.worthybitbuilders.squadsense.adapters.FriendItemAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityInboxBinding;
 import com.worthybitbuilders.squadsense.databinding.AddNewChatRoomPopupBinding;
+import com.worthybitbuilders.squadsense.databinding.AddNewGroupChatPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.InboxMoreOptionsBinding;
-import com.worthybitbuilders.squadsense.databinding.PopupOptionViewProjectBinding;
-import com.worthybitbuilders.squadsense.databinding.ProjectMoreOptionsBinding;
 import com.worthybitbuilders.squadsense.models.ChatRoom;
 import com.worthybitbuilders.squadsense.models.UserModel;
-import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.ChatRoomViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
-import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,6 +46,11 @@ public class InboxActivity extends AppCompatActivity {
     ChatRoomViewModel chatRoomViewModel;
     Dialog loadingDialog;
     private FriendItemAdapter friendItemAdapter;
+
+    // TODO: replace this adapter by something similar
+    BoardItemOwnerAdapter createGroupMemberAdapter;
+    List<UserModel> createGroupMembers = new ArrayList<>();
+    private FriendItemAdapter createGroupFriendAdapter;
     private ChatRoomAdapter chatRoomAdapter;
     private final List<UserModel> friendList = new ArrayList<>();
 
@@ -64,7 +67,9 @@ public class InboxActivity extends AppCompatActivity {
         chatRoomViewModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
 
         binding.rvInbox.setLayoutManager(new LinearLayoutManager(this));
-        friendItemAdapter = new FriendItemAdapter(friendList);
+        friendItemAdapter = new FriendItemAdapter(friendList, false);
+        createGroupFriendAdapter = new FriendItemAdapter(friendList, false);
+        createGroupMemberAdapter = new BoardItemOwnerAdapter(createGroupMembers, false);
         loadChatRooms();
 
         binding.btnMore.setOnClickListener(view -> showInboxMoreOptions(view));
@@ -83,7 +88,7 @@ public class InboxActivity extends AppCompatActivity {
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialog.show();
 
-        LoadFriends(addNewChatRoomPopupBinding, dialog);
+        setUpAddNewChatRoom(addNewChatRoomPopupBinding, dialog);
         addNewChatRoomPopupBinding.btnBack.setOnClickListener(view -> dialog.dismiss());
     }
 
@@ -106,7 +111,7 @@ public class InboxActivity extends AppCompatActivity {
         });
     }
 
-    private void LoadFriends(AddNewChatRoomPopupBinding popupBinding, Dialog popupDialog)
+    private void setUpAddNewChatRoom(AddNewChatRoomPopupBinding popupBinding, Dialog popupDialog)
     {
         loadingDialog.show();
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
@@ -129,41 +134,142 @@ public class InboxActivity extends AppCompatActivity {
             }
         });
 
-        friendItemAdapter.setOnClickListener(position -> {
-            popupDialog.dismiss();
+        friendItemAdapter.setOnClickListener(new FriendItemAdapter.OnActionCallback() {
+            @Override
+            public void OnItemClick(int position) {
+                popupDialog.dismiss();
 
-            List<String> memberIds = new ArrayList<>();
-            memberIds.add(friendList.get(position).getId());
-            memberIds.add(userId);
-            Collections.sort(memberIds);
+                List<String> memberIds = new ArrayList<>();
+                memberIds.add(friendList.get(position).getId());
+                memberIds.add(userId);
+                Collections.sort(memberIds);
 
-            // check if there is already a chat room with 2 user
-            List<ChatRoom> availChatRooms = chatRoomViewModel.getChatRooms();
-            for (int i = 0; i < availChatRooms.size(); i++) {
-                List<String> chatRoomMemberIds = new ArrayList<>();
-                for (int j = 0; j < availChatRooms.get(i).getMembers().size(); j++) {
-                    chatRoomMemberIds.add(availChatRooms.get(i).getMembers().get(j)._id);
+                // check if there is already a chat room with 2 user
+                List<ChatRoom> availChatRooms = chatRoomViewModel.getChatRooms();
+                for (int i = 0; i < availChatRooms.size(); i++) {
+                    List<String> chatRoomMemberIds = new ArrayList<>();
+                    for (int j = 0; j < availChatRooms.get(i).getMembers().size(); j++) {
+                        chatRoomMemberIds.add(availChatRooms.get(i).getMembers().get(j)._id);
+                    }
+
+                    Collections.sort(chatRoomMemberIds);
+                    if (Arrays.equals(memberIds.toArray(), chatRoomMemberIds.toArray())) {
+                        changeToMessagingActivity(availChatRooms.get(i));
+                        return;
+                    }
                 }
 
-                Collections.sort(chatRoomMemberIds);
-                if (Arrays.equals(memberIds.toArray(), chatRoomMemberIds.toArray())) {
-                    changeToMessagingActivity(availChatRooms.get(i));
-                    return;
+                // if there is no room already, create another
+                chatRoomViewModel.createNewChatRoom(memberIds, false, "", new ChatRoomViewModel.ApiCallHandler() {
+                    @Override
+                    public void onSuccess() {
+                        updateChatRoomUI();
+                        chatRoomAdapter.notifyItemInserted(0);
+                        chatRoomAdapter.notifyItemRangeChanged(0, chatRoomViewModel.getChatRooms().size());
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        ToastUtils.showToastError(InboxActivity.this, message, Toast.LENGTH_SHORT);
+                    }
+                });
+            }
+
+            @Override
+            public void OnMoreOptionsClick(int position) {
+
+            }
+        });
+    }
+
+    private void setUpAddNewGroupChatRoom(AddNewGroupChatPopupBinding popupBinding, Dialog popupDialog)
+    {
+        loadingDialog.show();
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        friendViewModel.getFriendById(userId, new FriendViewModel.getFriendCallback() {
+            @Override
+            public void onSuccess(List<UserModel> friends) {
+                friendList.clear();
+                friendList.addAll(friends);
+                popupBinding.rvFriends.setLayoutManager(new LinearLayoutManager(InboxActivity.this));
+                popupBinding.rvFriends.setAdapter(createGroupFriendAdapter);
+
+                popupBinding.rvGroupMembers.setLayoutManager(new LinearLayoutManager(InboxActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                popupBinding.rvGroupMembers.setAdapter(createGroupMemberAdapter);
+
+                if(friendList.size() > 0) {
+                    popupBinding.imageNoFriendFound.setVisibility(View.GONE);
+                    popupBinding.rvFriends.setVisibility(View.VISIBLE);
+                    popupBinding.containerGroupName.setVisibility(View.VISIBLE);
+                    popupBinding.containerGroupMembers.setVisibility(View.VISIBLE);
+                } else {
+                    popupBinding.imageNoFriendFound.setVisibility(View.VISIBLE);
+                    popupBinding.rvFriends.setVisibility(View.GONE);
+                    popupBinding.containerGroupName.setVisibility(View.GONE);
+                    popupBinding.containerGroupMembers.setVisibility(View.GONE);
+                }
+
+                loadingDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                ToastUtils.showToastError(InboxActivity.this, message, Toast.LENGTH_SHORT);
+                popupDialog.dismiss();
+                loadingDialog.dismiss();
+            }
+        });
+
+        createGroupFriendAdapter.setOnClickListener(new FriendItemAdapter.OnActionCallback() {
+            @Override
+            public void OnItemClick(int position) {
+                if (createGroupMembers.contains(friendList.get(position))) {
+                    createGroupMembers.remove(friendList.get(position));
+                    createGroupMemberAdapter.notifyItemRemoved(position);
+                    createGroupMemberAdapter.notifyItemRangeChanged(position, createGroupMembers.size());
+                } else {
+                    createGroupMembers.add(friendList.get(position));
+                    createGroupMemberAdapter.notifyItemInserted(position);
                 }
             }
 
-            // if there is no room already, create another
-            chatRoomViewModel.createNewChatRoom(memberIds, new ChatRoomViewModel.ApiCallHandler() {
+            @Override
+            public void OnMoreOptionsClick(int position) {}
+        });
+
+        createGroupMemberAdapter.setOnClickListener(position -> {
+            createGroupMembers.remove(position);
+            createGroupMemberAdapter.notifyItemRemoved(position);
+            createGroupMemberAdapter.notifyItemRangeChanged(position, createGroupMembers.size());
+        });
+
+        popupBinding.btnAddGroup.setOnClickListener((view) -> {
+            String groupName = popupBinding.etGroupName.getText().toString();
+            if (groupName.isEmpty()) {
+                ToastUtils.showToastError(InboxActivity.this, "Enter your group name", Toast.LENGTH_SHORT);
+                return;
+            }
+
+            ArrayList<String> memberIds = new ArrayList<>();
+            memberIds.add(userId);
+            for (int i = 0; i < createGroupMembers.size(); i++) memberIds.add(createGroupMembers.get(i).getId());
+            loadingDialog.show();
+
+            chatRoomViewModel.createNewChatRoom(memberIds, true, groupName, new ChatRoomViewModel.ApiCallHandler() {
                 @Override
                 public void onSuccess() {
                     updateChatRoomUI();
                     chatRoomAdapter.notifyItemInserted(0);
                     chatRoomAdapter.notifyItemRangeChanged(0, chatRoomViewModel.getChatRooms().size());
+                    createGroupMembers.clear();
+                    popupDialog.dismiss();
+                    loadingDialog.dismiss();
                 }
 
                 @Override
                 public void onFailure(String message) {
                     ToastUtils.showToastError(InboxActivity.this, message, Toast.LENGTH_SHORT);
+                    loadingDialog.dismiss();
                 }
             });
         });
@@ -237,15 +343,32 @@ public class InboxActivity extends AppCompatActivity {
     }
 
     private void showInboxMoreOptions(View anchor) {
-        InboxMoreOptionsBinding binding = InboxMoreOptionsBinding.inflate(getLayoutInflater());
-        PopupWindow popupWindow = new PopupWindow(binding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
+        InboxMoreOptionsBinding popupBinding = InboxMoreOptionsBinding.inflate(getLayoutInflater());
+        PopupWindow popupWindow = new PopupWindow(popupBinding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
         popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popupWindow.setElevation(50);
 
-        binding.btnAddChat.setOnClickListener(view -> showAddChatRoomPopup());
+        popupBinding.btnAddChat.setOnClickListener(view -> showAddChatRoomPopup());
+        popupBinding.btnCreateGroup.setOnClickListener(view -> showAddGroupChatPopup());
 
         popupWindow.setTouchable(true);
         popupWindow.setOutsideTouchable(true);
         popupWindow.showAsDropDown(anchor, 0, 0);
+    }
+
+    private void showAddGroupChatPopup() {
+        final Dialog dialog = new Dialog(InboxActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        AddNewGroupChatPopupBinding popupBinding = AddNewGroupChatPopupBinding.inflate(getLayoutInflater());
+        dialog.setContentView(popupBinding.getRoot());
+
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialog.show();
+
+        setUpAddNewGroupChatRoom(popupBinding, dialog);
+        popupBinding.btnBack.setOnClickListener(view -> dialog.dismiss());
     }
 }
