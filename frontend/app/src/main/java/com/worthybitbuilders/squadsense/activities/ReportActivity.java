@@ -2,7 +2,6 @@ package com.worthybitbuilders.squadsense.activities;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,8 +17,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.databinding.ActivityReportBinding;
+import com.worthybitbuilders.squadsense.models.report_models.CheckBox;
 import com.worthybitbuilders.squadsense.models.report_models.StatusReportItemModel;
 import com.worthybitbuilders.squadsense.models.report_models.StatusReportModel;
+import com.worthybitbuilders.squadsense.models.report_models.TimelineModel;
 import com.worthybitbuilders.squadsense.models.report_models.UserReportItemModel;
 import com.worthybitbuilders.squadsense.models.report_models.UserReportModel;
 
@@ -30,11 +30,11 @@ import java.util.Objects;
 
 public class ReportActivity extends AppCompatActivity {
 
-    private ArrayList<Pair<String, String>> mockCheckBoxData = new ArrayList<Pair<String, String>>();
+    private CheckBox mockCheckBoxData = new CheckBox("Check box title", 1 ,3);
 
     private ArrayList<UserReportModel> mockUserData = new ArrayList<UserReportModel>();
 
-    private ArrayList<StatusReportModel> mockTimeData = new ArrayList<StatusReportModel>();
+    private TimelineModel mockTimeData = new TimelineModel("Deadlines", new TimelineModel.TimelineValuesModel(0,1,0,3));
 
     private ArrayList<StatusReportModel> mockStatusData = new ArrayList<StatusReportModel>();
 
@@ -53,30 +53,13 @@ public class ReportActivity extends AppCompatActivity {
         });
         activityBinding.reportBtnBack.setOnClickListener((view)->finish());
 
-        this.mockCheckBoxData.add(new Pair<String, String>("Checked", "2"));
-        this.mockCheckBoxData.add(new Pair<String, String>("Unchecked", "3"));
         renderCheckbox(mockCheckBoxData);
+
+        renderTime(mockTimeData);
 
         mockUserData.add(new UserReportModel("Title 1", new UserReportItemModel("1","2")));
         mockUserData.add(new UserReportModel("Title 2", new UserReportItemModel("4","3")));
         renderUser(mockUserData);
-
-        ArrayList<StatusReportItemModel> time1Arr = new ArrayList<StatusReportItemModel>();
-        time1Arr.add(new StatusReportItemModel("Done", "1"));
-        time1Arr.add(new StatusReportItemModel("Working", "2"));
-
-        mockTimeData.add(
-                new StatusReportModel("Time 1", time1Arr)
-        );
-
-        ArrayList<StatusReportItemModel> time2Arr = new ArrayList<StatusReportItemModel>();
-        time2Arr.add(new StatusReportItemModel("Start working", "1"));
-        time2Arr.add(new StatusReportItemModel("Working", "2"));
-        mockTimeData.add(
-                new StatusReportModel("Time 2", time2Arr)
-
-        );
-        renderStatus(mockTimeData, activityBinding.reportTimeLayout);
 
         ArrayList<StatusReportItemModel> status1Arr = new ArrayList<StatusReportItemModel>();
         status1Arr.add(new StatusReportItemModel("Done", "4"));
@@ -95,6 +78,25 @@ public class ReportActivity extends AppCompatActivity {
         );
         renderStatus(mockStatusData, activityBinding.reportStatusLayout);
 
+    }
+
+    private void renderTime(TimelineModel timeData){
+        View newView = inflateLayout(ReportActivity.this, R.layout.report_timeline_view, activityBinding.reportTimeLayout);
+        ((TextView) activityBinding.reportTimeTitle).setText(timeData.title);
+
+        TextView before = (TextView) newView.findViewById(R.id.timeline_report_before_count);
+        TextView during = (TextView) newView.findViewById(R.id.timeline_report_during_count);
+        TextView after = (TextView) newView.findViewById(R.id.timeline_report_after_count);
+        TextView undefined = (TextView) newView.findViewById(R.id.timeline_report_undefined_count);
+
+        before.setText(String.valueOf(timeData.values.before));
+        during.setText(String.valueOf(timeData.values.during));
+        after.setText(String.valueOf(timeData.values.after));
+        undefined.setText(String.valueOf(timeData.values.undefinedValue));
+
+
+
+        this.activityBinding.reportTimeLayout.addView(newView);
     }
 
     private void renderStatus(ArrayList<StatusReportModel> statusData, ViewGroup parent){
@@ -122,20 +124,18 @@ public class ReportActivity extends AppCompatActivity {
 
 
 
-    private void renderCheckbox(ArrayList<Pair<String, String>> CheckBoxData){
-        CheckBoxData.forEach(item-> {
-            View newView = inflateLayout(ReportActivity.this, R.layout.report_checkbox_view, activityBinding.reportCheckboxLayout);
+    private void renderCheckbox(CheckBox CheckBoxData){
+        View newView = inflateLayout(ReportActivity.this, R.layout.report_checkbox_view, activityBinding.reportCheckboxLayout);
+        TextView title = (TextView) activityBinding.reportCheckboxTitle;
 
-            TextView label = (TextView) newView.findViewById(R.id.report_checkbox_label);
-            TextView number = (TextView) newView.findViewById(R.id.report_checkbox_number);
-            ImageView icon = (ImageView) newView.findViewById(R.id.report_checkbox_icon);
+        title.setText(CheckBoxData.title);
+        TextView checked = (TextView) newView.findViewById(R.id.report_checkbox_checked_number);
+        TextView unchecked = (TextView) newView.findViewById(R.id.report_checkbox_unchecked_number);
 
-            label.setText(item.first);
-            number.setText(item.second);
-            icon.setImageResource(item.first.equals("Checked")?R.drawable.ic_checkbox_checked:R.drawable.ic_checkbox_unchecked);
+        checked.setText(String.valueOf(CheckBoxData.checked));
+        unchecked.setText(String.valueOf(CheckBoxData.unchecked));
 
-            this.activityBinding.reportCheckboxLayout.addView(newView);
-        });
+        this.activityBinding.reportCheckboxLayout.addView(newView);
     }
 
     private void renderUser(ArrayList<UserReportModel> mockUserData){
