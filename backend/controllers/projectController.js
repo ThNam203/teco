@@ -234,9 +234,33 @@ const createActivityLog = async (
 
 exports.updateACell = asyncCatch(async (req, res, next) => {
     const { userId, projectId, boardId, cellId } = req.params
+    const user = await User.findById(userId)
     const cell = req.body
 
     const updatedCell = await updateACell(cell)
+
+    // create notificaton for user who is appointed to the tasks (whose id does not equal to userId)
+    if (cell.cellType === 'CellUser') {
+        // users who were appointed to the task before update
+        const oldUsers = cell.users
+        const newUsers = updatedCell.users
+        newUsers.forEach((newUserId) => {
+            // it means a new user has been appointed the task
+            // TODO: add projectid, boardid, cellId for navigation
+            if (
+                newUserId.toString() !== userId &&
+                !oldUsers.contains(newUserId)
+            ) {
+                Notification.create({
+                    senderId: userId,
+                    receiverId: newUserId,
+                    notificationType: 'TaskAppointed',
+                    title: 'New task',
+                    content: `${user.name} has appointed you to a new task`,
+                })
+            }
+        })
+    }
 
     if (!updatedCell)
         return next(new AppError('Unable to update the cell', 500))
@@ -246,16 +270,14 @@ exports.updateACell = asyncCatch(async (req, res, next) => {
         board.cells.forEach((cellsRow, rowIdx) => {
             cellsRow.forEach((aCell, columnIdx) => {
                 if (aCell._id.toString() === cellId) {
-                    User.findById(userId).then((user) => {
-                        createActivityLog(
-                            user._id,
-                            projectId,
-                            boardId,
-                            cellId,
-                            `${user.name} has updated a cell in column ${columnIdx}, row ${rowIdx}`,
-                            ACTIVITY_LOG_TYPES.UPDATE
-                        )
-                    })
+                    createActivityLog(
+                        user._id,
+                        projectId,
+                        boardId,
+                        cellId,
+                        `${user.name} has updated a cell in column ${columnIdx}, row ${rowIdx}`,
+                        ACTIVITY_LOG_TYPES.UPDATE
+                    )
                 }
             })
         })
@@ -424,6 +446,8 @@ exports.addNewCommentToUpdateTask = asyncCatch(async (req, res, next) => {
     const { commentContent } = req.body
     const { userId, projectId, boardId, cellId, updateTaskId } = req.params
 
+    const user = await User.findById(userId)
+
     const fileLocations = []
     if (req.files) {
         req.files.forEach((file) => {
@@ -453,6 +477,18 @@ exports.addNewCommentToUpdateTask = asyncCatch(async (req, res, next) => {
         updateTaskId: updateTaskId,
         content: comment.content,
         files: fileLocations,
+    })
+
+    // notify the user who owns the update task
+    UpdateTask.findById(updateTaskId).then((updateTask) => {
+        if (updateTask.author.toString() !== userId) {
+            Notification.create({
+                senderId: userId,
+                receiverId: updateTask.author,
+                notificationType: 'Comment',
+                title: `${user.name} has commented in your update task`,
+            })
+        }
     })
 
     if (!newComment) return next(new AppError('Unable to send comment', 500))

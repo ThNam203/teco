@@ -78,6 +78,7 @@ public class SocketClient {
         callVideoIntent.putExtra("callerId", sdpOfferModel.getCallerId());
         callVideoIntent.putExtra("callerName", sdpOfferModel.getCallerName());
         callVideoIntent.putExtra("callerImagePath", sdpOfferModel.getCallerImagePath());
+        callVideoIntent.putExtra("isVideoCall", sdpOfferModel.getIsVideoCall());
         callVideoIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         application.startActivity(callVideoIntent);
     };

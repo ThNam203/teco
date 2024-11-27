@@ -35,9 +35,14 @@
         android:theme="@style/Theme.Monday_app_project"
         android:usesCleartextTraffic="true"
         tools:targetApi="s">
+        <activity
+            android:name=".activities.GroupCallVideoActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCshnX_TzNbKq_0aa8UXGUM-lk9kdjFpeo"/>
+            android:value="AIzaSyCshnX_TzNbKq_0aa8UXGUM-lk9kdjFpeo" />
+
         <activity
             android:name=".activities.MapActivity"
             android:exported="false" />
@@ -112,7 +117,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.LogInActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".activities.AddProjectActivity"
             android:exported="false" />

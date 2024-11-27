@@ -24,10 +24,4 @@ const friendSchema = new mongoose.Schema(
     }
 )
 
-friendSchema.methods.createNewNotification = (req) =>
-    this.create({
-        firstId: req.body.firstId,
-        secondId: req.body.secondId,
-    })
-
 module.exports = mongoose.model('Friend', friendSchema)

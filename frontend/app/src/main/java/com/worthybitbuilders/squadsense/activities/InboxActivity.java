@@ -70,10 +70,18 @@ public class InboxActivity extends AppCompatActivity {
         friendItemAdapter = new FriendItemAdapter(friendList, false);
         createGroupFriendAdapter = new FriendItemAdapter(friendList, false);
         createGroupMemberAdapter = new BoardItemOwnerAdapter(createGroupMembers, false);
-        loadChatRooms();
+
+        chatRoomAdapter = new ChatRoomAdapter(chatRoomViewModel.getChatRooms(), this::changeToMessagingActivity);
+        binding.rvInbox.setAdapter(chatRoomAdapter);
 
         binding.btnMore.setOnClickListener(view -> showInboxMoreOptions(view));
         binding.btnBack.setOnClickListener(view -> InboxActivity.super.onBackPressed());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadChatRooms();
     }
 
     private void showAddChatRoomPopup() {
@@ -98,9 +106,8 @@ public class InboxActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 loadingDialog.dismiss();
-                chatRoomAdapter = new ChatRoomAdapter(chatRoomViewModel.getChatRooms(), chatRoom -> changeToMessagingActivity(chatRoom));
+                chatRoomAdapter.notifyDataSetChanged();
                 updateChatRoomUI();
-                binding.rvInbox.setAdapter(chatRoomAdapter);
             }
 
             @Override
@@ -147,6 +154,8 @@ public class InboxActivity extends AppCompatActivity {
                 // check if there is already a chat room with 2 user
                 List<ChatRoom> availChatRooms = chatRoomViewModel.getChatRooms();
                 for (int i = 0; i < availChatRooms.size(); i++) {
+                    // skip group chats
+                    if (availChatRooms.get(i).isGroup()) continue;
                     List<String> chatRoomMemberIds = new ArrayList<>();
                     for (int j = 0; j < availChatRooms.get(i).getMembers().size(); j++) {
                         chatRoomMemberIds.add(availChatRooms.get(i).getMembers().get(j)._id);
@@ -310,18 +319,21 @@ public class InboxActivity extends AppCompatActivity {
         // put the chat room image
         if (chatRoom.getLogoPath() != null && !chatRoom.getLogoPath().isEmpty())
             messagingIntent.putExtra("chatRoomImage", chatRoom.getLogoPath());
-        else {
+        else if (chatRoom.isGroup()) {
+            messagingIntent.putExtra("chatRoomImage", "");
+            messagingIntent.putExtra("isGroup", true);
+        } else {
             String imagePath = null;
             String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
             // get the first user that is different from the current user to take the image
             for (int i = 0; i < chatRoom.getMembers().size(); i++) {
                 if (!Objects.equals(chatRoom.getMembers().get(i).get_id(), userId)) {
-                    imagePath = chatRoom.getMembers().get(i).getImageProfilePath();
+                    imagePath = chatRoom.getMembers().get(i).getProfileImagePath();
                     break;
                 }
             }
 
-            messagingIntent.putExtra("chatRoomImage", chatRoom.getLogoPath());
+            messagingIntent.putExtra("chatRoomImage", imagePath);
         }
 
         startActivity(messagingIntent);

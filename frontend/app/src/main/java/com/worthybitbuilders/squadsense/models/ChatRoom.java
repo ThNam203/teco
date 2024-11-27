@@ -6,12 +6,12 @@ public class ChatRoom {
     public static class Member {
         public String _id;
         public String name;
-        public String imageProfilePath;
+        public String profileImagePath;
 
-        public Member(String _id, String name, String imageProfilePath) {
+        public Member(String _id, String name, String profileImagePath) {
             this._id = _id;
             this.name = name;
-            this.imageProfilePath = imageProfilePath;
+            this.profileImagePath = profileImagePath;
         }
 
         public String get_id() {
@@ -22,8 +22,8 @@ public class ChatRoom {
             return name;
         }
 
-        public String getImageProfilePath() {
-            return imageProfilePath;
+        public String getProfileImagePath() {
+            return profileImagePath;
         }
     }
     private String _id;

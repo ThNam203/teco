@@ -20,10 +20,11 @@
             android:minHeight="48dp"
             android:src="@drawable/ic_arrow_back"
             app:tint="@color/primary_icon_color" />
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/chatRoomImage"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            app:shapeAppearanceOverlay="@style/RoundedImageView"
             tools:src="@drawable/ic_user"/>
         <TextView
             android:id="@+id/chatRoomTitle"

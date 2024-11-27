@@ -32,6 +32,7 @@ public class ChatRoomViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<List<ChatRoom>> call, @NonNull Response<List<ChatRoom>> response) {
                 if (response.isSuccessful()) {
+                    chatRooms.clear();
                     if (response.body() != null) chatRooms.addAll(response.body());
                     handler.onSuccess();
                 } else {

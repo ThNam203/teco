@@ -46,6 +46,8 @@ public class RTCClient {
     private CameraVideoCapturer videoCapturer;
     private AudioTrack localAudioTrack;
     private VideoTrack localVideoTrack;
+    // video call and voice only call
+    private boolean isVideoCall;
     // buffer the candidates and only send if caller has created an answer
     private final List<JSONObject> bufferedIceCandidates = new ArrayList<>();
     // can send buffered ice candidates
@@ -59,9 +61,10 @@ public class RTCClient {
         return canSendBufferedICECandidates;
     }
 
-    public RTCClient(Application application, String chatRoomId, PeerConnection.Observer observer) {
+    public RTCClient(Application application, String chatRoomId, boolean isVideoCall, PeerConnection.Observer observer) {
         this.application = application;
         this.chatRoomId = chatRoomId;
+        this.isVideoCall = isVideoCall;
         this.observer = observer;
         init();
     }
@@ -128,29 +131,6 @@ public class RTCClient {
         peerConnection.addStream(localStream);
     }
 
-//    private VideoCapturer createVideoCapturer() {
-//        CameraEnumerator enumerator = new Camera2Enumerator(this);
-//        final String[] deviceNames = enumerator.getDeviceNames();
-//
-//        // First, try to find front facing camera
-//        for (String deviceName : deviceNames) {
-//            if (enumerator.isFrontFacing(deviceName)) {
-//                VideoCapturer videoCapturer = enumerator.createCapturer(deviceName, null);
-//                if (videoCapturer != null) return videoCapturer;
-//            }
-//        }
-//
-//        // Front facing camera not found, try something else
-//        for (String deviceName : deviceNames) {
-//            if (!enumerator.isFrontFacing(deviceName)) {
-//                VideoCapturer videoCapturer = enumerator.createCapturer(deviceName, null);
-//                if (videoCapturer != null) return videoCapturer;
-//            }
-//        }
-//
-//        return null;
-//    }
-
     private CameraVideoCapturer getVideoCapturer(Application application) {
         Camera2Enumerator enumerator = new Camera2Enumerator(application);
         String[] deviceNames = enumerator.getDeviceNames();
@@ -164,8 +144,8 @@ public class RTCClient {
 
     public void call() {
         MediaConstraints mediaConstraints = new MediaConstraints();
-        mediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"));
         mediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"));
+        if (isVideoCall) mediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"));
 
         peerConnection.createOffer(new SdpObserver() {
             @Override
@@ -183,6 +163,7 @@ public class RTCClient {
                             String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
                             offer.put("callerId", userId);
                             offer.put("chatRoomId", chatRoomId);
+                            offer.put("isVideoCall", isVideoCall);
                             offer.put("sdp", sessionDescription.description);
                             offer.put("type", sessionDescription.type.canonicalForm());
                         } catch (JSONException e) {
@@ -303,10 +284,6 @@ public class RTCClient {
         peerConnection.addIceCandidate(candidate);
     }
 
-    public void switchCamera() {
-        videoCapturer.switchCamera(null);
-    }
-
     public void toggleAudio(boolean mute) {
         localAudioTrack.setEnabled(mute);
     }
@@ -317,7 +294,7 @@ public class RTCClient {
 
     public void endCall() {
         try {
-            videoCapturer.stopCapture();
+            if (videoCapturer != null) videoCapturer.stopCapture();
         } catch (InterruptedException ignored) {}
         peerConnection.close();
     }

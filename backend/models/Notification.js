@@ -23,6 +23,7 @@ const notificationSchema = new mongoose.Schema(
                 'Share',
                 'MemberRequest',
                 'AdminRequest',
+                'TaskAppointed',
             ],
         },
         title: {
@@ -31,7 +32,6 @@ const notificationSchema = new mongoose.Schema(
         },
         content: {
             type: String,
-            required: true,
         },
         isRead: {
             type: Boolean,
@@ -45,16 +45,5 @@ const notificationSchema = new mongoose.Schema(
         timestamps: true,
     }
 )
-
-notificationSchema.methods.createNewNotification = (req) =>
-    this.create({
-        userId: req.body.userId,
-        notificationType: req.body.notificationType,
-        title: req.body.title,
-        content: req.body.content,
-        isRead: req.body.isRead,
-        link: req.body.link,
-        timestamps: req.body.timestamps,
-    })
 
 module.exports = mongoose.model('Notification', notificationSchema)

@@ -53,7 +53,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('offerVideoCall', async (data) => {
-        const { sdp, chatRoomId, callerId } = data
+        const { sdp, chatRoomId, callerId, isVideoCall } = data
         const user = await User.findById(callerId)
         const offer = JSON.stringify({
             chatRoomId: chatRoomId,
@@ -61,7 +61,9 @@ io.on('connection', (socket) => {
             callerName: user.name,
             callerImagePath: user.profileImagePath,
             callerId: callerId,
+            isVideoCall: isVideoCall,
         })
+        console.log(isVideoCall)
 
         const chatRoom = await ChatRoom.findById(chatRoomId)
         chatRoom.members.forEach((memberId) => {

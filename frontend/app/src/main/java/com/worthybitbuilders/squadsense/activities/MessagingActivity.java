@@ -73,11 +73,11 @@ public class MessagingActivity extends AppCompatActivity {
     private MessageAdapter messageAdapter;
     private String chatRoomImagePath;
     private String chatRoomTitle;
-    private UtilService utilService = RetrofitServices.getUtilService();
-    private final int OPEN_FILE_REQUEST_CODE = 0;
-    private final int OPEN_IMAGE_REQUEST_CODE = 1;
-    private final int OPEN_CAMERA_REQUEST_CODE = 2;
-
+    private boolean isGroupChat = false;
+    private final UtilService utilService = RetrofitServices.getUtilService();
+    private final int OPEN_FILE_REQUEST_CODE = 123;
+    private final int OPEN_IMAGE_REQUEST_CODE = 1234;
+    private final int OPEN_CAMERA_REQUEST_CODE = 12345;
     private AttachFileAdapter attachFileAdapter;
     private final List<Uri> fileUris = new ArrayList<>();
 
@@ -95,6 +95,7 @@ public class MessagingActivity extends AppCompatActivity {
 
         chatRoomImagePath = getIntent.getStringExtra("chatRoomImage");
         chatRoomTitle = getIntent.getStringExtra("chatRoomTitle");
+        isGroupChat = getIntent.getBooleanExtra("isGroup", false);
         // this most likely to happen if a user navigate to this activity using a notification
         // because a notification only give the id, not chatRoomImagePath and chatRoomTitle
         if (chatRoomImagePath == null || chatRoomTitle == null) getChatRoomInformation();
@@ -107,10 +108,14 @@ public class MessagingActivity extends AppCompatActivity {
         });
         binding.rvAttach.setAdapter(attachFileAdapter);
         binding.chatRoomTitle.setText(chatRoomTitle);
+
+        int placeHolder;
+        if (isGroupChat) placeHolder = R.drawable.ic_group;
+        else placeHolder = R.drawable.ic_user;
         Glide
             .with(this)
             .load(chatRoomImagePath)
-            .placeholder(R.drawable.ic_user)
+            .placeholder(placeHolder)
             .into(binding.chatRoomImage);
 
 
@@ -140,6 +145,17 @@ public class MessagingActivity extends AppCompatActivity {
         binding.btnVideoCall.setOnClickListener(view -> {
             Intent callIntent = new Intent(this, CallVideoActivity.class);
             callIntent.putExtra("chatRoomId", chatRoomId);
+            callIntent.putExtra("isVideoCall", true);
+            callIntent.putExtra("chatRoomTitle", chatRoomTitle);
+            callIntent.putExtra("isCaller", true);
+            startActivity(callIntent);
+        });
+
+        binding.btnVoiceCall.setOnClickListener(view -> {
+            Intent callIntent = new Intent(this, CallVideoActivity.class);
+            callIntent.putExtra("chatRoomId", chatRoomId);
+            callIntent.putExtra("isVideoCall", false);
+            callIntent.putExtra("chatRoomTitle", chatRoomTitle);
             callIntent.putExtra("isCaller", true);
             startActivity(callIntent);
         });
@@ -273,13 +289,16 @@ public class MessagingActivity extends AppCompatActivity {
                     // put the chat room image
                     if (chatRoom.getLogoPath() != null && !chatRoom.getLogoPath().isEmpty())
                         MessagingActivity.this.chatRoomImagePath = chatRoom.getLogoPath();
-                    else {
+                    else if (chatRoom.isGroup()) {
+                        isGroupChat = chatRoom.isGroup();
+                        chatRoomImagePath = "";
+                    } else {
                         String imagePath = null;
                         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
                         // get the first user that is different from the current user to take the image
                         for (int i = 0; i < chatRoom.getMembers().size(); i++) {
                             if (!Objects.equals(chatRoom.getMembers().get(i).get_id(), userId)) {
-                                imagePath = chatRoom.getMembers().get(i).getImageProfilePath();
+                                imagePath = chatRoom.getMembers().get(i).getProfileImagePath();
                                 break;
                             }
                         }

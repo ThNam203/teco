@@ -5,12 +5,13 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
+    android:layout_marginVertical="8dp"
     android:background="@color/transparent"
     tools:background="@color/primary_second_color">
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/chatRoomImage"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:src="@drawable/ic_chat_room_default_icon"
         app:shapeAppearanceOverlay="@style/RoundedImageView"/>
     <LinearLayout

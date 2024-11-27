@@ -7,10 +7,11 @@
     android:orientation="horizontal"
     android:layout_marginEnd="8dp"
     android:layout_marginTop="16dp">
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivOtherAvatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        app:shapeAppearanceOverlay="@style/RoundedImageView"
         tools:src="@drawable/ic_user"
         android:contentDescription="User Icon"
         app:layout_constraintStart_toStartOf="parent"

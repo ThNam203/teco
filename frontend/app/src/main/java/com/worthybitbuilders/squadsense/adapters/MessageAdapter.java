@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.models.ChatMessage;
 import com.worthybitbuilders.squadsense.utils.CustomUtils;
@@ -77,7 +78,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
     private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
         TextView tvMessage, tvTimestamp;
-        ImageView ivProfileImage;
+        ShapeableImageView ivProfileImage;
         RecyclerView rvFiles;
 
         ReceivedMessageHolder(View itemView) {

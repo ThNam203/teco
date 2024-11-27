@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -76,13 +77,16 @@ public class ChatRoomAdapter extends RecyclerView.Adapter<ChatRoomAdapter.ChatRo
                     .load(chatRoom.getLogoPath())
                     .placeholder(R.drawable.ic_chat_room_default_icon)
                     .into(ivChatRoomImage);
-            else {
+            else if (chatRoom.isGroup()) {
+                ivChatRoomImage.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.ic_group));
+            } else {
                 String imagePath = null;
                 String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
                 // get the first user that is different from the current user to take the image
                 for (int i = 0; i < chatRoom.getMembers().size(); i++) {
                     if (!Objects.equals(chatRoom.getMembers().get(i).get_id(), userId)) {
-                        imagePath = chatRoom.getMembers().get(i).getImageProfilePath();
+                        if (chatRoom.getMembers().get(i).getProfileImagePath() != null)
+                            imagePath = chatRoom.getMembers().get(i).getProfileImagePath();
                     }
                 }
 

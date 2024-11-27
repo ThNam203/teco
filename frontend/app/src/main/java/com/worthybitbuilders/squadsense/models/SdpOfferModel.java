@@ -6,13 +6,15 @@ public class SdpOfferModel {
     private final String callerId;
     private final String callerName;
     private final String callerImagePath;
+    private final boolean isVideoCall;
 
-    public SdpOfferModel(String chatRoomId, String sdp, String callerId, String callerName, String callerImagePath) {
+    public SdpOfferModel(String chatRoomId, String sdp, String callerId, String callerName, String callerImagePath, boolean isVideoCall) {
         this.chatRoomId = chatRoomId;
         this.sdp = sdp;
         this.callerId = callerId;
         this.callerName = callerName;
         this.callerImagePath = callerImagePath;
+        this.isVideoCall = isVideoCall;
     }
 
     public String getChatRoomId() {
@@ -33,5 +35,9 @@ public class SdpOfferModel {
 
     public String getCallerImagePath() {
         return callerImagePath;
+    }
+
+    public boolean getIsVideoCall() {
+        return isVideoCall;
     }
 }

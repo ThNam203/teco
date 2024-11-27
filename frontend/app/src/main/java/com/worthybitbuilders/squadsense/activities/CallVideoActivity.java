@@ -5,13 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.telecom.Call;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -22,7 +18,6 @@ import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.databinding.ActivityCallVideoBinding;
 import com.worthybitbuilders.squadsense.models.IceCandidateModel;
 import com.worthybitbuilders.squadsense.utils.RTCClient;
-import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.SocketClient;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 
@@ -36,10 +31,10 @@ import org.webrtc.RtpReceiver;
 import org.webrtc.SessionDescription;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -47,7 +42,6 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class CallVideoActivity extends AppCompatActivity {
-    private final String TAG = "CallVideoActivity";
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     private ActivityCallVideoBinding binding;
     // chat room and video call use the same id
@@ -55,10 +49,12 @@ public class CallVideoActivity extends AppCompatActivity {
     private RTCClient rtcClient = null;
     private final Socket socket = SocketClient.getInstance();
     private final Gson gson = new Gson();
-    private boolean isMute = false;
+    // video call and voice only call
+    private boolean isVideoCall;
     private boolean isCameraOn = true;
     private boolean isCaller;
     private boolean isAudioOn = true;
+    private int callTimeCounter = 0;
     private MediaPlayer mediaPlayer;
 
     // Prepare the MediaPlayer with the media file
@@ -83,9 +79,11 @@ public class CallVideoActivity extends AppCompatActivity {
         this.chatRoomId = getIntent.getStringExtra("chatRoomId");
         // determine if this user init the call
         this.isCaller = getIntent.getBooleanExtra("isCaller", false);
+        this.isVideoCall = getIntent.getBooleanExtra("isVideoCall", true);
+
         if (isCaller) {
-            setIncomingCallLayoutGone();
-            setCallLayoutVisible();
+            binding.incomingCallUserName.setText(getIntent.getStringExtra("chatRoomTitle"));
+            setUpCallLayout();
             socket.on("callDeny", args -> {
                 runOnUiThread(() -> {
                     ToastUtils.showToastError(CallVideoActivity.this, "Call denied", Toast.LENGTH_LONG);
@@ -109,8 +107,7 @@ public class CallVideoActivity extends AppCompatActivity {
                 rtcClient.onRemoteSessionReceived(session);
                 rtcClient.answer();
                 runOnUiThread(() -> {
-                    setIncomingCallLayoutGone();
-                    setCallLayoutVisible();
+                    setUpCallLayout();
                     binding.remoteViewLoading.setVisibility(View.GONE);
                 });
 
@@ -138,18 +135,19 @@ public class CallVideoActivity extends AppCompatActivity {
                 isCameraOn = true;
                 binding.videoButton.setImageResource(R.drawable.ic_videocam);
             }
+
             rtcClient.toggleCamera(isCameraOn);
         });
 
-        binding.audioOutputButton.setOnClickListener(view -> {
+        binding.micButton.setOnClickListener(view -> {
             if (isAudioOn) {
                 isAudioOn = false;
                 rtcClient.toggleAudio(false);
-                binding.audioOutputButton.setImageResource(R.drawable.ic_audio_off);
+                binding.micButton.setImageResource(R.drawable.ic_microphone_off);
             } else {
                 isAudioOn = true;
                 rtcClient.toggleAudio(true);
-                binding.audioOutputButton.setImageResource(R.drawable.ic_audio_on);
+                binding.micButton.setImageResource(R.drawable.ic_microphone);
             }
         });
 
@@ -167,9 +165,11 @@ public class CallVideoActivity extends AppCompatActivity {
     private void doWorkIfPermissionsAccepted() {
         String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
         if (EasyPermissions.hasPermissions(this, permissions)) {
-            rtcClient = new RTCClient(getApplication(), chatRoomId, peerConnectionObserver);
-            rtcClient.initializeSurfaceView(binding.localView);
-            rtcClient.initializeSurfaceView(binding.remoteView);
+            rtcClient = new RTCClient(getApplication(), chatRoomId, isVideoCall, peerConnectionObserver);
+            if (isVideoCall) {
+                rtcClient.initializeSurfaceView(binding.localView);
+                rtcClient.initializeSurfaceView(binding.remoteView);
+            }
             rtcClient.startLocalVideo(binding.localView);
             if (isCaller) {
                 rtcClient.call();
@@ -200,20 +200,18 @@ public class CallVideoActivity extends AppCompatActivity {
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
+    private void setUpCallLayout() {
+        if (isVideoCall) {
+            binding.videoCallLayout.setVisibility(View.VISIBLE);
+            binding.incomingCallLayout.setVisibility(View.GONE);
+        }
+        else {
+            binding.videoButton.setVisibility(View.GONE);
+            binding.videoCallLayout.setVisibility(View.GONE);
+        }
 
-    private void setIncomingCallLayoutGone() {
-        binding.incomingCallLayout.setVisibility(View.GONE);
-    }
-    private void setIncomingCallLayoutVisible() {
-        binding.incomingCallLayout.setVisibility(View.VISIBLE);
-    }
-
-    private void setCallLayoutGone() {
-        binding.callLayout.setVisibility(View.GONE);
-    }
-
-    private void setCallLayoutVisible() {
-        binding.callLayout.setVisibility(View.VISIBLE);
+        binding.incomingControls.setVisibility(View.GONE);
+        binding.callControls.setVisibility(View.VISIBLE);
     }
 
     private void setIncomingCallUserInfo(Intent getIntent) {
@@ -221,16 +219,26 @@ public class CallVideoActivity extends AppCompatActivity {
         String callerImagePath = getIntent.getStringExtra("callerImagePath");
         binding.incomingCallUserName.setText(callerName);
         Glide
-                .with(CallVideoActivity.this)
-                .load(callerImagePath)
-                .placeholder(R.drawable.ic_user)
-                .into(binding.incomingUserCallAvatar);
+            .with(CallVideoActivity.this)
+            .load(callerImagePath)
+            .placeholder(R.drawable.ic_user)
+            .into(binding.incomingUserCallAvatar);
     }
 
-    private PeerConnection.Observer peerConnectionObserver = new PeerConnection.Observer() {
+    private final PeerConnection.Observer peerConnectionObserver = new PeerConnection.Observer() {
         @Override
         public void onConnectionChange(PeerConnection.PeerConnectionState newState) {
-            Log.d("CallVideoActivity", "onConnectionChange" + newState.name());
+            Log.d("CallVideoActivity", "onConnectionChange" + newState.toString());
+            if (newState == PeerConnection.PeerConnectionState.DISCONNECTED) {
+                runOnUiThread(() -> {
+                    ToastUtils.showToastSuccess(CallVideoActivity.this, "Call ended", Toast.LENGTH_SHORT);
+                    finish();
+                });
+            }
+            // TODO: i dont know why but at the time im working, this never got called so i moved to IceConnectionState
+//            else if (newState == PeerConnection.PeerConnectionState.CONNECTED) {
+//                startCallTimer();
+//            }
         }
 
         @Override
@@ -241,7 +249,14 @@ public class CallVideoActivity extends AppCompatActivity {
         @Override
         public void onIceConnectionChange(PeerConnection.IceConnectionState iceConnectionState) {
             Log.d("CallVideoActivity", "onIceConnectionChange" + iceConnectionState.toString());
-            if (iceConnectionState == PeerConnection.IceConnectionState.DISCONNECTED) finish();
+            if (iceConnectionState == PeerConnection.IceConnectionState.DISCONNECTED) {
+                runOnUiThread(() -> {
+                    ToastUtils.showToastSuccess(CallVideoActivity.this, "Call ended", Toast.LENGTH_SHORT);
+                    finish();
+                });
+            } else if (iceConnectionState == PeerConnection.IceConnectionState.CONNECTED) {
+                startCallTimer();
+            }
         }
 
         @Override
@@ -330,4 +345,25 @@ public class CallVideoActivity extends AppCompatActivity {
         rtcClient.onRemoteSessionReceived(session);
         runOnUiThread(() -> binding.remoteViewLoading.setVisibility(View.GONE));
     };
+
+    public void startCallTimer() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(() -> {
+                    callTimeCounter += 1;
+                    int hours = callTimeCounter / 3600;
+                    int minutes = (callTimeCounter % 3600) / 60;
+                    int seconds = callTimeCounter % 60;
+
+                    if (hours == 0) {
+                        binding.callTimer.setText(String.format(Locale.US, "%02d:%02d", minutes, seconds));
+                    } else {
+                        binding.callTimer.setText(String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds));
+                    }
+                });
+            }
+        }, 0, 1000);
+    }
 }
