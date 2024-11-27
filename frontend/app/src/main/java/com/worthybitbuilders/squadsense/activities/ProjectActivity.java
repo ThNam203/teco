@@ -767,11 +767,8 @@ public class ProjectActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(int position) {
-                if (position == projectActivityViewModel.getProjectModel().getChosenPosition()) {
-                    dialog.dismiss();
-                    return;
-                }
-
+                listSelectedCollection.clear();
+                activityBinding.emptyFilterResult.setVisibility(View.GONE);
                 projectActivityViewModel.getProjectModel().setChosenPosition(position);
                 BoardContentModel newContent = projectActivityViewModel.getProjectModel().getBoards().get(position);
                 boardViewModel.setBoardContent(newContent, projectActivityViewModel.getProjectModel().get_id(), boardAdapter);
@@ -789,6 +786,7 @@ public class ProjectActivity extends AppCompatActivity {
             }
             dialog.dismiss();
         });
+
         binding.btnNewBoard.setOnClickListener(view -> {
             Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
             loadingDialog.show();
@@ -912,7 +910,7 @@ public class ProjectActivity extends AppCompatActivity {
                 List<String> newList = new ArrayList<>(selectedCollection);
                 listSelectedCollection.add(newList);
             }
-            boardViewModel.filterRow(listSelectedCollection, boardAdapter);
+            boardViewModel.filterRow(listSelectedCollection, boardAdapter, activityBinding);
             dialog.dismiss();
         });
 

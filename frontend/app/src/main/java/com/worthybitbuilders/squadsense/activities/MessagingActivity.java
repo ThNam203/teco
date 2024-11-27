@@ -142,6 +142,12 @@ public class MessagingActivity extends AppCompatActivity {
         binding.rvMessage.setLayoutManager(new LinearLayoutManager(this));
         binding.rvMessage.setAdapter(messageAdapter);
 
+        // TODO: add group call functionality
+        if (isGroupChat) {
+            binding.btnVideoCall.setVisibility(View.GONE);
+            binding.btnVoiceCall.setVisibility(View.GONE);
+        }
+
         binding.btnVideoCall.setOnClickListener(view -> {
             Intent callIntent = new Intent(this, CallVideoActivity.class);
             callIntent.putExtra("chatRoomId", chatRoomId);

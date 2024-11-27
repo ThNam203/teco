@@ -1,10 +1,14 @@
 package com.worthybitbuilders.squadsense.viewmodels;
 
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.worthybitbuilders.squadsense.activities.ProjectActivity;
 import com.worthybitbuilders.squadsense.adapters.TableViewAdapter;
+import com.worthybitbuilders.squadsense.databinding.ActivityProjectBinding;
 import com.worthybitbuilders.squadsense.factory.BoardItemFactory;
 import com.worthybitbuilders.squadsense.models.NewColumnRequestModel;
 import com.worthybitbuilders.squadsense.models.NewRowRequestModel;
@@ -136,6 +140,8 @@ public class BoardViewModel extends ViewModel {
     }
 
     public void setBoardContent(BoardContentModel content, String projectId, TableViewAdapter tableViewAdapter) {
+        sortState = null;
+        sortingColumnPosition = -1;
         setBoardTitle(content.getBoardTitle());
         setProjectId(projectId);
         setBoardId(content.get_id());
@@ -421,7 +427,7 @@ public class BoardViewModel extends ViewModel {
         adapter.notifyDataSetChanged();
     }
 
-    public void filterRow(List<List<String>> filterCriteria, TableViewAdapter adapter) {
+    public void filterRow(List<List<String>> filterCriteria, TableViewAdapter adapter, ActivityProjectBinding binding) {
         // if we are filtering, then we remove the sort column data
         sortingColumnPosition = -1;
 
@@ -432,7 +438,9 @@ public class BoardViewModel extends ViewModel {
                 break;
             }
         }
+
         if (!needToFilter) {
+            binding.emptyFilterResult.setVisibility(View.VISIBLE);
             adapter.setAllItems(
                     mColumnHeaderModelList,
                     mRowHeaderModelList,
@@ -442,7 +450,7 @@ public class BoardViewModel extends ViewModel {
             return;
         }
 
-        List<Integer> includeRowPositions = new ArrayList<>();
+        List<Integer> excludeRowPositions = new ArrayList<>();
 
         // -1 is to exclude the "new column" and "new row"
         for (int rowPos = 0; rowPos < mRowHeaderModelList.size() - 1; rowPos++) {
@@ -451,8 +459,7 @@ public class BoardViewModel extends ViewModel {
                 if (criteria.size() == 0) continue;
 
                 BoardBaseItemModel itemModel = mCellModelList.get(rowPos).get(colPos);
-                // in an entire row, if one cell MEETS the criteria then we add it and no need to check remaining cells
-                boolean isAdded = false;
+                boolean isRemoved = false;
                 switch (itemModel.getCellType()) {
                     case "CellStatus":
                     case "CellText":
@@ -461,9 +468,9 @@ public class BoardViewModel extends ViewModel {
                     case "CellDate":
                     case "CellCheckbox":
                     case "CellMap":
-                        if (criteria.contains(itemModel.getContent())) {
-                            includeRowPositions.add(rowPos);
-                            isAdded = true;
+                        if (!criteria.contains(itemModel.getContent())) {
+                            excludeRowPositions.add(rowPos);
+                            isRemoved = true;
                         }
                         break;
                     case "CellUser":
@@ -472,28 +479,34 @@ public class BoardViewModel extends ViewModel {
                             userIds.add(((BoardUserItemModel) itemModel).getUsers().get(i).getId());
                         }
 
+                        boolean isContained = false;
                         for (String userIdCriteria : criteria) {
                             for (String userId : userIds) {
                                 if (userIdCriteria.equals(userId)) {
-                                    includeRowPositions.add(rowPos);
-                                    isAdded = true;
+                                    isContained = true;
                                     break;
                                 }
                             }
                         }
+
+                        if (!isContained) {
+                            excludeRowPositions.add(rowPos);
+                            isRemoved = true;
+                        }
+
                         break;
                     default:
                         throw new RuntimeException();
                 }
 
-                if (isAdded) break;
+                if (isRemoved) break;
             }
         }
 
         List<BoardRowHeaderModel> filteredRows = new ArrayList<>();
         List<List<BoardBaseItemModel>> filteredCells = new ArrayList<>();
-        for (int i = 0; i < mRowHeaderModelList.size(); i++) {
-            if (includeRowPositions.contains(i)) {
+        for (int i = 0; i < mRowHeaderModelList.size() - 1; i++) {
+            if (!excludeRowPositions.contains(i)) {
                 filteredRows.add(mRowHeaderModelList.get(i));
                 filteredCells.add(new ArrayList<>(mCellModelList.get(i)));
             }
@@ -505,6 +518,9 @@ public class BoardViewModel extends ViewModel {
         for (int i = 0; i < filteredCells.size(); i++) {
             filteredCells.get(i).remove(filteredCells.get(i).size() - 1);
         }
+
+        if (filteredRows.size() == 0) binding.emptyFilterResult.setVisibility(View.VISIBLE);
+        else binding.emptyFilterResult.setVisibility(View.GONE);
 
         adapter.setAllItems(
                 filteredColumns,

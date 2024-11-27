@@ -242,14 +242,14 @@ exports.updateACell = asyncCatch(async (req, res, next) => {
     // create notificaton for user who is appointed to the tasks (whose id does not equal to userId)
     if (cell.cellType === 'CellUser') {
         // users who were appointed to the task before update
-        const oldUsers = cell.users
-        const newUsers = updatedCell.users
-        newUsers.forEach((newUserId) => {
+        const oldUserIds = cell.users.map((u) => u._id)
+        const newUserIds = updatedCell.users.map((u) => u._id)
+        newUserIds.forEach((newUserId) => {
             // it means a new user has been appointed the task
             // TODO: add projectid, boardid, cellId for navigation
             if (
                 newUserId.toString() !== userId &&
-                !oldUsers.contains(newUserId)
+                !oldUserIds.contains(newUserId)
             ) {
                 Notification.create({
                     senderId: userId,

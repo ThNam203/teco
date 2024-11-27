@@ -63,7 +63,6 @@ io.on('connection', (socket) => {
             callerId: callerId,
             isVideoCall: isVideoCall,
         })
-        console.log(isVideoCall)
 
         const chatRoom = await ChatRoom.findById(chatRoomId)
         chatRoom.members.forEach((memberId) => {

@@ -59,13 +59,6 @@ public class MoreFragment extends Fragment {
         loadingDialog = DialogUtils.GetLoadingDialog(getContext());
 
         LoadData();
-
-        //set onclick of buttons here
-        binding.btnLanguage.setOnClickListener(view -> {
-            ActivityUtils.switchToActivity(getContext(), MapActivity.class);
-        });
-        binding.btnNotificationSettings.setOnClickListener(view -> btnNotificationSetting_showActivity());
-        binding.btnTheme.setOnClickListener(view -> btnTheme_showPopup());
         binding.btnInbox.setOnClickListener(view -> btnInbox_showActivity());
         binding.profile.setOnClickListener(view -> btnProfile_showActivity());
         binding.btnFriend.setOnClickListener(new View.OnClickListener() {

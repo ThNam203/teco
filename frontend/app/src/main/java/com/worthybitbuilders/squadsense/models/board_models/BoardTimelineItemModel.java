@@ -28,18 +28,20 @@ public class BoardTimelineItemModel extends BoardBaseItemModel {
     @Override
     public String getContent() {
         String finalContent = "";
+        int startMonthToConvert = startMonth - 1;
+        int endMonthToConvert = endMonth - 1;
         if (startDay != -1 && startMonth != -1 && startYear != -1) {
             if (startDay == endDay && startMonth == endMonth && startYear == endYear) {
 
             } else if (startMonth == endMonth && startYear == endYear)
                 finalContent += String.format(Locale.US, "%d", startDay);
             else if (startYear == endYear) {
-                finalContent += String.format(Locale.US, "%s %d", CustomUtils.convertIntToMonth(startMonth), startDay);
-            } else finalContent += String.format(Locale.US, "%s %d, %d", CustomUtils.convertIntToMonth(startMonth), startDay, startYear);
+                finalContent += String.format(Locale.US, "%s %d", CustomUtils.convertIntToMonth(startMonthToConvert), startDay);
+            } else finalContent += String.format(Locale.US, "%s %d, %d", CustomUtils.convertIntToMonth(startMonthToConvert), startDay, startYear);
 
             if (finalContent.isEmpty())
-                finalContent += String.format(Locale.US, "%s %d, %d", CustomUtils.convertIntToMonth(endMonth), endDay, endYear);
-            else finalContent += String.format(Locale.US, " - %s %d, %d", CustomUtils.convertIntToMonth(endMonth), endDay, endYear);
+                finalContent += String.format(Locale.US, "%s %d, %d", CustomUtils.convertIntToMonth(endMonthToConvert), endDay, endYear);
+            else finalContent += String.format(Locale.US, " - %s %d, %d", CustomUtils.convertIntToMonth(endMonthToConvert), endDay, endYear);
         }
 
         return finalContent;
