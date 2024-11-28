@@ -6,10 +6,10 @@ import java.util.List;
 
 public class StatusReportModel {
     public String title;
-    public ArrayList<StatusReportItemModel> status;
+    public ArrayList<StatusReportItemModel> statuses;
 
     public StatusReportModel(String title, ArrayList<StatusReportItemModel> status){
         this.title = title;
-        this.status = status;
+        this.statuses = status;
     }
 }

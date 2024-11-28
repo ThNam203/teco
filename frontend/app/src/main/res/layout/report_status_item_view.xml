@@ -3,7 +3,9 @@
     android:id="@+id/status_report_item_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp">
+    android:layout_marginTop="10dp"
+    android:background="#FFFFFF"
+    android:gravity="center">
 
     <TextView
         android:id="@+id/status_report_label1"
@@ -15,7 +17,7 @@
         android:layout_weight="1"
         android:width="50dp"
         android:background="@drawable/background_btn_corner"
-        android:backgroundTint="@color/red"
+        android:backgroundTintMode="src_atop"
         android:gravity="center"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"

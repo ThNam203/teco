@@ -3,164 +3,183 @@
     android:id="@+id/report_timeline_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
     android:orientation="vertical"
-    android:paddingLeft="30dp"
+    android:paddingLeft="15dp"
     android:paddingBottom="5dp">
 
-    <LinearLayout
-        android:id="@+id/timeline_report_before_layout"
+    <TextView
+        android:id="@+id/report_timeline_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/timline_report_label1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginBottom="5dp"
-            android:layout_weight="1"
-            android:width="50dp"
-            android:background="@drawable/background_btn_corner"
-            android:backgroundTint="@color/green"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Before"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/small_textsize"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/timeline_report_before_count"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="1"
-            android:textAlignment="center"
-            android:textSize="@dimen/normal_textsize"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/timeline_report_during_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/timeline_report_label2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginBottom="5dp"
-            android:layout_weight="1"
-            android:width="50dp"
-            android:background="@drawable/background_btn_corner"
-            android:backgroundTint="@color/orange"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="During"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/small_textsize"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/timeline_report_during_count"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="1"
-            android:textAlignment="center"
-            android:textSize="@dimen/normal_textsize"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/timeline_report_after_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/timeline_report_label3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginBottom="5dp"
-            android:layout_weight="1"
-            android:width="50dp"
-            android:background="@drawable/background_btn_corner"
-            android:backgroundTint="@color/red"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="After"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/small_textsize"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/timeline_report_after_count"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="1"
-            android:textAlignment="center"
-            android:textSize="@dimen/normal_textsize"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/timeline_report_undefined_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center">
+        android:text="Timeline"
+        android:textColor="@color/black"
+        android:textSize="@dimen/normal_textsize" />
 
-        <TextView
-            android:id="@+id/status_report_label1"
-            android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/report_timeline_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/timeline_report_before_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginBottom="5dp"
-            android:layout_weight="1"
-            android:width="50dp"
-            android:background="@drawable/background_btn_corner"
-            android:backgroundTint="@color/grey"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Undefined"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/small_textsize"
-            android:textStyle="bold" />
+            android:layout_marginTop="10dp"
+            android:gravity="center">
 
-        <TextView
-            android:id="@+id/timeline_report_undefined_count"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="1"
-            android:textAlignment="center"
-            android:textSize="@dimen/normal_textsize"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/report_timeline_before_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:width="50dp"
+                android:background="@drawable/background_btn_corner"
+                android:backgroundTint="@color/green"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="Before"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/small_textsize"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/report_timeline_before_count"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="1"
+                android:textAlignment="center"
+                android:textSize="@dimen/normal_textsize"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/timeline_report_during_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/report_timeline_during_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:width="50dp"
+                android:background="@drawable/background_btn_corner"
+                android:backgroundTint="@color/orange"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="During"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/small_textsize"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/report_timeline_during_count"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="1"
+                android:textAlignment="center"
+                android:textSize="@dimen/normal_textsize"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/timeline_report_after_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/report_timeline_after_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:width="50dp"
+                android:background="@drawable/background_btn_corner"
+                android:backgroundTint="@color/red"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="After"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/small_textsize"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/report_timeline_after_count"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="1"
+                android:textAlignment="center"
+                android:textSize="@dimen/normal_textsize"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/timeline_report_undefined_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/report_timeline_undefined_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:width="50dp"
+                android:background="@drawable/background_btn_corner"
+                android:backgroundTint="@color/grey"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="Undefined"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/small_textsize"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/report_timeline_undefined_count"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="1"
+                android:textAlignment="center"
+                android:textSize="@dimen/normal_textsize"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

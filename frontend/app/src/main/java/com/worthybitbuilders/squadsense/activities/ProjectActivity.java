@@ -270,6 +270,7 @@ public class ProjectActivity extends AppCompatActivity {
         activityBinding.btnBack.setOnClickListener((view) -> onBackPressed());
         activityBinding.btnReport.setOnClickListener((view)->{
             Intent reportIntent = new Intent(this, ReportActivity.class);
+            reportIntent.putExtra("projectId",projectActivityViewModel.getProjectId());
             this.startActivity(reportIntent);
         });
         createNewProjectIfRequest();
