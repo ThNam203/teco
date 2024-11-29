@@ -100,25 +100,25 @@ exports.getReportForProject = asyncCatch(async (req, res, next) => {
                     values: textValues,
                 })
             } else if (col.columnType === BOARD_COLUMN_TYPES.USER) {
-                const userCounts = {}
+                const assigments = []
 
-                board.cells.forEach((row) => {
+                board.cells.forEach((row, rowIndex) => {
+                    const rowAssignment = {
+                        label: board.rowCells[rowIndex].title,
+                        assignee: [],
+                    }
                     const cell = row[colIndex]
                     if (cell && Array.isArray(cell.users)) {
                         cell.users.forEach((user) => {
-                            userCounts[user.id] = userCounts[user.id] || {
-                                count: 0,
-                                user,
-                            }
-
-                            userCounts[user.id].count += 1
+                            rowAssignment.assignee.push(user.name)
                         })
                     }
+                    assigments.push(rowAssignment)
                 })
 
                 newReportForBoard.user.push({
                     title: col.title,
-                    users: userCounts,
+                    assigments: assigments,
                 })
             } else if (col.columnType === BOARD_COLUMN_TYPES.STATUS) {
                 const statusCounts = {}
