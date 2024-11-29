@@ -315,22 +315,41 @@ exports.createAndGetNewBoard = asyncCatch(async (req, res, next) => {
 
 exports.updateBoard = asyncCatch(async (req, res, next) => {
     const { userId, projectId, boardId } = req.params
-    const { boardTitle } = req.body.nameValuePairs
+    const { boardTitle, deadlineColumnIndex } = req.body.nameValuePairs
 
-    const board = await Board.findByIdAndUpdate(boardId, {
-        boardTitle: boardTitle,
-    })
+    if (boardTitle) {
+        const board = await Board.findByIdAndUpdate(boardId, {
+            boardTitle: boardTitle,
+        })
 
-    User.findById(userId).then((user) => {
-        createActivityLog(
-            user._id,
-            projectId,
-            boardId,
-            null,
-            `${user.name} has renamed "${board.boardTitle}" board to "${boardTitle}"`,
-            ACTIVITY_LOG_TYPES.CHANGE
-        )
-    })
+        User.findById(userId).then((user) => {
+            createActivityLog(
+                user._id,
+                projectId,
+                boardId,
+                null,
+                `${user.name} has renamed "${board.boardTitle}" board to "${boardTitle}"`,
+                ACTIVITY_LOG_TYPES.CHANGE
+            )
+        })
+    }
+
+    if (deadlineColumnIndex !== undefined) {
+        const board = await Board.findByIdAndUpdate(boardId, {
+            deadlineColumnIndex: deadlineColumnIndex,
+        })
+
+        User.findById(userId).then((user) => {
+            createActivityLog(
+                user._id,
+                projectId,
+                boardId,
+                null,
+                `${user.name} has marked column "${deadlineColumnIndex}" as deadline in ${board.boardTitle} board`,
+                ACTIVITY_LOG_TYPES.CHANGE
+            )
+        })
+    }
 
     res.status(204).end()
 })
@@ -374,21 +393,6 @@ exports.deleteRow = asyncCatch(async (req, res, next) => {
     )
     await board.save()
     res.status(200).json(board)
-})
-
-exports.deleteColumn = asyncCatch(async (req, res, next) => {
-    const { boardId, deletedColumnPosition } = req.body
-    const board = await Board.findById(boardId)
-    board.columnCells.splice(deletedColumnPosition, 1)
-
-    await Promise.all(
-        board.cells.map(async (cellRow) => {
-            const cellId = cellRow.splice(deletedColumnPosition, 1)[0]
-            await cellModels.CellBase.findByIdAndDelete(cellId)
-        })
-    )
-
-    res.status(204).end()
 })
 
 exports.addNewUpdateTask = asyncCatch(async (req, res, next) => {
@@ -687,6 +691,14 @@ exports.removeColumn = asyncCatch(async (req, res, next) => {
     const board = await Board.findById(boardId).populate('cells', 'Cell')
     if (!board) throw new AppError('Unable to find board', 404)
 
+    if (board.deadlineColumnIndex.toString() === columnPosition) {
+        board.deadlineColumnIndex = -1
+        board.markModified('deadlineColumnIndex')
+    } else if (board.deadlineColumnIndex.toString() > columnPosition) {
+        board.deadlineColumnIndex -= 1
+        board.markModified('deadlineColumnIndex')
+    }
+
     const deletedColumn = board.columnCells.splice(columnPosition, 1)[0]
     board.markModified('columnCells')
 
@@ -709,7 +721,8 @@ exports.removeColumn = asyncCatch(async (req, res, next) => {
         )
     })
 
-    res.status(204).end()
+    // return the curernt deadline column index
+    res.status(200).json(board.deadlineColumnIndex)
 })
 
 exports.updateColumn = asyncCatch(async (req, res, next) => {

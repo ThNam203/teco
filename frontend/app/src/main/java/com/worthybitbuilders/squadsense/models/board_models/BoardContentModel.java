@@ -7,16 +7,18 @@ public class BoardContentModel {
     private String boardTitle;
     private List<BoardRowHeaderModel> rowCells;
     private List<BoardColumnHeaderModel> columnCells;
+    private Integer deadlineColumnIndex = null;
     // TODO: COLUMN SHOULD HOLD THE COLUMN TYPE, NOT THE CELL
     private List<List<BoardBaseItemModel>> cells;
 
     /** This constructor is used for when data is fetched from server */
-    public BoardContentModel(String _id, String boardTitle, List<BoardRowHeaderModel> rowCells, List<BoardColumnHeaderModel> columnCells, List<List<BoardBaseItemModel>> cells) {
+    public BoardContentModel(String _id, String boardTitle, List<BoardRowHeaderModel> rowCells, List<BoardColumnHeaderModel> columnCells, List<List<BoardBaseItemModel>> cells, int deadlineColumnIndex) {
         this._id = _id;
         this.boardTitle = boardTitle;
         this.rowCells = rowCells;
         this.columnCells = columnCells;
         this.cells = cells;
+        this.deadlineColumnIndex = deadlineColumnIndex;
     }
 
     /**
@@ -29,6 +31,7 @@ public class BoardContentModel {
         this.rowCells = rowCells;
         this.columnCells = columnCells;
         this.cells = cells;
+        this.deadlineColumnIndex = null;
     }
 
     public String get_id() {
@@ -65,5 +68,13 @@ public class BoardContentModel {
 
     public void setCells(List<List<BoardBaseItemModel>> cells) {
         this.cells = cells;
+    }
+
+    public Integer getDeadlineColumnIndex() {
+        return deadlineColumnIndex;
+    }
+
+    public void setDeadlineColumnIndex(Integer deadlineColumnIndex) {
+        this.deadlineColumnIndex = deadlineColumnIndex;
     }
 }

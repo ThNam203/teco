@@ -176,6 +176,27 @@ public class ProjectActivityViewModel extends ViewModel {
         });
     }
 
+    public void updateBoardDeadlineColumnIndex(int boardPosition, int deadlineColumnIndex, ApiCallHandlers handlers) throws JSONException {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        JSONObject data = new JSONObject();
+        data.put("deadlineColumnIndex", deadlineColumnIndex);
+        Call<Void> call = projectService.updateBoard(userId, getProjectId(), getProjectModel().getBoards().get(boardPosition).get_id(), data);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    getProjectModel().getBoards().get(boardPosition).setDeadlineColumnIndex(deadlineColumnIndex);
+                    handlers.onSuccess();
+                } else handlers.onFailure(response.message());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                handlers.onFailure(t.getMessage());
+            }
+        });
+    }
+
     public void removeBoard(int boardPosition, ApiCallHandlers handlers) {
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         Call<Void> call = projectService.removeBoard(userId, getProjectId(), getProjectModel().getBoards().get(boardPosition).get_id());

@@ -93,7 +93,7 @@ public interface ProjectService {
     Call<List<String>> addNewColumnToRemote(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Body NewColumnRequestModel newColumn);
 
     @DELETE("{userId}/project/{projectId}/board/{boardId}/column/{columnPosition}")
-    Call<Void> deleteAColumn(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("columnPosition") int columnPosition);
+    Call<Integer> deleteAColumn(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("columnPosition") int columnPosition);
 
     @PUT("{userId}/project/{projectId}/board/{boardId}/column/{columnPosition}")
     Call<Void> updateAColumn(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("columnPosition") int columnPosition, @Body JSONObject newDescription);

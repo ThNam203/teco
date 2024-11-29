@@ -156,9 +156,9 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
         } else if (holder instanceof BoardCheckboxItemViewHolder) {
             ((BoardCheckboxItemViewHolder) holder).setItemModel((BoardCheckboxItemModel) cellItemModel, columnPosition, rowPosition);
         } else if (holder instanceof BoardDateItemViewHolder) {
-            ((BoardDateItemViewHolder) holder).setItemModel((BoardDateItemModel) cellItemModel, columnTitle, columnPosition, rowPosition);
+            ((BoardDateItemViewHolder) holder).setItemModel((BoardDateItemModel) cellItemModel, columnTitle, columnPosition, rowPosition, boardViewModel.getDeadlineColumnIndex());
         } else if (holder instanceof BoardTimelineItemViewHolder) {
-            ((BoardTimelineItemViewHolder) holder).setItemModel((BoardTimelineItemModel) cellItemModel, columnTitle, columnPosition, rowPosition);
+            ((BoardTimelineItemViewHolder) holder).setItemModel((BoardTimelineItemModel) cellItemModel, columnTitle, columnPosition, rowPosition, boardViewModel.getDeadlineColumnIndex());
         } else if (holder instanceof BoardMapItemViewHolder) {
             ((BoardMapItemViewHolder) holder).setItemModel((BoardMapItemModel) cellItemModel, columnTitle, columnPosition, rowPosition);
         }

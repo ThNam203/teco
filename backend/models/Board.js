@@ -48,6 +48,10 @@ const boardSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    deadlineColumnIndex: {
+        type: Number,
+        default: -1,
+    },
     rowCells: [rowCellModel],
     columnCells: [columnCellModel],
     cells: [[{ type: mongoose.Schema.Types.ObjectId, ref: 'Cell' }]],

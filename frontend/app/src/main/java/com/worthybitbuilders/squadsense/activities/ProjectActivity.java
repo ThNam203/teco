@@ -281,6 +281,65 @@ public class ProjectActivity extends AppCompatActivity {
             else DrawableCompat.setTint(binding.btnSortDescContainer.getBackground(), ContextCompat.getColor(ProjectActivity.this, R.color.transparent));
         }
 
+        if (headerModel.getColumnType() == BoardColumnHeaderModel.ColumnType.Date ||
+            headerModel.getColumnType() == BoardColumnHeaderModel.ColumnType.TimeLine) {
+            binding.btnMarkAsDeadline.setVisibility(View.VISIBLE);
+            int boardPosition = projectActivityViewModel.getProjectModel().getChosenPosition();
+            BoardContentModel boardContentModel = projectActivityViewModel.getProjectModel().getBoards().get(boardPosition);
+            if (boardContentModel.getDeadlineColumnIndex() != null &&
+                boardContentModel.getDeadlineColumnIndex() != -1 &&
+                boardContentModel.getDeadlineColumnIndex() == columnPosition) {
+                binding.btnMarkAsDeadline.setText("Remove deadline");
+                binding.btnMarkAsDeadline.setOnClickListener((view) -> {
+                    try {
+                        projectActivityViewModel.updateBoardDeadlineColumnIndex(boardPosition, -1, new ProjectActivityViewModel.ApiCallHandlers() {
+                            @Override
+                            public void onSuccess() {
+                                // update the cells in column
+                                boardViewModel.setDeadlineColumnIndex(-1);
+                                for (int i = 0; i < boardContentModel.getRowCells().size(); i++)
+                                    boardAdapter.changeCellItem(columnPosition, i, boardViewModel.getmCellModelList().get(i).get(columnPosition));
+                                popupWindow.dismiss();
+                            }
+
+                            @Override
+                            public void onFailure(String message) {
+                                ToastUtils.showToastError(ProjectActivity.this, message, Toast.LENGTH_SHORT);
+                                popupWindow.dismiss();
+                            }
+                        });
+                    } catch (JSONException e) {
+                        ToastUtils.showToastError(ProjectActivity.this, "Something went wrong, please try again", Toast.LENGTH_SHORT);
+                        popupWindow.dismiss();
+                    }
+                });
+            } else {
+                binding.btnMarkAsDeadline.setOnClickListener((view) -> {
+                    try {
+                        projectActivityViewModel.updateBoardDeadlineColumnIndex(boardPosition, columnPosition, new ProjectActivityViewModel.ApiCallHandlers() {
+                            @Override
+                            public void onSuccess() {
+                                // update the cells in column
+                                boardViewModel.setDeadlineColumnIndex(columnPosition);
+                                for (int i = 0; i < boardContentModel.getRowCells().size(); i++)
+                                    boardAdapter.changeCellItem(columnPosition, i, boardViewModel.getmCellModelList().get(i).get(columnPosition));
+                                popupWindow.dismiss();
+                            }
+
+                            @Override
+                            public void onFailure(String message) {
+                                ToastUtils.showToastError(ProjectActivity.this, message, Toast.LENGTH_SHORT);
+                                popupWindow.dismiss();
+                            }
+                        });
+                    } catch (JSONException e) {
+                        ToastUtils.showToastError(ProjectActivity.this, "Something went wrong, please try again", Toast.LENGTH_SHORT);
+                        popupWindow.dismiss();
+                    }
+                });
+            }
+        }
+
         binding.btnSortAsc.setOnClickListener(view -> {
             boardViewModel.sortColumn(columnPosition, BoardViewModel.SortState.ASCENDING, boardAdapter);
             // if we sort column then we remove the filter criteria to not click each other
@@ -618,6 +677,9 @@ public class ProjectActivity extends AppCompatActivity {
                 boardViewModel.deleteColumn(columnPosition, new BoardViewModel.ApiCallHandler() {
                     @Override
                     public void onSuccess() {
+                        projectActivityViewModel.getProjectModel().getBoards().get(
+                                projectActivityViewModel.getProjectModel().getChosenPosition()
+                        ).setDeadlineColumnIndex(boardViewModel.getDeadlineColumnIndex());
                         thisDialog.dismiss();
                     }
 

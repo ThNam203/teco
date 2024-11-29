@@ -56,7 +56,7 @@ public class BoardViewModel extends ViewModel {
     private final MutableLiveData<List<List<BoardBaseItemModel>>> mCellLiveData = new MutableLiveData<>(null);
     private final MutableLiveData<String> boardTitleLiveData = new MutableLiveData<>(null);
     private final ProjectService projectService = RetrofitServices.getProjectService();
-
+    private Integer deadlineColumnIndex;
     // for sorting features
     private SortState sortState = null;
     private int sortingColumnPosition = -1;
@@ -96,6 +96,10 @@ public class BoardViewModel extends ViewModel {
     public String getBoardTitle() {
         if (boardTitle == null || boardTitle.isEmpty()) return "Unknown title";
         return boardTitle;
+    }
+
+    public Integer getDeadlineColumnIndex() {
+        return deadlineColumnIndex;
     }
 
     public void setBoardTitle(String boardTitle) {
@@ -138,10 +142,11 @@ public class BoardViewModel extends ViewModel {
     public void setBoardId(String boardId) {
         this.boardId = boardId;
     }
-
+    public void setDeadlineColumnIndex(int deadlineColumnIndex) { this.deadlineColumnIndex = deadlineColumnIndex; }
     public void setBoardContent(BoardContentModel content, String projectId, TableViewAdapter tableViewAdapter) {
         sortState = null;
         sortingColumnPosition = -1;
+        deadlineColumnIndex = content.getDeadlineColumnIndex();
         setBoardTitle(content.getBoardTitle());
         setProjectId(projectId);
         setBoardId(content.get_id());
@@ -224,11 +229,12 @@ public class BoardViewModel extends ViewModel {
 
     public void deleteColumn(int columnPosition, ApiCallHandler handler) {
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
-        Call<Void> call = projectService.deleteAColumn(userId, projectId, boardId, columnPosition);
-        call.enqueue(new Callback<Void>() {
+        Call<Integer> call = projectService.deleteAColumn(userId, projectId, boardId, columnPosition);
+        call.enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+            public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
                 if (response.isSuccessful()) {
+                    deadlineColumnIndex = response.body();
                     mColumnHeaderModelList.remove(columnPosition);
                     for (int i = 0; i < mCellModelList.size(); i++) {
                         mCellModelList.get(i).remove(columnPosition);
@@ -241,7 +247,7 @@ public class BoardViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable t) {
                 handler.onFailure(t.getMessage());
             }
         });
