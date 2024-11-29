@@ -1,5 +1,7 @@
 package com.worthybitbuilders.squadsense.activities;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,10 +29,8 @@ import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.databinding.ActivityReportBinding;
 import com.worthybitbuilders.squadsense.models.report_models.CheckBox;
 import com.worthybitbuilders.squadsense.models.report_models.ReportModel;
-import com.worthybitbuilders.squadsense.models.report_models.StatusReportItemModel;
 import com.worthybitbuilders.squadsense.models.report_models.StatusReportModel;
 import com.worthybitbuilders.squadsense.models.report_models.TimelineModel;
-import com.worthybitbuilders.squadsense.models.report_models.UserReportItemModel;
 import com.worthybitbuilders.squadsense.models.report_models.UserReportModel;
 import com.worthybitbuilders.squadsense.services.ReportService;
 import com.worthybitbuilders.squadsense.services.RetrofitServices;
@@ -51,6 +52,10 @@ public class ReportActivity extends AppCompatActivity {
     private List<TimelineModel> timeData = new ArrayList<TimelineModel>();
 
     private List<StatusReportModel> statusData = new ArrayList<StatusReportModel>();
+
+    private List<ReportModel> reports = new ArrayList<ReportModel>();
+
+    private int currentReportIndex = 0;
 
     private ActivityReportBinding activityBinding;
     @Override
@@ -78,12 +83,13 @@ public class ReportActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     Gson gson = new Gson();
                     List<ReportModel> reportsList = response.body();
+                    if(!reportsList.isEmpty()) reports.addAll(reportsList);
 
                     // Process the first report if list is not empty
-                    if (reportsList != null && !reportsList.isEmpty()) {
-                        ReportModel firstReport = reportsList.get(0);
+                        if (reportsList != null && !reportsList.isEmpty()) {
+                        ReportModel firstReport = reports.get(0);
 
-                        ((TextView)activityBinding.reportTitle).setText(String.valueOf(firstReport.title));
+                        ((TextView)activityBinding.reportSelector).setText(String.valueOf(firstReport.title));
 
                         // Access specific components
                         checkBoxData.clear();
@@ -109,6 +115,7 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
 
+
         List<UserReportModel.Assignee> assignees1 = new ArrayList<UserReportModel.Assignee>();
         assignees1.add(new UserReportModel.Assignee("Dawng"));
         assignees1.add(new UserReportModel.Assignee("Khoa"));
@@ -125,9 +132,17 @@ public class ReportActivity extends AppCompatActivity {
         userReport.add(new UserReportModel("Personal", assignments));
 
         renderUser(userReport);
+
+        activityBinding.reportSelector.setOnClickListener(view->{
+            selectorClicked();
+        });
     }
 
     private void renderTime(List<TimelineModel> timeData){
+        for (int i = activityBinding.reportTimeLayout.getChildCount() - 1; i >= 2; i--) {
+            activityBinding.reportTimeLayout.removeViewAt(i);
+        }
+
         timeData.forEach(time->{
             View newView = inflateLayout(ReportActivity.this, R.layout.report_timeline_view, activityBinding.reportTimeLayout);
             TextView title = (TextView) newView.findViewById(R.id.report_timeline_title);
@@ -148,6 +163,10 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void renderStatus(List<StatusReportModel> statusData){
+        for (int i = activityBinding.reportStatusLayout.getChildCount() - 1; i >= 2; i--) {
+            activityBinding.reportStatusLayout.removeViewAt(i);
+        }
+
         statusData.forEach(item-> {
             View newView = inflateLayout(ReportActivity.this, R.layout.report_status_view, activityBinding.reportStatusLayout);
 
@@ -173,6 +192,8 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void renderUser(List<UserReportModel> usersData){
+
+
         usersData.forEach(user->{
             View newView = inflateLayout(ReportActivity.this, R.layout.report_user_view, activityBinding.reportUserLayout);
             TextView title = newView.findViewById(R.id.report_user_title);
@@ -198,24 +219,15 @@ public class ReportActivity extends AppCompatActivity {
             this.activityBinding.reportUserLayout.addView(newView);
 
         });
-
-
-
-//        mockUserData.forEach(item->{
-//            View newView = inflateLayout(ReportActivity.this, R.layout.report_user_view, activityBinding.reportUserLayout);
-//            TextView title = (TextView) newView.findViewById(R.id.report_user_title);
-//            title.setText(item.title);
-//            TextView assign = (TextView) newView.findViewById(R.id.report_user_assigned_number);
-//            assign.setText(item.item.assigned);
-//            TextView unassign = (TextView) newView.findViewById(R.id.report_user_unassigned_number);
-//            unassign.setText(item.item.unassigned);
-//            this.activityBinding.reportUserLayout.addView(newView);
-//        });
     }
 
 
 
     private void renderCheckbox(List<CheckBox> CheckBoxData){
+        for (int i = activityBinding.reportCheckboxLayout.getChildCount() - 1; i >= 2; i--) {
+            activityBinding.reportCheckboxLayout.removeViewAt(i);
+        }
+
         CheckBoxData.forEach(checkBox->{
             View newView = inflateLayout(ReportActivity.this, R.layout.report_checkbox_view, activityBinding.reportCheckboxLayout);
             TextView title = (TextView) newView.findViewById(R.id.report_checkBox_title);
@@ -235,6 +247,75 @@ public class ReportActivity extends AppCompatActivity {
         return LayoutInflater
                 .from(context)
                 .inflate(layoutId, parent, false);
+    }
+
+    private void selectorClicked(){
+
+        // Create a dialog builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Prepare the list of report titles for the dialog
+        String[] reportTitles = new String[reports.size()];
+        for (int i = 0; i < reports.size(); i++) {
+            reportTitles[i] = reports.get(i).title;
+        }
+
+        // Set the dialog title
+        builder.setTitle("Select board");
+
+        // Create a single-choice list dialog
+        builder.setSingleChoiceItems(reportTitles, currentReportIndex, (dialog, which) -> {
+            // When an item is selected
+            if (which != currentReportIndex) {
+                // Clear existing data
+                clearExistingData();
+
+                // Update to the selected report
+                ReportModel selectedReport = reports.get(which);
+
+                // Update UI elements
+                updateUIWithReport(selectedReport);
+
+                // Update current index
+                currentReportIndex = which;
+
+                // Dismiss dialog
+                dialog.dismiss();
+            } else {
+                // If the same item is selected, just dismiss the dialog
+                dialog.dismiss();
+            }
+        });
+
+        // Add a cancel button
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+    private void clearExistingData() {
+        // Clear all existing data lists
+        checkBoxData.clear();
+        timeData.clear();
+        statusData.clear();
+    }
+
+    private void updateUIWithReport(ReportModel report) {
+        // Update report title
+        ((TextView)activityBinding.reportSelector).setText(String.valueOf(report.title));
+
+        // Populate data lists
+        checkBoxData.addAll(report.checkbox);
+        timeData.addAll(report.timeline);
+        statusData.addAll(report.status);
+
+        // Render new data
+        renderCheckbox(checkBoxData);
+        renderTime(timeData);
+        renderStatus(statusData);
     }
 
 }
