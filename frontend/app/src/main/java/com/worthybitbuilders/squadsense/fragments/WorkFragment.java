@@ -36,6 +36,9 @@ import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.MainActivityViewModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WorkFragment extends Fragment {
     private FragmentWorkBinding binding;
     private Boolean isHidingDoneItems = false;
@@ -71,6 +74,7 @@ public class WorkFragment extends Fragment {
             detailIntent.putExtra("boardTitle", model.getBoardTitle());
             detailIntent.putExtra("rowPosition", model.getCellRowPosition());
             detailIntent.putExtra("rowTitle", model.getRowTitle());
+            detailIntent.putExtra("isDone", model.isDone());
 
             detailIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(detailIntent);
@@ -81,23 +85,25 @@ public class WorkFragment extends Fragment {
         binding.btnHideDoneItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!isHidingDoneItems)
-                {
+                if(!isHidingDoneItems) {
                     Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.ic_checkbox_checked);
                     drawable.setColorFilter(ContextCompat.getColor(getActivity(), R.color.chosen_color), PorterDuff.Mode.SRC_IN);
                     binding.btnHideDoneItem.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-
                     isHidingDoneItems = true;
-                }
-                else
-                {
+
+                    List<WorkModel> notDoneWorks = new ArrayList<>();
+                    for (int i = 0; i < activityViewModel.getUserWorks().size(); i++) {
+                        if (!activityViewModel.getUserWorks().get(i).isDone())
+                            notDoneWorks.add(activityViewModel.getUserWorks().get(i));
+                    }
+                    workAdapter.setData(notDoneWorks);
+                } else {
                     Drawable drawable = ContextCompat.getDrawable(getActivity(), R.drawable.ic_checkbox_unchecked);
                     drawable.setColorFilter(ContextCompat.getColor(getActivity(), R.color.primary_icon_color), PorterDuff.Mode.SRC_IN);
                     binding.btnHideDoneItem.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-
                     isHidingDoneItems = false;
+                    workAdapter.setData(activityViewModel.getUserWorks());
                 }
-
             }
         });
 

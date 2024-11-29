@@ -14,6 +14,7 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemMod
 import com.worthybitbuilders.squadsense.models.board_models.BoardDateItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardMapItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardNumberItemModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardRowHeaderModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardStatusItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardTextItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardTimelineItemModel;
@@ -44,19 +45,19 @@ public class BoardDetailItemViewModel extends ViewModel {
     private String updateCellId;
     private final String projectTitle;
     private final String boardTitle;
-    private String rowTitle;
+    private BoardRowHeaderModel rowHeaderModel;
     /**
      * @param rowPosition is the position according to the board,
      *                    we need it to update the exact cell on the remote
      */
-    public BoardDetailItemViewModel(int rowPosition, String projectId, String boardId, String updateCellId, String projectTitle, String boardTitle, String rowTitle) {
+    public BoardDetailItemViewModel(int rowPosition, String projectId, String boardId, String updateCellId, String projectTitle, String boardTitle, BoardRowHeaderModel rowHeaderModel) {
         this.rowPosition = rowPosition;
         this.projectId = projectId;
         this.boardId = boardId;
         this.updateCellId = updateCellId;
         this.projectTitle = projectTitle;
         this.boardTitle = boardTitle;
-        this.rowTitle = rowTitle;
+        this.rowHeaderModel = rowHeaderModel;
     }
     public int getRowPosition() {
         return rowPosition;
@@ -64,7 +65,7 @@ public class BoardDetailItemViewModel extends ViewModel {
 
     public String getProjectId() { return projectId; }
 
-    public String getRowTitle() { return rowTitle; }
+    public BoardRowHeaderModel getRowHeaderModel() { return rowHeaderModel; }
 
     public String getBoardId() { return boardId; }
 
@@ -165,12 +166,33 @@ public class BoardDetailItemViewModel extends ViewModel {
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("newTitle", newTitle);
-        Call<Void> call = projectService.updateRowTitle(userId, projectId, boardId, rowPosition, jsonObject);
+        Call<Void> call = projectService.updateRow(userId, projectId, boardId, rowPosition, jsonObject);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    rowTitle = newTitle;
+                    rowHeaderModel.setTitle(newTitle);
+                    handler.onSuccess();
+                } else handler.onFailure(response.message());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                handler.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public void updateRowIsDone(boolean newIsDone, ApiCallHandler handler) throws JSONException {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("newIsDone", newIsDone);
+        Call<Void> call = projectService.updateRow(userId, projectId, boardId, rowPosition, jsonObject);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    rowHeaderModel.setDone(newIsDone);
                     handler.onSuccess();
                 } else handler.onFailure(response.message());
             }

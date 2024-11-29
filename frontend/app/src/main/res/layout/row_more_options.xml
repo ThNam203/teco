@@ -9,6 +9,18 @@
     android:backgroundTint="@color/primary_second_color"
     android:layout_marginEnd="16dp">
     <Button
+        android:id="@+id/btnChangeDone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_tick"
+        app:iconTint="@color/primary_icon_second_color"
+        android:text="Mark as done"
+        android:textAllCaps="false"
+        android:textStyle="normal"
+        android:textColor="@color/primary_word_second_color"
+        android:textSize="@dimen/small_textsize"
+        android:background="@color/transparent"/>
+    <Button
         android:id="@+id/btnRename"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

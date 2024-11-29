@@ -5,6 +5,7 @@ import com.worthybitbuilders.squadsense.models.board_models.BoardColumnHeaderMod
 import com.worthybitbuilders.squadsense.models.board_models.BoardContentModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardDateItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardNumberItemModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardRowHeaderModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardStatusItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardTextItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
@@ -15,11 +16,11 @@ import java.util.List;
 
 public class ProjectTemplates {
     public static List<BoardContentModel> sampleProjectContent() {
-        List<String> rowTitles = new ArrayList<>();
-        rowTitles.add("Task 1");
-        rowTitles.add("Task 2");
-        rowTitles.add("Task 3");
-        rowTitles.add("Task 4");
+        List<BoardRowHeaderModel> rowTitles = new ArrayList<>();
+        rowTitles.add(new BoardRowHeaderModel("Task 1"));
+        rowTitles.add(new BoardRowHeaderModel("Task 2"));
+        rowTitles.add(new BoardRowHeaderModel("Task 3"));
+        rowTitles.add(new BoardRowHeaderModel("Task 4"));
 
         List<BoardColumnHeaderModel> columnTitles = new ArrayList<>();
         columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.User, "Person"));
@@ -83,11 +84,11 @@ public class ProjectTemplates {
     }
     public static List<BoardContentModel> sampleITManagementContent(){
 
-        List<String> rowTitles = new ArrayList<>();
-        rowTitles.add("Employee name 3");
-        rowTitles.add("Employee name 5");
-        rowTitles.add("Employee name 1");
-        rowTitles.add("Employee name 2");
+        List<BoardRowHeaderModel> rowTitles = new ArrayList<>();
+        rowTitles.add(new BoardRowHeaderModel("Employee name 3"));
+        rowTitles.add(new BoardRowHeaderModel("Employee name 5"));
+        rowTitles.add(new BoardRowHeaderModel("Employee name 1"));
+        rowTitles.add(new BoardRowHeaderModel("Employee name 2"));
 
         List<BoardColumnHeaderModel> columnTitles = new ArrayList<>();
         columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Update, "Updates"));
@@ -251,10 +252,10 @@ public class ProjectTemplates {
         return content;
     }
     public static List<BoardContentModel> sampleFacilitiesRequestsContent(){
-        List<String> rowTitles = new ArrayList<>();
-        rowTitles.add("I want to arrange an event");
-        rowTitles.add("Where can I see the list of our vendors?");
-        rowTitles.add("Order food for the guests");
+        List<BoardRowHeaderModel> rowTitles = new ArrayList<>();
+        rowTitles.add(new BoardRowHeaderModel("I want to arrange an event"));
+        rowTitles.add(new BoardRowHeaderModel("Where can I see the list of our vendors?"));
+        rowTitles.add(new BoardRowHeaderModel("Order food for the guests"));
 
         List<BoardColumnHeaderModel> columnTitles = new ArrayList<>();
         columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Update,"Updates"));
@@ -368,11 +369,11 @@ public class ProjectTemplates {
         return content;
     }
     public static List<BoardContentModel> sampleProjectRequestAndApprovalsContent() {
-        List<String> rowTitles = new ArrayList<>();
-        rowTitles.add("Project Golf");
-        rowTitles.add("Project Zulu");
-        rowTitles.add("Project Juliet");
-        rowTitles.add("Project Kilo");
+        List<BoardRowHeaderModel> rowTitles = new ArrayList<>();
+        rowTitles.add(new BoardRowHeaderModel("Project Golf"));
+        rowTitles.add(new BoardRowHeaderModel("Project Zulu"));
+        rowTitles.add(new BoardRowHeaderModel("Project Juliet"));
+        rowTitles.add(new BoardRowHeaderModel("Project Kilo"));
 
         List<BoardColumnHeaderModel> columnTitles = new ArrayList<>();
         columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Update,"Updates"));
@@ -480,15 +481,15 @@ public class ProjectTemplates {
         cells.add(fourthRow);
 
         List<BoardContentModel> content = new ArrayList<>();
-        content.add(new BoardContentModel("Project Request & Approvals",rowTitles,columnTitles, cells));
+        content.add(new BoardContentModel("Project Request & Approvals", rowTitles, columnTitles, cells));
         return content;
     }
     public static List<BoardContentModel> sampleRecuitmenAndOnboardingContent() {
-        List<String> rowTitles = new ArrayList<>();
-        rowTitles.add("Applicant 1");
-        rowTitles.add("Applicant 2");
-        rowTitles.add("Applicant 3");
-        rowTitles.add("Applicant 4");
+        List<BoardRowHeaderModel> rowTitles = new ArrayList<>();
+        rowTitles.add(new BoardRowHeaderModel("Applicant 1"));
+        rowTitles.add(new BoardRowHeaderModel("Applicant 2"));
+        rowTitles.add(new BoardRowHeaderModel("Applicant 3"));
+        rowTitles.add(new BoardRowHeaderModel("Applicant 4"));
 
         List<BoardColumnHeaderModel> columnTitles = new ArrayList<>();
         columnTitles.add(new BoardColumnHeaderModel(BoardColumnHeaderModel.ColumnType.Update, "Updates"));

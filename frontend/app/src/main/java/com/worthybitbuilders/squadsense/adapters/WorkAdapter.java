@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -50,12 +51,16 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.WorkViewHolder
 
     public static class WorkViewHolder extends RecyclerView.ViewHolder {
         public TextView rowTitle;
+        public ImageView doneTick;
         public WorkViewHolder(@NonNull View itemView) {
             super(itemView);
             rowTitle = itemView.findViewById(R.id.tvRowTitle);
+            doneTick = itemView.findViewById(R.id.doneTick);
         }
 
         public void bind(WorkModel workModel) {
+            if (workModel.isDone()) doneTick.setVisibility(View.VISIBLE);
+            else doneTick.setVisibility(View.GONE);
             rowTitle.setText(String.format(Locale.US, "%s > %s > %s", workModel.getProjectTitle(), workModel.getBoardTitle(), workModel.getRowTitle()));
         }
     }

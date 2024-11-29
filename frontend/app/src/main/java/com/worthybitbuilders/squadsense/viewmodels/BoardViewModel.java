@@ -162,12 +162,8 @@ public class BoardViewModel extends ViewModel {
     }
 
     private List<BoardRowHeaderModel> createRowHeaderList(BoardContentModel contentModel) {
-        List<BoardRowHeaderModel> data = new ArrayList<>();
-        contentModel.getRowCells().forEach(title -> {
-            data.add(new BoardRowHeaderModel(title, false));
-        });
+        List<BoardRowHeaderModel> data = new ArrayList<>(contentModel.getRowCells());
         data.add(new BoardRowHeaderModel("+ New Row", true));
-
         return data;
     }
 

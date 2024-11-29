@@ -20,6 +20,22 @@ const columnCellModel = new mongoose.Schema(
     }
 )
 
+const rowCellModel = new mongoose.Schema(
+    {
+        title: {
+            type: String,
+            required: true,
+        },
+        isDone: {
+            type: Boolean,
+            default: false,
+        },
+    },
+    {
+        _id: false,
+    }
+)
+
 // const cellRowSchema = new mongoose.Schema(
 //     {
 //         type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Cell' }],
@@ -32,7 +48,7 @@ const boardSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    rowCells: [{ type: String }],
+    rowCells: [rowCellModel],
     columnCells: [columnCellModel],
     cells: [[{ type: mongoose.Schema.Types.ObjectId, ref: 'Cell' }]],
 })

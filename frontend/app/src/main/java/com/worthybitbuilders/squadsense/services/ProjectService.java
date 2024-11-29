@@ -106,7 +106,7 @@ public interface ProjectService {
     Call<BoardDetailItemModel> getCellsInARow(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("rowPosition") Integer rowPosition);
 
     @PUT("{userId}/project/{projectId}/board/{boardId}/row/{rowPosition}")
-    Call<Void> updateRowTitle(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("rowPosition") Integer rowPosition, @Body JSONObject rowTitle);
+    Call<Void> updateRow(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("rowPosition") Integer rowPosition, @Body JSONObject data);
 
     @DELETE("{userId}/project/{projectId}/board/{boardId}/row/{rowPosition}")
     Call<Void> deleteARow(@Path("userId") String userId, @Path("projectId") String projectId, @Path("boardId") String boardId, @Path("rowPosition") Integer rowPosition);

@@ -616,7 +616,7 @@ exports.addNewRow = asyncCatch(async (req, res, next) => {
     })
 
     const board = await Board.findById(boardId)
-    board.rowCells.push(rowHeaderModel.title)
+    board.rowCells.push(rowHeaderModel)
 
     const newCells = await Promise.all(
         cells.map(async (cell) => await createACell(cell))
@@ -625,6 +625,7 @@ exports.addNewRow = asyncCatch(async (req, res, next) => {
     const newCellIds = newCells.map((cell) => cell._id)
 
     board.cells.push(newCellIds)
+    board.markModified('rowCells')
     board.markModified('cells')
     await board.save()
 
@@ -755,14 +756,15 @@ exports.updateColumn = asyncCatch(async (req, res, next) => {
 
 exports.updateRow = asyncCatch(async (req, res, next) => {
     const { userId, projectId, boardId, rowPosition } = req.params
-    const { newTitle } = req.body.nameValuePairs
+    const { newTitle, newIsDone } = req.body.nameValuePairs
 
     const board = await Board.findById(boardId)
     if (!board) throw new AppError('Unable to find board', 404)
 
     if (newTitle) {
-        const oldTitle = board.rowCells[rowPosition]
-        board.rowCells[rowPosition] = newTitle
+        const oldTitle = board.rowCells[rowPosition].title
+        board.rowCells[rowPosition].title = newTitle
+
         board.markModified('rowCells')
         await board.save()
 
@@ -773,6 +775,29 @@ exports.updateRow = asyncCatch(async (req, res, next) => {
                 boardId,
                 null,
                 `${user.name} has renamed "${oldTitle}" row to "${newTitle}`,
+                ACTIVITY_LOG_TYPES.CHANGE
+            )
+        })
+    }
+
+    if (newIsDone != null) {
+        const { title } = board.rowCells[rowPosition]
+        board.rowCells[rowPosition].isDone = newIsDone
+
+        board.markModified('rowCells')
+        await board.save()
+
+        let message
+        if (newIsDone) message = ` has marked "${title}" row as done`
+        else message = ` has marked "${title}" row as not done`
+
+        User.findById(userId).then((user) => {
+            createActivityLog(
+                user._id,
+                projectId,
+                boardId,
+                null,
+                user.name + message,
                 ACTIVITY_LOG_TYPES.CHANGE
             )
         })
@@ -800,7 +825,7 @@ exports.removeRow = asyncCatch(async (req, res, next) => {
             projectId,
             boardId,
             null,
-            `${user.name} has removed "${deletedRow}" row`,
+            `${user.name} has removed "${deletedRow.title}" row`,
             ACTIVITY_LOG_TYPES.REMOVE
         )
     })
@@ -883,62 +908,6 @@ exports.getCellsInARow = asyncCatch(async (req, res, next) => {
     })
 })
 
-// exports.getUserWork = asyncCatch(async (req, res, next) => {
-//     const { userId } = req.params
-//     const projects = await Project.find({
-//         memberIds: { $in: [userId] },
-//     })
-
-//     const works = []
-
-//     await Promise.all(
-//         projects.map(async (project) => {
-//             await project.populate({
-//                 path: 'boards',
-//                 model: 'Board',
-//                 populate: {
-//                     path: 'cells',
-//                     model: 'Cell',
-//                 },
-//             })
-
-//             project.boards.forEach((board, boardPosition) => {
-//                 const work = {}
-//                 board.cells.forEach((cellRow, cellRowPosition) => {
-//                     for (
-//                         let cellIdx = 0;
-//                         cellIdx < cellRow.length;
-//                         cellIdx += 1
-//                     ) {
-//                         const cell = cellRow[cellIdx]
-//                         if (cell.cellType === 'CellUser') {
-//                             const isInArray = cell.users.some((user) =>
-//                                 user.equals(userId)
-//                             )
-
-//                             if (isInArray) {
-//                                 work.projectId = project._id
-//                                 work.projectTitle = project.title
-//                                 work.boardId = board._id
-//                                 work.boardTitle = board.boardTitle
-//                                 work.boardPosition = boardPosition
-//                                 work.rowTitle = board.rowCells[cellRowPosition]
-//                                 work.cellRowPosition = cellRowPosition
-//                                 work.cellCreatedDate = cell.createdAt
-//                                 works.push(work)
-//                                 break
-//                             }
-//                         }
-//                     }
-//                 })
-//             })
-//         })
-//     )
-
-//     console.log(works)
-//     res.status(200).json(works)
-// })
-
 exports.getUserWork = asyncCatch(async (req, res, next) => {
     const { userId } = req.params
     const projects = await Project.find({
@@ -968,7 +937,8 @@ exports.getUserWork = asyncCatch(async (req, res, next) => {
                         boardId: board._id,
                         boardTitle: board.boardTitle,
                         boardPosition: boardPosition,
-                        rowTitle: board.rowCells[cellRowPosition],
+                        rowTitle: board.rowCells[cellRowPosition].title,
+                        isDone: board.rowCells[cellRowPosition].isDone,
                         cellRowPosition: cellRowPosition,
                         cellCreatedDate: workCell.createdAt,
                     })

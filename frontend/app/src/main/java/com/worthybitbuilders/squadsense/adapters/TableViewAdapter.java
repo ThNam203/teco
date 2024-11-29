@@ -220,7 +220,7 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
         if (rowHeaderItemModel == null) return;
         headerHolder.setRowHeaderModel(rowHeaderItemModel);
 
-        if (rowHeaderItemModel.getIsAddNewRowRow()) {
+        if (rowHeaderItemModel.getIsAddNewRowRow() != null && rowHeaderItemModel.getIsAddNewRowRow()) {
             headerHolder.itemView.setOnClickListener(view -> handlers.onNewRowHeaderClick());
             headerHolder.container.setBackground(ContextCompat.getDrawable(mContext, R.drawable.background_board_new_row_header));
         }

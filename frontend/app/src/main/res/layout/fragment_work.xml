@@ -7,32 +7,14 @@
     tools:context=".fragments.WorkFragment"
     android:background="@color/primary_color"
     android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60sp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="My Work"
-            android:padding="10sp"
-            android:layout_alignParentLeft="true"
-            android:gravity="left"
-            android:textColor="@color/primary_word_color"
-            android:textSize="@dimen/large_textsize"
-            android:textStyle="bold" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:backgroundTint="@color/transparent"
-            android:minHeight="48sp"
-            android:src="@drawable/ic_more_setting"
-            app:tint="@color/primary_icon_color" />
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="My Work"
+        android:padding="10sp"
+        android:textColor="@color/primary_word_color"
+        android:textSize="@dimen/large_textsize"
+        android:textStyle="bold" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

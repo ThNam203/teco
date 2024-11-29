@@ -31,6 +31,7 @@ import com.worthybitbuilders.squadsense.factory.BoardItemDetailViewModelFactory;
 import com.worthybitbuilders.squadsense.fragments.BoardDetailColumnFragment;
 import com.worthybitbuilders.squadsense.fragments.BoardDetailUpdateFragment;
 import com.worthybitbuilders.squadsense.models.BoardDetailItemModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardRowHeaderModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
@@ -52,8 +53,8 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
     private BoardDetailItemViewModel viewModel;
     private ProjectActivityViewModel projectActivityViewModel;
     private String currentChosenCellId = null;
-
     private String rowTitle = "";
+    private boolean isDone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +72,13 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         String projectId = intent.getStringExtra("projectId");
         String boardId = intent.getStringExtra("boardId");
         String rowTitle = intent.getStringExtra("rowTitle");
+        isDone = intent.getBooleanExtra("isDone", false);
         String projectTitle = intent.getStringExtra("projectTitle");
         String boardTitle = intent.getStringExtra("boardTitle");
 
+        if (isDone) activityBinding.doneTick.setVisibility(View.VISIBLE);
+
         this.rowTitle = rowTitle;
-
-
 
         // updateCellId is only for when user tap the update item
         // which is because there could be more than 1 update item
@@ -87,9 +89,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
 
         activityBinding.itemTitle.setText(rowTitle);
 
-
-
-        BoardItemDetailViewModelFactory viewModelFactory = new BoardItemDetailViewModelFactory(rowPosition, projectId, boardId, updateCellId, projectTitle, boardTitle, rowTitle);
+        BoardItemDetailViewModelFactory viewModelFactory = new BoardItemDetailViewModelFactory(rowPosition, projectId, boardId, updateCellId, projectTitle, boardTitle, new BoardRowHeaderModel(rowTitle, isDone, false));
         viewModel = new ViewModelProvider(this, viewModelFactory).get(BoardDetailItemViewModel.class);
         projectActivityViewModel = new ViewModelProvider(this).get(ProjectActivityViewModel.class);
 
@@ -183,6 +183,33 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
             popupWindow.dismiss();
         });
 
+        if (isDone) moreOptionsBinding.btnChangeDone.setText("Mark as not done");
+        else moreOptionsBinding.btnChangeDone.setText("Mark as done");
+
+        moreOptionsBinding.btnChangeDone.setOnClickListener(view -> {
+            try {
+                viewModel.updateRowIsDone(!isDone, new BoardDetailItemViewModel.ApiCallHandler() {
+                    @Override
+                    public void onSuccess() {
+                        isDone = !isDone;
+                        if (isDone) activityBinding.doneTick.setVisibility(View.VISIBLE);
+                        else activityBinding.doneTick.setVisibility(View.GONE);
+                        ToastUtils.showToastSuccess(BoardItemDetailActivity.this, "Updated", Toast.LENGTH_SHORT);
+                        popupWindow.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        ToastUtils.showToastError(BoardItemDetailActivity.this, message, Toast.LENGTH_SHORT);
+                        popupWindow.dismiss();
+                    }
+                });
+            } catch (JSONException e) {
+                ToastUtils.showToastError(BoardItemDetailActivity.this, "Something went wrong, please try again", Toast.LENGTH_SHORT);
+                popupWindow.dismiss();
+            }
+        });
+
         popupWindow.setTouchable(true);
         popupWindow.setOutsideTouchable(true);
         popupWindow.showAsDropDown(this.activityBinding.btnMoreOptions, 0, 0);
@@ -194,7 +221,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         ConfirmDeleteSecondaryBinding binding = ConfirmDeleteSecondaryBinding.inflate(getLayoutInflater());
         confirmDialog.setContentView(binding.getRoot());
 
-        binding.tvTitle.setText(String.format(Locale.US, "Delete row \"%s\"?", viewModel.getRowTitle()));
+        binding.tvTitle.setText(String.format(Locale.US, "Delete row \"%s\"?", viewModel.getRowHeaderModel().getTitle()));
         binding.tvAdditionalContent.setText("This row will be removed from the board");
         binding.btnCancel.setOnClickListener(view -> confirmDialog.dismiss());
         binding.btnConfirm.setOnClickListener(view -> {
@@ -229,7 +256,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         RowRenamePopupBinding binding = RowRenamePopupBinding.inflate(getLayoutInflater());
         dialog.setContentView(binding.getRoot());
 
-        binding.etTextItem.setText(viewModel.getRowTitle());
+        binding.etTextItem.setText(viewModel.getRowHeaderModel().getTitle());
         binding.btnClosePopup.setOnClickListener((view) -> dialog.dismiss());
 
         binding.btnSaveTextItem.setOnClickListener(view -> {
@@ -243,7 +270,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
                 viewModel.updateRowTitle(newContent, new BoardDetailItemViewModel.ApiCallHandler() {
                     @Override
                     public void onSuccess() {
-                        activityBinding.itemTitle.setText(viewModel.getRowTitle());
+                        activityBinding.itemTitle.setText(viewModel.getRowHeaderModel().getTitle());
                         dialog.dismiss();
                     }
 

@@ -5,13 +5,13 @@ import java.util.List;
 public class BoardContentModel {
     private String _id;
     private String boardTitle;
-    private List<String> rowCells;
+    private List<BoardRowHeaderModel> rowCells;
     private List<BoardColumnHeaderModel> columnCells;
     // TODO: COLUMN SHOULD HOLD THE COLUMN TYPE, NOT THE CELL
     private List<List<BoardBaseItemModel>> cells;
 
     /** This constructor is used for when data is fetched from server */
-    public BoardContentModel(String _id, String boardTitle, List<String> rowCells, List<BoardColumnHeaderModel> columnCells, List<List<BoardBaseItemModel>> cells) {
+    public BoardContentModel(String _id, String boardTitle, List<BoardRowHeaderModel> rowCells, List<BoardColumnHeaderModel> columnCells, List<List<BoardBaseItemModel>> cells) {
         this._id = _id;
         this.boardTitle = boardTitle;
         this.rowCells = rowCells;
@@ -23,7 +23,7 @@ public class BoardContentModel {
      * This constructor is used for client to make a new board
      * The _id will be over-written when it's pushed and returned from server
      */
-    public BoardContentModel(String boardTitle, List<String> rowCells, List<BoardColumnHeaderModel> columnCells, List<List<BoardBaseItemModel>> cells) {
+    public BoardContentModel(String boardTitle, List<BoardRowHeaderModel> rowCells, List<BoardColumnHeaderModel> columnCells, List<List<BoardBaseItemModel>> cells) {
         this._id = "server will recreate it later";
         this.boardTitle = boardTitle;
         this.rowCells = rowCells;
@@ -43,11 +43,11 @@ public class BoardContentModel {
         this.boardTitle = boardTitle;
     }
 
-    public List<String> getRowCells() {
+    public List<BoardRowHeaderModel> getRowCells() {
         return rowCells;
     }
 
-    public void setRowCells(List<String> rowCells) {
+    public void setRowCells(List<BoardRowHeaderModel> rowCells) {
         this.rowCells = rowCells;
     }
 

@@ -168,6 +168,7 @@ public class ProjectActivity extends AppCompatActivity {
                 updateIntent.putExtra("updateCellId", itemModel.get_id());
                 updateIntent.putExtra("updateCellTitle", columnTitle);
                 updateIntent.putExtra("isFromUpdateColumn", true);
+                updateIntent.putExtra("isDone", boardViewModel.getmRowHeaderModelList().get(rowPosition).isDone());
                 startActivity(updateIntent);
             }
 
@@ -202,6 +203,7 @@ public class ProjectActivity extends AppCompatActivity {
                 showRowIntent.putExtra("rowPosition", rowPosition);
                 showRowIntent.putExtra("rowTitle", rowTitle);
                 showRowIntent.putExtra("creatorId", projectActivityViewModel.getProjectModel().getCreatorId());
+                showRowIntent.putExtra("isDone", boardViewModel.getmRowHeaderModelList().get(rowPosition).isDone());
 
                 Bundle bundle = new Bundle();
                 bundle.putStringArrayList("adminId", (ArrayList<String>) projectActivityViewModel.getProjectModel().getAdminIds());

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
-    android:layout_width="149dp"
+    android:layout_width="150dp"
     android:layout_height="@dimen/tableview_default_height"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,16 +18,27 @@
             android:background="@color/blue"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
+        <ImageView
+            android:id="@+id/doneTick"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_tick"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/leftSideStroke"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/light_blue_600" />
         <TextView
             android:id="@+id/tvRowHeader"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
             android:gravity="center_vertical"
             android:paddingHorizontal="16dp"
             android:singleLine="true"
             android:textColor="@color/primary_word_color"
             android:textSize="@dimen/tableview_default_text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/doneTick"
             tools:text="Header Data" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

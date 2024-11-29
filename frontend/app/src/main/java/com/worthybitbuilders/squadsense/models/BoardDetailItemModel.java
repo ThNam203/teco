@@ -1,15 +1,16 @@
 package com.worthybitbuilders.squadsense.models;
 
 import com.worthybitbuilders.squadsense.models.board_models.BoardBaseItemModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardRowHeaderModel;
 
 import java.util.List;
 
 public class BoardDetailItemModel {
     private List<BoardBaseItemModel> cells;
     private List<String> columnTitles;
-    private String rowTitle;
+    private BoardRowHeaderModel rowTitle;
 
-    public BoardDetailItemModel(List<BoardBaseItemModel> cells, List<String> columnTitles, String rowTitle) {
+    public BoardDetailItemModel(List<BoardBaseItemModel> cells, List<String> columnTitles, BoardRowHeaderModel rowTitle) {
         this.cells = cells;
         this.columnTitles = columnTitles;
         this.rowTitle = rowTitle;
@@ -31,11 +32,11 @@ public class BoardDetailItemModel {
         this.columnTitles = columnTitles;
     }
 
-    public String getRowTitle() {
+    public BoardRowHeaderModel getRowTitle() {
         return rowTitle;
     }
 
-    public void setRowTitle(String rowTitle) {
+    public void setRowTitle(BoardRowHeaderModel rowTitle) {
         this.rowTitle = rowTitle;
     }
 }

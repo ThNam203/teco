@@ -7,33 +7,46 @@
     android:layout_height="match_parent"
     android:background="@color/primary_color"
     android:orientation="vertical">
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="10dp">
-
         <ImageButton
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerInParent="true"
             android:backgroundTint="@color/transparent"
-            android:contentDescription="btn add person"
             android:minHeight="48dp"
             android:src="@drawable/ic_arrow_back"
-            app:tint="@color/primary_icon_color" />
-
+            app:tint="@color/primary_icon_color"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
         <TextView
             android:id="@+id/itemTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_marginStart="8dp"
             android:text="Item 1"
             android:textAlignment="center"
             android:textColor="@color/primary_word_color"
             android:textSize="@dimen/large_textsize"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <ImageView
+            android:id="@+id/doneTick"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_tick"
+            app:tint="@color/blue"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/itemTitle"/>
         <ImageButton
             android:id="@+id/btnMoreOptions"
             android:layout_width="wrap_content"
@@ -43,9 +56,10 @@
             android:minHeight="48dp"
             android:src="@drawable/ic_more_setting"
             app:tint="@color/primary_icon_color"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
-    </RelativeLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
