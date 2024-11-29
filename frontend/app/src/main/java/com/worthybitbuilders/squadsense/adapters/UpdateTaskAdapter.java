@@ -29,6 +29,7 @@ import com.worthybitbuilders.squadsense.databinding.UpdateTaskMoreOptionsBinding
 import com.worthybitbuilders.squadsense.databinding.UpdateTaskViewBinding;
 import com.worthybitbuilders.squadsense.models.UpdateTask;
 import com.worthybitbuilders.squadsense.utils.CustomUtils;
+import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.BoardDetailItemViewModel;
 
@@ -95,6 +96,9 @@ public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.Up
             if (taskContent.isEmpty()) itemBinding.tvTaskContent.setVisibility(View.GONE);
             else itemBinding.tvTaskContent.setText(taskContent);
 
+            String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+            if(userId.equals(task.getAuthorId())) itemBinding.btnMoreOptions.setVisibility(View.VISIBLE);
+            else itemBinding.btnMoreOptions.setVisibility(View.GONE);
             itemBinding.btnMoreOptions.setOnClickListener(view -> showMoreOptions(task, position));
             itemBinding.btnComment.setOnClickListener(view -> {
                 Intent commentIntent = new Intent(context, UpdateTaskCommentActivity.class);

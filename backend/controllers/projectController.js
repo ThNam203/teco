@@ -575,7 +575,7 @@ exports.getAllUpdateTasksOfACell = asyncCatch(async (req, res, next) => {
     const { userId, cellId } = req.params
 
     const updateTasks = await UpdateTask.find({ cellId: cellId })
-        .populate('author', '_id name email imageProfilePath')
+        .populate('author', '_id name email profileImagePath')
         .sort({
             createdAt: -1,
         })
@@ -942,7 +942,6 @@ exports.getUserWork = asyncCatch(async (req, res, next) => {
                         cell.cellType === 'CellUser' &&
                         cell.users.some((user) => user.equals(userId))
                 )
-
                 if (workCell) {
                     result.push({
                         projectId: project._id,

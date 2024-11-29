@@ -89,8 +89,7 @@ public class MemberAdapter extends RecyclerView.Adapter {
                 tvMemberRole.setText("Admin");
                 tvMemberRole.setVisibility(View.VISIBLE);
             }
-            else
-                tvMemberRole.setVisibility(View.GONE);
+            else tvMemberRole.setVisibility(View.GONE);
 
             String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
 

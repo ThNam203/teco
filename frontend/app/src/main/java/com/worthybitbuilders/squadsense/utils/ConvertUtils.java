@@ -2,7 +2,9 @@ package com.worthybitbuilders.squadsense.utils;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class ConvertUtils {
 
@@ -83,5 +85,25 @@ public class ConvertUtils {
     {
         String dateString = String.format("%02d-%02d-%d", day, month, year);
         return dateString;
+    }
+    public static long getHours(Date date)
+    {
+        // Create a Calendar instance and set it to the given Date
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        // Get hour, minute, and second from the Calendar
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        return hour;
+    }
+    public static long getMinutes(Date date)
+    {
+        // Create a Calendar instance and set it to the given Date
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        // Get hour, minute, and second from the Calendar
+        int minute = calendar.get(Calendar.MINUTE);
+        return minute;
     }
 }

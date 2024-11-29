@@ -147,6 +147,7 @@ public class MemberActivity extends AppCompatActivity {
             projectActivityViewModel.getProjectById(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
                 @Override
                 public void onSuccess() {
+                    listAdminId.clear();
                     listAdminId.addAll(projectActivityViewModel.getProjectModel().getAdminIds());
                     LoadMemberData();
                     eventChecker.markEventAsCompleteAndDoActionIfNeeded(LOAD_ADMINID_CODE);

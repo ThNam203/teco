@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="200dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/curved_small_background"
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_admin"
         app:iconTint="@color/primary_icon_second_color"
-        android:text="Request admin"
+        android:text="Request admin right"
         android:textColor="@color/primary_word_second_color"
         android:textAllCaps="false"
         android:textStyle="normal"

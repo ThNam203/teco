@@ -1,18 +1,23 @@
 package com.worthybitbuilders.squadsense.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.ContentView;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.models.WorkModel;
+import com.worthybitbuilders.squadsense.utils.ConvertUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -50,6 +55,7 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.WorkViewHolder
     }
 
     public static class WorkViewHolder extends RecyclerView.ViewHolder {
+
         public TextView rowTitle;
         public ImageView doneTick;
         public WorkViewHolder(@NonNull View itemView) {

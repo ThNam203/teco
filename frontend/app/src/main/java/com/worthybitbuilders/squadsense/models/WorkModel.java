@@ -2,6 +2,11 @@ package com.worthybitbuilders.squadsense.models;
 
 import android.content.Intent;
 
+import com.worthybitbuilders.squadsense.utils.CompareUtils;
+import com.worthybitbuilders.squadsense.utils.ConvertUtils;
+
+import java.util.Date;
+
 public class WorkModel {
     private final String projectId;
     private final String projectTitle;
@@ -11,6 +16,7 @@ public class WorkModel {
     private final String rowTitle;
     private final Integer cellRowPosition;
     private final String createdAt;
+
     private final boolean isDone;
 
     public WorkModel(String projectId, String projectTitle, String boardId, String boardTitle, Integer boardPosition, String rowTitle, Integer cellRowPosition, String createdAt, boolean isDone) {

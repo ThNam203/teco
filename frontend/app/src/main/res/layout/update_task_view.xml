@@ -16,13 +16,20 @@
         android:layout_marginEnd="4dp"
         android:layout_marginTop="12dp"
         android:gravity="center_vertical">
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/ivAuthorAvatar"
+
+        <androidx.cardview.widget.CardView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            tools:src="@drawable/ic_user"
-            android:layout_marginEnd="16dp"
-            app:shapeAppearanceOverlay="@style/RoundedImageView"/>
+            android:layout_gravity="center"
+            android:layout_marginRight="16dp"
+            app:cardCornerRadius="250dp">
+            <ImageView
+                android:id="@+id/ivAuthorAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_user"/>
+        </androidx.cardview.widget.CardView>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -36,6 +43,7 @@
                 android:layout_weight="1"
                 android:textSize="@dimen/normal_textsize"
                 android:singleLine="true"
+                android:text="Name"
                 android:textColor="@color/primary_word_color"
                 android:textStyle="bold"
                 android:gravity="center_vertical"/>
@@ -44,6 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:text="Jul 17, 2023"
                 android:textColor="@color/grey"
                 android:singleLine="true"
                 android:textSize="14sp"

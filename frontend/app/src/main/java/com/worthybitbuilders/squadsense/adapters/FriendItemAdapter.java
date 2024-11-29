@@ -103,7 +103,14 @@ public class FriendItemAdapter extends RecyclerView.Adapter {
                             List<UserModel> sameElements = new ArrayList<>(listFriend1); // Tạo một danh sách mới để giữ lại các phần tử chung
                             sameElements.retainAll(friends);
                             final int numSameElements = sameElements.size();
-                            tvFriendConnection.setText(String.valueOf(numSameElements) + (numSameElements > 1 ? " connections" : " connection"));
+                            if(numSameElements > 0) {
+                                tvFriendConnection.setVisibility(View.VISIBLE);
+                                tvFriendConnection.setText(numSameElements + " connections");
+                            }
+                            else {
+                                tvFriendConnection.setVisibility(View.GONE);
+                                tvFriendConnection.setText("");
+                            }
                         }
 
                         @Override
