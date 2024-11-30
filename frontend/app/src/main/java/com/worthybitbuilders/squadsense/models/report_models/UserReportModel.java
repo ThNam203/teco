@@ -5,19 +5,19 @@ import java.util.List;
 public class UserReportModel {
 
     public String title;
-    public List<Assignment> assignments;
+    public List<Assignment> assigments;
 
     public UserReportModel(String title, List<Assignment> assignments) {
         this.title = title;
-        this.assignments = assignments;
+        this.assigments = assignments;
     }
 
     public static class Assignment {
         public String label;
-        public List<Assignee> user;
-        public Assignment(String label, List<Assignee> user) {
+        public List<String> assignee;
+        public Assignment(String label, List<String> user) {
             this.label = label;
-            this.user = user;
+            this.assignee = user;
         }
     }
 
