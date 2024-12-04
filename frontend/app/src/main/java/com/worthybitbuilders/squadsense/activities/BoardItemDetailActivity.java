@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.worthybitbuilders.squadsense.R;
@@ -31,8 +32,11 @@ import com.worthybitbuilders.squadsense.factory.BoardItemDetailViewModelFactory;
 import com.worthybitbuilders.squadsense.fragments.BoardDetailColumnFragment;
 import com.worthybitbuilders.squadsense.fragments.BoardDetailUpdateFragment;
 import com.worthybitbuilders.squadsense.models.BoardDetailItemModel;
+import com.worthybitbuilders.squadsense.models.UserModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardBaseItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardRowHeaderModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardUpdateItemModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
@@ -54,6 +58,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
     private ProjectActivityViewModel projectActivityViewModel;
     private String currentChosenCellId = null;
     private String rowTitle = "";
+    private int rowPosition;
     private boolean isDone;
 
     @Override
@@ -78,14 +83,15 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
 
         if (isDone) activityBinding.doneTick.setVisibility(View.VISIBLE);
 
-        this.rowTitle = rowTitle;
-
         // updateCellId is only for when user tap the update item
         // which is because there could be more than 1 update item
         // when open from board
         String updateCellId = intent.getStringExtra("updateCellId");
         String updateCellTitle = intent.getStringExtra("updateCellTitle");
         int rowPosition = intent.getIntExtra("rowPosition", -1);
+
+        this.rowTitle = rowTitle;
+        this.rowPosition = rowPosition;
 
         activityBinding.itemTitle.setText(rowTitle);
 
@@ -100,21 +106,6 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
 
         Dialog loadingDialog = DialogUtils.GetLoadingDialog(this);
         loadingDialog.show();
-
-        projectActivityViewModel.getProjectById(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
-            @Override
-            public void onSuccess() {
-                String creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
-                List<String> listAdminId = projectActivityViewModel.getProjectModel().getAdminIds();
-                loadViewWithSuitableRole(creatorId, listAdminId);
-            }
-
-            @Override
-            public void onFailure(String message) {
-
-            }
-        });
-
 
         viewModel.getDataFromRemote(new BoardDetailItemViewModel.ApiCallHandler() {
             @Override
@@ -163,6 +154,20 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
             }
         });
 
+        projectActivityViewModel.getProjectById(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
+            @Override
+            public void onSuccess() {
+                String creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
+                List<String> listAdminId = projectActivityViewModel.getProjectModel().getAdminIds();
+                loadViewWithSuitableRole(creatorId, listAdminId);
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+            }
+        });
+
         if (!isFromUpdateColumn) changeToColumnFragment();
         activityBinding.btnMoreOptions.setOnClickListener(view -> showMoreOptions());
         activityBinding.btnShowColumns.setOnClickListener(view -> changeToColumnFragment());
@@ -183,6 +188,9 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
             popupWindow.dismiss();
         });
 
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        String creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
+        List<String> listAdminId = projectActivityViewModel.getProjectModel().getAdminIds();
         if (isDone) {
             moreOptionsBinding.btnChangeDone.setText("Mark as not done");
             moreOptionsBinding.btnRemove.setVisibility(View.GONE);
@@ -190,8 +198,14 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         }
         else{
             moreOptionsBinding.btnChangeDone.setText("Mark as done");
-            moreOptionsBinding.btnRemove.setVisibility(View.VISIBLE);
-            moreOptionsBinding.btnRename.setVisibility(View.VISIBLE);
+            if(creatorId.equals(userId) || listAdminId.contains(userId)) {
+                moreOptionsBinding.btnRename.setVisibility(View.VISIBLE);
+                moreOptionsBinding.btnRemove.setVisibility(View.VISIBLE);
+            }
+            else {
+                moreOptionsBinding.btnRename.setVisibility(View.GONE);
+                moreOptionsBinding.btnRemove.setVisibility(View.GONE);
+            }
         }
 
         moreOptionsBinding.btnChangeDone.setOnClickListener(view -> {
@@ -361,6 +375,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         else if(listAdminId.contains(userId)) role = Role.ADMIN;
         else role = Role.MEMBER;
 
+
         switch (role){
             case CREATOR:
                 activityBinding.btnMoreOptions.setVisibility(View.VISIBLE);
@@ -369,8 +384,30 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
                 activityBinding.btnMoreOptions.setVisibility(View.VISIBLE);
                 break;
             case MEMBER:
-                activityBinding.btnMoreOptions.setVisibility(View.GONE);
+                if(isAnOwnerOfRow(userId)) activityBinding.btnMoreOptions.setVisibility(View.VISIBLE);
+                else activityBinding.btnMoreOptions.setVisibility(View.GONE);
                 break;
         }
+    }
+    private boolean isAnOwnerOfRow(String id)
+    {
+        if(viewModel.getItemsLiveData().getValue() == null) return false;
+        List<BoardBaseItemModel> cells = viewModel.getItemsLiveData().getValue().getCells();
+
+        for (BoardBaseItemModel cell : cells) {
+            if (cell.getCellType().equals("CellUser")) {
+                BoardUserItemModel userItemModel = (BoardUserItemModel) cell;
+                if (userItemModel != null) {
+                    List<UserModel> users = userItemModel.getUsers();
+                    for (UserModel user : users) {
+                        if (user.getId().equals(id)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

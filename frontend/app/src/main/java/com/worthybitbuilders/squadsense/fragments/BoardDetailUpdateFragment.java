@@ -56,7 +56,6 @@ public class BoardDetailUpdateFragment extends Fragment {
 
         binding.rvUpdates.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.rvUpdates.setHasFixedSize(true);
-        handlerIfTaskDone(isDone);
 
         binding.writeUpdateContainer.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), NewUpdateTaskActivity.class);
@@ -81,13 +80,14 @@ public class BoardDetailUpdateFragment extends Fragment {
             }
         });
 
-        adapter = new UpdateTaskAdapter(getActivity(), viewModel, () -> {
+        adapter = new UpdateTaskAdapter(getActivity(), viewModel, ()  -> {
             binding.emptyNotification.setVisibility(View.VISIBLE);
             binding.rvUpdates.setVisibility(View.GONE);
         });
         binding.rvUpdates.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.rvUpdates.setAdapter(adapter);
 
+        handlerIfTaskDone(isDone);
         return binding.getRoot();
     }
 
@@ -95,6 +95,11 @@ public class BoardDetailUpdateFragment extends Fragment {
     {
         if(isDone) binding.writeUpdateContainer.setVisibility(View.GONE);
         else binding.writeUpdateContainer.setVisibility(View.VISIBLE);
+
+        if(adapter != null){
+            adapter.setReadOnly(isDone);
+            binding.rvUpdates.setAdapter(adapter);
+        }
     }
 
     @Override

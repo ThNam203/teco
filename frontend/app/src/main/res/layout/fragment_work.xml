@@ -24,7 +24,7 @@
             android:id="@+id/btn_hide_done_item"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:backgroundTint="@color/primary_second_color"
+            android:backgroundTint="@color/primary_color"
             android:drawableLeft="@drawable/ic_checkbox_unchecked"
             android:drawableTint="@color/primary_icon_color"
             android:text="Hide done items"
@@ -32,25 +32,28 @@
             android:textSize="@dimen/normal_textsize"
             android:textColor="@color/primary_word_color"
             android:layout_marginRight="10sp"
-            android:layout_marginLeft="10sp"/>
+            android:layout_marginLeft="10sp"
+            android:elevation="5dp"/>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvWork"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="8dp" />
+        android:paddingHorizontal="8dp"
+        android:visibility="gone"/>
     <LinearLayout
         android:id="@+id/emptyWorkNotification"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:paddingTop="50dp"
         android:orientation="vertical">
         <ImageView
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_gravity="center"
             android:background="@color/transparent"
-            android:src="@drawable/image_work_fragment" />
+            android:src="@drawable/image_work_fragment"
+            android:layout_marginVertical="10dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

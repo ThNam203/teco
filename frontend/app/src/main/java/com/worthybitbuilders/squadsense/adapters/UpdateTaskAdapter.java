@@ -47,10 +47,16 @@ public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.Up
     private final BoardDetailItemViewModel viewModel;
     private List<UpdateTask> updateTasks = new ArrayList<>();
     private final Handlers handlers;
+
+    private boolean isReadOnly = false;
     public UpdateTaskAdapter(Context context, BoardDetailItemViewModel viewModel, Handlers handlers) {
         this.context = context;
         this.viewModel = viewModel;
         this.handlers = handlers;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.isReadOnly = readOnly;
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -112,6 +118,23 @@ public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.Up
             setUpImageRecyclerView(task);
             setUpFileRecyclerView(task);
             setUpVideoRecyclerView(task);
+
+            if(isReadOnly) {
+                itemBinding.btnLike.setEnabled(false);
+                itemBinding.btnComment.setEnabled(false);
+                itemBinding.btnMoreOptions.setVisibility(View.GONE);
+
+                itemView.setOnClickListener(view -> {
+                    ToastUtils.showToastError(itemView.getContext(), "This task is already completed and cannot be edited", Toast.LENGTH_SHORT);
+                });
+            }
+            else {
+                itemBinding.btnLike.setEnabled(true);
+                itemBinding.btnComment.setEnabled(true);
+                itemBinding.btnMoreOptions.setVisibility(View.VISIBLE);
+
+                itemView.setOnClickListener(null);
+            }
         }
 
         private void showMoreOptions(UpdateTask task, int position) {

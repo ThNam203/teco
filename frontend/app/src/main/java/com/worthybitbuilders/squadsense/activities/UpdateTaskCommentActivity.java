@@ -132,7 +132,7 @@ public class UpdateTaskCommentActivity extends AppCompatActivity {
                 binding.tvAuthorName.setText(viewModel.getUpdateTask().getAuthorName());
                 binding.tvTimestamp.setText(CustomUtils.mongooseDateToFormattedString(viewModel.getUpdateTask().getCreatedAt()));
                 binding.tvTaskContent.setText(viewModel.getUpdateTask().getContent());
-                Glide.with(binding.ivAuthorAvatar).load(viewModel.getUpdateTask().getAuthorImagePath()).placeholder(R.drawable.ic_user).into(binding.ivAuthorAvatar);
+                Glide.with(UpdateTaskCommentActivity.this).load(viewModel.getUpdateTask().getAuthorImagePath()).placeholder(R.drawable.ic_user).into(binding.ivAuthorAvatar);
 
                 setUpButtonLike();
                 setUpFileRecyclerView();
@@ -148,6 +148,8 @@ public class UpdateTaskCommentActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        binding.btnBack.setOnClickListener(view -> finish());
     }
 
     private void uploadUpdateTask() {
