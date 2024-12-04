@@ -136,19 +136,16 @@ public class ProjectActivityLogActivity extends AppCompatActivity {
             }
         });
 
-        binding.inputSearch.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if(binding.inputSearch.getCompoundDrawables()[2] == null) return false;
-                    if (event.getRawX() >= (binding.inputSearch.getRight() - binding.inputSearch.getCompoundDrawables()[2].getBounds().width())) {
-                        // Người dùng đã chạm vào nút xóa
-                        binding.inputSearch.setText(""); // Xóa toàn bộ chữ trong EditText
-                        return true;
-                    }
+        binding.inputSearch.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if(binding.inputSearch.getCompoundDrawables()[2] == null) return false;
+                if (event.getRawX() >= (binding.inputSearch.getRight() - binding.inputSearch.getCompoundDrawables()[2].getBounds().width())) {
+                    // Người dùng đã chạm vào nút xóa
+                    binding.inputSearch.setText(""); // Xóa toàn bộ chữ trong EditText
+                    return true;
                 }
-                return false;
             }
+            return false;
         });
 
         binding.btnFilter.setOnClickListener(view -> showFilterPopup());

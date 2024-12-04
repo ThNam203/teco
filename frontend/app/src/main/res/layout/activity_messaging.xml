@@ -35,32 +35,41 @@
             android:textSize="@dimen/normal_textsize"
             android:textColor="@color/primary_word_color"
             android:layout_gravity="center"
-            android:layout_marginHorizontal="16dp"/>
+            android:layout_marginHorizontal="8dp"/>
         <ImageButton
             android:id="@+id/btnVoiceCall"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_call"
-            app:tint="@color/blue"
-            android:background="?attr/selectableItemBackground"/>
+            android:background="@null"
+            app:tint="@color/blue"/>
         <ImageButton
             android:id="@+id/btnVideoCall"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            android:layout_marginHorizontal="16dp"
+            android:layout_marginHorizontal="8dp"
             android:src="@drawable/ic_video_call"
             app:tint="@color/blue"
-            android:background="?attr/selectableItemBackground"/>
-
+            android:background="@null"/>
+        <ImageButton
+            android:id="@+id/btnSetting"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:visibility="gone"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_more_setting"
+            app:tint="@color/primary_icon_color"
+            android:background="@null"/>
     </LinearLayout>
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/transparent">
         <androidx.recyclerview.widget.RecyclerView
@@ -76,9 +85,6 @@
             android:background="@color/primary_second_color"
             android:visibility="invisible"/>
     </RelativeLayout>
-
-
-
     <LinearLayout
         android:id="@+id/layout_gchat_chatbox"
         android:orientation="horizontal"

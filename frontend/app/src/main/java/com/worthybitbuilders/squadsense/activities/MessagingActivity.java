@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,7 +18,10 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.MimeTypeMap;
@@ -35,9 +40,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.adapters.AttachFileAdapter;
+import com.worthybitbuilders.squadsense.adapters.FriendItemAdapter;
 import com.worthybitbuilders.squadsense.adapters.MessageAdapter;
 import com.worthybitbuilders.squadsense.adapters.NewUpdateTaskFileAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityMessagingBinding;
+import com.worthybitbuilders.squadsense.databinding.PopupChatSettingBinding;
+import com.worthybitbuilders.squadsense.databinding.PopupFilterActivityLogBinding;
 import com.worthybitbuilders.squadsense.factory.MessageActivityViewModelFactory;
 import com.worthybitbuilders.squadsense.models.ChatMessage;
 import com.worthybitbuilders.squadsense.models.ChatRoom;
@@ -147,7 +155,23 @@ public class MessagingActivity extends AppCompatActivity {
         if (isGroupChat) {
             binding.btnVideoCall.setVisibility(View.GONE);
             binding.btnVoiceCall.setVisibility(View.GONE);
+            binding.btnSetting.setVisibility(View.VISIBLE);
         }
+
+        binding.btnSetting.setOnClickListener(view -> {
+            final Dialog dialog = new Dialog(this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            PopupChatSettingBinding popupFilterBinding = PopupChatSettingBinding.inflate(getLayoutInflater());
+            dialog.setContentView(popupFilterBinding.getRoot());
+
+//            FriendItemAdapter friendItemAdapter = new FriendItemAdapter(messageViewModel.getChatRoomInfor())
+
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
+            dialog.getWindow().setGravity(Gravity.BOTTOM);
+            dialog.show();
+        });
 
         binding.btnVideoCall.setOnClickListener(view -> {
             Intent callIntent = new Intent(this, CallVideoActivity.class);

@@ -460,38 +460,39 @@ public class ProjectActivity extends AppCompatActivity {
         else
             showProjectOptionFor(Role.MEMBER, binding);
 
+        binding.btnLeaveProject.setOnClickListener((view) -> {
+            projectActivityViewModel.leaveProject(new ProjectActivityViewModel.ApiCallHandlers() {
+                @Override
+                public void onSuccess() {
+                    finish();
+                }
 
-        binding.btnShowMember.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ActivityUtils.switchToActivity(ProjectActivity.this, MemberActivity.class);
-            }
+                @Override
+                public void onFailure(String message) {
+                    ToastUtils.showToastError(ProjectActivity.this, message, Toast.LENGTH_SHORT);
+                }
+            });
         });
 
-        binding.btnRenameProject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showRenamePopup();
-            }
-        });
 
-        binding.btnRequestAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String projectId = projectActivityViewModel.getProjectId();
-                projectActivityViewModel.requestAdmin(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
-                    @Override
-                    public void onSuccess() {
-                        ToastUtils.showToastSuccess(ProjectActivity.this, "Your request was sent to admins of this project", Toast.LENGTH_SHORT);
-                        popupWindow.dismiss();
-                    }
+        binding.btnShowMember.setOnClickListener(view -> ActivityUtils.switchToActivity(ProjectActivity.this, MemberActivity.class));
 
-                    @Override
-                    public void onFailure(String message) {
-                        ToastUtils.showToastError(ProjectActivity.this, message, Toast.LENGTH_SHORT);
-                    }
-                });
-            }
+        binding.btnRenameProject.setOnClickListener(view -> showRenamePopup());
+
+        binding.btnRequestAdmin.setOnClickListener(view -> {
+            String projectId = projectActivityViewModel.getProjectId();
+            projectActivityViewModel.requestAdmin(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
+                @Override
+                public void onSuccess() {
+                    ToastUtils.showToastSuccess(ProjectActivity.this, "Your request was sent to admins of this project", Toast.LENGTH_SHORT);
+                    popupWindow.dismiss();
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    ToastUtils.showToastError(ProjectActivity.this, message, Toast.LENGTH_SHORT);
+                }
+            });
         });
 
         binding.btnActivityLog.setOnClickListener(view -> {
@@ -500,41 +501,38 @@ public class ProjectActivity extends AppCompatActivity {
             startActivity(activityLogIntent);
         });
 
-        binding.btnDeleteProject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String titleConfirmDialog = "Delete";
-                String contentConfirmDialog = "Do you want to delete this project ?";
-                DialogUtils.showConfirmDialogDelete(ProjectActivity.this, titleConfirmDialog, contentConfirmDialog, new DialogUtils.ConfirmAction() {
-                    @Override
-                    public void onAcceptToDo(Dialog thisDialog) {
-                        thisDialog.dismiss();
-                        Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
-                        loadingDialog.show();
-                        String projectId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID);
-                        projectActivityViewModel.deleteProject(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
-                            @Override
-                            public void onSuccess() {
-                                ToastUtils.showToastSuccess(ProjectActivity.this, "Project deleted", Toast.LENGTH_SHORT);
-                                loadingDialog.dismiss();
-                                ProjectActivity.this.onBackPressed();
-                            }
+        binding.btnDeleteProject.setOnClickListener(view -> {
+            String titleConfirmDialog = "Delete";
+            String contentConfirmDialog = "Do you want to delete this project ?";
+            DialogUtils.showConfirmDialogDelete(ProjectActivity.this, titleConfirmDialog, contentConfirmDialog, new DialogUtils.ConfirmAction() {
+                @Override
+                public void onAcceptToDo(Dialog thisDialog) {
+                    thisDialog.dismiss();
+                    Dialog loadingDialog = DialogUtils.GetLoadingDialog(ProjectActivity.this);
+                    loadingDialog.show();
+                    String projectId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID);
+                    projectActivityViewModel.deleteProject(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
+                        @Override
+                        public void onSuccess() {
+                            ToastUtils.showToastSuccess(ProjectActivity.this, "Project deleted", Toast.LENGTH_SHORT);
+                            loadingDialog.dismiss();
+                            ProjectActivity.this.onBackPressed();
+                        }
 
-                            @Override
-                            public void onFailure(String message) {
-                                ToastUtils.showToastError(ProjectActivity.this, "You are not allowed to delete this project", Toast.LENGTH_SHORT);
-                                loadingDialog.dismiss();
-                            }
-                        });
+                        @Override
+                        public void onFailure(String message) {
+                            ToastUtils.showToastError(ProjectActivity.this, "You are not allowed to delete this project", Toast.LENGTH_SHORT);
+                            loadingDialog.dismiss();
+                        }
+                    });
 
-                    }
+                }
 
-                    @Override
-                    public void onCancel(Dialog thisDialog) {
-                        thisDialog.dismiss();
-                    }
-                });
-            }
+                @Override
+                public void onCancel(Dialog thisDialog) {
+                    thisDialog.dismiss();
+                }
+            });
         });
 
         popupWindow.setTouchable(true);

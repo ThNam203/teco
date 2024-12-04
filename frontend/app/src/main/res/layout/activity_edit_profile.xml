@@ -82,7 +82,6 @@
                     android:background="@drawable/background_btn_corner"
                     android:backgroundTint="@color/teal_200"
                     android:visibility="visible">
-
                     <TextView
                         android:id="@+id/default_image_profile_text"
                         android:layout_width="wrap_content"
@@ -93,7 +92,6 @@
                         android:textColor="@color/white"
                         android:textSize="48sp"
                         android:textStyle="bold" />
-
                     <ImageButton
                         android:id="@+id/btn_camera"
                         android:layout_width="40dp"

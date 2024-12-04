@@ -175,6 +175,23 @@ public class ProjectActivityViewModel extends ViewModel {
             }
         });
     }
+    public void leaveProject(ApiCallHandlers handlers) {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        Call<Void> call = projectService.leaveProject(userId, projectId);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    handlers.onSuccess();
+                } else handlers.onFailure(response.message());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                handlers.onFailure(t.getMessage());
+            }
+        });
+    }
 
     public void updateBoardDeadlineColumnIndex(int boardPosition, int deadlineColumnIndex, ApiCallHandlers handlers) throws JSONException {
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);

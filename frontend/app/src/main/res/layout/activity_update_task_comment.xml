@@ -47,13 +47,6 @@
                 android:textSize="14sp"
                 android:gravity="center_vertical"/>
         </LinearLayout>
-        <ImageButton
-            android:id="@+id/btnMoreOptions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_more_setting"
-            app:tint="@color/primary_icon_color"
-            android:backgroundTint="@color/transparent"/>
     </LinearLayout>
     <TextView
         android:id="@+id/tvTaskContent"

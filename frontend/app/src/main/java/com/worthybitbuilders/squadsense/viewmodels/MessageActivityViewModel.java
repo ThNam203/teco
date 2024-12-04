@@ -33,7 +33,6 @@ public class MessageActivityViewModel extends ViewModel {
     private final String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
     private final Socket socket = SocketClient.getInstance();
     private final ChatRoomService chatRoomService = RetrofitServices.getChatRoomService();
-
     private final Emitter.Listener onNewMessage = args -> {
         ChatMessage newMessage = new Gson().fromJson(args[0].toString(), ChatMessage.class);
         mMessageList.add(newMessage);

@@ -49,6 +49,9 @@ public interface ProjectService {
     @DELETE("{userId}/project/{projectId}")
     Call<Void> deleteProject(@Path("userId") String userId, @Path("projectId") String projectId);
 
+    @PATCH("{userId}/project/{projectId}")
+    Call<Void> leaveProject(@Path("userId") String userId, @Path("projectId") String projectId);
+
     @GET("{userId}/project/{projectId}/get-member")
     Call<List<UserModel>> getMember(@Path("userId") String userId, @Path("projectId") String projectId);
 
