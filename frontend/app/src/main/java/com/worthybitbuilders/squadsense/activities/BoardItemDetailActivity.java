@@ -183,8 +183,16 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
             popupWindow.dismiss();
         });
 
-        if (isDone) moreOptionsBinding.btnChangeDone.setText("Mark as not done");
-        else moreOptionsBinding.btnChangeDone.setText("Mark as done");
+        if (isDone) {
+            moreOptionsBinding.btnChangeDone.setText("Mark as not done");
+            moreOptionsBinding.btnRemove.setVisibility(View.GONE);
+            moreOptionsBinding.btnRename.setVisibility(View.GONE);
+        }
+        else{
+            moreOptionsBinding.btnChangeDone.setText("Mark as done");
+            moreOptionsBinding.btnRemove.setVisibility(View.VISIBLE);
+            moreOptionsBinding.btnRename.setVisibility(View.VISIBLE);
+        }
 
         moreOptionsBinding.btnChangeDone.setOnClickListener(view -> {
             try {
@@ -194,6 +202,10 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
                         isDone = !isDone;
                         if (isDone) activityBinding.doneTick.setVisibility(View.VISIBLE);
                         else activityBinding.doneTick.setVisibility(View.GONE);
+                        BoardDetailColumnFragment boardDetailColumnFragment = (BoardDetailColumnFragment) getSupportFragmentManager().findFragmentByTag("BOARD_DETAIL_COLUMN_FRAGMENT");
+                        BoardDetailUpdateFragment boardDetailUpdateFragment = (BoardDetailUpdateFragment) getSupportFragmentManager().findFragmentByTag("BOARD_DETAIL_UPDATE_FRAGMENT");
+                        if(boardDetailColumnFragment != null) boardDetailColumnFragment.setDone(isDone);
+                        if(boardDetailUpdateFragment != null) boardDetailUpdateFragment.setDone(isDone);
                         ToastUtils.showToastSuccess(BoardItemDetailActivity.this, "Updated", Toast.LENGTH_SHORT);
                         popupWindow.dismiss();
                     }
@@ -303,9 +315,11 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
     private void changeToUpdateFragment(String cellId, String columnTitle, String rowTitle) {
         currentChosenCellId = cellId;
         viewModel.setUpdateCellId(cellId);
+        BoardDetailUpdateFragment boardDetailUpdateFragment = (BoardDetailUpdateFragment) BoardDetailUpdateFragment.newInstance(cellId, columnTitle, rowTitle);
+        if(boardDetailUpdateFragment != null) boardDetailUpdateFragment.setDone(isDone);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(activityBinding.fragmentContainer.getId(), BoardDetailUpdateFragment.newInstance(cellId, columnTitle, rowTitle))
+                .replace(activityBinding.fragmentContainer.getId(), boardDetailUpdateFragment, "BOARD_DETAIL_UPDATE_FRAGMENT")
                 .commit();
     }
 
@@ -317,9 +331,11 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         int colorTint = ContextCompat.getColor(BoardItemDetailActivity.this, R.color.white);
         activityBinding.btnShowColumns.setTextColor(colorTint);
         activityBinding.btnShowColumns.setCompoundDrawableTintList(ColorStateList.valueOf(colorTint));
+        BoardDetailColumnFragment boardDetailColumnFragment = (BoardDetailColumnFragment) BoardDetailColumnFragment.newInstance();
+        if(boardDetailColumnFragment != null) boardDetailColumnFragment.setDone(isDone);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(activityBinding.fragmentContainer.getId(), BoardDetailColumnFragment.newInstance())
+                .replace(activityBinding.fragmentContainer.getId(), boardDetailColumnFragment, "BOARD_DETAIL_COLUMN_FRAGMENT")
                 .commit();
     }
 

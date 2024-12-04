@@ -86,11 +86,17 @@ public class BoardDetailColumnFragment extends Fragment {
     private String creatorId = "";
     private List<String> listAdminId = new ArrayList<>();
 
+    private boolean isDone = false;
+
     public static BoardDetailColumnFragment newInstance() {
         BoardDetailColumnFragment fragment = new BoardDetailColumnFragment();
         return fragment;
     }
     public BoardDetailColumnFragment() {}
+
+    public void setDone(boolean isDone) {
+        this.isDone = isDone;
+    }
 
     public interface ItemClickHelper {
         void onUpdateItemClick(BoardUpdateItemModel itemModel, String columnTitle);
@@ -124,6 +130,7 @@ public class BoardDetailColumnFragment extends Fragment {
         adapter = new BoardItemDetailColumnAdapter(viewModel, getActivity(), new BoardItemDetailColumnAdapter.ClickHandlers() {
             @Override
             public void onMapItemClick(BoardMapItemModel itemModel, String columnTitle, int columnPos) {
+                if(handlerIfTaskDone(isDone)) return;
                 Intent mapIntent = new Intent(getActivity(), MapActivity.class);
                 String itemJson = new Gson().toJson(itemModel);
                 mapIntent.putExtra("itemModel", itemJson);
@@ -135,41 +142,49 @@ public class BoardDetailColumnFragment extends Fragment {
 
             @Override
             public void onUpdateItemClick(BoardUpdateItemModel itemModel, String columnTitle) {
+                if(handlerIfTaskDone(isDone)) return;
                 ((ItemClickHelper) getActivity()).onUpdateItemClick(itemModel, columnTitle);
             }
 
             @Override
             public void onCheckboxItemClick(BoardCheckboxItemModel itemModel, int columnPos) {
+                if(handlerIfTaskDone(isDone)) return;
                 onCheckboxItemClicked(itemModel, columnPos);
             }
 
             @Override
             public void OnDateItemClick(BoardDateItemModel itemModel, String columnTitle, int columnPos) {
+                if(handlerIfTaskDone(isDone)) return;
                 showDateItemPopup(itemModel, columnTitle, columnPos);
             }
 
             @Override
             public void onNumberItemClick(BoardNumberItemModel itemModel, String columnTitle, int columnPos) {
+                if(handlerIfTaskDone(isDone)) return;
                 showNumberItemPopup(itemModel, columnTitle, columnPos);
             }
 
             @Override
             public void onStatusItemClick(BoardStatusItemModel itemModel, int columnPos) {
+                if(handlerIfTaskDone(isDone)) return;
                 showTaskStatusPopup(itemModel, columnPos);
             }
 
             @Override
             public void onTextItemClick(BoardTextItemModel itemModel, String columnTitle, int columnPos) {
+                if(handlerIfTaskDone(isDone)) return;
                 showTextItemPopup(itemModel, columnTitle, columnPos);
             }
 
             @Override
             public void OnTimelineItemClick(BoardTimelineItemModel itemModel, String columnTitle, int columnPos) {
+                if(handlerIfTaskDone(isDone)) return;
                 showTimelineItemPopup(itemModel, columnTitle, columnPos);
             }
 
             @Override
             public void onUserItemClick(BoardUserItemModel userItemModel, String columnTitle, int columnPosition) {
+                if(handlerIfTaskDone(isDone)) return;
                 showOwnerPopup(userItemModel, columnTitle, columnPosition);
             }
         });
@@ -185,6 +200,14 @@ public class BoardDetailColumnFragment extends Fragment {
         return binding.getRoot();
     }
 
+    private boolean handlerIfTaskDone(boolean isDone)
+    {
+        if(isDone) {
+            ToastUtils.showToastError(getContext(), "This task is already completed and cannot be edited", Toast.LENGTH_SHORT);
+            return true;
+        }
+        return false;
+    }
 
     private void showOwnerPopup(BoardUserItemModel userItemModel, String columnTitle, int columnPos) {
         final Dialog dialog = new Dialog(getActivity());

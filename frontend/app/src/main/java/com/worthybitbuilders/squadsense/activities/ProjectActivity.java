@@ -132,6 +132,7 @@ public class ProjectActivity extends AppCompatActivity {
         boardAdapter = new TableViewAdapter(this, boardViewModel, new TableViewAdapter.OnClickHandlers() {
             @Override
             public void OnMapItemClick(BoardMapItemModel itemModel, String columnTitle, int columnPos, int rowPos) {
+                if(isTaskDone(rowPos)) return;
                 Intent mapIntent = new Intent(ProjectActivity.this, MapActivity.class);
                 String itemJson = new Gson().toJson(itemModel);
                 mapIntent.putExtra("itemModel", itemJson);
@@ -143,21 +144,25 @@ public class ProjectActivity extends AppCompatActivity {
 
             @Override
             public void OnTimelineItemClick(BoardTimelineItemModel itemModel, String columnTitle, int columnPos, int rowPos) {
+                if(isTaskDone(rowPos)) return;
                 showTimelineItemPopup(itemModel, columnTitle, columnPos, rowPos);
             }
 
             @Override
             public void OnDateItemClick(BoardDateItemModel itemModel, String columnTitle, int columnPos, int rowPos) {
+                if(isTaskDone(rowPos)) return;
                 showDateItemPopup(itemModel, columnTitle, columnPos, rowPos);
             }
 
             @Override
             public void onCheckboxItemClick(BoardCheckboxItemModel itemModel, int columnPos, int rowPos) {
+                if(isTaskDone(rowPos)) return;
                 onCheckboxItemClicked(itemModel, columnPos, rowPos);
             }
 
             @Override
             public void onUpdateItemClick(BoardUpdateItemModel itemModel, int rowPosition, String rowTitle, String columnTitle) {
+                if(isTaskDone(rowPosition)) return;
                 Intent updateIntent = new Intent(ProjectActivity.this, BoardItemDetailActivity.class);
                 updateIntent.putExtra("projectId", projectActivityViewModel.getProjectId());
                 updateIntent.putExtra("boardId", boardViewModel.getBoardId());
@@ -174,6 +179,7 @@ public class ProjectActivity extends AppCompatActivity {
 
             @Override
             public void onNumberItemClick(BoardNumberItemModel itemModel, String columnTitle, int columnPos, int rowPos) {
+                if(isTaskDone(rowPos)) return;
                 showNumberItemPopup(itemModel, columnTitle, columnPos, rowPos);
             }
 
@@ -219,16 +225,19 @@ public class ProjectActivity extends AppCompatActivity {
 
             @Override
             public void onTextItemClick(BoardTextItemModel itemModel, String columnTitle, int columnPos, int rowPos) {
+                if(isTaskDone(rowPos)) return;
                 showTextItemPopup(itemModel, columnTitle, columnPos, rowPos);
             }
 
             @Override
             public void onUserItemClick(BoardUserItemModel userItemModel, String columnTitle, int columnPos, int rowPos) {
+                if(isTaskDone(rowPos)) return;
                 showOwnerPopup(userItemModel, columnTitle, columnPos, rowPos);
             }
 
             @Override
             public void onStatusItemClick(BoardStatusItemModel itemModel, int columnPos, int rowPos) {
+                if(isTaskDone(rowPos)) return;
                 showTaskStatusPopup(itemModel, columnPos, rowPos);
             }
         });
@@ -260,6 +269,16 @@ public class ProjectActivity extends AppCompatActivity {
         activityBinding.btnMoreOptions.setOnClickListener(this::showProjectOptions);
         activityBinding.btnBack.setOnClickListener((view) -> onBackPressed());
         createNewProjectIfRequest();
+    }
+
+    private boolean isTaskDone(int rowPosition)
+    {
+        boolean isDone = boardViewModel.getmRowHeaderModelList().get(rowPosition).isDone();
+        if(isDone) {
+            ToastUtils.showToastError(ProjectActivity.this, "This task is already completed and cannot be edited", Toast.LENGTH_SHORT);
+            return true;
+        }
+        else return false;
     }
 
     private void showColumnHeaderOptions(BoardColumnHeaderModel headerModel, int columnPosition, View anchor) {

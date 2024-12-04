@@ -26,6 +26,8 @@ public class BoardDetailUpdateFragment extends Fragment {
     private String columnTitle;
     private String rowTitle;
     private UpdateTaskAdapter adapter;
+
+    private boolean isDone = false;
     public static BoardDetailUpdateFragment newInstance(String updateCellId, String columnTitle, String rowTitle) {
         Bundle args = new Bundle();
         args.putString("rowTitle", rowTitle);
@@ -36,6 +38,12 @@ public class BoardDetailUpdateFragment extends Fragment {
         return fragment;
     }
     public BoardDetailUpdateFragment() {}
+
+    public void setDone(boolean isDone){
+        this.isDone = isDone;
+        if(binding == null) return;
+        handlerIfTaskDone(isDone);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -48,6 +56,7 @@ public class BoardDetailUpdateFragment extends Fragment {
 
         binding.rvUpdates.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.rvUpdates.setHasFixedSize(true);
+        handlerIfTaskDone(isDone);
 
         binding.writeUpdateContainer.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), NewUpdateTaskActivity.class);
@@ -80,6 +89,12 @@ public class BoardDetailUpdateFragment extends Fragment {
         binding.rvUpdates.setAdapter(adapter);
 
         return binding.getRoot();
+    }
+
+    private void handlerIfTaskDone(boolean isDone)
+    {
+        if(isDone) binding.writeUpdateContainer.setVisibility(View.GONE);
+        else binding.writeUpdateContainer.setVisibility(View.VISIBLE);
     }
 
     @Override
