@@ -442,7 +442,7 @@ public class BoardViewModel extends ViewModel {
         }
 
         if (!needToFilter) {
-            binding.emptyFilterResult.setVisibility(View.VISIBLE);
+            binding.emptyFilterResult.setVisibility(View.GONE);
             adapter.setAllItems(
                     mColumnHeaderModelList,
                     mRowHeaderModelList,

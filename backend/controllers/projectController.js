@@ -92,63 +92,63 @@ const updateACell = async (cell) => {
             newCell = await cellModels.CellStatus.findByIdAndUpdate(
                 cell._id,
                 cell,
-                { new: true }
+                { new: false }
             )
             break
         case 'CellUpdate':
             newCell = await cellModels.CellUpdate.findByIdAndUpdate(
                 cell._id,
                 cell,
-                { new: true }
+                { new: false }
             )
             break
         case 'CellText':
             newCell = await cellModels.CellText.findByIdAndUpdate(
                 cell._id,
                 cell,
-                { new: true }
+                { new: false }
             )
             break
         case 'CellNumber':
             newCell = await cellModels.CellNumber.findByIdAndUpdate(
                 cell._id,
                 cell,
-                { new: true }
+                { new: false }
             )
             break
         case 'CellTimeline':
             newCell = await cellModels.CellTimeline.findByIdAndUpdate(
                 cell._id,
                 cell,
-                { new: true }
+                { new: false }
             )
             break
         case 'CellDate':
             newCell = await cellModels.CellDate.findByIdAndUpdate(
                 cell._id,
                 cell,
-                { new: true }
+                { new: false }
             )
             break
         case 'CellUser':
             newCell = await cellModels.CellUser.findByIdAndUpdate(
                 cell._id,
                 cell,
-                { new: true }
+                { new: false }
             ).populate('users', '_id name profileImagePath')
             break
         case 'CellCheckbox':
             newCell = await cellModels.CellCheckbox.findByIdAndUpdate(
                 cell._id,
                 cell,
-                { new: true }
+                { new: false }
             )
             break
         case 'CellMap':
             newCell = await cellModels.CellMap.findByIdAndUpdate(
                 cell._id,
                 cell,
-                { new: true }
+                { new: false }
             )
             break
         default:
@@ -237,20 +237,17 @@ exports.updateACell = asyncCatch(async (req, res, next) => {
     const user = await User.findById(userId)
     const cell = req.body
 
-    const updatedCell = await updateACell(cell)
+    const oldCell = await updateACell(cell)
 
     // create notificaton for user who is appointed to the tasks (whose id does not equal to userId)
     if (cell.cellType === 'CellUser') {
         // users who were appointed to the task before update
-        const oldUserIds = cell.users.map((u) => u._id)
-        const newUserIds = updatedCell.users.map((u) => u._id)
+        const oldUserIds = oldCell.users.map((u) => u._id.toString())
+        const newUserIds = cell.users.map((u) => u._id.toString())
         newUserIds.forEach((newUserId) => {
             // it means a new user has been appointed the task
             // TODO: add projectid, boardid, cellId for navigation
-            if (
-                newUserId.toString() !== userId &&
-                !oldUserIds.contains(newUserId)
-            ) {
+            if (newUserId !== userId && !oldUserIds.contains(newUserId)) {
                 Notification.create({
                     senderId: userId,
                     receiverId: newUserId,
@@ -262,8 +259,7 @@ exports.updateACell = asyncCatch(async (req, res, next) => {
         })
     }
 
-    if (!updatedCell)
-        return next(new AppError('Unable to update the cell', 500))
+    if (!oldCell) return next(new AppError('Unable to update the cell', 500))
 
     // create activity log
     Board.findById(boardId).then((board) => {
@@ -538,7 +534,7 @@ exports.getUpdateTaskAndComment = asyncCatch(async (req, res, next) => {
 
     const updateTask = await UpdateTask.findById(updateTaskId).populate(
         'author',
-        '_id name email imageProfilePath'
+        '_id name email profileImagePath'
     )
 
     const objectTask = updateTask.toObject()
@@ -550,7 +546,7 @@ exports.getUpdateTaskAndComment = asyncCatch(async (req, res, next) => {
         updateTaskId: updateTaskId,
     })
         .sort({ createdAt: -1 })
-        .populate('author', '_id name email imageProfilePath')
+        .populate('author', '_id name email profileImagePath')
     commentsRaw.reverse()
 
     const comments = commentsRaw.map((comment) => {

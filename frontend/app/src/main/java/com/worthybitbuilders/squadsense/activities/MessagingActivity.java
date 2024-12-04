@@ -128,6 +128,7 @@ public class MessagingActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 messageAdapter.notifyDataSetChanged();
+                binding.rvMessage.scrollToPosition(messageViewModel.getMessageList().size());
                 loadingDialog.dismiss();
             }
 

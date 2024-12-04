@@ -680,6 +680,7 @@ public class ProjectActivity extends AppCompatActivity {
                         projectActivityViewModel.getProjectModel().getBoards().get(
                                 projectActivityViewModel.getProjectModel().getChosenPosition()
                         ).setDeadlineColumnIndex(boardViewModel.getDeadlineColumnIndex());
+
                         thisDialog.dismiss();
                     }
 
@@ -964,7 +965,6 @@ public class ProjectActivity extends AppCompatActivity {
             }
         });
 
-
         BoardFilterAdapter filterBoardAdapter = new BoardFilterAdapter(listFilterBoard, listFilterCollection, tempListSelectedCollection);
         popupFilterBinding.rvBoardFilter.setAdapter(filterBoardAdapter);
 
@@ -980,7 +980,7 @@ public class ProjectActivity extends AppCompatActivity {
 
         popupFilterBinding.btnClear.setOnClickListener(view -> {
             tempListSelectedCollection.clear();
-            popupFilterBinding.rvBoardFilter.setAdapter(filterBoardAdapter);
+            filterBoardAdapter.notifyDataSetChanged();
         });
 
     }
