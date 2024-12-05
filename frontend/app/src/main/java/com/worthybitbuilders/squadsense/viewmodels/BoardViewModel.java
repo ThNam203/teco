@@ -191,7 +191,7 @@ public class BoardViewModel extends ViewModel {
         return columnRow;
     }
 
-    public void createNewColumn(BoardColumnHeaderModel.ColumnType columnType) {
+    public void createNewColumn(BoardColumnHeaderModel.ColumnType columnType, ApiCallHandler handler) {
         // create the corresponding items
         BoardColumnHeaderModel newColumnModel = new BoardColumnHeaderModel(columnType, columnType.getName());
         List<BoardBaseItemModel> itemModels = new ArrayList<>();
@@ -217,6 +217,7 @@ public class BoardViewModel extends ViewModel {
 
                     mColumnLiveData.setValue(mColumnHeaderModelList);
                     mCellLiveData.setValue(mCellModelList);
+                    handler.onSuccess();
                 }
             }
 
@@ -289,7 +290,7 @@ public class BoardViewModel extends ViewModel {
         return projectService.deleteARow(userId, projectId, boardId, rowPosition);
     }
 
-    public void createNewRow(String title) {
+    public void createNewRow(String title, ApiCallHandler callHandler) {
         BoardRowHeaderModel newRowHeaderModel = new BoardRowHeaderModel(title, false);
         int columnPosition = mRowHeaderModelList.size() - 1;
 
@@ -320,6 +321,7 @@ public class BoardViewModel extends ViewModel {
                     mCellModelList.add(newRowItems);
                     mRowLiveData.setValue(mRowHeaderModelList);
                     mCellLiveData.setValue(mCellModelList);
+                    callHandler.onSuccess();
                 }
             }
 

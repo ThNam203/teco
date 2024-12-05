@@ -90,7 +90,7 @@
                 android:drawableLeft="@drawable/ic_search"
                 android:drawablePadding="5dp"
                 android:drawableTint="@color/primary_word_second_color"
-                android:hint="Search People or Teams"
+                android:hint="Search people"
                 android:minHeight="48dp"
                 android:padding="5dp"
                 android:textColor="@color/primary_word_color"
@@ -102,20 +102,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"/>
-
-            <TextView
-                android:id="@+id/btnInvite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Invite a new team member by email"
-                android:textSize="@dimen/small_textsize"
-                android:textAllCaps="false"
-                android:textColor="@color/primary_word_third_color"
-                android:drawableLeft="@drawable/ic_mail_outline"
-                android:drawableTint="@color/primary_icon_third_color"
-                android:drawablePadding="5dp"
-                android:gravity="center_vertical"
-                android:layout_marginVertical="15dp"/>
+<!--            <TextView-->
+<!--                android:id="@+id/btnInvite"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Invite a new team member by email"-->
+<!--                android:textSize="@dimen/small_textsize"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:textColor="@color/primary_word_third_color"-->
+<!--                android:drawableLeft="@drawable/ic_mail_outline"-->
+<!--                android:drawableTint="@color/primary_icon_third_color"-->
+<!--                android:drawablePadding="5dp"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:layout_marginVertical="15dp"/>-->
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

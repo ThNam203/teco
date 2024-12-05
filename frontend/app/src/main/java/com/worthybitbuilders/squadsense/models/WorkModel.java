@@ -15,11 +15,9 @@ public class WorkModel {
     private final Integer boardPosition;
     private final String rowTitle;
     private final Integer cellRowPosition;
-    private final String createdAt;
-
     private final boolean isDone;
 
-    public WorkModel(String projectId, String projectTitle, String boardId, String boardTitle, Integer boardPosition, String rowTitle, Integer cellRowPosition, String createdAt, boolean isDone) {
+    public WorkModel(String projectId, String projectTitle, String boardId, String boardTitle, Integer boardPosition, String rowTitle, Integer cellRowPosition, boolean isDone) {
         this.projectId = projectId;
         this.projectTitle = projectTitle;
         this.boardId = boardId;
@@ -27,7 +25,6 @@ public class WorkModel {
         this.boardPosition = boardPosition;
         this.rowTitle = rowTitle;
         this.cellRowPosition = cellRowPosition;
-        this.createdAt = createdAt;
         this.isDone = isDone;
     }
 
@@ -57,10 +54,6 @@ public class WorkModel {
 
     public Integer getCellRowPosition() {
         return cellRowPosition;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
     }
 
     public boolean isDone() {

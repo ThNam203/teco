@@ -32,11 +32,11 @@ public class NotificationAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_NEW_MESSAGE = 1;
     private static final int VIEW_TYPE_MEMBER_REQUEST = 2;
     private static final int VIEW_TYPE_ADMIN_REQUEST = 3;
-    private List<Notification> notificationList;
+    private final List<Notification> notificationList;
     private OnActionCallback actionCallback;
     private ReplyMemberRequestHandler memberRequestHandler;
     private ReplyAdminRequestHandler adminRequestHandler ;
-    private UserViewModel userViewModel;
+    private final UserViewModel userViewModel;
 
     public interface OnActionCallback {
         void OnClick(int position);
@@ -84,15 +84,19 @@ public class NotificationAdapter extends RecyclerView.Adapter {
         if (notification.getNotificationType().equals("FriendRequest")) {
             return VIEW_TYPE_FRIEND_REQUEST;
         }
-        else if(notification.getNotificationType().equals("NewMessage")) {
+        else if (notification.getNotificationType().equals("NewMessage")) {
             return VIEW_TYPE_NEW_MESSAGE;
         }
-        else if(notification.getNotificationType().equals("MemberRequest")) {
+        else if (notification.getNotificationType().equals("MemberRequest")) {
             return VIEW_TYPE_MEMBER_REQUEST;
         }
-        else if(notification.getNotificationType().equals("AdminRequest")) {
+        else if (notification.getNotificationType().equals("AdminRequest")) {
             return VIEW_TYPE_ADMIN_REQUEST;
+        } else if (notification.getNotificationType().equals("Comment")) {
+            // TODO: implements new comment
+            return VIEW_TYPE_NEW_MESSAGE;
         }
+
         return -1;
     }
 
@@ -121,7 +125,8 @@ public class NotificationAdapter extends RecyclerView.Adapter {
                     .inflate(R.layout.item_notification_admin_request, parent, false);
             return new AdminRequestNotificationHolder(view, adminRequestHandler);
         }
-        return null;
+
+        throw new IllegalArgumentException("Holy fuck");
     }
 
     @Override
@@ -201,7 +206,6 @@ public class NotificationAdapter extends RecyclerView.Adapter {
             });
         }
     }
-
 
     private class NewMessageNotificationHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvContent, tvTimestamps;

@@ -252,7 +252,7 @@ exports.updateACell = asyncCatch(async (req, res, next) => {
                 Notification.create({
                     senderId: userId,
                     receiverId: newUserId,
-                    notificationType: 'TaskAppointed',
+                    notificationType: 'NewMessage',
                     title: 'New task',
                     content: `${user.name} has appointed you to a new task`,
                 })
@@ -487,7 +487,8 @@ exports.addNewCommentToUpdateTask = asyncCatch(async (req, res, next) => {
                 senderId: userId,
                 receiverId: updateTask.author,
                 notificationType: 'Comment',
-                title: `${user.name} has commented in your update task`,
+                title: user.name,
+                content: `${user.name} has commented in your update task`,
             })
         }
     })
@@ -845,8 +846,7 @@ exports.removeRow = asyncCatch(async (req, res, next) => {
 
 exports.saveNewProject = asyncCatch(async (req, res, next) => {
     const { userId } = req.params
-    const { boards, chosenPosition, memberIds, adminIds, creatorId, title } =
-        req.body
+    const { boards, chosenPosition, adminIds, creatorId, title } = req.body
 
     const promises = await Promise.all(
         boards.map(async (board) => await saveABoard(board))
@@ -855,7 +855,7 @@ exports.saveNewProject = asyncCatch(async (req, res, next) => {
     const newProject = await Project.create({
         chosenPosition,
         boards: promises,
-        memberIds,
+        memberIds: [creatorId],
         adminIds,
         creatorId,
         title,
@@ -892,13 +892,16 @@ exports.leaveProject = asyncCatch(async (req, res, next) => {
 
     const project = await Project.findById(projectId)
 
-    const memberIdx = project.memberIds.filter((x) => x.toString() === userId)
+    const memberIdx = project.memberIds.findIndex(
+        (x) => x.toString() === userId
+    )
+
     if (memberIdx !== -1) {
-        project.adminIds.splice(memberIdx, 1)
-        project.markModified('adminIds')
+        project.memberIds.splice(memberIdx, 1)
+        project.markModified('memberIds')
     }
 
-    const adminIdx = project.adminIds.filter((x) => x.toString() === userId)
+    const adminIdx = project.adminIds.findIndex((x) => x.toString() === userId)
     if (adminIdx !== -1) {
         project.adminIds.splice(adminIdx, 1)
         project.markModified('adminIds')
@@ -927,8 +930,10 @@ exports.leaveProject = asyncCatch(async (req, res, next) => {
                                 cellModels.CellUser.findByIdAndUpdate(
                                     cell._id,
                                     { users: updatedCellUserUsers },
-                                    {}
+                                    { new: true }
                                 )
+                                    .then((c) => {})
+                                    .catch((err) => {})
                             }
                         }
                     })
@@ -1012,7 +1017,6 @@ exports.getUserWork = asyncCatch(async (req, res, next) => {
                         rowTitle: board.rowCells[cellRowPosition].title,
                         isDone: board.rowCells[cellRowPosition].isDone,
                         cellRowPosition: cellRowPosition,
-                        cellCreatedDate: workCell.createdAt,
                     })
                 }
             })
@@ -1279,8 +1283,12 @@ exports.deleteMember = asyncCatch(async (req, res, next) => {
     const project = await Project.findById(projectId)
     if (!project) return next(new AppError('Unable to find project', 404))
 
-    const indexMember = project.memberIds.indexOf(memberId)
-    const indexAdmin = project.adminIds.indexOf(memberId)
+    const indexMember = project.memberIds.findIndex(
+        (id) => id.toString() === memberId
+    )
+    const indexAdmin = project.adminIds.findIndex(
+        (id) => id.toString() === memberId
+    )
     if (indexMember > -1) project.memberIds.splice(indexMember, 1)
     if (indexAdmin > -1) project.adminIds.splice(indexAdmin, 1)
 
@@ -1315,8 +1323,10 @@ exports.deleteMember = asyncCatch(async (req, res, next) => {
                                 cellModels.CellUser.findByIdAndUpdate(
                                     cell._id,
                                     { users: updatedCellUserUsers },
-                                    {}
+                                    { new: true }
                                 )
+                                    .then((c) => {})
+                                    .catch((err) => {})
                             }
                         }
                     })

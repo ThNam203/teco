@@ -134,10 +134,10 @@ public class LogInActivity extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        binding.btnLoginGoogle.setOnClickListener(view -> {
-            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            startActivityIfNeeded(signInIntent, 1);
-        });
+//        binding.btnLoginGoogle.setOnClickListener(view -> {
+//            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+//            startActivityIfNeeded(signInIntent, 1);
+//        });
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
