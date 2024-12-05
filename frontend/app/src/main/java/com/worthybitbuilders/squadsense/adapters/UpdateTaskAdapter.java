@@ -109,6 +109,7 @@ public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.Up
                 commentIntent.putExtra("projectId", viewModel.getProjectId());
                 commentIntent.putExtra("boardId", viewModel.getBoardId());
                 commentIntent.putExtra("cellId", viewModel.getUpdateCellId());
+                commentIntent.putExtra("isReadOnly", isReadOnly);
                 context.startActivity(commentIntent);
             });
             setUpButtonLike(task, position);
@@ -117,23 +118,18 @@ public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.Up
             setUpVideoRecyclerView(task);
 
             if(isReadOnly) {
-                itemBinding.btnLike.setEnabled(false);
-                itemBinding.btnComment.setEnabled(false);
-                itemBinding.btnMoreOptions.setVisibility(View.GONE);
-
-                itemView.setOnClickListener(view -> {
-                    ToastUtils.showToastError(itemView.getContext(), "This task is already completed and cannot be edited", Toast.LENGTH_SHORT);
+                itemBinding.btnLike.setOnClickListener(view -> {
+                    ToastUtils.showToastError(itemView.getContext(), "Feature turned off due to task completion", Toast.LENGTH_SHORT);
                 });
+
+                itemBinding.btnMoreOptions.setVisibility(View.GONE);
             }
             else {
-                itemBinding.btnLike.setEnabled(true);
-                itemBinding.btnComment.setEnabled(true);
+                setUpButtonLike(task, position);
 
                 String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
                 if(userId.equals(task.getAuthorId())) itemBinding.btnMoreOptions.setVisibility(View.VISIBLE);
                 else itemBinding.btnMoreOptions.setVisibility(View.GONE);
-
-                itemView.setOnClickListener(null);
             }
         }
 

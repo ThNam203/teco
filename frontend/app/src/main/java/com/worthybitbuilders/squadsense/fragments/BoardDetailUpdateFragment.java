@@ -48,6 +48,10 @@ public class BoardDetailUpdateFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
+        //done -> chỉ coi, comment vẫn vào được, giấu ô write comment
+        //chưa done -> creator, admin, owner -> all
+        // không liên quan -> chỉ coi
         binding = FragmentBoardDetailUpdateBinding.inflate(getLayoutInflater());
         updateCellId = getArguments().getString("updateCellId");
         columnTitle = getArguments().getString("columnTitle");

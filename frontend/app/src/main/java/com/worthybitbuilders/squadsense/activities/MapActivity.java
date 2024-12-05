@@ -3,6 +3,7 @@ package com.worthybitbuilders.squadsense.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,6 +47,7 @@ import com.worthybitbuilders.squadsense.services.RetrofitServices;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
+import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,6 +60,7 @@ import retrofit2.Response;
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private final static int LOCATION_REQUEST_CODE = 44;
     private final ProjectService projectService = RetrofitServices.getProjectService();
+    private ProjectActivityViewModel projectActivityViewModel;
     private ActivityMapBinding binding;
     private GoogleMap map;
     private SupportMapFragment mapActivity;
@@ -68,10 +71,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private String projectId;
     private String boardId;
     private String cellId;
+    private boolean isDone = false;
+    private boolean isOwner = false;
+
     // temporary marker, which is not saved and for user interact
     // same as temporary address model
     private Marker temporaryMarker = null;
     private BoardMapItemModel.AddressModel temporaryAddressModel = null;
+    private String creatorId = "";
+    private List<String> listAdminId = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +91,37 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Intent getIntent = getIntent();
         String itemModelString = getIntent.getStringExtra("itemModel");
         boardMapItemModel = new GsonBuilder().create().fromJson(itemModelString, BoardMapItemModel.class);
+        projectActivityViewModel = new ViewModelProvider(this).get(ProjectActivityViewModel.class);
         projectId = getIntent.getStringExtra("projectId");
         boardId = getIntent.getStringExtra("boardId");
         cellId = getIntent.getStringExtra("cellId");
+        isDone = getIntent.getBooleanExtra("isDone", false);
+        isOwner = getIntent.getBooleanExtra("isOwner", false);
+        //creator admin owner -> all
+        //ko liên quan -> không cho xóa, thêm
+
+        projectActivityViewModel.getProjectById(projectId, new ProjectActivityViewModel.ApiCallHandlers() {
+            @Override
+            public void onSuccess() {
+                creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
+                listAdminId = projectActivityViewModel.getProjectModel().getAdminIds();
+
+                if(isDone) {
+
+                }
+                else if(userId.equals(creatorId) || listAdminId.contains(userId) || isOwner) {
+
+                }
+                else{
+
+                }
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+            }
+        });
 
         mapSearchAdapter = new MapSearchResultAdapter(address -> {
             LatLng point = new LatLng(address.getLatitude(), address.getLongitude());
@@ -223,6 +259,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         popupBinding.etAddressDescription.setText(addressModel.description);
         popupBinding.btnClosePopup.setOnClickListener((view) -> dialog.dismiss());
 
+        if(isDone) {
+            popupBinding.btnSave.setVisibility(View.GONE);
+        }
+        else if(userId.equals(creatorId) || listAdminId.contains(userId) || isOwner)
+        {
+            popupBinding.btnSave.setVisibility(View.VISIBLE);
+        }
+        else {
+            popupBinding.btnSave.setVisibility(View.GONE);
+        }
         popupBinding.btnSave.setOnClickListener((view -> {
             Dialog loadingDialog = DialogUtils.GetLoadingDialog(MapActivity.this);
             loadingDialog.show();
@@ -285,7 +331,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         MapAddressAdapter adapter = new MapAddressAdapter();
-        adapter.setData(addresses, new MapAddressAdapter.ClickHandler() {
+        adapter.setData(addresses, isDone, new MapAddressAdapter.ClickHandler() {
             @Override
             public void OnAddressClick(BoardMapItemModel.AddressModel addressModel, int position) {
                 LatLng point = addressMarkers.get(position).getPosition();
@@ -312,6 +358,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         popupBinding.rvAddresses.setLayoutManager(new LinearLayoutManager(MapActivity.this, RecyclerView.VERTICAL, false));
         popupBinding.rvAddresses.setAdapter(adapter);
 
+
+        if(isDone) {
+            popupBinding.btnSave.setVisibility(View.GONE);
+        }
+        else if(userId.equals(creatorId) || listAdminId.contains(userId) || isOwner) {
+            popupBinding.btnSave.setVisibility(View.VISIBLE);
+        }
+        else{
+            popupBinding.btnSave.setVisibility(View.GONE);
+        }
         popupBinding.btnSave.setOnClickListener((view -> {
             Dialog loadingDialog = DialogUtils.GetLoadingDialog(MapActivity.this);
             loadingDialog.show();

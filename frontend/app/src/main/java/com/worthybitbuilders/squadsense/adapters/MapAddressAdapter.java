@@ -20,13 +20,15 @@ import java.util.List;
 public class MapAddressAdapter extends RecyclerView.Adapter<MapAddressAdapter.MapAddressViewHolder> {
     private List<BoardMapItemModel.AddressModel> addressModels = null;
     private ClickHandler clickHandler;
+    private boolean isReadOnly = false;
 
     public MapAddressAdapter() {}
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<BoardMapItemModel.AddressModel> addressModels, ClickHandler clickHandler) {
+    public void setData(List<BoardMapItemModel.AddressModel> addressModels, boolean isReadOnly, ClickHandler clickHandler) {
         this.addressModels = addressModels;
         this.clickHandler = clickHandler;
+        this.isReadOnly = isReadOnly;
         notifyDataSetChanged();
     }
 
@@ -39,7 +41,7 @@ public class MapAddressAdapter extends RecyclerView.Adapter<MapAddressAdapter.Ma
 
     @Override
     public void onBindViewHolder(@NonNull MapAddressViewHolder holder, int position) {
-        holder.bind(addressModels.get(position), position, clickHandler);
+        holder.bind(addressModels.get(position), position, isReadOnly, clickHandler);
     }
 
     @Override
@@ -59,10 +61,13 @@ public class MapAddressAdapter extends RecyclerView.Adapter<MapAddressAdapter.Ma
             tvAddressDescription = itemView.findViewById(R.id.tvAddressDescription);
         }
 
-        public void bind(BoardMapItemModel.AddressModel addressModel, int position, ClickHandler handler)  {
+        public void bind(BoardMapItemModel.AddressModel addressModel, int position, boolean isReadOnly, ClickHandler handler)  {
             this.tvAddressDescription.setText(addressModel.description);
             this.tvAddressLocation.setText(addressModel.title);
             this.itemView.setOnClickListener((view) -> handler.OnAddressClick(addressModel, position));
+
+            if(isReadOnly) btnDelete.setVisibility(View.GONE);
+            else btnDelete.setVisibility(View.VISIBLE);
             this.btnDelete.setOnClickListener((view) -> handler.OnDeleteClick(addressModel, position));
         }
     }

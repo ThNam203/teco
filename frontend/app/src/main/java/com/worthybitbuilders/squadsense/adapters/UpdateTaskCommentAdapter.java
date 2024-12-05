@@ -52,10 +52,13 @@ public class UpdateTaskCommentAdapter extends RecyclerView.Adapter<UpdateTaskCom
     private final UpdateTaskCommentViewModel viewModel;
     private final List<UpdateTaskAndCommentModel.UpdateTaskComment> comments;
 
-    public UpdateTaskCommentAdapter(Context context, UpdateTaskCommentViewModel viewModel) {
+    private boolean isReadOnly;
+
+    public UpdateTaskCommentAdapter(Context context, boolean isReadOnly, UpdateTaskCommentViewModel viewModel) {
         this.context = context;
         this.viewModel = viewModel;
         this.comments = viewModel.getComments();
+        this.isReadOnly = isReadOnly;
     }
 
     @NonNull
@@ -101,11 +104,23 @@ public class UpdateTaskCommentAdapter extends RecyclerView.Adapter<UpdateTaskCom
 
             if(userId.equals(comment.getAuthor()._id)) itemBinding.btnMoreOptions.setVisibility(View.VISIBLE);
             else itemBinding.btnMoreOptions.setVisibility(View.GONE);
+
             itemBinding.btnMoreOptions.setOnClickListener(view -> showMoreOptions(comment, position));
             setUpButtonLike(comment, position);
             setUpImageRecyclerView(comment);
             setUpFileRecyclerView(comment);
             setUpVideoRecyclerView(comment);
+
+            if(isReadOnly) {
+                itemBinding.btnLike.setOnClickListener(view -> {
+                    ToastUtils.showToastError(itemView.getContext(), "Feature turned off due to task completion", Toast.LENGTH_SHORT);
+                });
+                itemBinding.btnMoreOptions.setVisibility(View.GONE);
+            }
+            else {
+                setUpButtonLike(comment, position);
+                itemBinding.btnMoreOptions.setVisibility(View.VISIBLE);
+            }
         }
 
         private void showMoreOptions(UpdateTaskAndCommentModel.UpdateTaskComment comment, int position) {

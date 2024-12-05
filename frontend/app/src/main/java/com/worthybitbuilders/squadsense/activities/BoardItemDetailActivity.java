@@ -172,6 +172,11 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         activityBinding.btnMoreOptions.setOnClickListener(view -> showMoreOptions());
         activityBinding.btnShowColumns.setOnClickListener(view -> changeToColumnFragment());
         setContentView(activityBinding.getRoot());
+        //done -> chỉ coi
+        //chưa done
+        //      creator, admin, owner -> all
+        //      không liên quan -> chỉ coi
+
     }
 
     private void showMoreOptions() {
@@ -374,7 +379,6 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         if(creatorId.equals(userId)) role = Role.CREATOR;
         else if(listAdminId.contains(userId)) role = Role.ADMIN;
         else role = Role.MEMBER;
-
 
         switch (role){
             case CREATOR:
