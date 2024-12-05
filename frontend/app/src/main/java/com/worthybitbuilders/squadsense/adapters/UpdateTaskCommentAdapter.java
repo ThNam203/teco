@@ -186,7 +186,7 @@ public class UpdateTaskCommentAdapter extends RecyclerView.Adapter<UpdateTaskCom
 
                 if (comment.getLikeCount() == 1) {
                     itemBinding.btnLike.setText("Liked");
-                } else itemBinding.btnLike.setText(String.format(Locale.US, "%d Liked", comment.getLikeCount() - 1));
+                } else itemBinding.btnLike.setText(String.format(Locale.US, "%d Liked", comment.getLikeCount()));
             } else {
                 int color = ContextCompat.getColor(context, R.color.primary_icon_color);
                 itemBinding.btnLike.setText(String.format(Locale.US, "%d Like", comment.getLikeCount()));

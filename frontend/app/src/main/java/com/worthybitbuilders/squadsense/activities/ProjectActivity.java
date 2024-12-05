@@ -246,10 +246,10 @@ public class ProjectActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStatusItemClick(BoardStatusItemModel itemModel, int columnPos, int rowPos) {
+            public void onStatusItemClick(BoardStatusItemModel itemModel, String columnTitle, int columnPos, int rowPos) {
                 if(isTaskDone(rowPos)) return;
                 if(!isAnOwnerOfRow(userId, rowPos)) return;
-                showTaskStatusPopup(itemModel, columnPos, rowPos);
+                showTaskStatusPopup(itemModel, columnTitle, columnPos, rowPos);
             }
         });
         activityBinding.tableView.setAdapter(boardAdapter);
@@ -1162,13 +1162,14 @@ public class ProjectActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void showTaskStatusPopup(BoardStatusItemModel statusItemModel, int columnPos, int rowPos)
+    private void showTaskStatusPopup(BoardStatusItemModel statusItemModel, String columnTitle, int columnPos, int rowPos)
     {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         BoardStatusItemPopupBinding binding = BoardStatusItemPopupBinding.inflate(getLayoutInflater());
         dialog.setContentView(binding.getRoot());
 
+        binding.tvStatusPopupTitle.setText(columnTitle);
         StatusContentsAdapter statusContentsAdapter = new StatusContentsAdapter(statusItemModel);
         statusContentsAdapter.setHandlers((itemModel, newContent) -> {
             itemModel.setContent(newContent);

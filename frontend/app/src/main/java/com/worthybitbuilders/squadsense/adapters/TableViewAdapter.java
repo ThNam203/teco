@@ -144,7 +144,7 @@ public class TableViewAdapter extends AbstractTableAdapter<BoardColumnHeaderMode
         String rowTitle = mRowHeaderItems.get(rowPosition).getTitle();
 
         if (holder instanceof BoardStatusItemViewHolder) {
-            ((BoardStatusItemViewHolder) holder).setItemModel((BoardStatusItemModel) cellItemModel, columnPosition, rowPosition);
+            ((BoardStatusItemViewHolder) holder).setItemModel((BoardStatusItemModel) cellItemModel, columnTitle, columnPosition, rowPosition);
         } else if (holder instanceof BoardTextItemViewHolder) {
             ((BoardTextItemViewHolder) holder).setItemModel((BoardTextItemModel) cellItemModel, columnTitle, columnPosition, rowPosition);
         } else if (holder instanceof BoardUserItemViewHolder) {

@@ -30,7 +30,7 @@
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status"
+            tools:text="Status"
             android:layout_gravity="center"
             android:textAlignment="center"
             android:textColor="@color/primary_word_color"

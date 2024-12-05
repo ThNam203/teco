@@ -29,6 +29,7 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.webkit.MimeTypeMap;
@@ -446,9 +447,8 @@ public class UpdateTaskCommentActivity extends AppCompatActivity {
             int color = Color.parseColor("#0073ea");
             binding.btnLike.setIconTint(ColorStateList.valueOf(color));
 
-            if (task.getLikeCount() == 1) {
-                binding.btnLike.setText("Liked");
-            } else binding.btnLike.setText(String.format(Locale.US, "You, %d others liked", task.getLikeCount() - 1));
+            if (task.getLikeCount() == 1) binding.btnLike.setText("Liked");
+            else binding.btnLike.setText(String.format(Locale.US, "You, %d others liked", task.getLikeCount() - 1));
         } else {
             int color = ContextCompat.getColor(UpdateTaskCommentActivity.this, R.color.primary_icon_color);
             binding.btnLike.setText(String.format(Locale.US, "%d Like", task.getLikeCount()));

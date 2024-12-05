@@ -23,7 +23,7 @@ public class BoardStatusItemViewHolder extends AbstractViewHolder {
         this.handlers = handlers;
     }
 
-    public void setItemModel(BoardStatusItemModel itemModel, int columnPos, int rowPos) {
+    public void setItemModel(BoardStatusItemModel itemModel, String columnTitle, int columnPos, int rowPos) {
         taskStatusContent.setText(itemModel.getContent());
 
         String color = null;
@@ -33,11 +33,11 @@ public class BoardStatusItemViewHolder extends AbstractViewHolder {
         if (color == null) DrawableCompat.setTint(taskStatusContent.getBackground(), Color.parseColor("#9c9c9c"));
         else DrawableCompat.setTint(taskStatusContent.getBackground(), Color.parseColor(color));
         itemView.setOnClickListener((view) -> {
-            handlers.onStatusItemClick(itemModel, columnPos, rowPos);
+            handlers.onStatusItemClick(itemModel, columnTitle, columnPos, rowPos);
         });
     }
 
     public interface StatusItemClickHandlers {
-        void onStatusItemClick(BoardStatusItemModel itemModel, int columnPos, int rowPos);
+        void onStatusItemClick(BoardStatusItemModel itemModel, String columnTitle, int columnPos, int rowPos);
     }
 }
