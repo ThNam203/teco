@@ -16,8 +16,9 @@ router
 router
     .route('/:projectId')
     .get(projectController.getProjectById)
-    .delete(projectController.deleteProjectById)
+    .patch(projectController.leaveProject)
     .post(projectController.updateProject)
+    .delete(projectController.deleteProjectById)
 
 router.route('/:projectId/get-member').get(projectController.getMemberOfProject)
 

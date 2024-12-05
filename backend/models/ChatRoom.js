@@ -6,6 +6,12 @@ const chatRoomSchema = new mongoose.Schema(
             type: String,
             trim: true,
         },
+        admins: [
+            {
+                type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+                default: [],
+            },
+        ],
         members: {
             type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
             required: true,

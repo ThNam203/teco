@@ -244,10 +244,11 @@ exports.updateACell = asyncCatch(async (req, res, next) => {
         // users who were appointed to the task before update
         const oldUserIds = oldCell.users.map((u) => u._id.toString())
         const newUserIds = cell.users.map((u) => u._id.toString())
+
         newUserIds.forEach((newUserId) => {
             // it means a new user has been appointed the task
             // TODO: add projectid, boardid, cellId for navigation
-            if (newUserId !== userId && !oldUserIds.contains(newUserId)) {
+            if (newUserId !== userId && !oldUserIds.includes(newUserId)) {
                 Notification.create({
                     senderId: userId,
                     receiverId: newUserId,
@@ -886,6 +887,69 @@ exports.saveNewProject = asyncCatch(async (req, res, next) => {
     res.status(200).json(newProject)
 })
 
+exports.leaveProject = asyncCatch(async (req, res, next) => {
+    const { projectId, userId } = req.params
+
+    const project = await Project.findById(projectId)
+
+    const memberIdx = project.memberIds.filter((x) => x.toString() === userId)
+    if (memberIdx !== -1) {
+        project.adminIds.splice(memberIdx, 1)
+        project.markModified('adminIds')
+    }
+
+    const adminIdx = project.adminIds.filter((x) => x.toString() === userId)
+    if (adminIdx !== -1) {
+        project.adminIds.splice(adminIdx, 1)
+        project.markModified('adminIds')
+    }
+
+    await project.save()
+
+    // remove the user from "User" item if there are any
+    project.boards.forEach((boardId) => {
+        Board.findById(boardId)
+            .populate({
+                path: 'cells',
+                model: 'Cell',
+            })
+            .then((board) => {
+                board.cells.forEach((rowCell) => {
+                    rowCell.forEach((cell) => {
+                        if (cell.cellType === 'CellUser') {
+                            const idx = cell.users.findIndex(
+                                (x) => x.toString() === userId
+                            )
+
+                            if (idx !== -1) {
+                                cell.users.splice(idx, 1)
+                                const updatedCellUserUsers = cell.users
+                                cellModels.CellUser.findByIdAndUpdate(
+                                    cell._id,
+                                    { users: updatedCellUserUsers },
+                                    {}
+                                )
+                            }
+                        }
+                    })
+                })
+            })
+    })
+
+    User.findById(userId).then((user) => {
+        createActivityLog(
+            user._id,
+            projectId,
+            null,
+            null,
+            `${user.name} has leaved the project`,
+            ACTIVITY_LOG_TYPES.REMOVE
+        )
+    })
+
+    res.status(204).end()
+})
+
 exports.getCellsInARow = asyncCatch(async (req, res, next) => {
     const { boardId, rowPosition } = req.params
 
@@ -1229,6 +1293,35 @@ exports.deleteMember = asyncCatch(async (req, res, next) => {
             `${user.name} has been removed from project`,
             ACTIVITY_LOG_TYPES.REMOVE
         )
+    })
+
+    project.boards.forEach((boardId) => {
+        Board.findById(boardId)
+            .populate({
+                path: 'cells',
+                model: 'Cell',
+            })
+            .then((board) => {
+                board.cells.forEach((rowCell) => {
+                    rowCell.forEach((cell) => {
+                        if (cell.cellType === 'CellUser') {
+                            const idx = cell.users.findIndex(
+                                (x) => x.toString() === memberId
+                            )
+
+                            if (idx !== -1) {
+                                cell.users.splice(idx, 1)
+                                const updatedCellUserUsers = cell.users
+                                cellModels.CellUser.findByIdAndUpdate(
+                                    cell._id,
+                                    { users: updatedCellUserUsers },
+                                    {}
+                                )
+                            }
+                        }
+                    })
+                })
+            })
     })
 
     await project.save()
