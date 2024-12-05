@@ -102,9 +102,6 @@ public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.Up
             if (taskContent.isEmpty()) itemBinding.tvTaskContent.setVisibility(View.GONE);
             else itemBinding.tvTaskContent.setText(taskContent);
 
-            String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
-            if(userId.equals(task.getAuthorId())) itemBinding.btnMoreOptions.setVisibility(View.VISIBLE);
-            else itemBinding.btnMoreOptions.setVisibility(View.GONE);
             itemBinding.btnMoreOptions.setOnClickListener(view -> showMoreOptions(task, position));
             itemBinding.btnComment.setOnClickListener(view -> {
                 Intent commentIntent = new Intent(context, UpdateTaskCommentActivity.class);
@@ -131,7 +128,10 @@ public class UpdateTaskAdapter extends RecyclerView.Adapter<UpdateTaskAdapter.Up
             else {
                 itemBinding.btnLike.setEnabled(true);
                 itemBinding.btnComment.setEnabled(true);
-                itemBinding.btnMoreOptions.setVisibility(View.VISIBLE);
+
+                String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+                if(userId.equals(task.getAuthorId())) itemBinding.btnMoreOptions.setVisibility(View.VISIBLE);
+                else itemBinding.btnMoreOptions.setVisibility(View.GONE);
 
                 itemView.setOnClickListener(null);
             }

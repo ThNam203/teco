@@ -99,6 +99,8 @@ public class UpdateTaskCommentAdapter extends RecyclerView.Adapter<UpdateTaskCom
             String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
             if (!comment.getAuthor()._id.equals(userId)) itemBinding.btnMoreOptions.setVisibility(View.GONE);
 
+            if(userId.equals(comment.getAuthor()._id)) itemBinding.btnMoreOptions.setVisibility(View.VISIBLE);
+            else itemBinding.btnMoreOptions.setVisibility(View.GONE);
             itemBinding.btnMoreOptions.setOnClickListener(view -> showMoreOptions(comment, position));
             setUpButtonLike(comment, position);
             setUpImageRecyclerView(comment);

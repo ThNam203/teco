@@ -130,10 +130,12 @@ public class ProjectActivity extends AppCompatActivity {
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         boardViewModel = new ViewModelProvider(this).get(BoardViewModel.class);
 
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         boardAdapter = new TableViewAdapter(this, boardViewModel, new TableViewAdapter.OnClickHandlers() {
             @Override
             public void OnMapItemClick(BoardMapItemModel itemModel, String columnTitle, int columnPos, int rowPos) {
                 if(isTaskDone(rowPos)) return;
+                if(!isAnOwnerOfRow(userId, rowPos)) return;
                 Intent mapIntent = new Intent(ProjectActivity.this, MapActivity.class);
                 String itemJson = new Gson().toJson(itemModel);
                 mapIntent.putExtra("itemModel", itemJson);
@@ -146,24 +148,27 @@ public class ProjectActivity extends AppCompatActivity {
             @Override
             public void OnTimelineItemClick(BoardTimelineItemModel itemModel, String columnTitle, int columnPos, int rowPos) {
                 if(isTaskDone(rowPos)) return;
+                if(!isAnOwnerOfRow(userId, rowPos)) return;
                 showTimelineItemPopup(itemModel, columnTitle, columnPos, rowPos);
             }
 
             @Override
             public void OnDateItemClick(BoardDateItemModel itemModel, String columnTitle, int columnPos, int rowPos) {
                 if(isTaskDone(rowPos)) return;
+                if(!isAnOwnerOfRow(userId, rowPos)) return;
                 showDateItemPopup(itemModel, columnTitle, columnPos, rowPos);
             }
 
             @Override
             public void onCheckboxItemClick(BoardCheckboxItemModel itemModel, int columnPos, int rowPos) {
                 if(isTaskDone(rowPos)) return;
+                if(!isAnOwnerOfRow(userId, rowPos)) return;
                 onCheckboxItemClicked(itemModel, columnPos, rowPos);
             }
 
             @Override
             public void onUpdateItemClick(BoardUpdateItemModel itemModel, int rowPosition, String rowTitle, String columnTitle) {
-                if(isTaskDone(rowPosition)) return;
+                if(!isAnOwnerOfRow(userId, rowPosition)) return;
                 Intent updateIntent = new Intent(ProjectActivity.this, BoardItemDetailActivity.class);
                 updateIntent.putExtra("projectId", projectActivityViewModel.getProjectId());
                 updateIntent.putExtra("boardId", boardViewModel.getBoardId());
@@ -181,6 +186,7 @@ public class ProjectActivity extends AppCompatActivity {
             @Override
             public void onNumberItemClick(BoardNumberItemModel itemModel, String columnTitle, int columnPos, int rowPos) {
                 if(isTaskDone(rowPos)) return;
+                if(!isAnOwnerOfRow(userId, rowPos)) return;
                 showNumberItemPopup(itemModel, columnTitle, columnPos, rowPos);
             }
 
@@ -202,6 +208,7 @@ public class ProjectActivity extends AppCompatActivity {
 
             @Override
             public void onRowHeaderClick(int rowPosition, String rowTitle) {
+                if(!isAnOwnerOfRow(userId, rowPosition)) return;
                 Intent showRowIntent = new Intent(ProjectActivity.this, BoardItemDetailActivity.class);
                 showRowIntent.putExtra("projectId", projectActivityViewModel.getProjectId());
                 showRowIntent.putExtra("boardId", boardViewModel.getBoardId());
@@ -227,18 +234,21 @@ public class ProjectActivity extends AppCompatActivity {
             @Override
             public void onTextItemClick(BoardTextItemModel itemModel, String columnTitle, int columnPos, int rowPos) {
                 if(isTaskDone(rowPos)) return;
+                if(!isAnOwnerOfRow(userId, rowPos)) return;
                 showTextItemPopup(itemModel, columnTitle, columnPos, rowPos);
             }
 
             @Override
             public void onUserItemClick(BoardUserItemModel userItemModel, String columnTitle, int columnPos, int rowPos) {
                 if(isTaskDone(rowPos)) return;
+                if(!isAnOwnerOfRow(userId, rowPos)) return;
                 showOwnerPopup(userItemModel, columnTitle, columnPos, rowPos);
             }
 
             @Override
             public void onStatusItemClick(BoardStatusItemModel itemModel, int columnPos, int rowPos) {
                 if(isTaskDone(rowPos)) return;
+                if(!isAnOwnerOfRow(userId, rowPos)) return;
                 showTaskStatusPopup(itemModel, columnPos, rowPos);
             }
         });
@@ -281,6 +291,8 @@ public class ProjectActivity extends AppCompatActivity {
         }
         else return false;
     }
+
+
 
     private void showColumnHeaderOptions(BoardColumnHeaderModel headerModel, int columnPosition, View anchor) {
         ColumnMoreOptionsBinding binding = ColumnMoreOptionsBinding.inflate(getLayoutInflater());
@@ -777,6 +789,7 @@ public class ProjectActivity extends AppCompatActivity {
                     loadingDialog.dismiss();
                     isNewProjectCreateRequest = false;
                     saveRecentAccessProject(projectActivityViewModel.getProjectId());
+                    SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID, projectActivityViewModel.getProjectId());
                 }
 
                 @Override
@@ -1747,5 +1760,26 @@ public class ProjectActivity extends AppCompatActivity {
                 ToastUtils.showToastError(ProjectActivity.this, message, Toast.LENGTH_SHORT);
             }
         });
+    }
+    private boolean isAnOwnerOfRow(String id, int rowPos)
+    {
+        if(boardViewModel.getmCellModelList().get(rowPos) == null) return false;
+        List<BoardBaseItemModel> cells = boardViewModel.getmCellModelList().get(rowPos);
+
+        for (BoardBaseItemModel cell : cells) {
+            if (cell.getCellType().equals("CellUser")) {
+                BoardUserItemModel userItemModel = (BoardUserItemModel) cell;
+                if (userItemModel != null) {
+                    List<UserModel> users = userItemModel.getUsers();
+                    for (UserModel user : users) {
+                        if (user.getId().equals(id)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        ToastUtils.showToastError(ProjectActivity.this, "You don't have permission to adjust this row", Toast.LENGTH_SHORT);
+        return false;
     }
 }
