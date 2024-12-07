@@ -114,8 +114,8 @@ exports.getFriendById = asyncCatch(async (req, res, next) => {
     const listFriend = await Friend.find({
         $or: [{ firstId: userId }, { secondId: userId }],
     })
-    if (!listFriend) return next(new AppError('No notification found!', 400))
 
+    if (!listFriend) return next(new AppError('No friend found!', 400))
     const otherIds = []
 
     listFriend.forEach((friend) => {
@@ -128,4 +128,19 @@ exports.getFriendById = asyncCatch(async (req, res, next) => {
 
     const listUser = await User.find({ _id: { $in: otherIds } })
     res.status(200).json(listUser)
+})
+
+exports.unFriend = asyncCatch(async (req, res, next) => {
+    const { userId, unfriendUserId } = req.params
+    const friend = await Friend.findOneAndDelete({
+        $or: [
+            { firstId: userId, secondId: unfriendUserId },
+            { firstId: unfriendUserId, secondId: userId },
+        ],
+    })
+
+    if (!friend)
+        return next(new AppError('No friend need to delete found!', 400))
+
+    res.status(204).end()
 })

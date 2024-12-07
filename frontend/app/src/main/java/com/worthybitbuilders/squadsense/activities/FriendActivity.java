@@ -22,29 +22,40 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.adapters.FriendItemAdapter;
 import com.worthybitbuilders.squadsense.adapters.SearchingFriendAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityFriendBinding;
+import com.worthybitbuilders.squadsense.databinding.ColumnMoreOptionsBinding;
+import com.worthybitbuilders.squadsense.databinding.ConfirmDeleteSecondaryBinding;
+import com.worthybitbuilders.squadsense.databinding.FriendMoreOptionBinding;
 import com.worthybitbuilders.squadsense.databinding.PopupInviteByEmailBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.utils.ActivityUtils;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
+import com.worthybitbuilders.squadsense.viewmodels.BoardDetailItemViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.NotificationViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.UserViewModel;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FriendActivity extends AppCompatActivity {
-
     ActivityFriendBinding binding;
-
     NotificationViewModel notificationViewModel;
     FriendViewModel friendViewModel;
     UserViewModel userViewModel;
@@ -118,8 +129,68 @@ public class FriendActivity extends AppCompatActivity {
             public void OnItemClick(int position) {}
 
             @Override
-            public void OnMoreOptionsClick(int position) {}
+            public void OnMoreOptionsClick(int position) {
+                FriendMoreOptionBinding popupBinding = FriendMoreOptionBinding.inflate(getLayoutInflater());
+                PopupWindow popupWindow = new PopupWindow(popupBinding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
+                popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                popupWindow.setElevation(50);
+                popupWindow.setTouchable(true);
+                popupWindow.setOutsideTouchable(true);
+                View anchor = binding.rvFriends.getLayoutManager().findViewByPosition(position);
+                if (anchor != null) popupWindow.showAsDropDown(anchor, 0, 0);
+
+                popupBinding.btnDeleteFriend.setOnClickListener(view -> {
+                    showConfirmDelete(position);
+                    popupWindow.dismiss();
+                });
+            }
         });
+    }
+
+    private void showConfirmDelete(int position) {
+        final Dialog confirmDialog = new Dialog(this);
+        confirmDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        ConfirmDeleteSecondaryBinding binding = ConfirmDeleteSecondaryBinding.inflate(getLayoutInflater());
+        confirmDialog.setContentView(binding.getRoot());
+
+        binding.tvTitle.setText("Delete friend");
+        binding.tvAdditionalContent.setText("Are you sure to remove from you friend list");
+        binding.btnCancel.setOnClickListener(view -> confirmDialog.dismiss());
+        binding.btnConfirm.setOnClickListener(view -> {
+            try {
+                friendViewModel.deleteFriend(listFriend.get(position).getId()).enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            listFriend.remove(position);
+                            friendItemAdapter.notifyItemRemoved(position);
+                            friendItemAdapter.notifyItemRangeChanged(position, listFriend.size());
+                            ToastUtils.showToastSuccess(FriendActivity.this, "Updated", Toast.LENGTH_SHORT);
+                        } else {
+                            ToastUtils.showToastError(FriendActivity.this, "Something went wrong, please try again", Toast.LENGTH_SHORT);
+                            confirmDialog.dismiss();
+                        }
+
+                        confirmDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        ToastUtils.showToastError(FriendActivity.this, "Something went wrong, please try again", Toast.LENGTH_SHORT);
+                        confirmDialog.dismiss();
+                    }
+                });
+            } catch (JSONException e) {
+                ToastUtils.showToastError(FriendActivity.this, "Something went wrong, please try again", Toast.LENGTH_SHORT);
+                confirmDialog.dismiss();
+            }
+        });
+
+        confirmDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        confirmDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        confirmDialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
+        confirmDialog.getWindow().setGravity(Gravity.CENTER);
+        confirmDialog.show();
     }
 
     private void LoadListFriendView()

@@ -12,6 +12,10 @@ import com.worthybitbuilders.squadsense.models.FriendRequest;
 import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.services.FriendService;
 import com.worthybitbuilders.squadsense.services.RetrofitServices;
+import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
@@ -109,6 +113,10 @@ public class FriendViewModel extends ViewModel {
         });
     }
 
+    public Call<Void> deleteFriend(String unfriendUserId) throws JSONException {
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+        return friendService.deleteFriend(userId, unfriendUserId);
+    }
 
     public interface FriendRequestCallback {
         public void onSuccess();
