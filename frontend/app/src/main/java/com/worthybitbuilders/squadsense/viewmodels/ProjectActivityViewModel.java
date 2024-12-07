@@ -221,7 +221,7 @@ public class ProjectActivityViewModel extends ViewModel {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    getProjectModel().removeBoardAt(boardPosition);
+                    projectModel.removeBoardAt(boardPosition);
                     handlers.onSuccess();
                 } else handlers.onFailure(response.message());
             }
