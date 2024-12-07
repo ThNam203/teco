@@ -234,10 +234,9 @@ public class ProjectActivity extends AppCompatActivity {
             }
 
             @Override
-
-            public void onStatusItemClick(BoardStatusItemModel itemModel, int columnPos, int rowPos) {
+            public void onStatusItemClick(BoardStatusItemModel itemModel, String columnTitle, int columnPos, int rowPos) {
                 if(!canAccess(userId, rowPos)) return;
-                showTaskStatusPopup(itemModel, columnPos, rowPos);
+                showTaskStatusPopup(itemModel, columnTitle, columnPos, rowPos);
             }
         });
         activityBinding.tableView.setAdapter(boardAdapter);
