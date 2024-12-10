@@ -39,7 +39,7 @@ public class RTCClient {
     private final PeerConnection.Observer observer;
     private EglBase.Context eglContext;
     private PeerConnectionFactory peerConnectionFactory;
-    private List<PeerConnection.IceServer> iceServer;
+    private List<PeerConnection.IceServer> iceServers;
     private PeerConnection peerConnection;
     private VideoSource localVideoSource;
     private AudioSource localAudioSource;
@@ -47,7 +47,7 @@ public class RTCClient {
     private AudioTrack localAudioTrack;
     private VideoTrack localVideoTrack;
     // video call and voice only call
-    private boolean isVideoCall;
+    private final boolean isVideoCall;
     // buffer the candidates and only send if caller has created an answer
     private final List<JSONObject> bufferedIceCandidates = new ArrayList<>();
     // can send buffered ice candidates
@@ -72,7 +72,7 @@ public class RTCClient {
     private void init() {
         eglContext = EglBase.create().getEglBaseContext();
         initPeerConnectionFactory(application);
-        iceServer = createIceServers();
+        iceServers = createIceServers();
         peerConnection = createPeerConnection(observer);
         localVideoSource = peerConnectionFactory.createVideoSource(false);
         localAudioSource = peerConnectionFactory.createAudioSource(new MediaConstraints());
@@ -107,7 +107,9 @@ public class RTCClient {
     }
 
     private PeerConnection createPeerConnection(PeerConnection.Observer observer) {
-        return peerConnectionFactory.createPeerConnection(iceServer, observer);
+        PeerConnection.RTCConfiguration config = new PeerConnection.RTCConfiguration(iceServers);
+        config.sdpSemantics = PeerConnection.SdpSemantics.PLAN_B;
+        return peerConnectionFactory.createPeerConnection(config, observer);
     }
 
     public void initializeSurfaceView(SurfaceViewRenderer surface) {
@@ -128,7 +130,6 @@ public class RTCClient {
         MediaStream localStream = peerConnectionFactory.createLocalMediaStream("local_stream");
         localStream.addTrack(localAudioTrack);
         localStream.addTrack(localVideoTrack);
-        peerConnection.addStream(localStream);
     }
 
     private CameraVideoCapturer getVideoCapturer(Application application) {

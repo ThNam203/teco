@@ -28,9 +28,11 @@ import org.webrtc.IceCandidate;
 import org.webrtc.MediaStream;
 import org.webrtc.PeerConnection;
 import org.webrtc.RtpReceiver;
+import org.webrtc.RtpTransceiver;
 import org.webrtc.SessionDescription;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Timer;
@@ -255,7 +257,7 @@ public class CallVideoActivity extends AppCompatActivity {
                     finish();
                 });
             } else if (iceConnectionState == PeerConnection.IceConnectionState.CONNECTED) {
-                startCallTimer();
+//                startCallTimer();
             }
         }
 
@@ -316,7 +318,9 @@ public class CallVideoActivity extends AppCompatActivity {
 
         @Override
         public void onAddTrack(RtpReceiver rtpReceiver, MediaStream[] mediaStreams) {
-
+            Arrays.stream(mediaStreams).forEach(stream -> {
+                stream.videoTracks.get(0).addSink(binding.remoteView);
+            });
         }
     };
 
@@ -348,7 +352,7 @@ public class CallVideoActivity extends AppCompatActivity {
 
     public void startCallTimer() {
         Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 runOnUiThread(() -> {
