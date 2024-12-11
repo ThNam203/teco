@@ -13,6 +13,9 @@ import com.worthybitbuilders.squadsense.services.RetrofitServices;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.SocketClient;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,7 @@ public class MessageActivityViewModel extends ViewModel {
     private final String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
     private final Socket socket = SocketClient.getInstance();
     private final ChatRoomService chatRoomService = RetrofitServices.getChatRoomService();
+    private ChatRoom chatRoom;
     private final Emitter.Listener onNewMessage = args -> {
         ChatMessage newMessage = new Gson().fromJson(args[0].toString(), ChatMessage.class);
         mMessageList.add(newMessage);
@@ -54,6 +58,15 @@ public class MessageActivityViewModel extends ViewModel {
         return chatRoomService.getAChatRoom(userId, chatRoomId);
     }
 
+    // TODO: REMOVE THE SET CHATROOM
+    public void setChatRoom(ChatRoom chatRoom) {
+        this.chatRoom = chatRoom;
+    }
+
+    public ChatRoom getChatRoom() {
+        return chatRoom;
+    }
+
     public void getAllMessage(ApiCallHandler handler) {
         chatRoomService.getAllMessageInChatRoom(userId, chatRoomId).enqueue(new Callback<List<ChatMessage>>() {
             @Override
@@ -70,6 +83,42 @@ public class MessageActivityViewModel extends ViewModel {
             }
         });
     }
+
+    public void deleteMemberFromGroup(String deleteMemberId, ApiCallHandler handler) {
+        chatRoomService.removeMemberFromGroupChat(userId, chatRoomId, deleteMemberId).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    chatRoom.getMembers().removeIf(member -> (member._id.equals(deleteMemberId)));
+                    handler.onSuccess();
+                } else handler.onFailure(response.message());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                handler.onFailure(t.getMessage());
+            }
+        });
+    }
+
+//    public void addMemberToGroup(String newMemberId, ApiCallHandler handler) throws JSONException {
+//        JSONObject data = new JSONObject();
+//        data.put("newMemberId", newMemberId);
+//        chatRoomService.addMemberToGroupChat(userId, chatRoomId, data).enqueue(new Callback<Void>() {
+//            @Override
+//            public void onResponse(Call<Void> call, Response<Void> response) {
+//                if (response.isSuccessful()) {
+//                    chatRoom.getMembers().add()));
+//                    handler.onSuccess();
+//                } else handler.onFailure(response.message());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Void> call, Throwable t) {
+//                handler.onFailure(t.getMessage());
+//            }
+//        });
+//    }
 
     public ArrayList<ChatMessage> getMessageList() {
         return mMessageList;

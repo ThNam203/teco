@@ -9,7 +9,9 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -25,4 +27,10 @@ public interface ChatRoomService {
 
     @POST("{userId}/chatroom")
     Call<ChatRoom> createNewChatRoom(@Path("userId") String userId, @Body JSONObject data);
+
+    @PATCH("{userId}/chatroom/{chatRoomId}/member")
+    Call<Void> addMemberToGroupChat(@Path("userId") String userId, @Path("chatRoomId") String chatRoomId, @Body JSONObject data);
+
+    @DELETE("{userId}/chatroom/{chatRoomId}/member/{memberId}")
+    Call<Void> removeMemberFromGroupChat(@Path("userId") String userId, @Path("chatRoomId") String chatRoomId, @Path("memberId") String deleteMemberId);
 }

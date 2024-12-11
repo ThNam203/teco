@@ -72,4 +72,32 @@ public class ChatRoom {
     public boolean isGroup() {
         return isGroup;
     }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setMembers(List<Member> members) {
+        this.members = members;
+    }
+
+    public void setLogoPath(String logoPath) {
+        this.logoPath = logoPath;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
+    public void setLastMessageTime(String lastMessageTime) {
+        this.lastMessageTime = lastMessageTime;
+    }
+
+    public void setGroup(boolean group) {
+        isGroup = group;
+    }
 }

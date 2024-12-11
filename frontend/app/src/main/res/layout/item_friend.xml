@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="10sp"
     android:background="@color/transparent">
     <LinearLayout
@@ -47,7 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:text="0 connection"
+                    tools:text="0 connection"
                     android:textColor="@color/primary_word_second_color"
                     android:textSize="@dimen/small_textsize" />
             </LinearLayout>

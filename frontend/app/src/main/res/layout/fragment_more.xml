@@ -102,16 +102,14 @@
                             android:text="Inbox"
                             android:textColor="@color/primary_word_color"
                             android:textSize="@dimen/normal_textsize" />
-
-                        <TextView
-                            android:id="@+id/desc_inbox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:text="No new updates"
-                            android:textColor="@color/primary_word_second_color"
-                            android:textSize="@dimen/small_textsize" />
-
+<!--                        <TextView-->
+<!--                            android:id="@+id/desc_inbox"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginLeft="5dp"-->
+<!--                            android:text="No new updates"-->
+<!--                            android:textColor="@color/primary_word_second_color"-->
+<!--                            android:textSize="@dimen/small_textsize" />-->
                     </LinearLayout>
 
                     <ImageView

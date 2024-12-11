@@ -42,6 +42,19 @@ io.on('connection', (socket) => {
             '_id name profileImagePath'
         )
 
+        User.findById(senderId).then((user) => {
+            if (message.length === 0 && files.length > 0) {
+                chatRoom.lastMessage = `${user.name} sent ${files.length} files`
+            } else {
+                chatRoom.lastMessage = `${user.name}: ${message}`
+            }
+
+            chatRoom.lastMessageTime = Date.now()
+            chatRoom.markModified('lastMessage')
+            chatRoom.markModified('lastMessageTime')
+            chatRoom.save()
+        })
+
         // newChatMessage is for 2 users chatting to each other
         io.in(chatRoomId).emit('newMessage', newChatMessage)
         // newMessage is used for updating the chat room list if other user is

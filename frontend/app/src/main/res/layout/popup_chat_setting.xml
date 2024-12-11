@@ -65,35 +65,19 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1"/>
-        <androidx.cardview.widget.CardView
-            android:id="@+id/image_profile_border"
-            android:visibility="gone"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:cardCornerRadius="250dp">
-            <ImageView
-                android:id="@+id/image_profile"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:scaleType="centerCrop"/>
-        </androidx.cardview.widget.CardView>
         <RelativeLayout
             android:id="@+id/default_image_profile"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/background_btn_corner"
-            android:backgroundTint="@color/teal_200"
             android:visibility="visible">
-            <TextView
-                android:id="@+id/default_image_profile_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="N"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textSize="48sp"
-                android:textStyle="bold" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image_profile"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:shapeAppearanceOverlay="@style/RoundedImageView"
+                android:src="@drawable/ic_people"
+                app:tint="@color/teal_200"
+                android:scaleType="centerCrop"/>
             <ImageButton
                 android:id="@+id/btn_camera"
                 android:layout_width="40dp"
@@ -120,7 +104,8 @@
             android:layout_marginStart="16dp"
             android:gravity="center">
             <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="wrap_content"
+                android:id="@+id/btnAddMember"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/curved_small_background"
                 android:backgroundTint="@color/light_blue_600"
@@ -128,7 +113,8 @@
                 android:layout_marginBottom="8dp"
                 android:text="Add member"/>
             <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="wrap_content"
+                android:id="@+id/btnLeave"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/curved_small_background"
                 android:backgroundTint="@color/light_red"
@@ -144,6 +130,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Members"
+        android:layout_marginStart="8dp"
         android:textColor="@color/primary_word_color"
         android:textSize="20sp"/>
     <androidx.recyclerview.widget.RecyclerView

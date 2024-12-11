@@ -25,6 +25,9 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.MimeTypeMap;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,10 +45,12 @@ import com.worthybitbuilders.squadsense.R;
 import com.worthybitbuilders.squadsense.adapters.AttachFileAdapter;
 import com.worthybitbuilders.squadsense.adapters.FriendItemAdapter;
 import com.worthybitbuilders.squadsense.adapters.MessageAdapter;
-import com.worthybitbuilders.squadsense.adapters.NewUpdateTaskFileAdapter;
+import com.worthybitbuilders.squadsense.adapters.holders.GroupChatMemberAdapter;
 import com.worthybitbuilders.squadsense.databinding.ActivityMessagingBinding;
+import com.worthybitbuilders.squadsense.databinding.ColumnMoreOptionsBinding;
+import com.worthybitbuilders.squadsense.databinding.ConfirmDeleteSecondaryBinding;
+import com.worthybitbuilders.squadsense.databinding.FriendMoreOptionBinding;
 import com.worthybitbuilders.squadsense.databinding.PopupChatSettingBinding;
-import com.worthybitbuilders.squadsense.databinding.PopupFilterActivityLogBinding;
 import com.worthybitbuilders.squadsense.factory.MessageActivityViewModelFactory;
 import com.worthybitbuilders.squadsense.models.ChatMessage;
 import com.worthybitbuilders.squadsense.models.ChatRoom;
@@ -55,6 +60,8 @@ import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.MessageActivityViewModel;
+
+import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -76,12 +83,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MessagingActivity extends AppCompatActivity {
+    private final int CAMERA_PERMISSION_REQUEST_CODE = 123123;
     private ActivityMessagingBinding binding;
     private MessageActivityViewModel messageViewModel;
     private MessageAdapter messageAdapter;
-    private String chatRoomImagePath;
-    private String chatRoomTitle;
-    private boolean isGroupChat = false;
     private final UtilService utilService = RetrofitServices.getUtilService();
     private final int OPEN_FILE_REQUEST_CODE = 123;
     private final int OPEN_IMAGE_REQUEST_CODE = 1234;
@@ -100,13 +105,7 @@ public class MessagingActivity extends AppCompatActivity {
         String chatRoomId = getIntent.getStringExtra("chatRoomId");
         MessageActivityViewModelFactory factory = new MessageActivityViewModelFactory(chatRoomId);
         messageViewModel = new ViewModelProvider(this, factory).get(MessageActivityViewModel.class);
-
-        chatRoomImagePath = getIntent.getStringExtra("chatRoomImage");
-        chatRoomTitle = getIntent.getStringExtra("chatRoomTitle");
-        isGroupChat = getIntent.getBooleanExtra("isGroup", false);
-        // this most likely to happen if a user navigate to this activity using a notification
-        // because a notification only give the id, not chatRoomImagePath and chatRoomTitle
-        if (chatRoomImagePath == null || chatRoomTitle == null) getChatRoomInformation();
+        getChatRoomInformation();
 
         binding.rvAttach.setLayoutManager(new LinearLayoutManager(MessagingActivity.this, LinearLayoutManager.HORIZONTAL, false));
         attachFileAdapter = new AttachFileAdapter(fileUris, this, position -> {
@@ -115,17 +114,6 @@ public class MessagingActivity extends AppCompatActivity {
             attachFileAdapter.notifyItemRangeChanged(position, fileUris.size());
         });
         binding.rvAttach.setAdapter(attachFileAdapter);
-        binding.chatRoomTitle.setText(chatRoomTitle);
-
-        int placeHolder;
-        if (isGroupChat) placeHolder = R.drawable.ic_group;
-        else placeHolder = R.drawable.ic_user;
-        Glide
-            .with(this)
-            .load(chatRoomImagePath)
-            .placeholder(placeHolder)
-            .into(binding.chatRoomImage);
-
 
         listenForNewMessage();
 
@@ -151,20 +139,21 @@ public class MessagingActivity extends AppCompatActivity {
         binding.rvMessage.setLayoutManager(new LinearLayoutManager(this));
         binding.rvMessage.setAdapter(messageAdapter);
 
-        // TODO: add group call functionality
-        if (isGroupChat) {
-            binding.btnVideoCall.setVisibility(View.GONE);
-            binding.btnVoiceCall.setVisibility(View.GONE);
-            binding.btnSetting.setVisibility(View.VISIBLE);
-        }
-
         binding.btnSetting.setOnClickListener(view -> {
             final Dialog dialog = new Dialog(this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            PopupChatSettingBinding popupFilterBinding = PopupChatSettingBinding.inflate(getLayoutInflater());
-            dialog.setContentView(popupFilterBinding.getRoot());
+            PopupChatSettingBinding popupBinding = PopupChatSettingBinding.inflate(getLayoutInflater());
+            dialog.setContentView(popupBinding.getRoot());
 
-//            FriendItemAdapter friendItemAdapter = new FriendItemAdapter(messageViewModel.getChatRoomInfor())
+            ChatRoom chatRoom = messageViewModel.getChatRoom();
+            popupBinding.popupTitle.setText(chatRoom.getTitle());
+            popupBinding.btnCamera.setOnClickListener((v) -> showChangeLogo());
+
+            GroupChatMemberAdapter memberAdapter = new GroupChatMemberAdapter(messageViewModel.getChatRoom().getMembers());
+            memberAdapter.setClickHandler((position, anchor) -> showMoreOption(position, anchor, memberAdapter));
+            popupBinding.rvGroupMembers.setLayoutManager(new LinearLayoutManager(MessagingActivity.this));
+            popupBinding.rvGroupMembers.setAdapter(memberAdapter);
+            popupBinding.btnLeave.setOnClickListener((v) -> showConfirmLeave());
 
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -177,7 +166,7 @@ public class MessagingActivity extends AppCompatActivity {
             Intent callIntent = new Intent(this, CallVideoActivity.class);
             callIntent.putExtra("chatRoomId", chatRoomId);
             callIntent.putExtra("isVideoCall", true);
-            callIntent.putExtra("chatRoomTitle", chatRoomTitle);
+            callIntent.putExtra("chatRoomTitle", messageViewModel.getChatRoom().getTitle());
             callIntent.putExtra("isCaller", true);
             startActivity(callIntent);
         });
@@ -186,7 +175,7 @@ public class MessagingActivity extends AppCompatActivity {
             Intent callIntent = new Intent(this, CallVideoActivity.class);
             callIntent.putExtra("chatRoomId", chatRoomId);
             callIntent.putExtra("isVideoCall", false);
-            callIntent.putExtra("chatRoomTitle", chatRoomTitle);
+            callIntent.putExtra("chatRoomTitle", messageViewModel.getChatRoom().getTitle());
             callIntent.putExtra("isCaller", true);
             startActivity(callIntent);
         });
@@ -293,12 +282,31 @@ public class MessagingActivity extends AppCompatActivity {
         binding.btnClose.setOnClickListener(view -> finish());
     }
 
+    private void showMoreOption(int position, View anchor, GroupChatMemberAdapter memberAdapter) {
+        // TODO: change this binding
+        FriendMoreOptionBinding popupBinding = FriendMoreOptionBinding.inflate(getLayoutInflater());
+        PopupWindow popupWindow = new PopupWindow(popupBinding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        popupBinding.btnDeleteFriend.setOnClickListener(view -> {
+            showConfirmDelete(position, memberAdapter);
+            popupWindow.dismiss();
+        });
+
+        popupWindow.setElevation(50);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.showAsDropDown(anchor, 0, 0);
+    }
+
     private void getChatRoomInformation() {
         messageViewModel.getChatRoomInfor().enqueue(new Callback<ChatRoom>() {
             @Override
             public void onResponse(@NonNull Call<ChatRoom> call, @NonNull Response<ChatRoom> response) {
                 if (response.isSuccessful()) {
                     ChatRoom chatRoom = response.body();
+                    // TODO: FIX THIS, MOVE IT TO THE VIEW MODEL INSTEAD OF THIS
+                    messageViewModel.setChatRoom(chatRoom);
                     if (chatRoom == null) {
                         ToastUtils.showToastError(MessagingActivity.this, "Something went wrong, please try again", Toast.LENGTH_LONG);
                         return;
@@ -314,15 +322,13 @@ public class MessagingActivity extends AppCompatActivity {
                                 break;
                             }
                         }
-                        MessagingActivity.this.chatRoomTitle = otherUserName;
-                    } else MessagingActivity.this.chatRoomTitle = chatRoom.getTitle();
+                        chatRoom.setTitle(otherUserName);
+                    }
 
                     // put the chat room image
-                    if (chatRoom.getLogoPath() != null && !chatRoom.getLogoPath().isEmpty())
-                        MessagingActivity.this.chatRoomImagePath = chatRoom.getLogoPath();
+                    if (chatRoom.getLogoPath() != null && !chatRoom.getLogoPath().isEmpty()) {}
                     else if (chatRoom.isGroup()) {
-                        isGroupChat = chatRoom.isGroup();
-                        chatRoomImagePath = "";
+                        chatRoom.setLogoPath("");
                     } else {
                         String imagePath = null;
                         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
@@ -334,8 +340,26 @@ public class MessagingActivity extends AppCompatActivity {
                             }
                         }
 
-                        MessagingActivity.this.chatRoomImagePath = imagePath;
+                        chatRoom.setLogoPath(imagePath);
                     }
+
+                    // TODO: add group call functionality
+                    if (chatRoom.isGroup()) {
+                        binding.btnVideoCall.setVisibility(View.GONE);
+                        binding.btnVoiceCall.setVisibility(View.GONE);
+                        binding.btnSetting.setVisibility(View.VISIBLE);
+                    }
+
+                    binding.chatRoomTitle.setText(chatRoom.getTitle());
+
+                    int placeHolder;
+                    if (chatRoom.isGroup()) placeHolder = R.drawable.ic_group;
+                    else placeHolder = R.drawable.ic_user;
+                    Glide
+                            .with(MessagingActivity.this)
+                            .load(chatRoom.getLogoPath())
+                            .placeholder(placeHolder)
+                            .into(binding.chatRoomImage);
                 } else ToastUtils.showToastError(MessagingActivity.this, response.message(), Toast.LENGTH_LONG);
             }
 
@@ -574,5 +598,129 @@ public class MessagingActivity extends AppCompatActivity {
             mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase());
         }
         return mimeType;
+    }
+
+    private void showChangeLogo() {
+        Dialog dialog = new Dialog(getWindow().getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.popup_of_camera);
+        //Set activity of button in dialog here
+        TextView tvOpenCamera = (TextView) dialog.findViewById(R.id.option_open_camera);
+        TextView tvUploadPhoto = (TextView) dialog.findViewById(R.id.option_upload_photo);
+
+        tvOpenCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!checkPermissionAndAskForIt(
+                        MessagingActivity.this,
+                        Manifest.permission.CAMERA,
+                        CAMERA_PERMISSION_REQUEST_CODE)
+                ) return;
+                getPhotoFromCamera();
+            }
+        });
+
+        tvUploadPhoto.setOnClickListener(view -> openImageStorage());
+        //
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setGravity(Gravity.CENTER);
+    }
+
+    private void getPhotoFromCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                ToastUtils.showToastError(this, "Unable to take picture, please try again", Toast.LENGTH_LONG);
+            }
+
+            if (photoFile != null) {
+                Uri avatarUri = FileProvider.getUriForFile(this,
+                        "com.worthybitbuilders.squadsense.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, avatarUri);
+                startActivityIfNeeded(takePictureIntent, CAMERA_PERMISSION_REQUEST_CODE);
+            }
+        } else {
+            ToastUtils.showToastError(this, "No usable camera, operation failed", Toast.LENGTH_LONG);
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "IMG_" + timeStamp;
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File imageFile = File.createTempFile(imageFileName, ".jpg", storageDir);
+        return imageFile;
+    }
+    private void showConfirmDelete(int position, GroupChatMemberAdapter memberAdapter) {
+        final Dialog confirmDialog = new Dialog(this);
+        confirmDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        ConfirmDeleteSecondaryBinding binding = ConfirmDeleteSecondaryBinding.inflate(getLayoutInflater());
+        confirmDialog.setContentView(binding.getRoot());
+
+        binding.tvTitle.setText("Delete member");
+        binding.tvAdditionalContent.setText(String.format(Locale.US, "Are you sure to remove %s", messageViewModel.getChatRoom().getMembers().get(position).name));
+        binding.btnCancel.setOnClickListener(view -> confirmDialog.dismiss());
+        binding.btnConfirm.setOnClickListener(view -> {
+            messageViewModel.deleteMemberFromGroup(messageViewModel.getChatRoom().getMembers().get(position)._id, new MessageActivityViewModel.ApiCallHandler() {
+                @Override
+                public void onSuccess() {
+                    memberAdapter.notifyItemRemoved(position);
+                    memberAdapter.notifyItemRangeChanged(position, messageViewModel.getChatRoom().getMembers().size());
+                    ToastUtils.showToastSuccess(MessagingActivity.this, "Updated", Toast.LENGTH_SHORT);
+                    confirmDialog.dismiss();
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    ToastUtils.showToastSuccess(MessagingActivity.this, message, Toast.LENGTH_SHORT);
+                    confirmDialog.dismiss();
+                }
+            });
+        });
+
+        confirmDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        confirmDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        confirmDialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
+        confirmDialog.getWindow().setGravity(Gravity.CENTER);
+        confirmDialog.show();
+    }
+
+    private void showConfirmLeave() {
+        final Dialog confirmDialog = new Dialog(this);
+        confirmDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        ConfirmDeleteSecondaryBinding binding = ConfirmDeleteSecondaryBinding.inflate(getLayoutInflater());
+        confirmDialog.setContentView(binding.getRoot());
+
+        binding.tvTitle.setText("Leave");
+        binding.tvAdditionalContent.setText("Are you sure leave");
+        binding.btnCancel.setOnClickListener(view -> confirmDialog.dismiss());
+        binding.btnConfirm.setOnClickListener(view -> {
+            String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+            messageViewModel.deleteMemberFromGroup(userId, new MessageActivityViewModel.ApiCallHandler() {
+                @Override
+                public void onSuccess() {
+                    finish();
+                    confirmDialog.dismiss();
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    ToastUtils.showToastSuccess(MessagingActivity.this, message, Toast.LENGTH_SHORT);
+                    confirmDialog.dismiss();
+                }
+            });
+        });
+
+        confirmDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        confirmDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        confirmDialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
+        confirmDialog.getWindow().setGravity(Gravity.CENTER);
+        confirmDialog.show();
     }
 }

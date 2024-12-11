@@ -154,7 +154,7 @@ public class FriendActivity extends AppCompatActivity {
         confirmDialog.setContentView(binding.getRoot());
 
         binding.tvTitle.setText("Delete friend");
-        binding.tvAdditionalContent.setText("Are you sure to remove from you friend list");
+        binding.tvAdditionalContent.setText(String.format(Locale.US, "Are you sure to remove %s from your friend list", listFriend.get(position).getName()));
         binding.btnCancel.setOnClickListener(view -> confirmDialog.dismiss());
         binding.btnConfirm.setOnClickListener(view -> {
             try {

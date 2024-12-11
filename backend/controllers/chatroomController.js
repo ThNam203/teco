@@ -37,15 +37,11 @@ exports.createNewChatRoom = asyncCatch(async (req, res, next) => {
 exports.getAllChatroomsOfUser = asyncCatch(async (req, res, next) => {
     const { userId } = req.params
     // const chatrooms = await ChatRoom.find({ members: { $in: [userId] } })
-    const user = await User.findById(userId).populate({
-        path: 'chatRooms',
-        populate: {
-            path: 'members',
-            select: '_id name profileImagePath',
-        },
-    })
+    const chatRooms = await ChatRoom.find({
+        members: { $in: [userId] },
+    }).populate('members', '_id name profileImagePath')
 
-    res.status(200).json(user.chatRooms)
+    res.status(200).json(chatRooms)
 })
 
 exports.getAChatRoom = asyncCatch(async (req, res, next) => {
@@ -56,6 +52,30 @@ exports.getAChatRoom = asyncCatch(async (req, res, next) => {
     )
 
     res.status(200).json(chatRoom)
+})
+
+exports.addMemberToGroupChat = asyncCatch(async (req, res, next) => {
+    const { chatRoomId } = req.params
+    const { newMemberId } = req.body.nameValuePairs
+
+    const chatRoom = await ChatRoom.findById(chatRoomId)
+    chatRoom.members.push(newMemberId)
+    chatRoom.markModified('members')
+    await chatRoom.save()
+
+    res.status(204).end()
+})
+
+exports.deleteMemberFromGroupChat = asyncCatch(async (req, res, next) => {
+    const { chatRoomId, memberId } = req.params
+
+    const chatRoom = await ChatRoom.findById(chatRoomId)
+    const idx = chatRoom.members.findIndex((x) => x.toString() === memberId)
+    if (idx === -1) return next(new AppError('Member not found', 404))
+    chatRoom.members.splice(idx, 1)
+    chatRoom.markModified('members')
+    await chatRoom.save()
+    res.status(204).end()
 })
 
 //TODO: check(verify) if user is in the chat room by userId from params
