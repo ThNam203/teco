@@ -1017,6 +1017,7 @@ exports.getUserWork = asyncCatch(async (req, res, next) => {
                         rowTitle: board.rowCells[cellRowPosition].title,
                         isDone: board.rowCells[cellRowPosition].isDone,
                         cellRowPosition: cellRowPosition,
+                        deadlineColumnIndex: board.deadlineColumnIndex,
                     })
                 }
             })

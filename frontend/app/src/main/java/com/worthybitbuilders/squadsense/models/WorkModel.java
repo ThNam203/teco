@@ -16,8 +16,9 @@ public class WorkModel {
     private final String rowTitle;
     private final Integer cellRowPosition;
     private final boolean isDone;
+    private final int deadlineColumnIndex;
 
-    public WorkModel(String projectId, String projectTitle, String boardId, String boardTitle, Integer boardPosition, String rowTitle, Integer cellRowPosition, boolean isDone) {
+    public WorkModel(String projectId, String projectTitle, String boardId, String boardTitle, Integer boardPosition, String rowTitle, Integer cellRowPosition, boolean isDone, int deadlineColumnIndex) {
         this.projectId = projectId;
         this.projectTitle = projectTitle;
         this.boardId = boardId;
@@ -26,6 +27,7 @@ public class WorkModel {
         this.rowTitle = rowTitle;
         this.cellRowPosition = cellRowPosition;
         this.isDone = isDone;
+        this.deadlineColumnIndex = deadlineColumnIndex;
     }
 
     public String getProjectId() {
@@ -58,5 +60,9 @@ public class WorkModel {
 
     public boolean isDone() {
         return isDone;
+    }
+
+    public int getDeadlineColumnIndex() {
+        return deadlineColumnIndex;
     }
 }

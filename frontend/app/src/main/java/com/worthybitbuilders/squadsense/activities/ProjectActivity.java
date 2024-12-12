@@ -175,6 +175,7 @@ public class ProjectActivity extends AppCompatActivity {
                 updateIntent.putExtra("updateCellTitle", columnTitle);
                 updateIntent.putExtra("isFromUpdateColumn", true);
                 updateIntent.putExtra("isDone", boardViewModel.getmRowHeaderModelList().get(rowPosition).isDone());
+                updateIntent.putExtra("deadlineColumnIndex", boardViewModel.getDeadlineColumnIndex());
                 startActivity(updateIntent);
             }
 
@@ -210,6 +211,7 @@ public class ProjectActivity extends AppCompatActivity {
                 showRowIntent.putExtra("rowTitle", rowTitle);
                 showRowIntent.putExtra("creatorId", projectActivityViewModel.getProjectModel().getCreatorId());
                 showRowIntent.putExtra("isDone", boardViewModel.getmRowHeaderModelList().get(rowPosition).isDone());
+                showRowIntent.putExtra("deadlineColumnIndex", boardViewModel.getDeadlineColumnIndex());
 
                 Bundle bundle = new Bundle();
                 bundle.putStringArrayList("adminId", (ArrayList<String>) projectActivityViewModel.getProjectModel().getAdminIds());

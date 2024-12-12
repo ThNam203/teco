@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:gravity="center_vertical">
     <TextView
@@ -15,18 +16,28 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1"/>
-    <TextView
-        android:id="@+id/tvDateItemContent"
+    <LinearLayout
         android:layout_width="160dp"
-        android:layout_height="@dimen/tableview_default_height"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:singleLine="true"
-        android:textColor="@color/primary_word_second_color"
-        android:textSize="@dimen/tableview_default_text_size"
-        android:gravity="center"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
         android:background="@drawable/background_btn_corner"
-        android:backgroundTint="@color/primary_second_color"/>
+        android:backgroundTint="@color/primary_second_color">
+        <ImageView
+            android:id="@+id/deadlineClock"
+            android:layout_width="16dp"
+            android:layout_height="@dimen/tableview_default_height"
+            android:src="@drawable/ic_alarm"
+            android:visibility="gone"
+            app:tint="@color/light_red"/>
+        <TextView
+            android:id="@+id/tvDateItemContent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/tableview_default_height"
+            android:singleLine="true"
+            android:textColor="@color/primary_word_second_color"
+            android:textSize="@dimen/tableview_default_text_size"
+            tools:text="Today"
+            android:gravity="center"/>
+    </LinearLayout>
 </LinearLayout>

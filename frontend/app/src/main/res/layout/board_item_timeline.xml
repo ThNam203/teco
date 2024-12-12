@@ -14,7 +14,7 @@
             android:layout_width="24dp"
             android:layout_height="@dimen/tableview_default_height"
             android:src="@drawable/ic_alarm"
-            android:visibility="visible"
+            android:visibility="gone"
             app:tint="@color/light_red"/>
         <TextView
             android:id="@+id/tvDateItemContent"

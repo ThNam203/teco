@@ -58,7 +58,6 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
     private ProjectActivityViewModel projectActivityViewModel;
     private String currentChosenCellId = null;
     private String rowTitle = "";
-    private int rowPosition;
     private boolean isDone;
 
     @Override
@@ -80,6 +79,7 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         isDone = intent.getBooleanExtra("isDone", false);
         String projectTitle = intent.getStringExtra("projectTitle");
         String boardTitle = intent.getStringExtra("boardTitle");
+        Integer deadlineColumnIndex = intent.getIntExtra("deadlineColumnIndex", -1);
 
         if (isDone) activityBinding.doneTick.setVisibility(View.VISIBLE);
 
@@ -89,13 +89,11 @@ public class BoardItemDetailActivity extends AppCompatActivity implements BoardD
         String updateCellId = intent.getStringExtra("updateCellId");
         String updateCellTitle = intent.getStringExtra("updateCellTitle");
         int rowPosition = intent.getIntExtra("rowPosition", -1);
-
         this.rowTitle = rowTitle;
-        this.rowPosition = rowPosition;
 
         activityBinding.itemTitle.setText(rowTitle);
 
-        BoardItemDetailViewModelFactory viewModelFactory = new BoardItemDetailViewModelFactory(rowPosition, projectId, boardId, updateCellId, projectTitle, boardTitle, new BoardRowHeaderModel(rowTitle, isDone, false));
+        BoardItemDetailViewModelFactory viewModelFactory = new BoardItemDetailViewModelFactory(rowPosition, projectId, boardId, updateCellId, projectTitle, boardTitle, new BoardRowHeaderModel(rowTitle, isDone, false), deadlineColumnIndex);
         viewModel = new ViewModelProvider(this, viewModelFactory).get(BoardDetailItemViewModel.class);
         projectActivityViewModel = new ViewModelProvider(this).get(ProjectActivityViewModel.class);
 

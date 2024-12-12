@@ -117,9 +117,9 @@ public class BoardItemDetailColumnAdapter extends RecyclerView.Adapter {
         } else if (holder instanceof BoardDetailCheckboxItemViewHolder) {
             ((BoardDetailCheckboxItemViewHolder) holder).setItemModel((BoardCheckboxItemModel) cellItemModel, columnTitle, position);
         } else if (holder instanceof BoardDetailDateItemViewHolder) {
-            ((BoardDetailDateItemViewHolder) holder).setItemModel((BoardDateItemModel) cellItemModel, columnTitle, position);
+            ((BoardDetailDateItemViewHolder) holder).setItemModel((BoardDateItemModel) cellItemModel, columnTitle, position, viewModel.getDeadlineColumnIndex());
         } else if (holder instanceof BoardDetailTimelineItemViewHolder) {
-            ((BoardDetailTimelineItemViewHolder) holder).setItemModel((BoardTimelineItemModel) cellItemModel, columnTitle, position);
+            ((BoardDetailTimelineItemViewHolder) holder).setItemModel((BoardTimelineItemModel) cellItemModel, columnTitle, position, viewModel.getDeadlineColumnIndex());
         } else if (holder instanceof BoardDetailUpdateItemViewHolder) {
             ((BoardDetailUpdateItemViewHolder) holder).setItemModel((BoardUpdateItemModel) cellItemModel, columnTitle);
         } else if (holder instanceof BoardDetailMapItemViewHolder) {

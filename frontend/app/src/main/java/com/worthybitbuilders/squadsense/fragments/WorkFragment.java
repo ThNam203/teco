@@ -63,6 +63,7 @@ public class WorkFragment extends Fragment {
             // deep link
             Intent projectIntent = new Intent(mContext, ProjectActivity.class);
             WorkModel model = activityViewModel.getUserWorks().get(position);
+            SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID, model.getProjectId());
             projectIntent.putExtra("projectId", model.getProjectId());
             projectIntent.putExtra("boardPosition", model.getBoardPosition());
             projectIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -76,6 +77,7 @@ public class WorkFragment extends Fragment {
             detailIntent.putExtra("rowPosition", model.getCellRowPosition());
             detailIntent.putExtra("rowTitle", model.getRowTitle());
             detailIntent.putExtra("isDone", model.isDone());
+            detailIntent.putExtra("deadlineColumnIndex", model.getDeadlineColumnIndex());
 
             detailIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(detailIntent);

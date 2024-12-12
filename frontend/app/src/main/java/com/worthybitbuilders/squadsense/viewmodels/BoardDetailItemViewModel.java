@@ -45,12 +45,13 @@ public class BoardDetailItemViewModel extends ViewModel {
     private String updateCellId;
     private final String projectTitle;
     private final String boardTitle;
-    private BoardRowHeaderModel rowHeaderModel;
+    private final BoardRowHeaderModel rowHeaderModel;
+    private final int deadlineColumnIndex;
     /**
      * @param rowPosition is the position according to the board,
      *                    we need it to update the exact cell on the remote
      */
-    public BoardDetailItemViewModel(int rowPosition, String projectId, String boardId, String updateCellId, String projectTitle, String boardTitle, BoardRowHeaderModel rowHeaderModel) {
+    public BoardDetailItemViewModel(int rowPosition, String projectId, String boardId, String updateCellId, String projectTitle, String boardTitle, BoardRowHeaderModel rowHeaderModel, int deadlineColumnIndex) {
         this.rowPosition = rowPosition;
         this.projectId = projectId;
         this.boardId = boardId;
@@ -58,6 +59,7 @@ public class BoardDetailItemViewModel extends ViewModel {
         this.projectTitle = projectTitle;
         this.boardTitle = boardTitle;
         this.rowHeaderModel = rowHeaderModel;
+        this.deadlineColumnIndex = deadlineColumnIndex;
     }
     public int getRowPosition() {
         return rowPosition;
@@ -75,6 +77,10 @@ public class BoardDetailItemViewModel extends ViewModel {
     public String getProjectTitle() { return projectTitle; }
 
     public String getBoardTitle() { return boardTitle; }
+
+    public int getDeadlineColumnIndex() {
+        return deadlineColumnIndex;
+    }
 
     public MutableLiveData<BoardDetailItemModel> getItemsLiveData() {
         return itemsLiveData;

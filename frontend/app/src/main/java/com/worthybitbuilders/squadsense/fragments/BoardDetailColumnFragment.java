@@ -82,7 +82,6 @@ public class BoardDetailColumnFragment extends Fragment {
     ProjectActivityViewModel projectActivityViewModel;
     private FragmentBoardDetailColumnBinding binding;
     private BoardItemDetailColumnAdapter adapter;
-
     private String creatorId = "";
     private List<String> listAdminId = new ArrayList<>();
 
