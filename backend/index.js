@@ -46,6 +46,7 @@ app.post('/upload-files', s3Controller.s3Upload.array('files'), (req, res) => {
         res.status(200).json(fileDescriptions)
     } else res.status(500).json('Unable to upload image')
 })
+
 app.use('/', authRouter)
 app.use('/', userRouter)
 app.use('/', friendRouter)
@@ -54,6 +55,9 @@ app.use('/:userId/chatroom', chatRoomRouter)
 app.use('/:userId/project', projectRouter)
 app.use('*', errorHandlers.invalidUrlHandler)
 app.use(errorHandlers.globalErrorHandler)
+
+console.log(process.env.PORT)
+console.log(process.env.MONGODB_CONNECT)
 
 server.listen(process.env.PORT || 3000, () => {
     console.log(`server is listening on port ${process.env.PORT || 3000}`)
