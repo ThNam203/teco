@@ -131,6 +131,7 @@ public class FriendActivity extends AppCompatActivity {
             @Override
             public void OnMoreOptionsClick(int position) {
                 FriendMoreOptionBinding popupBinding = FriendMoreOptionBinding.inflate(getLayoutInflater());
+                popupBinding.btnAdd.setVisibility(View.GONE);
                 PopupWindow popupWindow = new PopupWindow(popupBinding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
                 popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 popupWindow.setElevation(50);

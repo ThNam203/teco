@@ -54,11 +54,13 @@ import com.worthybitbuilders.squadsense.databinding.PopupChatSettingBinding;
 import com.worthybitbuilders.squadsense.factory.MessageActivityViewModelFactory;
 import com.worthybitbuilders.squadsense.models.ChatMessage;
 import com.worthybitbuilders.squadsense.models.ChatRoom;
+import com.worthybitbuilders.squadsense.models.UserModel;
 import com.worthybitbuilders.squadsense.services.RetrofitServices;
 import com.worthybitbuilders.squadsense.services.UtilService;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
+import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.MessageActivityViewModel;
 
 import org.json.JSONException;
@@ -154,6 +156,7 @@ public class MessagingActivity extends AppCompatActivity {
             popupBinding.rvGroupMembers.setLayoutManager(new LinearLayoutManager(MessagingActivity.this));
             popupBinding.rvGroupMembers.setAdapter(memberAdapter);
             popupBinding.btnLeave.setOnClickListener((v) -> showConfirmLeave());
+//            popupBinding.btnAddMember.setOnClickListener((v) -> );
 
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -285,6 +288,7 @@ public class MessagingActivity extends AppCompatActivity {
     private void showMoreOption(int position, View anchor, GroupChatMemberAdapter memberAdapter) {
         // TODO: change this binding
         FriendMoreOptionBinding popupBinding = FriendMoreOptionBinding.inflate(getLayoutInflater());
+        popupBinding.btnAdd.setVisibility(View.GONE);
         PopupWindow popupWindow = new PopupWindow(popupBinding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
         popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
@@ -347,7 +351,7 @@ public class MessagingActivity extends AppCompatActivity {
                     if (chatRoom.isGroup()) {
                         binding.btnVideoCall.setVisibility(View.GONE);
                         binding.btnVoiceCall.setVisibility(View.GONE);
-                        binding.btnSetting.setVisibility(View.VISIBLE);
+                        binding.btnSetting.setVisibility(View.GONE);
                     }
 
                     binding.chatRoomTitle.setText(chatRoom.getTitle());
@@ -723,4 +727,50 @@ public class MessagingActivity extends AppCompatActivity {
         confirmDialog.getWindow().setGravity(Gravity.CENTER);
         confirmDialog.show();
     }
+
+//    private void LoadlistFriend()
+//    {
+//        loadingDialog.show();
+//        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+//        friendViewModel.getFriendById(userId, new FriendViewModel.getFriendCallback() {
+//            @Override
+//            public void onSuccess(List<UserModel> friends) {
+//                listFriend.clear();
+//                listFriend.addAll(friends);
+//
+//                binding.rvFriends.setAdapter(friendItemAdapter);
+//                LoadListFriendView();
+//                loadingDialog.dismiss();
+//            }
+//
+//            @Override
+//            public void onFailure(String message) {
+//                ToastUtils.showToastError(FriendActivity.this, message, Toast.LENGTH_SHORT);
+//                loadingDialog.dismiss();
+//            }
+//        });
+//
+//        friendItemAdapter.setOnClickListener(new FriendItemAdapter.OnActionCallback() {
+//            @Override
+//            public void OnItemClick(int position) {}
+//
+//            @Override
+//            public void OnMoreOptionsClick(int position) {
+//                FriendMoreOptionBinding popupBinding = FriendMoreOptionBinding.inflate(getLayoutInflater());
+//                popupBinding.btnAdd.setVisibility(View.GONE);
+//                PopupWindow popupWindow = new PopupWindow(popupBinding.getRoot(), LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
+//                popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                popupWindow.setElevation(50);
+//                popupWindow.setTouchable(true);
+//                popupWindow.setOutsideTouchable(true);
+//                View anchor = binding.rvFriends.getLayoutManager().findViewByPosition(position);
+//                if (anchor != null) popupWindow.showAsDropDown(anchor, 0, 0);
+//
+//                popupBinding.btnDeleteFriend.setOnClickListener(view -> {
+//                    showConfirmDelete(position);
+//                    popupWindow.dismiss();
+//                });
+//            }
+//        });
+//    }
 }
