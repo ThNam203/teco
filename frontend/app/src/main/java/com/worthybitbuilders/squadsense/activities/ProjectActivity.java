@@ -158,7 +158,6 @@ public class ProjectActivity extends AppCompatActivity {
 
             @Override
             public void onCheckboxItemClick(BoardCheckboxItemModel itemModel, int columnPos, int rowPos) {
-                if(!canAccess(userId, rowPos)) return;
                 onCheckboxItemClicked(itemModel, columnPos, rowPos);
             }
 
@@ -209,13 +208,8 @@ public class ProjectActivity extends AppCompatActivity {
                 showRowIntent.putExtra("boardTitle", boardViewModel.getBoardTitle());
                 showRowIntent.putExtra("rowPosition", rowPosition);
                 showRowIntent.putExtra("rowTitle", rowTitle);
-                showRowIntent.putExtra("creatorId", projectActivityViewModel.getProjectModel().getCreatorId());
                 showRowIntent.putExtra("isDone", boardViewModel.getmRowHeaderModelList().get(rowPosition).isDone());
                 showRowIntent.putExtra("deadlineColumnIndex", boardViewModel.getDeadlineColumnIndex());
-
-                Bundle bundle = new Bundle();
-                bundle.putStringArrayList("adminId", (ArrayList<String>) projectActivityViewModel.getProjectModel().getAdminIds());
-                showRowIntent.putExtras(bundle);
 
                 startActivity(showRowIntent);
             }
@@ -565,25 +559,6 @@ public class ProjectActivity extends AppCompatActivity {
             case MEMBER:
                 projectMoreOptionsBinding.btnDeleteProject.setVisibility(View.GONE);
                 projectMoreOptionsBinding.btnRenameProject.setVisibility(View.GONE);
-                break;
-        }
-    }
-
-    private void showPopupOwnerFor(Role role, BoardOwnerItemPopupBinding popupBinding)
-    {
-        popupBinding.rvMembers.setVisibility(View.VISIBLE);
-        popupBinding.layoutRvOwers.setVisibility(View.VISIBLE);
-        popupBinding.btnSave.setVisibility(View.VISIBLE);
-
-        switch (role)
-        {
-            case CREATOR:
-                break;
-            case ADMIN:
-                break;
-            case MEMBER:
-                popupBinding.rvMembers.setVisibility(View.GONE);
-                popupBinding.btnSave.setVisibility(View.GONE);
                 break;
         }
     }
@@ -1066,14 +1041,26 @@ public class ProjectActivity extends AppCompatActivity {
         binding.rvOwers.setLayoutManager(new LinearLayoutManager(ProjectActivity.this, LinearLayoutManager.HORIZONTAL, false));
         BoardItemOwnerAdapter boardItemOwnerAdapter;
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
-        if(isTaskDone(rowPos))
+        if(isTaskDone(rowPos)){
+            binding.btnSave.setVisibility(View.GONE);
+            binding.rvMembers.setVisibility(View.GONE);
             boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, true);
-        else if(projectActivityViewModel.getProjectModel().getCreatorId().equals(userId))
+        }
+        else if(projectActivityViewModel.getProjectModel().getCreatorId().equals(userId)){
+            binding.btnSave.setVisibility(View.VISIBLE);
+            binding.rvMembers.setVisibility(View.VISIBLE);
             boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, false);
-        else if (projectActivityViewModel.getProjectModel().getAdminIds().contains(userId))
+        }
+        else if (projectActivityViewModel.getProjectModel().getAdminIds().contains(userId)){
+            binding.btnSave.setVisibility(View.VISIBLE);
+            binding.rvMembers.setVisibility(View.VISIBLE);
             boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, false);
-        else
+        }
+        else{
+            binding.btnSave.setVisibility(View.GONE);
+            binding.rvMembers.setVisibility(View.GONE);
             boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, true);
+        }
 
         BoardItemMemberAdapter boardItemMemberAdapter = new BoardItemMemberAdapter();
         binding.rvMembers.setAdapter(boardItemMemberAdapter);
@@ -1095,14 +1082,6 @@ public class ProjectActivity extends AppCompatActivity {
                 }
                 boardItemMemberAdapter.setData(listMember, statuses);
                 binding.rvMembers.setAdapter(boardItemMemberAdapter);
-
-                String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
-                if(projectActivityViewModel.getProjectModel().getCreatorId().equals(userId))
-                    showPopupOwnerFor(Role.CREATOR, binding);
-                else if (projectActivityViewModel.getProjectModel().getAdminIds().contains(userId))
-                    showPopupOwnerFor(Role.ADMIN, binding);
-                else
-                    showPopupOwnerFor(Role.MEMBER, binding);
             }
 
             @Override
@@ -1335,7 +1314,7 @@ public class ProjectActivity extends AppCompatActivity {
             binding.btnSaveTextItem.setVisibility(View.GONE);
             binding.btnClearTextItem.setVisibility(View.GONE);
         }
-        if(creatorId.equals(userId) || listAdminId.contains(userId) || isAnOwnerOfRow(userId, rowPos))
+        else if(creatorId.equals(userId) || listAdminId.contains(userId) || isAnOwnerOfRow(userId, rowPos))
         {
             binding.btnSaveTextItem.setVisibility(View.VISIBLE);
             binding.btnClearTextItem.setVisibility(View.VISIBLE);
@@ -1458,28 +1437,6 @@ public class ProjectActivity extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         BoardTimelineItemPopupBinding binding = BoardTimelineItemPopupBinding.inflate(getLayoutInflater());
         dialog.setContentView(binding.getRoot());
-
-        //hiện creator, admin -> all
-        //hiện owner -> all
-        //hiện ko liên quan -> hide feature
-
-        String creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
-        List<String> listAdminId = projectActivityViewModel.getProjectModel().getAdminIds();
-        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
-
-        if(isTaskDone(rowPos)) {
-            binding.btnSaveTimelineItem.setVisibility(View.GONE);
-            binding.tvAddTimelineTitle.setVisibility(View.GONE);
-        }
-        else if(creatorId.equals(userId) || listAdminId.contains(userId) || isAnOwnerOfRow(userId, rowPos))
-        {
-            binding.btnSaveTimelineItem.setVisibility(View.VISIBLE);
-            binding.tvAddTimelineTitle.setVisibility(View.VISIBLE);
-        }
-        else {
-            binding.btnSaveTimelineItem.setVisibility(View.GONE);
-            binding.tvAddTimelineTitle.setVisibility(View.GONE);
-        }
 
         final AtomicInteger dialogStartYear = new AtomicInteger(-1);
         final AtomicInteger dialogStartMonth = new AtomicInteger(-1);
@@ -1619,6 +1576,33 @@ public class ProjectActivity extends AppCompatActivity {
             materialDatePicker.show(getSupportFragmentManager(), "I DONT KNOW WHAT THIS IS");
         });
 
+        //hiện creator, admin -> all
+        //hiện owner -> all
+        //hiện ko liên quan -> hide feature
+
+        String creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
+        List<String> listAdminId = projectActivityViewModel.getProjectModel().getAdminIds();
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+
+        if(isTaskDone(rowPos)) {
+            binding.btnSaveTimelineItem.setVisibility(View.GONE);
+            binding.tvAddTimelineTitle.setText("Timeline");
+            binding.addTimeContainer.setEnabled(false);
+        }
+        else if(creatorId.equals(userId) || listAdminId.contains(userId) || isAnOwnerOfRow(userId, rowPos))
+        {
+            binding.btnSaveTimelineItem.setVisibility(View.VISIBLE);
+            if(binding.tvTimelineValue.getText().toString().isEmpty())
+                binding.tvAddTimelineTitle.setText("Add time");
+            else binding.tvAddTimelineTitle.setText("Clear");
+            binding.addTimeContainer.setEnabled(true);
+        }
+        else {
+            binding.btnSaveTimelineItem.setVisibility(View.GONE);
+            binding.tvAddTimelineTitle.setText("Timeline");
+            binding.addTimeContainer.setEnabled(false);
+        }
+
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
@@ -1641,20 +1625,29 @@ public class ProjectActivity extends AppCompatActivity {
         if(isTaskDone(rowPos))
         {
             binding.btnSaveDateItem.setVisibility(View.GONE);
-            binding.tvAddDateTitle.setVisibility(View.GONE);
-            binding.tvAddTimeTitle.setVisibility(View.GONE);
+            binding.dateItemDateContainer.setEnabled(false);
+            binding.dateItemTimeContainer.setEnabled(false);
+            binding.tvAddDateTitle.setText("Date");
+            binding.tvAddTimeTitle.setText("Time");
         }
-        if(creatorId.equals(userId) || listAdminId.contains(userId) || isAnOwnerOfRow(userId, rowPos))
+        else if(creatorId.equals(userId) || listAdminId.contains(userId) || isAnOwnerOfRow(userId, rowPos))
         {
             binding.btnSaveDateItem.setVisibility(View.VISIBLE);
-            binding.tvAddDateTitle.setVisibility(View.VISIBLE);
-            binding.tvAddTimeTitle.setVisibility(View.VISIBLE);
+            binding.dateItemDateContainer.setEnabled(true);
+            binding.dateItemTimeContainer.setEnabled(true);
+            if(binding.tvDateValue.getText().toString().isEmpty()) binding.tvAddDateTitle.setText("Add date");
+            else binding.tvAddDateTitle.setText("Clear");
+            if(binding.tvTimeValue.getText().toString().isEmpty()) binding.tvAddTimeTitle.setText("Add time");
+            else binding.tvAddTimeTitle.setText("Clear");
         }
         else {
             binding.btnSaveDateItem.setVisibility(View.GONE);
-            binding.tvAddDateTitle.setVisibility(View.GONE);
-            binding.tvAddTimeTitle.setVisibility(View.GONE);
+            binding.dateItemDateContainer.setEnabled(false);
+            binding.dateItemTimeContainer.setEnabled(false);
+            binding.tvAddDateTitle.setText("Date");
+            binding.tvAddTimeTitle.setText("Time");
         }
+
 
 
         final AtomicInteger dialogYear = new AtomicInteger(itemModel.getYear());

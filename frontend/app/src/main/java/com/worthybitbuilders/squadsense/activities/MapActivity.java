@@ -105,16 +105,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onSuccess() {
                 creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
                 listAdminId = projectActivityViewModel.getProjectModel().getAdminIds();
-
-                if(isDone) {
-
-                }
-                else if(userId.equals(creatorId) || listAdminId.contains(userId) || isOwner) {
-
-                }
-                else{
-
-                }
             }
 
             @Override
@@ -330,8 +320,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             popupBinding.rvAddresses.setVisibility(View.VISIBLE);
         }
 
+        boolean isReadOnly;
+        if(isDone) isReadOnly = true;
+        else if(creatorId.equals(userId) || listAdminId.contains(userId) || isOwner) isReadOnly = false;
+        else isReadOnly = true;
+
         MapAddressAdapter adapter = new MapAddressAdapter();
-        adapter.setData(addresses, isDone, new MapAddressAdapter.ClickHandler() {
+        adapter.setData(addresses, isReadOnly, new MapAddressAdapter.ClickHandler() {
             @Override
             public void OnAddressClick(BoardMapItemModel.AddressModel addressModel, int position) {
                 LatLng point = addressMarkers.get(position).getPosition();

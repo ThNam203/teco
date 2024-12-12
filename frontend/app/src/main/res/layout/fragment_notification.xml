@@ -22,17 +22,6 @@
             android:textColor="@color/primary_word_color"
             android:textSize="@dimen/large_textsize"
             android:textStyle="bold" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true"
-            android:backgroundTint="@color/transparent"
-            android:contentDescription="btn add person"
-            android:minHeight="48dp"
-            android:src="@drawable/ic_more_setting"
-            app:tint="@color/primary_icon_color" />
     </RelativeLayout>
 
     <EditText

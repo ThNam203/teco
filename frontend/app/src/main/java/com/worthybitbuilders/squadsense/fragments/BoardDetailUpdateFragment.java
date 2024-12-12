@@ -16,11 +16,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.worthybitbuilders.squadsense.activities.NewUpdateTaskActivity;
 import com.worthybitbuilders.squadsense.adapters.UpdateTaskAdapter;
 import com.worthybitbuilders.squadsense.databinding.FragmentBoardDetailUpdateBinding;
+import com.worthybitbuilders.squadsense.models.UserModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardBaseItemModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardUserItemModel;
+import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.BoardDetailItemViewModel;
+import com.worthybitbuilders.squadsense.viewmodels.ProjectActivityViewModel;
+
+import java.util.List;
 
 public class BoardDetailUpdateFragment extends Fragment {
     private BoardDetailItemViewModel viewModel;
+    private ProjectActivityViewModel projectActivityViewModel;
     private FragmentBoardDetailUpdateBinding binding;
     private String updateCellId;
     private String columnTitle;
@@ -57,6 +65,7 @@ public class BoardDetailUpdateFragment extends Fragment {
         columnTitle = getArguments().getString("columnTitle");
         rowTitle = getArguments().getString("rowTitle");
         viewModel = new ViewModelProvider(getActivity()).get(BoardDetailItemViewModel.class);
+        projectActivityViewModel = new ViewModelProvider(getActivity()).get(ProjectActivityViewModel.class);
 
         binding.rvUpdates.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.rvUpdates.setHasFixedSize(true);
@@ -91,14 +100,30 @@ public class BoardDetailUpdateFragment extends Fragment {
         binding.rvUpdates.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.rvUpdates.setAdapter(adapter);
 
-        handlerIfTaskDone(isDone);
+        projectActivityViewModel.getProjectById(viewModel.getProjectId(), new ProjectActivityViewModel.ApiCallHandlers() {
+            @Override
+            public void onSuccess() {
+                handlerIfTaskDone(isDone);
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+            }
+        });
         return binding.getRoot();
     }
 
     private void handlerIfTaskDone(boolean isDone)
     {
         if(isDone) binding.writeUpdateContainer.setVisibility(View.GONE);
-        else binding.writeUpdateContainer.setVisibility(View.VISIBLE);
+        else {
+            String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+            String creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
+            List<String> listAdminId = projectActivityViewModel.getProjectModel().getAdminIds();
+            if(creatorId.equals(userId) || listAdminId.contains(userId) || isAnOwnerOfRow(userId)) binding.writeUpdateContainer.setVisibility(View.VISIBLE);
+            else binding.writeUpdateContainer.setVisibility(View.GONE);
+        }
 
         if(adapter != null){
             adapter.setReadOnly(isDone);
@@ -123,5 +148,27 @@ public class BoardDetailUpdateFragment extends Fragment {
                 binding.progressBar.setVisibility(View.INVISIBLE);
             }
         });
+    }
+
+    private boolean isAnOwnerOfRow(String id)
+    {
+        if(viewModel.getItemsLiveData().getValue() == null) return false;
+        List<BoardBaseItemModel> cells = viewModel.getItemsLiveData().getValue().getCells();
+
+        for (BoardBaseItemModel cell : cells) {
+            if (cell.getCellType().equals("CellUser")) {
+                BoardUserItemModel userItemModel = (BoardUserItemModel) cell;
+                if (userItemModel != null) {
+                    List<UserModel> users = userItemModel.getUsers();
+                    for (UserModel user : users) {
+                        if (user.getId().equals(id)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

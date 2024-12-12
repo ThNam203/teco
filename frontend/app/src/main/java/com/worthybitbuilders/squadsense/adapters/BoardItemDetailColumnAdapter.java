@@ -40,6 +40,7 @@ public class BoardItemDetailColumnAdapter extends RecyclerView.Adapter {
     private BoardDetailItemViewModel viewModel;
     private ClickHandlers clickHandlers;
     private Context mContext;
+    private boolean isReadOnly = false;
     public interface ClickHandlers extends
             BoardDetailStatusItemViewHolder.StatusItemClickHandlers,
             BoardDetailTextItemViewHolder.TextItemClickHandlers,
@@ -105,6 +106,7 @@ public class BoardItemDetailColumnAdapter extends RecyclerView.Adapter {
         BoardDetailItemModel rowContents = viewModel.getItemsLiveData().getValue();
         String columnTitle = rowContents.getColumnTitles().get(position);
         BoardBaseItemModel cellItemModel = rowContents.getCells().get(position);
+        boolean isReadOnly = viewModel.getRowHeaderModel().isDone();
 
         if (holder instanceof BoardDetailStatusItemViewHolder) {
             ((BoardDetailStatusItemViewHolder) holder).setItemModel((BoardStatusItemModel) cellItemModel, columnTitle, position);
@@ -115,7 +117,7 @@ public class BoardItemDetailColumnAdapter extends RecyclerView.Adapter {
         } else if (holder instanceof BoardDetailNumberItemViewHolder) {
             ((BoardDetailNumberItemViewHolder) holder).setItemModel((BoardNumberItemModel) cellItemModel, columnTitle, position);
         } else if (holder instanceof BoardDetailCheckboxItemViewHolder) {
-            ((BoardDetailCheckboxItemViewHolder) holder).setItemModel((BoardCheckboxItemModel) cellItemModel, columnTitle, position);
+            ((BoardDetailCheckboxItemViewHolder) holder).setItemModel((BoardCheckboxItemModel) cellItemModel, columnTitle, position, isReadOnly);
         } else if (holder instanceof BoardDetailDateItemViewHolder) {
             ((BoardDetailDateItemViewHolder) holder).setItemModel((BoardDateItemModel) cellItemModel, columnTitle, position, viewModel.getDeadlineColumnIndex());
         } else if (holder instanceof BoardDetailTimelineItemViewHolder) {

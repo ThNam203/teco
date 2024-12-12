@@ -80,6 +80,7 @@ public class WorkFragment extends Fragment {
             detailIntent.putExtra("deadlineColumnIndex", model.getDeadlineColumnIndex());
 
             detailIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            SharedPreferencesManager.saveData(SharedPreferencesManager.KEYS.CURRENT_PROJECT_ID, model.getProjectId());
             startActivity(detailIntent);
         });
         binding.rvWork.setLayoutManager(new LinearLayoutManager(mContext));

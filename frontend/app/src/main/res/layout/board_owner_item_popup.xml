@@ -80,23 +80,6 @@
 
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/input_search"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="15dp"
-                android:background="@drawable/background_input"
-                android:backgroundTint="@color/primary_second_color"
-                android:drawableLeft="@drawable/ic_search"
-                android:drawablePadding="5dp"
-                android:drawableTint="@color/primary_word_second_color"
-                android:hint="Search people"
-                android:minHeight="48dp"
-                android:padding="5dp"
-                android:textColor="@color/primary_word_color"
-                android:textColorHint="@color/primary_word_second_color"
-                android:textSize="@dimen/normal_textsize" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvMembers"
                 android:layout_width="match_parent"

@@ -46,6 +46,7 @@ import com.worthybitbuilders.squadsense.databinding.BoardTextItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.BoardTimelineItemPopupBinding;
 import com.worthybitbuilders.squadsense.databinding.FragmentBoardDetailColumnBinding;
 import com.worthybitbuilders.squadsense.models.UserModel;
+import com.worthybitbuilders.squadsense.models.board_models.BoardBaseItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardCheckboxItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardDateItemModel;
 import com.worthybitbuilders.squadsense.models.board_models.BoardMapItemModel;
@@ -86,6 +87,7 @@ public class BoardDetailColumnFragment extends Fragment {
     private List<String> listAdminId = new ArrayList<>();
 
     private boolean isDone = false;
+    private boolean isOwner = false;
 
     public static BoardDetailColumnFragment newInstance() {
         BoardDetailColumnFragment fragment = new BoardDetailColumnFragment();
@@ -95,6 +97,7 @@ public class BoardDetailColumnFragment extends Fragment {
 
     public void setDone(boolean isDone) {
         this.isDone = isDone;
+        if(adapter != null) binding.rvItemContent.setAdapter(adapter);
     }
 
     public interface ItemClickHelper {
@@ -126,22 +129,23 @@ public class BoardDetailColumnFragment extends Fragment {
             }
         });
 
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
         adapter = new BoardItemDetailColumnAdapter(viewModel, getActivity(), new BoardItemDetailColumnAdapter.ClickHandlers() {
             @Override
             public void onMapItemClick(BoardMapItemModel itemModel, String columnTitle, int columnPos) {
-                if(handlerIfTaskDone(isDone)) return;
                 Intent mapIntent = new Intent(getActivity(), MapActivity.class);
                 String itemJson = new Gson().toJson(itemModel);
                 mapIntent.putExtra("itemModel", itemJson);
                 mapIntent.putExtra("projectId", viewModel.getProjectId());
                 mapIntent.putExtra("boardId", viewModel.getBoardId());
                 mapIntent.putExtra("cellId", itemModel.get_id());
+                mapIntent.putExtra("isDone", isDone);
+                mapIntent.putExtra("isOwner", isAnOwnerOfRow(userId));
                 startActivity(mapIntent);
             }
 
             @Override
             public void onUpdateItemClick(BoardUpdateItemModel itemModel, String columnTitle) {
-                if(handlerIfTaskDone(isDone)) return;
                 ((ItemClickHelper) getActivity()).onUpdateItemClick(itemModel, columnTitle);
             }
 
@@ -153,13 +157,11 @@ public class BoardDetailColumnFragment extends Fragment {
 
             @Override
             public void OnDateItemClick(BoardDateItemModel itemModel, String columnTitle, int columnPos) {
-                if(handlerIfTaskDone(isDone)) return;
                 showDateItemPopup(itemModel, columnTitle, columnPos);
             }
 
             @Override
             public void onNumberItemClick(BoardNumberItemModel itemModel, String columnTitle, int columnPos) {
-                if(handlerIfTaskDone(isDone)) return;
                 showNumberItemPopup(itemModel, columnTitle, columnPos);
             }
 
@@ -171,19 +173,16 @@ public class BoardDetailColumnFragment extends Fragment {
 
             @Override
             public void onTextItemClick(BoardTextItemModel itemModel, String columnTitle, int columnPos) {
-                if(handlerIfTaskDone(isDone)) return;
                 showTextItemPopup(itemModel, columnTitle, columnPos);
             }
 
             @Override
             public void OnTimelineItemClick(BoardTimelineItemModel itemModel, String columnTitle, int columnPos) {
-                if(handlerIfTaskDone(isDone)) return;
                 showTimelineItemPopup(itemModel, columnTitle, columnPos);
             }
 
             @Override
             public void onUserItemClick(BoardUserItemModel userItemModel, String columnTitle, int columnPosition) {
-                if(handlerIfTaskDone(isDone)) return;
                 showOwnerPopup(userItemModel, columnTitle, columnPosition);
             }
         });
@@ -220,12 +219,26 @@ public class BoardDetailColumnFragment extends Fragment {
         binding.rvOwers.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         BoardItemOwnerAdapter boardItemOwnerAdapter;
         String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
-        if(creatorId.equals(userId))
-            boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, false);
-        else if (listAdminId.contains(userId))
-            boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, false);
-        else
+        if(isDone){
+            binding.btnSave.setVisibility(View.GONE);
+            binding.rvMembers.setVisibility(View.GONE);
             boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, true);
+        }
+        else if(creatorId.equals(userId)){
+            binding.btnSave.setVisibility(View.VISIBLE);
+            binding.rvMembers.setVisibility(View.VISIBLE);
+            boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, false);
+        }
+        else if (listAdminId.contains(userId)){
+            binding.btnSave.setVisibility(View.VISIBLE);
+            binding.rvMembers.setVisibility(View.VISIBLE);
+            boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, false);
+        }
+        else{
+            binding.btnSave.setVisibility(View.GONE);
+            binding.rvMembers.setVisibility(View.GONE);
+            boardItemOwnerAdapter = new BoardItemOwnerAdapter(listOwner, true);
+        }
         BoardItemMemberAdapter boardItemMemberAdapter = new BoardItemMemberAdapter();
         binding.rvMembers.setAdapter(boardItemMemberAdapter);
         binding.rvOwers.setAdapter(boardItemOwnerAdapter);
@@ -244,15 +257,6 @@ public class BoardDetailColumnFragment extends Fragment {
                     statuses.add(isSet);
                 }
                 boardItemMemberAdapter.setData(listMember, statuses);
-
-                String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
-                if(creatorId.equals(userId))
-                    showPopupOwnerFor(Role.CREATOR, binding);
-                else if (listAdminId.contains(userId))
-                    showPopupOwnerFor(Role.ADMIN, binding);
-                else
-                    showPopupOwnerFor(Role.MEMBER, binding);
-
             }
 
             @Override
@@ -356,6 +360,26 @@ public class BoardDetailColumnFragment extends Fragment {
         });
 
         binding.btnClearTextItem.setOnClickListener((view) -> binding.etTextItem.setText(""));
+
+        //miễn sao copy được
+        String creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
+        List<String> listAdminId = projectActivityViewModel.getProjectModel().getAdminIds();
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+
+        if(isDone)
+        {
+            binding.btnSaveTextItem.setVisibility(View.GONE);
+            binding.btnClearTextItem.setVisibility(View.GONE);
+        }
+        else if(creatorId.equals(userId) || listAdminId.contains(userId) || isAnOwnerOfRow(userId))
+        {
+            binding.btnSaveTextItem.setVisibility(View.VISIBLE);
+            binding.btnClearTextItem.setVisibility(View.VISIBLE);
+        }
+        else {
+            binding.btnSaveTextItem.setVisibility(View.GONE);
+            binding.btnClearTextItem.setVisibility(View.GONE);
+        }
 
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -636,6 +660,38 @@ public class BoardDetailColumnFragment extends Fragment {
             ).show();
         });
 
+        //creator admin owner -> all
+        //ko liên quan -> hide save, add
+        String creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
+        List<String> listAdminId = projectActivityViewModel.getProjectModel().getAdminIds();
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+
+        if(isDone)
+        {
+            binding.btnSaveDateItem.setVisibility(View.GONE);
+            binding.dateItemDateContainer.setEnabled(false);
+            binding.dateItemTimeContainer.setEnabled(false);
+            binding.tvAddDateTitle.setText("Date");
+            binding.tvAddTimeTitle.setText("Time");
+        }
+        else if(creatorId.equals(userId) || listAdminId.contains(userId) || isAnOwnerOfRow(userId))
+        {
+            binding.btnSaveDateItem.setVisibility(View.VISIBLE);
+            binding.dateItemDateContainer.setEnabled(true);
+            binding.dateItemTimeContainer.setEnabled(true);
+            if(binding.tvDateValue.getText().toString().isEmpty()) binding.tvAddDateTitle.setText("Add date");
+            else binding.tvAddDateTitle.setText("Clear");
+            if(binding.tvTimeValue.getText().toString().isEmpty()) binding.tvAddTimeTitle.setText("Add time");
+            else binding.tvAddTimeTitle.setText("Clear");
+        }
+        else {
+            binding.btnSaveDateItem.setVisibility(View.GONE);
+            binding.dateItemDateContainer.setEnabled(false);
+            binding.dateItemTimeContainer.setEnabled(false);
+            binding.tvAddDateTitle.setText("Date");
+            binding.tvAddTimeTitle.setText("Time");
+        }
+
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
@@ -811,6 +867,33 @@ public class BoardDetailColumnFragment extends Fragment {
             materialDatePicker.show(getParentFragmentManager(), "I DONT KNOW WHAT THIS IS");
         });
 
+        //hiện creator, admin -> all
+        //hiện owner -> all
+        //hiện ko liên quan -> hide feature
+
+        String creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
+        List<String> listAdminId = projectActivityViewModel.getProjectModel().getAdminIds();
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+
+        if(isDone) {
+            binding.btnSaveTimelineItem.setVisibility(View.GONE);
+            binding.tvAddTimelineTitle.setText("Timeline");
+            binding.addTimeContainer.setEnabled(false);
+        }
+        else if(creatorId.equals(userId) || listAdminId.contains(userId) || isAnOwnerOfRow(userId))
+        {
+            binding.btnSaveTimelineItem.setVisibility(View.VISIBLE);
+            if(binding.tvTimelineValue.getText().toString().isEmpty())
+                binding.tvAddTimelineTitle.setText("Add time");
+            else binding.tvAddTimelineTitle.setText("Clear");
+            binding.addTimeContainer.setEnabled(true);
+        }
+        else {
+            binding.btnSaveTimelineItem.setVisibility(View.GONE);
+            binding.tvAddTimelineTitle.setText("Timeline");
+            binding.addTimeContainer.setEnabled(false);
+        }
+
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
@@ -858,6 +941,24 @@ public class BoardDetailColumnFragment extends Fragment {
             dialog.dismiss();
         });
 
+        //done -> chỉ coi
+        //chưa done -> creator, admin, owner -> all
+        // không liên quan chỉ coi
+        String creatorId = projectActivityViewModel.getProjectModel().getCreatorId();
+        List<String> listAdminId = projectActivityViewModel.getProjectModel().getAdminIds();
+        String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+
+        if(isDone){
+            binding.btnSaveNumberItem.setVisibility(View.GONE);
+        }
+        else if(creatorId.equals(userId) || listAdminId.contains(userId) || isAnOwnerOfRow(userId))
+        {
+            binding.btnSaveNumberItem.setVisibility(View.VISIBLE);
+        }
+        else {
+            binding.btnSaveNumberItem.setVisibility(View.GONE);
+        }
+
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimationBottom;
@@ -865,23 +966,24 @@ public class BoardDetailColumnFragment extends Fragment {
         dialog.show();
     }
 
-    private enum Role {CREATOR, ADMIN, MEMBER}
-    private void showPopupOwnerFor(Role role, BoardOwnerItemPopupBinding popupBinding)
+    private boolean isAnOwnerOfRow(String id)
     {
-        popupBinding.rvMembers.setVisibility(View.VISIBLE);
-        popupBinding.layoutRvOwers.setVisibility(View.VISIBLE);
-        popupBinding.btnSave.setVisibility(View.VISIBLE);
+        if(viewModel.getItemsLiveData().getValue().getCells() == null) return false;
+        List<BoardBaseItemModel> cells = viewModel.getItemsLiveData().getValue().getCells();
 
-        switch (role)
-        {
-            case CREATOR:
-                break;
-            case ADMIN:
-                break;
-            case MEMBER:
-                popupBinding.rvMembers.setVisibility(View.GONE);
-                popupBinding.btnSave.setVisibility(View.GONE);
-                break;
+        for (BoardBaseItemModel cell : cells) {
+            if (cell.getCellType().equals("CellUser")) {
+                BoardUserItemModel userItemModel = (BoardUserItemModel) cell;
+                if (userItemModel != null) {
+                    List<UserModel> users = userItemModel.getUsers();
+                    for (UserModel user : users) {
+                        if (user.getId().equals(id)) {
+                            return true;
+                        }
+                    }
+                }
+            }
         }
+        return false;
     }
 }
