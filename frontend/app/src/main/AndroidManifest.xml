@@ -54,9 +54,6 @@
             android:name=".activities.ProjectActivityLogActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.MeetingActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.FirstScreenActivity"
             android:exported="true">
             <intent-filter>
