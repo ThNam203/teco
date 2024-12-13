@@ -318,9 +318,9 @@ public class CallVideoActivity extends AppCompatActivity {
 
         @Override
         public void onAddTrack(RtpReceiver rtpReceiver, MediaStream[] mediaStreams) {
-            Arrays.stream(mediaStreams).forEach(stream -> {
-                stream.videoTracks.get(0).addSink(binding.remoteView);
-            });
+//            Arrays.stream(mediaStreams).forEach(stream -> {
+//                stream.videoTracks.get(0).addSink(binding.remoteView);
+//            });
         }
     };
 

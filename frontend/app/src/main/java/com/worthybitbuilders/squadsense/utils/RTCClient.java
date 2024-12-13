@@ -130,6 +130,7 @@ public class RTCClient {
         MediaStream localStream = peerConnectionFactory.createLocalMediaStream("local_stream");
         localStream.addTrack(localAudioTrack);
         localStream.addTrack(localVideoTrack);
+        peerConnection.addStream(localStream);
     }
 
     private CameraVideoCapturer getVideoCapturer(Application application) {
