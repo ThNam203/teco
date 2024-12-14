@@ -1,3 +1,4 @@
 backend/node_modules
 backend/config/product_config.env
 backend/config/.env
+backend/keys
