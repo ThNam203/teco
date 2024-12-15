@@ -37,14 +37,16 @@
         android:backgroundTint="#C0C0C0"
         android:layout_marginHorizontal="8dp"
         app:layout_constraintStart_toEndOf="@+id/ivOtherAvatar"
-        app:layout_constraintTop_toBottomOf="@id/tvOtherName">
-
+        app:layout_constraintTop_toBottomOf="@id/tvOtherName"
+        android:paddingTop="6dp"
+        android:paddingRight="12dp"
+        android:paddingLeft="12dp">
         <TextView
             android:id="@+id/tvOtherMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxWidth="250dp"
-            android:padding="8dp"
+            android:maxWidth="200dp"
+            android:padding="4dp"
             android:visibility="visible"
             android:textColor="@color/primary_word_color"
             android:textSize="@dimen/normal_textsize"
@@ -72,6 +74,7 @@
         android:layout_gravity="bottom"
         android:textColor="@color/primary_word_second_color"
         android:textSize="12sp"
+        android:layout_marginStart="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/messageContainer"
         tools:text="10:00" />
