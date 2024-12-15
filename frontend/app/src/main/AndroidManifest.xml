@@ -35,12 +35,15 @@
         android:theme="@style/Theme.Monday_app_project"
         android:usesCleartextTraffic="true"
         tools:targetApi="s">
+
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCshnX_TzNbKq_0aa8UXGUM-lk9kdjFpeo" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <activity
             android:name=".activities.MapActivity"
             android:exported="false" />
@@ -85,6 +88,10 @@
             android:exported="false" />
         <activity
             android:name=".activities.ShowImagesActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.ReportActivity"
             android:exported="false" />
 
         <provider
