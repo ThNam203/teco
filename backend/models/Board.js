@@ -1,5 +1,17 @@
 const mongoose = require('mongoose')
 
+const BOARD_COLUMN_TYPES = {
+    TEXT: 'Text',
+    DATE: 'Date',
+    CHECKBOX: 'Checkbox',
+    USER: 'User',
+    UPDATE: 'Update',
+    TIMELINE: 'Timeline',
+    NUMBER: 'Number',
+    STATUS: 'Status',
+    MAP: 'Map',
+}
+
 const columnCellModel = new mongoose.Schema(
     {
         columnType: {
@@ -57,4 +69,7 @@ const boardSchema = new mongoose.Schema({
     cells: [[{ type: mongoose.Schema.Types.ObjectId, ref: 'Cell' }]],
 })
 
-module.exports = mongoose.model('Board', boardSchema)
+module.exports = {
+    Board: mongoose.model('Board', boardSchema),
+    BOARD_COLUMN_TYPES,
+}

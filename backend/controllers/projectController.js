@@ -1,5 +1,5 @@
 /* eslint-disable node/no-unsupported-features/es-syntax */
-const Board = require('../models/Board')
+const { Board } = require('../models/Board')
 const Project = require('../models/Project')
 const User = require('../models/User')
 const Notification = require('../models/Notification')
@@ -214,6 +214,7 @@ const ACTIVITY_LOG_TYPES = {
     REMOVE: 'Remove',
     NEW: 'New',
 }
+
 const createActivityLog = async (
     userId,
     projectId,
