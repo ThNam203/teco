@@ -103,7 +103,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/report_time_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Time"
@@ -153,7 +153,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/report_checkbox_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Checkboxes"
