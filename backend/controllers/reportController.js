@@ -144,9 +144,14 @@ exports.getReportForProject = asyncCatch(async (req, res, next) => {
                     }
                 })
 
+                const arrayStatuses = Object.entries(statusCounts).map(([label, data]) => ({
+    label,
+    ...data
+}));
+
                 newReportForBoard.status.push({
                     title: col.title,
-                    statuses: statusCounts,
+                    statuses: arrayStatuses,
                 })
             }
         })
