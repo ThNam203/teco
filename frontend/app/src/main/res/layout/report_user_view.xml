@@ -1,100 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/report_user_layout1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="15dp"
+    android:layout_margin="15dp"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/report_user_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="Person"
+        android:text="Personal"
         android:textColor="@color/black"
         android:textSize="@dimen/normal_textsize" />
 
     <LinearLayout
-        android:id="@+id/report_user_item_layout"
+        android:id="@+id/report_user_assignment_containter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:maxWidth="15dp"
-            android:maxHeight="15dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            app:srcCompat="@drawable/ic_user" />
-
-        <TextView
-            android:id="@+id/report_user_assigned_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:width="45dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Assigned"
-            android:textSize="@dimen/normal_textsize" />
-
-        <TextView
-            android:id="@+id/report_user_assigned_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="center"
-            android:textSize="@dimen/normal_textsize"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            app:srcCompat="@drawable/ic_person" />
-
-        <TextView
-            android:id="@+id/textView29"
-            android:layout_width="45dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:text="Unassigned"
-            android:textSize="@dimen/normal_textsize" />
-
-        <TextView
-            android:id="@+id/report_user_unassigned_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:textAlignment="center"
-            android:textSize="@dimen/normal_textsize"
-            android:textStyle="bold" />
-
-    </LinearLayout>
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"></LinearLayout>
 
 </LinearLayout>

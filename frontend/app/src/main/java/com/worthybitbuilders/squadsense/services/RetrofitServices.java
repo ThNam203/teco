@@ -32,11 +32,9 @@ public class RetrofitServices {
     private static NotificationService notificationService = null;
     private static ProjectService projectService = null;
     private static UtilService utilService = null;
-<<<<<<< HEAD
-    private final static String BASE_URL = "http://10.45.100.107:3000/";
-=======
-    private final static String BASE_URL = "http://192.168.1.12:3000/";
->>>>>>> 151205f (add report route)
+
+    private static ReportService reportService = null;
+    private final static String BASE_URL = "http://192.168.1.194:3000/";
     
     private static final Gson mGson = new GsonBuilder()
             .registerTypeAdapter(BoardBaseItemModel.class, new BoardCellDeserializer())
@@ -46,6 +44,11 @@ public class RetrofitServices {
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create(mGson))
                     .build();
+
+    public static ReportService getReportService(){
+        if (reportService == null) reportService = retrofit.create(ReportService.class);
+        return reportService;
+    }
 
     public static UserService getUserService() {
         if (userService == null) userService = retrofit.create(UserService.class);

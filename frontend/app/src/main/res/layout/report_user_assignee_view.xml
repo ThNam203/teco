@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/report_user_assignee_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/report_user_assignee_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:width="100dp"
+        android:gravity="center"
+        android:text="Khoa"
+        android:textAlignment="textStart"
+        android:textSize="@dimen/normal_textsize" />
+
+</LinearLayout>
