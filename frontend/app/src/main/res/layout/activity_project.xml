@@ -102,23 +102,24 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="20dp">
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnShowTables"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@drawable/background_btn_corner"
                     android:backgroundTint="@color/primary_btn_second_color"
-                    android:text="Main Table"
-                    android:textAllCaps="false"
-                    android:textSize="@dimen/normal_textsize"
                     android:drawableLeft="@drawable/ic_table_sheet"
                     android:drawableRight="@drawable/ic_arrow_down"
-                    android:drawableTint="@color/primary_icon_color"
                     android:drawablePadding="10dp"
-                    android:textColor="@color/primary_word_color"
-                    android:layout_marginEnd="10dp"
+                    android:drawableTint="@color/primary_icon_color"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp" />
+                    android:paddingRight="10dp"
+                    android:text="Main Table"
+                    android:textAllCaps="false"
+                    android:textColor="@color/primary_word_color"
+                    android:textSize="@dimen/normal_textsize" />
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_filter"
                     android:layout_width="wrap_content"
