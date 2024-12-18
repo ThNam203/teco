@@ -1,59 +1,75 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
     android:layout_marginVertical="8dp"
-    android:background="@color/transparent"
-    tools:background="@color/primary_second_color">
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/chatRoomImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_chat_room_default_icon"
-        app:shapeAppearanceOverlay="@style/RoundedImageView"/>
+    android:layout_marginHorizontal="1dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    android:background="@color/white">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/tvChatRoomTitle"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:singleLine="true"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:textColor="@color/primary_word_color"
-            tools:text="Dat"
-            android:textSize="18sp"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:background="@color/transparent"
+        tools:background="@color/primary_second_color">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/chatRoomImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_chat_room_default_icon"
+            app:shapeAppearanceOverlay="@style/RoundedImageView" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical">
+
             <TextView
-                android:id="@+id/tvChatRoomLastMessage"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:id="@+id/tvChatRoomTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:gravity="center_vertical"
-                android:textSize="16sp"
-                android:textColor="@color/grey"
-                tools:text="Hello fen"
-                tools:ignore="NestedWeights" />
-            <TextView
-                android:id="@+id/tvChatRoomLastMessageTime"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:singleLine="true"
-                android:gravity="center_vertical"
-                android:textSize="16sp"
-                android:textColor="@color/grey"
-                android:layout_marginHorizontal="16dp"
-                tools:text="Hello fen"/>
+                android:textColor="@color/primary_word_color"
+                tools:text="Chat Room Title"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:id="@+id/tvChatRoomLastMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:textColor="@color/grey"
+                    tools:text="Last message content" />
+
+                <TextView
+                    android:id="@+id/tvChatRoomLastMessageTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:gravity="center_vertical"
+                    android:textSize="12sp"
+                    android:textColor="@color/grey"
+                    android:layout_marginStart="16dp"
+                    tools:text="12:34 PM" />
+            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
-</LinearLayout>
+</androidx.cardview.widget.CardView>

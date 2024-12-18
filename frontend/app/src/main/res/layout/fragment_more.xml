@@ -365,7 +365,7 @@
                 android:gravity="center"
                 android:background="@drawable/background_btn_corner"
                 android:backgroundTint="@color/light_red"
-                android:paddingVertical="5dp"
+                android:paddingVertical="10dp"
                 android:text="Log out"
                 android:textColor="@color/white"
                 android:textSize="@dimen/normal_textsize"
