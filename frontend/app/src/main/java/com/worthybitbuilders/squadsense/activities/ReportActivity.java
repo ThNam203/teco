@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,6 +53,8 @@ public class ReportActivity extends AppCompatActivity {
     private List<TimelineModel> timeData = new ArrayList<TimelineModel>();
 
     private List<StatusReportModel> statusData = new ArrayList<StatusReportModel>();
+
+    private List<UserReportModel> userData = new ArrayList<UserReportModel>();
 
     private List<ReportModel> reports = new ArrayList<ReportModel>();
 
@@ -101,9 +104,13 @@ public class ReportActivity extends AppCompatActivity {
                         statusData.clear();
                         statusData.addAll(firstReport.status);
 
+                        userData.clear();
+                        userData.addAll(firstReport.user);
+
                         if(!checkBoxData.isEmpty()) renderCheckbox(checkBoxData);
                         if(!timeData.isEmpty()) renderTime(timeData);
                         if(!statusData.isEmpty()) renderStatus(statusData);
+                        if(!userData.isEmpty()) renderUser(userData);
                     }
                 }
                 else Log.d("response", response.errorBody().toString());
@@ -114,24 +121,6 @@ public class ReportActivity extends AppCompatActivity {
                 Log.e("response", "Network Error: " + t.getMessage());
             }
         });
-
-
-        List<UserReportModel.Assignee> assignees1 = new ArrayList<UserReportModel.Assignee>();
-        assignees1.add(new UserReportModel.Assignee("Dawng"));
-        assignees1.add(new UserReportModel.Assignee("Khoa"));
-
-        List<UserReportModel.Assignee> assignees2 = new ArrayList<UserReportModel.Assignee>();
-        assignees2.add(new UserReportModel.Assignee("PhucsBui"));
-        assignees2.add(new UserReportModel.Assignee("BTNam"));
-
-        List<UserReportModel.Assignment> assignments = new ArrayList<UserReportModel.Assignment>();
-        assignments.add(new UserReportModel.Assignment("Task 1", assignees1));
-        assignments.add(new UserReportModel.Assignment("Task 2", assignees2));
-
-        List<UserReportModel> userReport = new ArrayList<UserReportModel>();
-        userReport.add(new UserReportModel("Personal", assignments));
-
-        renderUser(userReport);
 
         activityBinding.reportSelector.setOnClickListener(view->{
             selectorClicked();
@@ -192,26 +181,37 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void renderUser(List<UserReportModel> usersData){
-
-
+        for (int i = activityBinding.reportUserLayout.getChildCount() - 1; i >= 2; i--) {
+            activityBinding.reportUserLayout.removeViewAt(i);
+        }
         usersData.forEach(user->{
             View newView = inflateLayout(ReportActivity.this, R.layout.report_user_view, activityBinding.reportUserLayout);
             TextView title = newView.findViewById(R.id.report_user_title);
             title.setText(user.title);
 
             LinearLayout assignmentContainer = newView.findViewById(R.id.report_user_assignment_containter);
-            user.assignments.forEach(assignment->{
+            user.assigments.forEach(assignment->{
                 View assignmentView = inflateLayout(ReportActivity.this, R.layout.report_user_assignment_view, assignmentContainer);
                 TextView label = assignmentView.findViewById(R.id.report_user_assignment_label);
                 label.setText(assignment.label);
 
                 LinearLayout assigneeContainer = assignmentView.findViewById(R.id.report_user_assignee_container);
-                assignment.user.forEach(name->{
+                if(assignment.assignee.size()>0){
+                    assignment.assignee.forEach(name->{
+                        View assigneeView = inflateLayout(ReportActivity.this, R.layout.report_user_assignee_view, assigneeContainer);
+                        TextView username = assigneeView.findViewById(R.id.report_user_assignee_name);
+                        username.setText(name);
+                        assigneeContainer.addView(assigneeView);
+                    });
+                }
+                else{
                     View assigneeView = inflateLayout(ReportActivity.this, R.layout.report_user_assignee_view, assigneeContainer);
                     TextView username = assigneeView.findViewById(R.id.report_user_assignee_name);
-                    username.setText(name.name);
+                    username.setText("Not assigned");
+                    username.setTypeface(username.getTypeface(), Typeface.ITALIC);
                     assigneeContainer.addView(assigneeView);
-                });
+                }
+
 
                 assignmentContainer.addView(assignmentView);
             });
@@ -301,6 +301,7 @@ public class ReportActivity extends AppCompatActivity {
         checkBoxData.clear();
         timeData.clear();
         statusData.clear();
+        userData.clear();
     }
 
     private void updateUIWithReport(ReportModel report) {
@@ -311,11 +312,13 @@ public class ReportActivity extends AppCompatActivity {
         checkBoxData.addAll(report.checkbox);
         timeData.addAll(report.timeline);
         statusData.addAll(report.status);
+        userData.addAll(report.user);
 
         // Render new data
         renderCheckbox(checkBoxData);
         renderTime(timeData);
         renderStatus(statusData);
+        renderUser(userData);
     }
 
 }
