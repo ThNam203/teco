@@ -43,7 +43,7 @@ public class SocketClient {
         options.reconnectionDelay = 2000;
         options.reconnectionDelayMax = 5000;
         try {
-            mSocket = IO.socket("http://10.45.181.74:3000/", options);
+            mSocket = IO.socket("http://192.168.0.5:3000/", options);
             mSocket.connect();
             mSocket.on(Socket.EVENT_CONNECT, onConnect);
             mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
