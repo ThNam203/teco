@@ -123,6 +123,8 @@ public class UpdateTaskCommentActivity extends AppCompatActivity {
 
         binding.btnGetPhoto.setOnClickListener(view -> choosePhotoFromStorage());
         binding.btnSendComment.setOnClickListener(view -> uploadUpdateTask());
+        binding.btnSendComment2.setOnClickListener(view -> uploadUpdateTask());
+
 
         Dialog loadingDialog = DialogUtils.GetLoadingDialog(this);
         loadingDialog.show();
