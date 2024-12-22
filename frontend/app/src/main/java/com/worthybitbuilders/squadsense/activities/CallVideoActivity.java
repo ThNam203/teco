@@ -21,6 +21,8 @@ import com.worthybitbuilders.squadsense.utils.RTCClient;
 import com.worthybitbuilders.squadsense.utils.SocketClient;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 
+import org.jitsi.meet.sdk.JitsiMeetActivity;
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.webrtc.DataChannel;
@@ -44,6 +46,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class CallVideoActivity extends AppCompatActivity {
+    public static boolean isRunning = false;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     private ActivityCallVideoBinding binding;
     // chat room and video call use the same id
@@ -53,6 +56,7 @@ public class CallVideoActivity extends AppCompatActivity {
     private final Gson gson = new Gson();
     // video call and voice only call
     private boolean isVideoCall;
+    private boolean isGroupChat;
     private boolean isCameraOn = true;
     private boolean isCaller;
     private boolean isAudioOn = true;
@@ -74,11 +78,13 @@ public class CallVideoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isRunning = true;
         binding = ActivityCallVideoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Objects.requireNonNull(getSupportActionBar()).hide();
         Intent getIntent = getIntent();
         this.chatRoomId = getIntent.getStringExtra("chatRoomId");
+        this.isGroupChat = getIntent.getBooleanExtra("isGroupChat", false);
         // determine if this user init the call
         this.isCaller = getIntent.getBooleanExtra("isCaller", false);
         this.isVideoCall = getIntent.getBooleanExtra("isVideoCall", true);
@@ -93,7 +99,7 @@ public class CallVideoActivity extends AppCompatActivity {
                 rtcClient.endCall();
                 finish();
             });
-        } else {
+        } else if (!isGroupChat) {
             // if user is called, we get the call offer (sdp)
             String callOffer = getIntent.getStringExtra("callOffer");
             setIncomingCallUserInfo(getIntent);
@@ -127,47 +133,80 @@ public class CallVideoActivity extends AppCompatActivity {
                 socket.emit("callDeny", callerId);
                 finish();
             });
+        } else {
+            binding.incomingCallAcceptBtn.setOnClickListener(view -> {
+                JitsiMeetConferenceOptions options
+                        = new JitsiMeetConferenceOptions.Builder()
+                        .setRoom("CHATROOM" + chatRoomId)
+                        // Settings for audio and video
+                        .setAudioMuted(true)
+                        .setVideoMuted(true)
+                        // When using JaaS, set the obtained JWT here
+                        //.setToken("")
+                        // Different features flags can be set
+                        //.setFeatureFlag("toolbox.enabled", false)
+                        //.setFeatureFlag("prejoinpage.enabled", false)
+                        .setFeatureFlag("pip.enabled", true)
+                        .setFeatureFlag("welcomepage.enabled", false)
+                        .build();
+                // Launch the new activity with the given options. The launch() method takes care
+                // of creating the required Intent and passing the options.
+
+                JitsiMeetActivity.launch(CallVideoActivity.this, options);
+                finish();
+            });
+
+            binding.incomingCallDenyBtn.setOnClickListener(view -> {
+                if (mediaPlayer != null) {
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                    mediaPlayer = null;
+                }
+                finish();
+            });
         }
 
-        binding.videoButton.setOnClickListener(view -> {
-            if (isCameraOn) {
-                isCameraOn = false;
-                binding.videoButton.setImageResource(R.drawable.ic_videocam_off);
-            }else{
-                isCameraOn = true;
-                binding.videoButton.setImageResource(R.drawable.ic_videocam);
-            }
+        if (!isGroupChat) {
+            binding.videoButton.setOnClickListener(view -> {
+                if (isCameraOn) {
+                    isCameraOn = false;
+                    binding.videoButton.setImageResource(R.drawable.ic_videocam_off);
+                }else{
+                    isCameraOn = true;
+                    binding.videoButton.setImageResource(R.drawable.ic_videocam);
+                }
 
-            rtcClient.toggleCamera(isCameraOn);
-        });
+                rtcClient.toggleCamera(isCameraOn);
+            });
 
-        binding.micButton.setOnClickListener(view -> {
-            if (isAudioOn) {
-                isAudioOn = false;
-                rtcClient.toggleAudio(false);
-                binding.micButton.setImageResource(R.drawable.ic_microphone_off);
-            } else {
-                isAudioOn = true;
-                rtcClient.toggleAudio(true);
-                binding.micButton.setImageResource(R.drawable.ic_microphone);
-            }
-        });
+            binding.micButton.setOnClickListener(view -> {
+                if (isAudioOn) {
+                    isAudioOn = false;
+                    rtcClient.toggleAudio(false);
+                    binding.micButton.setImageResource(R.drawable.ic_microphone_off);
+                } else {
+                    isAudioOn = true;
+                    rtcClient.toggleAudio(true);
+                    binding.micButton.setImageResource(R.drawable.ic_microphone);
+                }
+            });
 
-        binding.endCallButton.setOnClickListener(view ->{
-            rtcClient.endCall();
-            finish();
-        });
+            binding.endCallButton.setOnClickListener(view ->{
+                rtcClient.endCall();
+                finish();
+            });
 
-        socket.on("answerOfferVideoCall", onOfferAnswerReceived);
-        socket.on("iceCandidate", onReceiveIceCandidate);
-        checkPermissionsAndAccessCamera();
+            socket.on("answerOfferVideoCall", onOfferAnswerReceived);
+            socket.on("iceCandidate", onReceiveIceCandidate);
+            checkPermissionsAndAccessCamera();
+        }
     }
 
     @AfterPermissionGranted(PERMISSIONS_REQUEST_CODE)
     private void doWorkIfPermissionsAccepted() {
         String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
         if (EasyPermissions.hasPermissions(this, permissions)) {
-            rtcClient = new RTCClient(getApplication(), chatRoomId, isVideoCall, peerConnectionObserver);
+            rtcClient = new RTCClient(getApplication(), chatRoomId, isVideoCall, isGroupChat, peerConnectionObserver);
             if (isVideoCall) {
                 rtcClient.initializeSurfaceView(binding.localView);
                 rtcClient.initializeSurfaceView(binding.remoteView);
@@ -327,6 +366,7 @@ public class CallVideoActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        isRunning = false;
         socket.off("iceCandidate");
         socket.off("answerOfferVideoCall");
     }

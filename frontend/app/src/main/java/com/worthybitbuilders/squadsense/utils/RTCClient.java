@@ -35,6 +35,7 @@ public class RTCClient {
     private final Application application;
     // chatroom and video call use the same chat room id
     private final String chatRoomId;
+    private final boolean isGroupChat;
     private final Socket socket = SocketClient.getInstance();
     private final PeerConnection.Observer observer;
     private EglBase.Context eglContext;
@@ -61,11 +62,12 @@ public class RTCClient {
         return canSendBufferedICECandidates;
     }
 
-    public RTCClient(Application application, String chatRoomId, boolean isVideoCall, PeerConnection.Observer observer) {
+    public RTCClient(Application application, String chatRoomId, boolean isVideoCall, boolean isGroupChat, PeerConnection.Observer observer) {
         this.application = application;
         this.chatRoomId = chatRoomId;
         this.isVideoCall = isVideoCall;
         this.observer = observer;
+        this.isGroupChat = isGroupChat;
         init();
     }
 
@@ -166,6 +168,7 @@ public class RTCClient {
                             offer.put("callerId", userId);
                             offer.put("chatRoomId", chatRoomId);
                             offer.put("isVideoCall", isVideoCall);
+                            offer.put("isGroupChat", isGroupChat);
                             offer.put("sdp", sessionDescription.description);
                             offer.put("type", sessionDescription.type.canonicalForm());
                         } catch (JSONException e) {

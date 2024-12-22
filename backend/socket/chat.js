@@ -86,6 +86,19 @@ io.on('connection', (socket) => {
         // socket.to(chatRoomId).emit('offerVideoCall', offer)
     })
 
+    socket.on('offerGroupCall', async (data) => {
+        const { chatRoomId, callerId } = data
+        const offer = JSON.stringify({
+            chatRoomId: chatRoomId,
+        })
+
+        const chatRoom = await ChatRoom.findById(chatRoomId)
+        chatRoom.members.forEach((memberId) => {
+            if (memberId.toString() !== callerId)
+                io.in(memberId.toString()).emit('offerGroupCall', offer)
+        })
+    })
+
     socket.on('answerOfferVideoCall', async (data) => {
         const { sdp, chatRoomId } = data
         const chatRoom = await ChatRoom.findById(chatRoomId)

@@ -74,7 +74,7 @@ public class InboxActivity extends AppCompatActivity {
         chatRoomAdapter = new ChatRoomAdapter(chatRoomViewModel.getChatRooms(), this::changeToMessagingActivity);
         binding.rvInbox.setAdapter(chatRoomAdapter);
 
-        binding.btnMore.setOnClickListener(view -> showInboxMoreOptions(view));
+        binding.btnMore.setOnClickListener(this::showInboxMoreOptions);
         binding.btnBack.setOnClickListener(view -> InboxActivity.super.onBackPressed());
     }
 
@@ -206,7 +206,7 @@ public class InboxActivity extends AppCompatActivity {
                 popupBinding.rvGroupMembers.setLayoutManager(new LinearLayoutManager(InboxActivity.this, LinearLayoutManager.HORIZONTAL, false));
                 popupBinding.rvGroupMembers.setAdapter(createGroupMemberAdapter);
 
-                if(friendList.size() > 0) {
+                if(!friendList.isEmpty()) {
                     popupBinding.imageNoFriendFound.setVisibility(View.GONE);
                     popupBinding.rvFriends.setVisibility(View.VISIBLE);
                     popupBinding.containerGroupName.setVisibility(View.VISIBLE);
