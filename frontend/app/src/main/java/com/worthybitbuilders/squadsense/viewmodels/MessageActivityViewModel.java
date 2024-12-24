@@ -145,4 +145,17 @@ public class MessageActivityViewModel extends ViewModel {
         void onSuccess();
         void onFailure(String message);
     }
+
+    public void startGroupCall() {
+        JSONObject offer = new JSONObject();
+        try {
+            String userId = SharedPreferencesManager.getData(SharedPreferencesManager.KEYS.USER_ID);
+            offer.put("callerId", userId);
+            offer.put("chatRoomId", chatRoomId);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        socket.emit("offerGroupCall", offer);
+    }
 }

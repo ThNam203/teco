@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.worthybitbuilders.squadsense.activities.CallVideoActivity;
 import com.worthybitbuilders.squadsense.models.ChatMessage;
+import com.worthybitbuilders.squadsense.models.GroupCallOfferModel;
 import com.worthybitbuilders.squadsense.models.IceCandidateModel;
 import com.worthybitbuilders.squadsense.models.SdpOfferModel;
 import com.worthybitbuilders.squadsense.viewmodels.MessageActivityViewModel;
@@ -49,6 +50,7 @@ public class SocketClient {
             mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
             mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
             mSocket.on("offerVideoCall", onReceiveOfferVideoCall);
+            mSocket.on("offerGroupCall", onReceiveOfferGroupCall);
             mSocket.on("newMessageNotify", onReceiveNewMessageNotify);
             if(!mSocket.connected()) {
                 mSocket.connect();
@@ -79,6 +81,18 @@ public class SocketClient {
         callVideoIntent.putExtra("callerName", sdpOfferModel.getCallerName());
         callVideoIntent.putExtra("callerImagePath", sdpOfferModel.getCallerImagePath());
         callVideoIntent.putExtra("isVideoCall", sdpOfferModel.getIsVideoCall());
+        callVideoIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        application.startActivity(callVideoIntent);
+    };
+
+    private static final Emitter.Listener onReceiveOfferGroupCall = args -> {
+        if (CallVideoActivity.isRunning) return;
+
+        GroupCallOfferModel offer = new Gson().fromJson(args[0].toString(), GroupCallOfferModel.class);
+        Intent callVideoIntent = new Intent(application, CallVideoActivity.class);
+        callVideoIntent.putExtra("isCaller", false);
+        callVideoIntent.putExtra("chatRoomId", offer.getChatRoomId());
+        callVideoIntent.putExtra("isGroupChat", true);
         callVideoIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         application.startActivity(callVideoIntent);
     };

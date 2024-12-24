@@ -59,6 +59,7 @@ import com.worthybitbuilders.squadsense.services.RetrofitServices;
 import com.worthybitbuilders.squadsense.services.UtilService;
 import com.worthybitbuilders.squadsense.utils.DialogUtils;
 import com.worthybitbuilders.squadsense.utils.SharedPreferencesManager;
+import com.worthybitbuilders.squadsense.utils.SocketClient;
 import com.worthybitbuilders.squadsense.utils.ToastUtils;
 import com.worthybitbuilders.squadsense.viewmodels.FriendViewModel;
 import com.worthybitbuilders.squadsense.viewmodels.MessageActivityViewModel;
@@ -66,6 +67,7 @@ import com.worthybitbuilders.squadsense.viewmodels.MessageActivityViewModel;
 import org.jitsi.meet.sdk.JitsiMeetActivity;
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -79,6 +81,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import io.socket.client.Socket;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -168,23 +171,23 @@ public class MessagingActivity extends AppCompatActivity {
             dialog.show();
         });
 
-            binding.btnVideoCall.setOnClickListener(view -> {
-                Intent callIntent = new Intent(this, CallVideoActivity.class);
-                callIntent.putExtra("chatRoomId", chatRoomId);
-                callIntent.putExtra("isVideoCall", true);
-                callIntent.putExtra("chatRoomTitle", messageViewModel.getChatRoom().getTitle());
-                callIntent.putExtra("isCaller", true);
-                startActivity(callIntent);
-            });
+        binding.btnVideoCall.setOnClickListener(view -> {
+            Intent callIntent = new Intent(this, CallVideoActivity.class);
+            callIntent.putExtra("chatRoomId", chatRoomId);
+            callIntent.putExtra("isVideoCall", true);
+            callIntent.putExtra("chatRoomTitle", messageViewModel.getChatRoom().getTitle());
+            callIntent.putExtra("isCaller", true);
+            startActivity(callIntent);
+        });
 
-            binding.btnVoiceCall.setOnClickListener(view -> {
-                Intent callIntent = new Intent(this, CallVideoActivity.class);
-                callIntent.putExtra("chatRoomId", chatRoomId);
-                callIntent.putExtra("isVideoCall", false);
-                callIntent.putExtra("chatRoomTitle", messageViewModel.getChatRoom().getTitle());
-                callIntent.putExtra("isCaller", true);
-                startActivity(callIntent);
-            });
+        binding.btnVoiceCall.setOnClickListener(view -> {
+            Intent callIntent = new Intent(this, CallVideoActivity.class);
+            callIntent.putExtra("chatRoomId", chatRoomId);
+            callIntent.putExtra("isVideoCall", false);
+            callIntent.putExtra("chatRoomTitle", messageViewModel.getChatRoom().getTitle());
+            callIntent.putExtra("isCaller", true);
+            startActivity(callIntent);
+        });
 
         binding.etEnterMessage.setOnClickListener(view -> {
             binding.etEnterMessage.setCursorVisible(true);
@@ -360,6 +363,7 @@ public class MessagingActivity extends AppCompatActivity {
                         binding.btnSetting.setVisibility(View.GONE);
 
                         binding.btnVideoCall.setOnClickListener(view -> {
+                            messageViewModel.startGroupCall();
                             JitsiMeetConferenceOptions options
                                     = new JitsiMeetConferenceOptions.Builder()
                                     .setRoom("CHATROOM" + messageViewModel.getChatRoom().get_id())
