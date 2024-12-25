@@ -19,7 +19,7 @@ const s3Client = new S3Client({
 
 const deleteOldProfileImage = (path) => {
     const command = new DeleteObjectCommand({
-        Bucket: 'squadsense',
+        Bucket: 'sen1or-teco',
         Key: path.substring(path.lastIndexOf('/') + 1, path.length),
     })
 
@@ -29,7 +29,7 @@ const deleteOldProfileImage = (path) => {
 exports.uploadProfileImage = multer({
     storage: multerS3({
         s3: s3Client,
-        bucket: 'squadsense',
+        bucket: 'sen1or-teco',
         acl: 'public-read',
         contentType: multerS3.AUTO_CONTENT_TYPE,
         key: function (req, file, cb) {

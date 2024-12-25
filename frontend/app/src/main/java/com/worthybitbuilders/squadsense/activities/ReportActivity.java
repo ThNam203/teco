@@ -171,7 +171,7 @@ public class ReportActivity extends AppCompatActivity {
 
                 label.setText(String.valueOf(subItem.label));
                 label.setBackground(ContextCompat.getDrawable(this, R.drawable.background_btn_corner));
-                label.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(subItem.color)));
+                if (subItem.color != null && !subItem.color.isEmpty()) label.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(subItem.color)));
                 count.setText(subItem.count);
                 statusItemsContainer.addView(newSubView);
             });

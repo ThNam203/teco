@@ -82,7 +82,7 @@ exports.getReportForProject = asyncCatch(async (req, res, next) => {
 
                 board.cells.forEach((row) => {
                     const cell = row[colIndex]
-                    const compareValue = compareTimeline(cell, new Date());
+                    const compareValue = compareTimeline(cell, new Date())
 
                     if (compareValue === 1) {
                         textValues.before += 1
@@ -129,7 +129,9 @@ exports.getReportForProject = asyncCatch(async (req, res, next) => {
                     firstCell.contents.forEach((status, index) => {
                         statusCounts[status] = {
                             count: 0,
-                            color: firstCell.colors[index],
+                            color: firstCell.colors
+                                ? firstCell.colors[index]
+                                : null,
                         }
                     })
                 }
@@ -139,15 +141,20 @@ exports.getReportForProject = asyncCatch(async (req, res, next) => {
                     const cell = row[colIndex]
                     if (cell && cell.content) {
                         const status = cell.content
-                        statusCounts[status].count =
-                            (statusCounts[status].count || 0) + 1
+                        if (!statusCounts[status]) {
+                            // Initialize if the status wasn't in the firstCell
+                            statusCounts[status] = { count: 0, color: null }
+                        }
+                        statusCounts[status].count++
                     }
                 })
 
-                const arrayStatuses = Object.entries(statusCounts).map(([label, data]) => ({
-    label,
-    ...data
-}));
+                const arrayStatuses = Object.entries(statusCounts).map(
+                    ([label, data]) => ({
+                        label,
+                        ...data,
+                    })
+                )
 
                 newReportForBoard.status.push({
                     title: col.title,
@@ -161,22 +168,29 @@ exports.getReportForProject = asyncCatch(async (req, res, next) => {
 })
 
 function compareTimeline(timeline, currentDate) {
-    const { startYear, startMonth, startDay, endYear, endMonth, endDay } = timeline;
-  
+    const { startYear, startMonth, startDay, endYear, endMonth, endDay } =
+        timeline
+
     // Handle -1 as not chosen
-    if (startYear === -1 || startMonth === -1 || startDay === -1 ||
-        endYear === -1 || endMonth === -1 || endDay === -1) {
-      return null;
+    if (
+        startYear === -1 ||
+        startMonth === -1 ||
+        startDay === -1 ||
+        endYear === -1 ||
+        endMonth === -1 ||
+        endDay === -1
+    ) {
+        return null
     }
-  
-    const startDate = new Date(startYear, startMonth - 1, startDay); // month is 0-indexed
-    const endDate = new Date(endYear, endMonth - 1, endDay);
-  
+
+    const startDate = new Date(startYear, startMonth - 1, startDay) // month is 0-indexed
+    const endDate = new Date(endYear, endMonth - 1, endDay)
+
     if (currentDate < startDate) {
-      return 1;
+        return 1
     } else if (currentDate > endDate) {
-      return -1;
+        return -1
     } else {
-      return 0;
+        return 0
     }
-  }
+}

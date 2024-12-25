@@ -15,12 +15,13 @@ import java.util.Locale;
 public class CustomUtils {
     // ALERT ---- MONTH START FROM 0 TO 11
     public static String convertIntToMonth(int month) {
-        String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Dec + 1", "Dec + 2"};
 
         if (month < 0 || month > 11) {
-            throw new IllegalArgumentException("Invalid month value. Must be between 1 and 12.");
+//            throw new IllegalArgumentException("Invalid month value. Must be between 1 and 12.");
         }
 
+        if (month == -1) return "Jan - 1";
         return months[month];
     }
 

@@ -1483,10 +1483,10 @@ public class ProjectActivity extends AppCompatActivity {
 
             // TODO: The function expects no problems or exceptions, should not update the item if the call failed
             itemModel.setStartYear(dialogStartYear.get());
-            itemModel.setStartMonth(dialogStartMonth.get());
+            itemModel.setStartMonth(dialogStartMonth.get() + 1);
             itemModel.setStartDay(dialogStartDay.get());
             itemModel.setEndYear(dialogEndYear.get());
-            itemModel.setEndMonth(dialogEndMonth.get());
+            itemModel.setEndMonth(dialogEndMonth.get() + 1);
             itemModel.setEndDay(dialogEndDay.get());
 
             boardViewModel.updateACell(itemModel).enqueue(new Callback<Void>() {
@@ -1526,7 +1526,7 @@ public class ProjectActivity extends AppCompatActivity {
                             .format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                     String[] startData = startDate.split("-");
                     dialogStartDay.set(Integer.parseInt(startData[0]));
-                    dialogStartMonth.set(Integer.parseInt(startData[1]));
+                    dialogStartMonth.set(Integer.parseInt(startData[1]) - 1);
                     dialogStartYear.set(Integer.parseInt(startData[2]));
 
                     String endDate = Instant
@@ -1535,7 +1535,7 @@ public class ProjectActivity extends AppCompatActivity {
                             .format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                     String[] endData = endDate.split("-");
                     dialogEndDay.set(Integer.parseInt(endData[0]));
-                    dialogEndMonth.set(Integer.parseInt(endData[1]));
+                    dialogEndMonth.set(Integer.parseInt(endData[1]) - 1);
                     dialogEndYear.set(Integer.parseInt(endData[2]));
                 } else {
                     Calendar calendar = Calendar.getInstance();
@@ -1554,15 +1554,15 @@ public class ProjectActivity extends AppCompatActivity {
                 if (dialogStartDay.get() != -1 && dialogStartMonth.get() != -1 && dialogStartYear.get() != -1) {
                     if (dialogStartDay.get() == dialogEndDay.get() && dialogStartMonth.get() == dialogStartMonth.get() && dialogStartYear.get() == dialogEndYear.get()) {
 
-                    } else if (dialogStartMonth.get() == dialogStartMonth.get() && dialogStartYear.get() == dialogEndYear.get())
+                    } else if (dialogStartMonth.get() == dialogEndMonth.get() && dialogStartYear.get() == dialogEndYear.get())
                         finalContent += String.format(Locale.US, "%d", dialogStartDay.get());
                     else if (dialogStartYear.get() == dialogEndYear.get()) {
                         finalContent += String.format(Locale.US, "%s %d", CustomUtils.convertIntToMonth(dialogStartMonth.get()), dialogStartDay.get());
                     } else finalContent += String.format(Locale.US, "%s %d, %d", CustomUtils.convertIntToMonth(dialogStartMonth.get()), dialogStartDay.get(), dialogStartYear.get());
 
                     if (finalContent.isEmpty())
-                        finalContent += String.format(Locale.US, "%s %d, %d", CustomUtils.convertIntToMonth(dialogStartMonth.get()), dialogEndDay.get(), dialogEndYear.get());
-                    else finalContent += String.format(Locale.US, " - %s %d, %d", CustomUtils.convertIntToMonth(dialogStartMonth.get()), dialogEndDay.get(), dialogEndYear.get());
+                        finalContent += String.format(Locale.US, "%s %d, %d", CustomUtils.convertIntToMonth(dialogEndMonth.get()), dialogEndDay.get(), dialogEndYear.get());
+                    else finalContent += String.format(Locale.US, " - %s %d, %d", CustomUtils.convertIntToMonth(dialogEndMonth.get()), dialogEndDay.get(), dialogEndYear.get());
                 }
 
                 binding.tvTimelineValue.setText(finalContent);

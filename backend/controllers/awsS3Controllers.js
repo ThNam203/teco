@@ -13,7 +13,7 @@ const s3Client = new S3Client({
 
 exports.deleteAnObject = (path) => {
     const command = new DeleteObjectCommand({
-        Bucket: 'squadsense',
+        Bucket: 'sen1or-teco',
         Key: path.substring(path.lastIndexOf('/') + 1, path.length),
     })
 
@@ -23,7 +23,7 @@ exports.deleteAnObject = (path) => {
 exports.s3Upload = multer({
     storage: multerS3({
         s3: s3Client,
-        bucket: 'squadsense',
+        bucket: 'sen1or-teco',
         acl: 'public-read',
         contentType: function (req, file, cb) {
             cb(null, file.mimetype)

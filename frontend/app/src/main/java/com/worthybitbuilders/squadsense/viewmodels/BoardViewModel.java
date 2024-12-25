@@ -500,7 +500,7 @@ public class BoardViewModel extends ViewModel {
 
                         break;
                     default:
-                        throw new RuntimeException();
+                        break;
                 }
 
                 if (isRemoved) break;
